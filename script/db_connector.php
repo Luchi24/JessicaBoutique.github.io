@@ -1,6 +1,8 @@
 <?php
 // script/db_connector.php
-
+header('Access-Control-Allow-Origin: *'); // Habilita el acceso desde cualquier dominio
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Authorization');
 // 1. CONFIGURACIÓN DE LA CONEXIÓN A LA BASE DE DATOS
 // NOTA: Asegúrate de que tu XAMPP esté corriendo y MySQL esté activo.
 $servername = "localhost"; // Generalmente 'localhost' en XAMPP
