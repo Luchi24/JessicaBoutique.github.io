@@ -1,0 +1,120 @@
+/* Estilos Globales y Tipografía */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f8f8;
+    color: #333;
+}
+
+header {
+    background-color: #ff69b4; /* Rosa para Jessica Boutique */
+    color: white;
+    padding: 15px 20px;
+    text-align: center;
+}
+
+nav {
+    background-color: #333;
+    padding: 10px 0;
+    text-align: center;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 15px;
+    display: inline-block;
+    transition: background-color 0.3s;
+}
+
+nav a:hover {
+    background-color: #555;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 20px;
+}
+
+/* Estilos de Tarjetas y Formularios */
+.card {
+    background: white;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h2, h3 {
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 10px;
+    margin-top: 0;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+input[type="text"], input[type="number"], select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Asegura que el padding no aumente el ancho */
+}
+
+button {
+    background-color: #ff69b4;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 10px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #e65a9e;
+}
+
+/* Estilos de Tablas */
+#tabla-productos {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+#tabla-productos th, #tabla-productos td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+#tabla-productos th {
+    background-color: #f2f2f2;
+}
+
+.btn-editar {
+    background-color: #007bff;
+}
+
+.btn-eliminar {
+    background-color: #dc3545;
+}
+
+/* Estilos para Listado de Categorías */
+#lista-categorias {
+    margin-top: 15px;
+}
+#lista-categorias span {
+    display: inline-block;
+    background-color: #eee;
+    padding: 5px 10px;
+    border-radius: 3px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
