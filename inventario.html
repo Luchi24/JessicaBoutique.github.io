@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario | Jessica Boutique</title>
+    <link rel="stylesheet" href="style/main.css">
+</head>
+<body>
+
+    <header>
+        <h1>📦 Gestión de Inventario</h1>
+    </header>
+
+    <nav>
+        <a href="index.html">🏠 Inicio</a>
+        <a href="inventario.html">📦 Inventario</a>
+        </nav>
+
+    <div class="container">
+        
+        <section class="card">
+            <h2>🏷️ Categorías</h2>
+            <form id="form-categoria">
+                <input type="text" id="nombre-categoria" placeholder="Nombre de la Categoría" required>
+                <button type="submit">Crear Categoría</button>
+            </form>
+            <div id="lista-categorias">
+                </div>
+        </section>
+
+        <hr>
+
+        <section class="card">
+            <h2>👚 Productos</h2>
+            <form id="form-producto">
+                <input type="hidden" id="producto-id" value="">
+                
+                <div class="form-group">
+                    <label for="nombre-producto">Nombre:</label>
+                    <input type="text" id="nombre-producto" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="stock-producto">Stock:</label>
+                    <input type="number" id="stock-producto" min="0" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="precio-producto">Precio Venta (S/):</label>
+                    <input type="number" id="precio-producto" step="0.01" min="0" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="categoria-producto">Categoría:</label>
+                    <select id="categoria-producto" required>
+                        <option value="">-- Seleccionar Categoría --</option>
+                        </select>
+                </div>
+                
+                <button type="submit" id="btn-submit-producto">Crear Producto</button>
+                <button type="button" id="btn-cancelar" style="display: none;">Cancelar Edición</button>
+            </form>
+            
+            <h3>Inventario Actual</h3>
+            <table id="tabla-productos">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Categoría</th>
+                        <th>Stock</th>
+                        <th>Precio (S/)</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tbody>
+            </table>
+        </section>
+
+    </div>
+
+    <script src="script/functions.js"></script>
+</body>
+</html>
