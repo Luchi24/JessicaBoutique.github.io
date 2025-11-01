@@ -3,43 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jessica Boutique | Sistema de Gestión</title>
+    <title>Inicio | Jessica Boutique | Sistema de Gestión</title>
+    <link rel="stylesheet" href="style/main.css"> 
     <style>
-        body { font-family: sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; }
-        header { background-color: #ff69b4; color: white; padding: 20px; text-align: center; }
-        nav { background-color: #333; padding: 10px 0; }
-        nav a { color: white; text-decoration: none; padding: 10px 20px; display: inline-block; }
-        nav a:hover { background-color: #555; }
-        .container { padding: 20px; }
-        h2 { color: #333; }
+        /* Estilos específicos para el dashboard */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .metric-card {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .metric-card h3 {
+            margin-top: 0;
+            color: #ff69b4; /* Rosa */
+        }
+        .metric-card .value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #333;
+        }
+        .quick-link {
+            display: block;
+            background-color: #f0f0f0;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        .quick-link:hover {
+            background-color: #ff69b4;
+            color: white;
+        }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>🎀 Jessica Boutique | Control Administrativo 🎀</h1>
+        <h1>🎀 Jessica Boutique | Panel de Control 🎀</h1>
     </header>
 
     <nav>
         <a href="index.html">🏠 Inicio</a>
         <a href="inventario.html">📦 Inventario</a>
-        <a href="ventas.html">💰 Registrar Venta</a>
+        <a href="ventas.html">💰 Registrar Venta</a> 
         <a href="reportes.html">📈 Reportes</a>
     </nav>
 
     <div class="container">
-        <h2>Bienvenido al Sistema</h2>
-        <p>Utiliza la barra de navegación superior para acceder a las funcionalidades principales del sistema:</p>
-        <ul>
-            <li>**Inventario:** Para ingresar, editar y verificar el stock de productos.</li>
-            <li>**Registrar Venta:** Para procesar nuevas transacciones y descontar el stock.</li>
-            <li>**Reportes:** Para consultar el historial de ventas y movimientos.</li>
-        </ul>
-        
-        <h3>Resumen Rápido (Placeholder)</h3>
-        <p>Stock bajo: 5 productos</p>
-        <p>Ventas del día: S/ 350.00</p>
+        <h2>👋 Hola, Bienvenida al Sistema de Gestión</h2>
+        <p>Revisa el estado actual del negocio y accede rápidamente a las funciones principales.</p>
+
+        <div class="dashboard-grid">
+            
+            <div class="metric-card">
+                <h3>Ventas del Día</h3>
+                <p class="value" id="total-ventas">S/ 0.00</p>
+                <a href="ventas.html" class="quick-link">Registrar Nueva Venta</a>
+            </div>
+
+            <div class="metric-card">
+                <h3>Productos en Stock</h3>
+                <p class="value" id="cantidad-stock">0</p>
+                <a href="inventario.html" class="quick-link">Gestionar Inventario</a>
+            </div>
+
+            <div class="metric-card">
+                <h3>Alerta de Stock Bajo</h3>
+                <p class="value" id="stock-bajo">0</p>
+                <a href="inventario.html" class="quick-link btn-alerta">Ver Alertas</a>
+            </div>
+            
+        </div>
+
+        <hr>
+
+        <section class="card">
+            <h2>Acciones Rápidas</h2>
+            <div class="dashboard-grid">
+                 <a href="inventario.html#form-producto" class="quick-link">➕ Agregar Nuevo Producto</a>
+                 <a href="ventas.html" class="quick-link">💸 Procesar Venta Rápida</a>
+                 <a href="reportes.html" class="quick-link">🔍 Revisar Reporte Mensual</a>
+            </div>
+        </section>
+
     </div>
 
+    <script src="script/functions.js"></script>
+    <script>
+        // Lógica simple para simular la carga de datos del dashboard usando el localStorage
+        document.addEventListener('DOMContentLoaded', () => {
+            const productos = JSON.parse(localStorage.getItem('productos')) || [];
+            
+            // 1. Cargar Stock Total
+            const totalStock = productos.reduce((sum, p) => sum + p.stock, 0);
+            document.getElementById('cantidad-stock').textContent = totalStock;
+
+            // 2. Cargar Stock Bajo (Simulación: productos con stock < 5)
+            const stockBajoCount = productos.filter(p => p.stock < 5).length;
+            document.getElementById('stock-bajo').textContent = stockBajoCount;
+
+            // 3. Cargar Ventas del Día (Simulación estática, ya que no implementamos ventas aún)
+            // Esto se reemplazaría por una función que calcule las ventas reales
+            document.getElementById('total-ventas').textContent = 'S/ 480.50 (Simulado)';
+        });
+    </script>
 </body>
 </html>
