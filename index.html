@@ -37,13 +37,36 @@
             <h1 class="text-3xl font-extrabold tracking-tight">
                 Gestión de Inventario - Jessica Boutique
             </h1>
-            <p class="mt-1 text-pink-200">Inventario en tiempo real alimentado por Firestore.</p>
+            <p class="mt-1 text-pink-200">Ejecutando en modo de datos en memoria (sin base de datos).</p>
             <div id="auth-status" class="mt-3 text-sm flex flex-col md:flex-row md:items-center">
                 <span class="font-medium mr-2">Usuario ID:</span>
-                <span id="user-id-display" class="bg-pink-700 p-1 px-2 rounded-md text-xs font-mono truncate">Cargando...</span>
+                <span id="user-id-display" class="bg-pink-700 p-1 px-2 rounded-md text-xs font-mono truncate">USUARIO_LOCAL_DEMO</span>
             </div>
             <div id="loading-indicator" class="mt-2 text-yellow-300 hidden">Cargando datos...</div>
             <div id="error-message" class="mt-2 text-red-300 hidden"></div>
+            
+            <!-- Advertencia de no persistencia -->
+            <div id="persistence-warning" class="mt-4 p-3 bg-yellow-100 text-yellow-800 rounded-lg text-sm font-medium border border-yellow-300">
+                ⚠️ **MODO DE DEMOSTRACIÓN SIN BASE DE DATOS:** Los datos se guardan solo en la memoria de esta página y **se perderán al recargar o cerrar la pestaña.**
+            </div>
+
+            <!-- Nuevos Botones de Importar/Exportar -->
+            <div class="mt-4 flex flex-col md:flex-row gap-3">
+                <button id="export-data-button" type="button" 
+                        class="bg-blue-700 hover:bg-blue-800 text-white font-bold p-3 rounded-lg transition duration-150 shadow-md flex items-center justify-center">
+                    <!-- Icono de Descarga (Exportar) -->
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                    Exportar Datos
+                </button>
+
+                <label for="import-file-input" class="cursor-pointer bg-purple-700 hover:bg-purple-800 text-white font-bold p-3 rounded-lg transition duration-150 shadow-md flex items-center justify-center">
+                    <!-- Icono de Carga (Importar) -->
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                    Importar Datos
+                </label>
+                <input type="file" id="import-file-input" accept=".json" class="hidden">
+            </div>
+            
         </header>
 
         <!-- Barra de Búsqueda, Botón de Stock y Filtros -->
@@ -125,10 +148,7 @@
                 <select id="size-select" required
                        class="col-span-1 md:col-span-2 p-3 border border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500 text-gray-700">
                     <option value="" disabled selected>Seleccione Talla</option>
-                    <option value="S">S</option>
-                    <option value="M">M</option>
-                    <option value="L">L</option>
-                    <option value="XL">XL</option>
+                    <!-- Las tallas fijas se inicializarán en JS -->
                 </select>
 
                 <input type="number" id="price" placeholder="Precio (Ej: 49.99)" step="0.01" min="0.01" required
@@ -160,26 +180,28 @@
 
     </div>
 
-    <!-- Script de Firebase y Lógica de la Aplicación -->
+    <!-- Script de Lógica de la Aplicación (In-Memory) -->
     <script type="module">
-        // Importaciones de Firebase
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, doc, addDoc, onSnapshot, updateDoc, deleteDoc, serverTimestamp, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        // Se ha eliminado toda la dependencia de Firebase/Firestore.
+        // La aplicación ahora usa solo arrays de JavaScript en memoria.
+        // ADVERTENCIA: Los datos se perderán al recargar la página si no se usa Exportar/Importar.
 
-        // Configuración de variables globales del Canvas
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'jessica-boutique-app';
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+        // Tallas actualizadas
+        const availableSizes = ['XS', 'S', 'M', 'L', 'Stándard'];
+
+        let userId = 'USUARIO_LOCAL_DEMO'; 
         
-        // Tallas fijas para filtros y selección
-        const availableSizes = ['S', 'M', 'L', 'XL'];
-
-        let db;
-        let auth;
-        let userId = null;
-        let currentInventory = []; 
-        let currentCategories = []; 
+        // Datos In-Memory de Ejemplo (IDs simplificados)
+        let currentInventory = [
+            { id: 'p1', name: 'Vestido de Noche Rojo', category: 'Vestidos', size: 'M', price: 89.90, stock: 5, timestamp: Date.now() - 10000 },
+            { id: 'p2', name: 'Jeans Clásicos Azul', category: 'Jeans', size: 'L', price: 65.00, stock: 12, timestamp: Date.now() - 5000 },
+        ]; 
+        
+        let currentCategories = [
+            { id: 'c1', name: 'Vestidos' }, 
+            { id: 'c2', name: 'Jeans' },
+            { id: 'c3', name: 'Blusas' }
+        ]; 
         
         // Estado de filtros
         let selectedCategoryFilter = 'TODOS';
@@ -205,6 +227,8 @@
         const inventorySection = document.getElementById('inventory-section');
         const categoryFilterContainer = document.getElementById('category-filter-container');
         const sizeFilterContainer = document.getElementById('size-filter-container');
+        const exportDataButton = document.getElementById('export-data-button');
+        const importFileInput = document.getElementById('import-file-input');
 
 
         // --- UTILS ---
@@ -214,10 +238,30 @@
             return new Intl.NumberFormat('es-PE', { style: 'currency', currency: 'PEN' }).format(price);
         };
 
-        // Función para mostrar mensajes de error
+        // Función para mostrar mensajes de error (reemplaza alert)
         const displayError = (message) => {
-            errorMessage.textContent = `Error: ${message}`;
-            errorMessage.classList.remove('hidden');
+            console.error(message);
+            // Implementación simple de notificación de error/éxito en UI
+            const statusMessage = document.getElementById('error-message');
+            statusMessage.textContent = message;
+            statusMessage.classList.remove('hidden');
+            setTimeout(() => {
+                statusMessage.classList.add('hidden');
+            }, 5000); 
+        };
+
+        // Función para mostrar mensaje de éxito
+        const displaySuccess = (message) => {
+            const statusMessage = document.getElementById('error-message');
+            statusMessage.textContent = message;
+            statusMessage.classList.remove('text-red-300');
+            statusMessage.classList.add('text-green-300');
+            statusMessage.classList.remove('hidden');
+            setTimeout(() => {
+                statusMessage.classList.add('hidden');
+                statusMessage.classList.remove('text-green-300');
+                statusMessage.classList.add('text-red-300'); // Volver al estado de error
+            }, 3000);
         };
         
         // Función para el scroll suave
@@ -226,145 +270,162 @@
         };
 
 
-        // Función de inicialización de Firebase y Autenticación
-        async function initFirebaseAndAuth() {
-            if (!firebaseConfig) {
-                displayError("La configuración de Firebase no está disponible.");
-                return;
-            }
-
-            try {
-                setLogLevel('Debug');
-
-                const app = initializeApp(firebaseConfig);
-                db = getFirestore(app);
-                auth = getAuth(app);
-
-                loadingIndicator.textContent = "Autenticando...";
-                loadingIndicator.classList.remove('hidden');
-
-                if (initialAuthToken) {
-                    await signInWithCustomToken(auth, initialAuthToken);
-                } else {
-                    await signInAnonymously(auth);
-                }
-
-                onAuthStateChanged(auth, (user) => {
-                    loadingIndicator.classList.add('hidden');
-                    if (user) {
-                        userId = user.uid;
-                        userIdDisplay.textContent = userId;
-                        loadInventory(); 
-                        loadCategories(); 
-                        renderSizeFilterButtons(); // Inicializar botones de talla
-                    } else {
-                        userIdDisplay.textContent = 'No autenticado';
-                        displayError('No se pudo autenticar al usuario.');
-                    }
-                });
-
-            } catch (error) {
-                console.error("Error en inicialización o autenticación:", error);
-                loadingIndicator.classList.add('hidden');
-                displayError(`Fallo de inicio: ${error.message}`);
-            }
+        // Función de inicialización de la Aplicación (In-Memory)
+        async function initApp() {
+            userIdDisplay.textContent = userId;
+            loadingIndicator.classList.add('hidden');
+            
+            renderSizeSelectOptions(); // Renderizar opciones de talla en el formulario
+            renderSizeFilterButtons(); // Renderizar botones de filtro de talla
+            loadCategories(); 
+            loadInventory(); 
         }
 
 
-        // --- CATEGORY CRUD OPERATIONS ---
+        // --- PERSISTENCIA (IMPORTAR/EXPORTAR JSON) ---
+        
+        // 1. Exportar Datos a JSON
+        function exportData() {
+            // Empaquetar el inventario y las categorías en un solo objeto
+            const dataToExport = {
+                inventory: currentInventory,
+                categories: currentCategories,
+                exportTime: new Date().toISOString()
+            };
+            
+            const dataStr = JSON.stringify(dataToExport, null, 2); // Formato legible
+            const blob = new Blob([dataStr], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+            
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `inventario_jessica_boutique_${new Date().toISOString().slice(0, 10)}.json`;
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
 
-        // 1. CREAR Categoría
-        async function saveCategory(event) {
-            event.preventDefault();
+            displaySuccess('Datos exportados con éxito como JSON.');
+        }
 
-            if (!db || !userId) {
-                displayError("Sistema no inicializado o usuario no autenticado.");
+        // 2. Importar Datos desde JSON
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) {
                 return;
             }
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const importedData = JSON.parse(e.target.result);
+                    
+                    if (!importedData.inventory || !importedData.categories) {
+                        throw new Error("El archivo JSON no contiene las estructuras 'inventory' y 'categories' requeridas.");
+                    }
+
+                    // Reemplazar los arrays en memoria
+                    currentInventory = importedData.inventory;
+                    currentCategories = importedData.categories;
+                    
+                    // Re-renderizar toda la interfaz con los datos nuevos
+                    loadCategories();
+                    loadInventory();
+                    
+                    displaySuccess('Datos importados correctamente. Inventario actualizado.');
+                } catch (error) {
+                    displayError(`Error al procesar el archivo: ${error.message}`);
+                } finally {
+                    // Resetear el input file para permitir la recarga del mismo archivo
+                    importFileInput.value = '';
+                }
+            };
+            
+            reader.onerror = () => {
+                displayError('Error al leer el archivo.');
+                importFileInput.value = '';
+            };
+
+            reader.readAsText(file);
+        }
+
+
+        // --- CATEGORY CRUD OPERATIONS (In-Memory) ---
+
+        // 1. CREAR Categoría
+        function saveCategory(event) {
+            event.preventDefault();
 
             const name = newCategoryInput.value.trim();
 
             if (name.length === 0) return;
 
-            const categoryRef = collection(db, `artifacts/${appId}/users/${userId}/categories`);
             const normalizedName = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
 
-            try {
-                const exists = currentCategories.some(cat => cat.name === normalizedName);
-                if (exists) {
-                    // Reemplazar alert con un mensaje temporal en la interfaz si fuera necesario
-                    console.warn(`La categoría "${normalizedName}" ya existe.`);
-                    return;
-                }
-                
-                await addDoc(categoryRef, {
-                    name: normalizedName,
-                    timestamp: serverTimestamp()
-                });
-                newCategoryInput.value = '';
-            } catch (error) {
-                console.error("Error al guardar la categoría:", error);
-                displayError(`Error al guardar categoría: ${error.message}`);
+            const exists = currentCategories.some(cat => cat.name === normalizedName);
+            if (exists) {
+                displayError(`La categoría "${normalizedName}" ya existe.`);
+                return;
             }
+            
+            const newId = Date.now().toString() + Math.random().toString(36).substring(2, 9);
+
+            currentCategories.push({
+                id: newId,
+                name: normalizedName,
+                timestamp: new Date().getTime() 
+            });
+            
+            newCategoryInput.value = '';
+            loadCategories(); 
+            loadInventory(); 
         }
 
-        // 2. LEER/ESCUCHAR Categorías (Real-time)
+        // 2. LEER/ESCUCHAR Categorías (In-Memory)
         function loadCategories() {
-            if (!db || !userId) return;
-
-            const categoriesRef = collection(db, `artifacts/${appId}/users/${userId}/categories`);
-            
-            onSnapshot(categoriesRef, (snapshot) => {
-                currentCategories = [];
-                snapshot.forEach((doc) => {
-                    currentCategories.push({ id: doc.id, ...doc.data() });
-                });
-
-                currentCategories.sort((a, b) => a.name.localeCompare(b.name));
-
-                renderCategoryManagement();
-                renderCategorySelect(); 
-                renderCategoryFilterButtons(); // Renderizar filtros
-            }, (error) => {
-                console.error("Error al obtener categorías:", error);
-                displayError(`Error de lectura de categorías: ${error.message}`);
-            });
+            currentCategories.sort((a, b) => a.name.localeCompare(b.name));
+            renderCategoryManagement();
+            renderCategorySelect(); 
+            renderCategoryFilterButtons(); 
         }
 
         // 3. ELIMINAR Categoría
-        async function deleteCategory(categoryId) {
-            if (!db || !userId) return;
-
-            // Usando confirm() para la simplicidad, pero idealmente sería un modal
-            if (!confirm(`¿Estás seguro de que quieres eliminar esta categoría? Nota: Los productos que la usen mantendrán la categoría en sus datos hasta que se editen.`)) {
+        function deleteCategory(categoryId) {
+            if (!confirm(`¿Estás seguro de que quieres eliminar esta categoría?`)) {
                 return;
             }
 
-            const categoryDocRef = doc(db, `artifacts/${appId}/users/${userId}/categories`, categoryId);
+            // Filtrar y actualizar el array
+            currentCategories = currentCategories.filter(cat => cat.id !== categoryId);
 
-            try {
-                await deleteDoc(categoryDocRef);
-            } catch (error) {
-                console.error("Error al eliminar categoría:", error);
-                displayError(`Error al eliminar categoría: ${error.message}`);
-            }
+            // También actualizamos cualquier producto que use esta categoría (para limpiar)
+            const deletedCategoryName = currentCategories.find(c => c.id === categoryId)?.name;
+             currentInventory = currentInventory.map(product => {
+                if (product.category === deletedCategoryName) {
+                    return { ...product, category: 'SIN CATEGORÍA' };
+                }
+                return product;
+            });
+
+
+            loadCategories();
+            loadInventory(); 
+            displaySuccess('Categoría eliminada.');
         }
 
-        // --- INVENTORY CRUD OPERATIONS ---
+        // --- INVENTORY CRUD OPERATIONS (In-Memory) ---
 
         // 1. CREAR Producto
-        async function saveProduct(event) {
+        function saveProduct(event) {
             event.preventDefault();
 
-            if (!db || !userId) {
-                displayError("Sistema no inicializado o usuario no autenticado.");
-                return;
-            }
-            
-            // Validar que se haya seleccionado una categoría y talla
             const categoryName = categorySelect.value;
             const size = sizeSelect.value;
-            if (!categoryName || !size) return; 
+            if (!categoryName || !size) {
+                 displayError("Debe seleccionar Categoría y Talla.");
+                 return;
+            } 
 
             const name = document.getElementById('name').value;
             const price = parseFloat(document.getElementById('price').value);
@@ -374,116 +435,81 @@
                  displayError("Por favor, ingrese valores válidos para Precio y Stock.");
                  return;
             }
+
+            const newId = Date.now().toString() + Math.random().toString(36).substring(2, 9);
             
             const newProduct = {
+                id: newId,
                 name: name.trim(),
                 category: categoryName, 
                 size: size,
                 price: price,
                 stock: stock,
-                timestamp: serverTimestamp()
+                timestamp: new Date().getTime() 
             };
 
-            const productsRef = collection(db, `artifacts/${appId}/users/${userId}/products`);
-
-            try {
-                await addDoc(productsRef, newProduct);
-                productForm.reset(); 
-                categorySelect.value = ''; // Resetear el select de categoría
-                sizeSelect.value = ''; // Resetear el select de talla
-            } catch (error) {
-                console.error("Error al guardar el producto:", error);
-                displayError(`Error al guardar: ${error.message}`);
-            }
+            currentInventory.push(newProduct);
+            
+            productForm.reset(); 
+            categorySelect.value = ''; 
+            sizeSelect.value = ''; 
+            
+            loadInventory(); 
+            displaySuccess(`Producto "${name}" agregado.`);
         }
 
-        // 2. LEER/ESCUCHAR Inventario (Real-time)
+        // 2. LEER/ESCUCHAR Inventario (In-Memory)
         function loadInventory() {
-            if (!db || !userId) return;
-
-            const productsRef = collection(db, `artifacts/${appId}/users/${userId}/products`);
-
-            onSnapshot(productsRef, (snapshot) => {
-                currentInventory = []; 
-                snapshot.forEach((doc) => {
-                    currentInventory.push({ id: doc.id, ...doc.data() });
-                });
-
-                currentInventory.sort((a, b) => a.name.localeCompare(b.name));
-
-                // Asegurar que se re-apliquen todos los filtros
-                handleSearch(); 
-
-            }, (error) => {
-                console.error("Error al obtener inventario:", error);
-                displayError(`Error de lectura: ${error.message}`);
-            });
+            currentInventory.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+            handleSearch(); 
         }
 
 
         // 3. ACTUALIZAR Stock
-        async function updateStock(productId, newStock) {
-            if (!db || !userId || isNaN(newStock) || newStock < 0) return;
+        function updateStock(productId, newStock) {
+            if (isNaN(newStock) || newStock < 0) return;
 
-            const productDocRef = doc(db, `artifacts/${appId}/users/${userId}/products`, productId);
+            const productIndex = currentInventory.findIndex(p => p.id === productId);
 
-            try {
-                await updateDoc(productDocRef, {
-                    stock: newStock,
-                    timestamp: serverTimestamp()
-                });
-            } catch (error) {
-                console.error("Error al actualizar stock:", error);
-                displayError(`Error al actualizar stock: ${error.message}`);
+            if (productIndex !== -1) {
+                currentInventory[productIndex].stock = newStock;
+                currentInventory[productIndex].timestamp = new Date().getTime(); 
+                loadInventory(); 
             }
         }
 
         // 4. ELIMINAR Producto
-        async function deleteProduct(productId) {
-            if (!db || !userId) return;
-
-            if (!confirm(`¿Estás seguro de que quieres eliminar el producto con ID ${productId}?`)) {
+        function deleteProduct(productId) {
+            if (!confirm(`¿Estás seguro de que quieres eliminar este producto?`)) {
                 return;
             }
 
-            const productDocRef = doc(db, `artifacts/${appId}/users/${userId}/products`, productId);
-
-            try {
-                await deleteDoc(productDocRef);
-            } catch (error) {
-                console.error("Error al eliminar producto:", error);
-                displayError(`Error al eliminar: ${error.message}`);
-            }
+            currentInventory = currentInventory.filter(p => p.id !== productId);
+            loadInventory(); 
+            displaySuccess('Producto eliminado.');
         }
 
         // --- FILTERING AND SEARCH ---
 
         function handleFilterClick(filterType, value) {
-            if (filterType === 'category') {
-                selectedCategoryFilter = (selectedCategoryFilter === value && value !== 'TODOS') ? 'TODOS' : value;
-                // Si deseleccionamos, forzamos a 'TODOS' a estar seleccionado
-                if (value !== 'TODOS' && selectedCategoryFilter !== value) {
-                    selectedCategoryFilter = 'TODOS';
-                }
-                
-                // Si seleccionamos "TODOS", el filtro de categoría se resetea.
-                if (value === 'TODOS') {
-                    selectedCategoryFilter = 'TODOS';
-                }
-                renderCategoryFilterButtons();
-            } else if (filterType === 'size') {
-                selectedSizeFilter = (selectedSizeFilter === value && value !== 'TODOS') ? 'TODOS' : value;
+            // Lógica de toggle de filtros (TODOS o el valor seleccionado)
+            const isCategory = filterType === 'category';
+            const filterState = isCategory ? selectedCategoryFilter : selectedSizeFilter;
+            
+            let newState = value;
 
-                 if (value !== 'TODOS' && selectedSizeFilter !== value) {
-                    selectedSizeFilter = 'TODOS';
-                }
-                
-                if (value === 'TODOS') {
-                    selectedSizeFilter = 'TODOS';
-                }
+            if (value !== 'TODOS' && filterState === value) {
+                newState = 'TODOS';
+            }
+
+            if (isCategory) {
+                selectedCategoryFilter = newState;
+                renderCategoryFilterButtons();
+            } else {
+                selectedSizeFilter = newState;
                 renderSizeFilterButtons();
             }
-            // Ejecutar la búsqueda con los nuevos filtros
+            
             handleSearch();
         }
 
@@ -491,19 +517,16 @@
         function handleSearch() {
             const query = searchInput.value.toLowerCase().trim();
             
-            // 1. Filtrar por Nombre
             let filteredProducts = currentInventory.filter(product =>
-                product.name.toLowerCase().includes(query)
+                (product.name || '').toLowerCase().includes(query)
             );
 
-            // 2. Filtrar por Categoría
             if (selectedCategoryFilter !== 'TODOS') {
                 filteredProducts = filteredProducts.filter(product =>
                     product.category === selectedCategoryFilter
                 );
             }
 
-            // 3. Filtrar por Talla
             if (selectedSizeFilter !== 'TODOS') {
                 filteredProducts = filteredProducts.filter(product =>
                     product.size === selectedSizeFilter
@@ -512,7 +535,6 @@
             
             renderInventory(filteredProducts);
 
-            // Mostrar sugerencias (solo si el input está enfocado)
             if (document.activeElement === searchInput) {
                 showSuggestions(query);
             }
@@ -522,12 +544,10 @@
             const uniqueSuggestions = new Set();
             const maxSuggestions = 5;
             
-            // Usar solo el inventario filtrado por nombre
             const searchFilteredProducts = currentInventory.filter(product =>
-                product.name.toLowerCase().includes(query)
+                (product.name || '').toLowerCase().includes(query)
             );
 
-            // Recolectar solo NOMBRES únicos
             searchFilteredProducts.forEach(product => {
                 if (uniqueSuggestions.size < maxSuggestions) {
                     uniqueSuggestions.add(product.name);
@@ -555,6 +575,34 @@
         }
 
         // --- UI RENDERING & HELPERS ---
+        
+        // Renderiza las opciones de talla en el SELECT del formulario
+        function renderSizeSelectOptions() {
+            const currentSelectedValue = sizeSelect.value;
+            sizeSelect.innerHTML = '';
+            
+            const defaultOption = document.createElement('option');
+            defaultOption.value = '';
+            defaultOption.textContent = 'Seleccione Talla';
+            defaultOption.disabled = true;
+            sizeSelect.appendChild(defaultOption);
+            
+            availableSizes.forEach(size => {
+                const option = document.createElement('option');
+                option.value = size;
+                option.textContent = size;
+                if (size === currentSelectedValue) {
+                    option.selected = true;
+                }
+                sizeSelect.appendChild(option);
+            });
+            
+            // Re-seleccionar el valor si existía, si no, seleccionar el default
+            if (availableSizes.every(size => size !== currentSelectedValue)) {
+                defaultOption.selected = true;
+            }
+        }
+
 
         // Renderiza los botones de filtro de Talla
         function renderSizeFilterButtons() {
@@ -771,9 +819,13 @@
             setTimeout(() => { searchSuggestions.classList.add('hidden'); }, 200);
         });
         viewStockButton.addEventListener('click', scrollToInventory);
+        
+        // Eventos de Importar/Exportar
+        exportDataButton.addEventListener('click', exportData);
+        importFileInput.addEventListener('change', importData);
 
 
-        initFirebaseAndAuth();
+        initApp(); 
 
     </script>
 </body>
