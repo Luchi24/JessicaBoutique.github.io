@@ -13,8 +13,8 @@
             font-family: 'Inter', sans-serif;
             background-color: #f8f8f8;
         }
-        /* Estilo para el botón de filtro seleccionado */
-        .filter-button.selected {
+        /* Estilo para el botón de filtro/orden seleccionado */
+        .filter-button.selected, .sort-button.selected {
             @apply bg-pink-600 text-white shadow-md ring-2 ring-pink-400;
         }
         /* Ocultar el scroll en las sugerencias por estética */
@@ -25,6 +25,16 @@
             background: #fbcfe8; /* pink-200 */
             border-radius: 3px;
         }
+        /* Clase para la bolita de color */
+        .color-dot {
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            border: 1px solid #ccc;
+            display: inline-block;
+            flex-shrink: 0;
+            margin-right: 0.5rem;
+        }
     </style>
 </head>
 <body class="min-h-screen">
@@ -32,51 +42,25 @@
     <!-- Contenedor Principal -->
     <div class="container mx-auto p-4 md:p-8">
 
-        <!-- Encabezado y Autenticación -->
+        <!-- Encabezado, Título, Búsqueda y Barra de Persistencia -->
         <header class="bg-pink-600 text-white p-6 rounded-xl shadow-lg mb-8">
-            <h1 class="text-3xl font-extrabold tracking-tight">
-                Gestión de Inventario - Jessica Boutique
-            </h1>
-            <div id="auth-status" class="mt-3 text-sm flex flex-col md:flex-row md:items-center">
-                <span class="font-medium mr-2">Usuario ID:</span>
-                <span id="user-id-display" class="bg-pink-700 p-1 px-2 rounded-md text-xs font-mono truncate">USUARIO_LOCAL_DEMO</span>
-            </div>
-            <div id="loading-indicator" class="mt-2 text-yellow-300 hidden">Cargando datos...</div>
-            <div id="error-message" class="mt-2 text-red-300 hidden"></div>
             
-            <!-- Advertencia de no persistencia -->
-            <div id="persistence-warning" class="mt-4 p-3 bg-yellow-100 text-yellow-800 rounded-lg text-sm font-medium border border-yellow-300">
-                ⚠️ **MODO DE DEMOSTRACIÓN SIN BASE DE DATOS:** Los datos se guardan solo en la memoria de esta página y **se perderán al recargar o cerrar la pestaña.**
+            <!-- Título y Usuario ID -->
+            <div class="flex flex-col sm:flex-row items-baseline justify-between mb-4">
+                <h1 class="text-3xl font-extrabold tracking-tight">
+                    Gestión de Inventario
+                </h1>
+                <div id="auth-status" class="mt-2 sm:mt-0 text-sm flex items-center">
+                    <span class="font-medium mr-2">UsuarioID:</span>
+                    <span id="user-id-display" class="bg-pink-700 p-1 px-2 rounded-md text-xs font-mono truncate">USUARIO_LOCAL_DEMO</span>
+                </div>
             </div>
 
-            <!-- Nuevos Botones de Importar/Exportar -->
-            <div class="mt-4 flex flex-col md:flex-row gap-3">
-                <button id="export-data-button" type="button" 
-                        class="bg-blue-700 hover:bg-blue-800 text-white font-bold p-3 rounded-lg transition duration-150 shadow-md flex items-center justify-center">
-                    <!-- Icono de Descarga (Exportar) -->
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                    Exportar Datos
-                </button>
-
-                <label for="import-file-input" class="cursor-pointer bg-purple-700 hover:bg-purple-800 text-white font-bold p-3 rounded-lg transition duration-150 shadow-md flex items-center justify-center">
-                    <!-- Icono de Carga (Importar) -->
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
-                    Importar Datos
-                </label>
-                <input type="file" id="import-file-input" accept=".json" class="hidden">
-            </div>
-            
-        </header>
-
-        <!-- Barra de Búsqueda, Botón de Stock y Filtros -->
-        <div class="bg-white p-6 rounded-xl shadow-lg mb-8">
-            <h2 class="text-2xl font-semibold mb-4 text-gray-800">Búsqueda y Filtros</h2>
-            
             <!-- Barra de Búsqueda y Botón de Acción -->
             <div class="flex items-stretch gap-4 mb-4">
                 <div class="relative flex-grow">
                     <input type="text" id="search-input" placeholder="Buscar por Nombre del producto..."
-                           class="w-full p-3 border border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500 text-lg">
+                           class="w-full p-3 border border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500 text-lg text-gray-900">
                     <!-- Contenedor de Sugerencias -->
                     <div id="search-suggestions" class="absolute z-10 w-full bg-white border border-gray-300 rounded-lg mt-1 shadow-xl max-h-48 overflow-y-auto hidden">
                         <!-- Sugerencias se cargarán aquí -->
@@ -84,27 +68,97 @@
                 </div>
                 <!-- Botón "Ver Stock" con scroll -->
                 <button id="view-stock-button" type="button" 
-                        class="bg-pink-500 hover:bg-pink-600 text-white font-bold p-3 rounded-lg transition duration-150 shadow-md flex-shrink-0">
-                    Ver Stock ↓
+                        class="bg-pink-500 hover:bg-pink-700 text-white font-bold p-3 rounded-lg transition duration-150 shadow-md flex-shrink-0">
+                    Ver Inventario ↓
                 </button>
             </div>
 
-            <!-- Filtros por Categoría -->
-            <div class="mb-4 pt-4 border-t border-gray-100">
-                <p class="text-sm font-medium text-gray-700 mb-2">Filtrar por Categoría:</p>
-                <div id="category-filter-container" class="flex flex-wrap gap-2">
-                    <button type="button" data-filter-type="category" data-filter-value="TODOS" class="filter-button selected px-3 py-1 bg-gray-200 text-gray-700 text-sm rounded-full hover:bg-gray-300 transition duration-150">TODOS</button>
-                    <!-- Los botones de categoría se cargarán aquí -->
+            <!-- Barra de Persistencia (Advertencia + Importar/Exportar) -->
+            <div id="persistence-warning" 
+                 class="mt-4 p-3 bg-yellow-100 text-yellow-800 rounded-lg text-sm font-medium border border-yellow-300 flex flex-col lg:flex-row items-center justify-between gap-3">
+                
+                <p class="font-medium text-center lg:text-left flex-grow">
+                    ⚠️ Los datos se perderán al recargar o cerrar la pestaña, asegúrese de **Exportar** previamente.
+                </p>
+                
+                <!-- Botones de Importar/Exportar -->
+                <div class="flex flex-shrink-0 gap-3 w-full lg:w-auto">
+                    <button id="export-data-button" type="button" 
+                            class="w-1/2 lg:w-auto bg-blue-700 hover:bg-blue-800 text-white font-bold px-3 py-2 rounded-lg transition duration-150 shadow-md flex items-center justify-center text-sm">
+                        <!-- Icono de Descarga (Exportar) -->
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        Exportar
+                    </button>
+
+                    <label for="import-file-input" class="w-1/2 lg:w-auto cursor-pointer bg-purple-700 hover:bg-purple-800 text-white font-bold px-3 py-2 rounded-lg transition duration-150 shadow-md flex items-center justify-center text-sm">
+                        <!-- Icono de Carga (Importar) -->
+                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                        Importar
+                    </label>
+                    <input type="file" id="import-file-input" accept=".json" class="hidden">
                 </div>
             </div>
 
-            <!-- Filtros por Talla -->
-            <div>
-                <p class="text-sm font-medium text-gray-700 mb-2">Filtrar por Talla:</p>
-                <div id="size-filter-container" class="flex flex-wrap gap-2">
-                    <button type="button" data-filter-type="size" data-filter-value="TODOS" class="filter-button selected px-3 py-1 bg-gray-200 text-gray-700 text-sm rounded-full hover:bg-gray-300 transition duration-150">TODOS</button>
-                    <!-- Las tallas fijas se inicializan con JS -->
+            <!-- Indicadores de estado -->
+            <div id="loading-indicator" class="mt-2 text-yellow-300 hidden">Cargando datos...</div>
+            <div id="error-message" class="mt-2 text-red-300 hidden"></div>
+            
+        </header>
+
+
+        <!-- Inventario Actual (Objetivo de scroll) - MOVIDO AQUÍ -->
+        <div id="inventory-section" class="bg-white p-6 rounded-xl shadow-lg mb-8">
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between mb-4">
+                <h2 class="text-2xl font-semibold text-gray-800">Inventario Actual (<span id="total-products">0</span>)</h2>
+                
+                <!-- Controles de Ordenación -->
+                <div class="flex items-center space-x-2 mt-2 md:mt-0">
+                    <span class="text-sm font-medium text-gray-700">Ordenar por Stock:</span>
+                    <button id="sort-low-to-high" type="button" data-sort-by="stock-asc" class="sort-button px-3 py-1 bg-gray-200 text-gray-700 text-sm rounded-full hover:bg-gray-300 transition duration-150">
+                        Bajo a Alto
+                    </button>
+                    <button id="sort-high-to-low" type="button" data-sort-by="stock-desc" class="sort-button px-3 py-1 bg-gray-200 text-gray-700 text-sm rounded-full hover:bg-gray-300 transition duration-150">
+                        Alto a Bajo
+                    </button>
+                    <!-- El botón de ordenación por Nombre es el estado por defecto, no necesita botón propio a menos que se quiera resetear -->
                 </div>
+            </div>
+
+            <!-- FILTROS DE INVENTARIO -->
+            <div class="flex flex-col gap-4 mb-6 pt-2 border-b pb-4">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                    <!-- Filtros por Categoría -->
+                    <div>
+                        <p class="text-sm font-medium text-gray-700 mb-2">Filtrar por Categoría:</p>
+                        <div id="category-filter-container" class="flex flex-wrap gap-2">
+                            <!-- Los botones de categoría se cargarán aquí -->
+                        </div>
+                    </div>
+
+                    <!-- Filtros por Talla -->
+                    <div class="pt-4 lg:pt-0 lg:border-l lg:pl-4">
+                        <p class="text-sm font-medium text-gray-700 mb-2">Filtrar por Talla:</p>
+                        <div id="size-filter-container" class="flex flex-wrap gap-2">
+                            <!-- Las tallas fijas se inicializan con JS -->
+                        </div>
+                    </div>
+
+                    <!-- Filtros por Color -->
+                    <div class="pt-4 lg:pt-0 lg:border-l lg:pl-4">
+                        <p class="text-sm font-medium text-gray-700 mb-2">Filtrar por Color:</p>
+                        <div id="color-filter-container" class="flex flex-wrap gap-2">
+                            <!-- Los colores únicos se cargarán aquí -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lista de Inventario -->
+            <div id="inventory-list" class="space-y-4">
+                <!-- Los productos se cargarán aquí -->
+                <p id="no-data-message" class="text-center text-gray-500 py-10 hidden">
+                    ¡Tu inventario está vacío! Agrega tu primer producto arriba.
+                </p>
             </div>
         </div>
 
@@ -125,11 +179,11 @@
             </div>
         </div>
 
-        <!-- Formulario para Agregar Producto (LAYOUT REDISEÑADO) -->
+        <!-- Formulario para Agregar Producto -->
         <div class="bg-white p-6 rounded-xl shadow-lg mb-8">
             <h2 class="text-2xl font-semibold mb-4 text-gray-800">Agregar Nuevo Producto</h2>
-            <!-- Usamos un grid de 6 columnas en desktop para la distribución de campos -->
-            <form id="product-form" class="grid grid-cols-1 md:grid-cols-6 gap-4">
+            <!-- Usamos un grid de 7 columnas en desktop para la distribución de campos (6 + 1 para el botón) -->
+            <form id="product-form" class="grid grid-cols-1 md:grid-cols-7 gap-4">
                 
                 <!-- Fila 1 -->
                 <input type="text" id="name" placeholder="Nombre (Ej: Vestido Floral)" required
@@ -137,28 +191,37 @@
 
                 <!-- SELECT de Categoría (Dinámico) -->
                 <select id="category-select" required
-                       class="col-span-1 md:col-span-3 p-3 border border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500 text-gray-700 disabled:bg-gray-100 disabled:text-gray-500">
+                       class="col-span-1 md:col-span-2 p-3 border border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500 text-gray-700 disabled:bg-gray-100 disabled:text-gray-500">
                     <option value="" disabled selected>Seleccione Categoría</option>
                     <!-- Opciones de categoría se llenarán con JS -->
                 </select>
                 
-                <!-- Fila 2 -->
                 <!-- SELECT de Talla (Fijo) -->
                 <select id="size-select" required
                        class="col-span-1 md:col-span-2 p-3 border border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500 text-gray-700">
                     <option value="" disabled selected>Seleccione Talla</option>
                     <!-- Las tallas fijas se inicializarán en JS -->
                 </select>
-
+                
+                <!-- Fila 2 - Datos Numéricos y Color -->
                 <input type="number" id="price" placeholder="Precio (Ej: 49.99)" step="0.01" min="0.01" required
                        class="col-span-1 md:col-span-2 p-3 border border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500">
 
                 <input type="number" id="stock" placeholder="Stock Inicial" min="0" required
                        class="col-span-1 md:col-span-1 p-3 border border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500">
 
+                <!-- Selector de Color -->
+                <div class="col-span-1 md:col-span-2 flex items-center p-3 border border-gray-300 rounded-lg bg-white">
+                    <label for="color-picker" class="text-gray-700 text-sm font-medium mr-2">Color:</label>
+                    <input type="color" id="color-picker" value="#ff0000" title="Seleccionar Color"
+                           class="w-8 h-8 rounded-full border-none p-0 overflow-hidden cursor-pointer">
+                    <input type="text" id="color-name" placeholder="Nombre (Ej: Rojo)" value="Rojo" required
+                           class="flex-grow ml-2 p-0 border-none focus:ring-0 focus:border-none text-gray-900">
+                </div>
+
                 <button type="submit"
-                        class="col-span-1 md:col-span-1 bg-green-500 hover:bg-green-600 text-white font-bold p-3 rounded-lg transition duration-150 shadow-md">
-                    Agregar
+                        class="col-span-1 md:col-span-2 bg-green-500 hover:bg-green-600 text-white font-bold p-3 rounded-lg transition duration-150 shadow-md">
+                    Agregar Producto
                 </button>
             </form>
             <p id="product-category-warning" class="text-sm text-red-500 mt-2 hidden">
@@ -166,34 +229,23 @@
             </p>
         </div>
 
-        <!-- Inventario Actual (Objetivo de scroll) -->
-        <div id="inventory-section" class="bg-white p-6 rounded-xl shadow-lg">
-            <h2 class="text-2xl font-semibold mb-4 text-gray-800">Inventario Actual (<span id="total-products">0</span>)</h2>
-            <div id="inventory-list" class="space-y-4">
-                <!-- Los productos se cargarán aquí -->
-                <p id="no-data-message" class="text-center text-gray-500 py-10 hidden">
-                    ¡Tu inventario está vacío! Agrega tu primer producto arriba.
-                </p>
-            </div>
-        </div>
-
     </div>
 
     <!-- Script de Lógica de la Aplicación (In-Memory) -->
     <script type="module">
-        // Se ha eliminado toda la dependencia de Firebase/Firestore.
-        // La aplicación ahora usa solo arrays de JavaScript en memoria.
+        // La aplicación usa arrays de JavaScript en memoria para simular datos.
         // ADVERTENCIA: Los datos se perderán al recargar la página si no se usa Exportar/Importar.
 
-        // Tallas actualizadas
+        // Tallas disponibles
         const availableSizes = ['XS', 'S', 'M', 'L', 'Stándard'];
 
         let userId = 'USUARIO_LOCAL_DEMO'; 
         
         // Datos In-Memory de Ejemplo (IDs simplificados)
         let currentInventory = [
-            { id: 'p1', name: 'Vestido de Noche Rojo', category: 'Vestidos', size: 'M', price: 89.90, stock: 5, timestamp: Date.now() - 10000 },
-            { id: 'p2', name: 'Jeans Clásicos Azul', category: 'Jeans', size: 'L', price: 65.00, stock: 12, timestamp: Date.now() - 5000 },
+            { id: 'p1', name: 'Vestido de Noche Rojo', category: 'Vestidos', size: 'M', price: 89.90, stock: 5, color: '#ff0000', colorName: 'Rojo', timestamp: Date.now() - 10000 },
+            { id: 'p2', name: 'Jeans Clásicos Azul', category: 'Jeans', size: 'L', price: 65.00, stock: 12, color: '#0000ff', colorName: 'Azul Marino', timestamp: Date.now() - 5000 },
+            { id: 'p3', name: 'Blusa de Seda Beige', category: 'Blusas', size: 'S', price: 45.00, stock: 3, color: '#f5f5dc', colorName: 'Beige', timestamp: Date.now() - 2000 },
         ]; 
         
         let currentCategories = [
@@ -202,9 +254,12 @@
             { id: 'c3', name: 'Blusas' }
         ]; 
         
-        // Estado de filtros
+        // Estado de filtros y ordenación
         let selectedCategoryFilter = 'TODOS';
         let selectedSizeFilter = 'TODOS';
+        let selectedColorFilter = 'TODOS';
+        let currentSort = 'name-asc'; // Opciones: 'name-asc', 'stock-asc', 'stock-desc'
+
 
         // Elementos del DOM
         const inventoryList = document.getElementById('inventory-list');
@@ -226,9 +281,13 @@
         const inventorySection = document.getElementById('inventory-section');
         const categoryFilterContainer = document.getElementById('category-filter-container');
         const sizeFilterContainer = document.getElementById('size-filter-container');
+        const colorFilterContainer = document.getElementById('color-filter-container');
         const exportDataButton = document.getElementById('export-data-button');
         const importFileInput = document.getElementById('import-file-input');
-
+        const colorPicker = document.getElementById('color-picker');
+        const colorNameInput = document.getElementById('color-name');
+        const sortLowToHighButton = document.getElementById('sort-low-to-high');
+        const sortHighToLowButton = document.getElementById('sort-high-to-low');
 
         // --- UTILS ---
 
@@ -243,7 +302,8 @@
             // Implementación simple de notificación de error/éxito en UI
             const statusMessage = document.getElementById('error-message');
             statusMessage.textContent = message;
-            statusMessage.classList.remove('hidden');
+            statusMessage.classList.remove('hidden', 'text-green-300');
+            statusMessage.classList.add('text-red-300');
             setTimeout(() => {
                 statusMessage.classList.add('hidden');
             }, 5000); 
@@ -274,12 +334,11 @@
             userIdDisplay.textContent = userId;
             loadingIndicator.classList.add('hidden');
             
-            renderSizeSelectOptions(); // Renderizar opciones de talla en el formulario
-            renderSizeFilterButtons(); // Renderizar botones de filtro de talla
+            renderSizeSelectOptions(); 
             loadCategories(); 
-            loadInventory(); 
+            loadInventory(); // Esto dispara la renderización inicial y filtros
+            updateSortButtonState();
         }
-
 
         // --- PERSISTENCIA (IMPORTAR/EXPORTAR JSON) ---
         
@@ -292,7 +351,7 @@
                 exportTime: new Date().toISOString()
             };
             
-            const dataStr = JSON.stringify(dataToExport, null, 2); // Formato legible
+            const dataStr = JSON.stringify(dataToExport, null, 2); 
             const blob = new Blob([dataStr], { type: "application/json" });
             const url = URL.createObjectURL(blob);
             
@@ -305,7 +364,7 @@
             document.body.removeChild(link);
             URL.revokeObjectURL(url);
 
-            displaySuccess('Datos exportados con éxito como JSON.');
+            displaySuccess('Datos exportados con éxito.');
         }
 
         // 2. Importar Datos desde JSON
@@ -321,7 +380,7 @@
                     const importedData = JSON.parse(e.target.result);
                     
                     if (!importedData.inventory || !importedData.categories) {
-                        throw new Error("El archivo JSON no contiene las estructuras 'inventory' y 'categories' requeridas.");
+                        throw new Error("El archivo no contiene las estructuras 'inventory' y 'categories' requeridas.");
                     }
 
                     // Reemplazar los arrays en memoria
@@ -351,37 +410,23 @@
 
 
         // --- CATEGORY CRUD OPERATIONS (In-Memory) ---
-
-        // 1. CREAR Categoría
         function saveCategory(event) {
             event.preventDefault();
-
             const name = newCategoryInput.value.trim();
-
             if (name.length === 0) return;
-
             const normalizedName = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
-
             const exists = currentCategories.some(cat => cat.name === normalizedName);
             if (exists) {
                 displayError(`La categoría "${normalizedName}" ya existe.`);
                 return;
             }
-            
             const newId = Date.now().toString() + Math.random().toString(36).substring(2, 9);
-
-            currentCategories.push({
-                id: newId,
-                name: normalizedName,
-                timestamp: new Date().getTime() 
-            });
-            
+            currentCategories.push({ id: newId, name: normalizedName, timestamp: new Date().getTime() });
             newCategoryInput.value = '';
             loadCategories(); 
             loadInventory(); 
         }
 
-        // 2. LEER/ESCUCHAR Categorías (In-Memory)
         function loadCategories() {
             currentCategories.sort((a, b) => a.name.localeCompare(b.name));
             renderCategoryManagement();
@@ -389,42 +434,40 @@
             renderCategoryFilterButtons(); 
         }
 
-        // 3. ELIMINAR Categoría
         function deleteCategory(categoryId) {
             if (!confirm(`¿Estás seguro de que quieres eliminar esta categoría?`)) {
                 return;
             }
-
-            // Filtrar y actualizar el array
+            const deletedCategory = currentCategories.find(cat => cat.id === categoryId);
             currentCategories = currentCategories.filter(cat => cat.id !== categoryId);
-
-            // También actualizamos cualquier producto que use esta categoría (para limpiar)
-            const deletedCategoryName = currentCategories.find(c => c.id === categoryId)?.name;
              currentInventory = currentInventory.map(product => {
-                if (product.category === deletedCategoryName) {
+                if (product.category === deletedCategory?.name) {
                     return { ...product, category: 'SIN CATEGORÍA' };
                 }
                 return product;
             });
-
-
             loadCategories();
             loadInventory(); 
             displaySuccess('Categoría eliminada.');
         }
 
         // --- INVENTORY CRUD OPERATIONS (In-Memory) ---
-
-        // 1. CREAR Producto
         function saveProduct(event) {
             event.preventDefault();
 
             const categoryName = categorySelect.value;
             const size = sizeSelect.value;
+            const colorCode = colorPicker.value;
+            const colorName = colorNameInput.value.trim();
+
             if (!categoryName || !size) {
                  displayError("Debe seleccionar Categoría y Talla.");
                  return;
             } 
+            if (!colorName) {
+                 displayError("Debe ingresar un Nombre de Color.");
+                 return;
+            }
 
             const name = document.getElementById('name').value;
             const price = parseFloat(document.getElementById('price').value);
@@ -442,6 +485,8 @@
                 name: name.trim(),
                 category: categoryName, 
                 size: size,
+                color: colorCode,
+                colorName: colorName.charAt(0).toUpperCase() + colorName.slice(1).toLowerCase(), // Normalizar el nombre del color
                 price: price,
                 stock: stock,
                 timestamp: new Date().getTime() 
@@ -450,26 +495,37 @@
             currentInventory.push(newProduct);
             
             productForm.reset(); 
-            categorySelect.value = ''; 
-            sizeSelect.value = ''; 
+            colorPicker.value = '#ff0000';
+            colorNameInput.value = 'Rojo';
             
             loadInventory(); 
             displaySuccess(`Producto "${name}" agregado.`);
         }
 
-        // 2. LEER/ESCUCHAR Inventario (In-Memory)
         function loadInventory() {
-            currentInventory.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
-            handleSearch(); 
+            // La ordenación por defecto es por nombre (name-asc)
+            
+            let sortedInventory = [...currentInventory];
+
+            switch (currentSort) {
+                case 'name-asc':
+                    sortedInventory.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+                    break;
+                case 'stock-asc':
+                    sortedInventory.sort((a, b) => (a.stock || 0) - (b.stock || 0));
+                    break;
+                case 'stock-desc':
+                    sortedInventory.sort((a, b) => (b.stock || 0) - (a.stock || 0));
+                    break;
+            }
+
+            handleSearch(); // Llama a la búsqueda y renderiza con los datos ordenados
+            renderColorFilterButtons(); // Actualiza los filtros de color basados en el nuevo inventario
         }
 
-
-        // 3. ACTUALIZAR Stock
         function updateStock(productId, newStock) {
             if (isNaN(newStock) || newStock < 0) return;
-
             const productIndex = currentInventory.findIndex(p => p.id === productId);
-
             if (productIndex !== -1) {
                 currentInventory[productIndex].stock = newStock;
                 currentInventory[productIndex].timestamp = new Date().getTime(); 
@@ -477,12 +533,10 @@
             }
         }
 
-        // 4. ELIMINAR Producto
         function deleteProduct(productId) {
             if (!confirm(`¿Estás seguro de que quieres eliminar este producto?`)) {
                 return;
             }
-
             currentInventory = currentInventory.filter(p => p.id !== productId);
             loadInventory(); 
             displaySuccess('Producto eliminado.');
@@ -490,36 +544,78 @@
 
         // --- FILTERING AND SEARCH ---
 
+        function handleSortChange(sortBy) {
+            currentSort = sortBy;
+            updateSortButtonState();
+            loadInventory();
+        }
+
+        function updateSortButtonState() {
+            // Limpiar clases de todos los botones de ordenación
+            document.querySelectorAll('.sort-button').forEach(btn => btn.classList.remove('selected'));
+            
+            // Aplicar clase al botón seleccionado
+            if (currentSort === 'stock-asc') {
+                sortLowToHighButton.classList.add('selected');
+            } else if (currentSort === 'stock-desc') {
+                sortHighToLowButton.classList.add('selected');
+            }
+            // Por defecto, si es 'name-asc', no se selecciona ningún botón de stock.
+        }
+
         function handleFilterClick(filterType, value) {
-            // Lógica de toggle de filtros (TODOS o el valor seleccionado)
-            const isCategory = filterType === 'category';
-            const filterState = isCategory ? selectedCategoryFilter : selectedSizeFilter;
+            let filterState;
             
-            let newState = value;
-
-            if (value !== 'TODOS' && filterState === value) {
-                newState = 'TODOS';
-            }
-
-            if (isCategory) {
-                selectedCategoryFilter = newState;
-                renderCategoryFilterButtons();
-            } else {
-                selectedSizeFilter = newState;
-                renderSizeFilterButtons();
+            switch (filterType) {
+                case 'category':
+                    filterState = selectedCategoryFilter;
+                    selectedCategoryFilter = (value !== 'TODOS' && filterState === value) ? 'TODOS' : value;
+                    renderCategoryFilterButtons();
+                    break;
+                case 'size':
+                    filterState = selectedSizeFilter;
+                    selectedSizeFilter = (value !== 'TODOS' && filterState === value) ? 'TODOS' : value;
+                    renderSizeFilterButtons();
+                    break;
+                case 'color':
+                    filterState = selectedColorFilter;
+                    selectedColorFilter = (value !== 'TODOS' && filterState === value) ? 'TODOS' : value;
+                    renderColorFilterButtons();
+                    break;
             }
             
-            handleSearch();
+            handleSearch(); // Re-ejecutar búsqueda y filtros
         }
 
 
         function handleSearch() {
             const query = searchInput.value.toLowerCase().trim();
             
-            let filteredProducts = currentInventory.filter(product =>
-                (product.name || '').toLowerCase().includes(query)
-            );
+            let filteredProducts = [...currentInventory]; 
+            
+            // Aplicar ordenación
+            switch (currentSort) {
+                case 'stock-asc':
+                    filteredProducts.sort((a, b) => (a.stock || 0) - (b.stock || 0));
+                    break;
+                case 'stock-desc':
+                    filteredProducts.sort((a, b) => (b.stock || 0) - (a.stock || 0));
+                    break;
+                case 'name-asc':
+                default:
+                    filteredProducts.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+                    break;
+            }
 
+
+            // Aplicar búsqueda (sobre el set ordenado)
+            if (query) {
+                 filteredProducts = filteredProducts.filter(product =>
+                    (product.name || '').toLowerCase().includes(query)
+                );
+            }
+
+            // Aplicar filtros
             if (selectedCategoryFilter !== 'TODOS') {
                 filteredProducts = filteredProducts.filter(product =>
                     product.category === selectedCategoryFilter
@@ -529,6 +625,12 @@
             if (selectedSizeFilter !== 'TODOS') {
                 filteredProducts = filteredProducts.filter(product =>
                     product.size === selectedSizeFilter
+                );
+            }
+
+            if (selectedColorFilter !== 'TODOS') {
+                filteredProducts = filteredProducts.filter(product =>
+                    product.colorName === selectedColorFilter
                 );
             }
             
@@ -557,7 +659,7 @@
             if (uniqueSuggestions.size > 0 && query.length > 0) {
                 uniqueSuggestions.forEach(suggestion => {
                     const item = document.createElement('div');
-                    item.className = 'p-2 cursor-pointer hover:bg-pink-100 transition duration-100 border-b border-gray-100 last:border-b-0';
+                    item.className = 'p-2 cursor-pointer hover:bg-pink-100 transition duration-100 border-b border-gray-100 last:border-b-0 text-gray-800';
                     item.textContent = suggestion;
                     item.addEventListener('mousedown', (e) => {
                         e.preventDefault(); 
@@ -575,34 +677,24 @@
 
         // --- UI RENDERING & HELPERS ---
         
-        // Renderiza las opciones de talla en el SELECT del formulario
+        // Renderiza las opciones en el SELECT de Talla (Fijo) - FUNCIÓN AÑADIDA
         function renderSizeSelectOptions() {
-            const currentSelectedValue = sizeSelect.value;
             sizeSelect.innerHTML = '';
-            
             const defaultOption = document.createElement('option');
             defaultOption.value = '';
             defaultOption.textContent = 'Seleccione Talla';
             defaultOption.disabled = true;
+            defaultOption.selected = true;
             sizeSelect.appendChild(defaultOption);
-            
+
             availableSizes.forEach(size => {
                 const option = document.createElement('option');
                 option.value = size;
                 option.textContent = size;
-                if (size === currentSelectedValue) {
-                    option.selected = true;
-                }
                 sizeSelect.appendChild(option);
             });
-            
-            // Re-seleccionar el valor si existía, si no, seleccionar el default
-            if (availableSizes.every(size => size !== currentSelectedValue)) {
-                defaultOption.selected = true;
-            }
         }
-
-
+        
         // Renderiza los botones de filtro de Talla
         function renderSizeFilterButtons() {
             sizeFilterContainer.innerHTML = '';
@@ -620,7 +712,6 @@
                 sizeFilterContainer.appendChild(button);
             });
             
-            // Añadir event listeners después de renderizar
             sizeFilterContainer.querySelectorAll('.filter-button').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     handleFilterClick('size', e.target.getAttribute('data-filter-value'));
@@ -645,10 +736,48 @@
                 categoryFilterContainer.appendChild(button);
             });
 
-            // Añadir event listeners después de renderizar
             categoryFilterContainer.querySelectorAll('.filter-button').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     handleFilterClick('category', e.target.getAttribute('data-filter-value'));
+                });
+            });
+        }
+
+        // Renderiza los botones de filtro de Color (basado en colores existentes en el inventario)
+        function renderColorFilterButtons() {
+            colorFilterContainer.innerHTML = '';
+            
+            // 1. Obtener colores únicos y normalizados presentes en el inventario
+            const uniqueColors = [...new Set(currentInventory.map(p => p.colorName).filter(Boolean))].sort();
+
+            // Botón TODOS
+            colorFilterContainer.innerHTML += `<button type="button" data-filter-type="color" data-filter-value="TODOS" class="filter-button px-3 py-1 bg-gray-200 text-gray-700 text-sm rounded-full hover:bg-gray-300 transition duration-150 ${selectedColorFilter === 'TODOS' ? 'selected' : ''}">TODOS</button>`;
+            
+            uniqueColors.forEach(colorName => {
+                // Obtener el código de color para la bolita (solo para la visualización)
+                const productWithColor = currentInventory.find(p => p.colorName === colorName);
+                const colorCode = productWithColor ? productWithColor.color : '#ffffff';
+
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = `filter-button flex items-center px-3 py-1 bg-pink-100 text-pink-700 text-sm rounded-full hover:bg-pink-200 transition duration-150 ${selectedColorFilter === colorName ? 'selected' : ''}`;
+                button.setAttribute('data-filter-type', 'color');
+                button.setAttribute('data-filter-value', colorName);
+                button.innerHTML = `
+                    <span class="color-dot mr-2" style="background-color: ${colorCode}; border-color: #999;"></span>
+                    <span>${colorName}</span>
+                `;
+                colorFilterContainer.appendChild(button);
+            });
+
+            colorFilterContainer.querySelectorAll('.filter-button').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    // Prevenir que el click en el span o dot active el botón sin valor
+                    let value = e.target.getAttribute('data-filter-value');
+                    if (!value) {
+                         value = e.target.closest('.filter-button').getAttribute('data-filter-value');
+                    }
+                    handleFilterClick('color', value);
                 });
             });
         }
@@ -667,34 +796,6 @@
                     inventoryList.appendChild(createProductCard(product));
                 });
             }
-        }
-
-        // Renderiza los chips de categoría en la sección de Gestión
-        function renderCategoryManagement() {
-            categoryChipsContainer.innerHTML = '';
-            
-            if (currentCategories.length === 0) {
-                categoryChipsContainer.innerHTML = `<p class="text-gray-500 italic text-sm">Aún no hay categorías definidas.</p>`;
-                categoryWarning.classList.remove('hidden');
-                return;
-            } else {
-                categoryWarning.classList.add('hidden');
-            }
-
-            currentCategories.forEach(category => {
-                const chip = document.createElement('button');
-                chip.type = 'button';
-                chip.className = 'flex items-center text-sm px-3 py-1 bg-pink-100 text-pink-700 rounded-full font-medium hover:bg-red-200 transition duration-150 group';
-                chip.innerHTML = `
-                    <span>${category.name}</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1 text-pink-500 group-hover:text-red-700" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
-                    </svg>
-                `;
-                chip.title = `Clic para eliminar categoría: ${category.name}`;
-                chip.onclick = () => deleteCategory(category.id);
-                categoryChipsContainer.appendChild(chip);
-            });
         }
 
         // Renderiza las opciones en el SELECT de Categoría
@@ -731,6 +832,34 @@
             }
         }
 
+        // Renderiza los chips de categoría en la sección de Gestión
+        function renderCategoryManagement() {
+            categoryChipsContainer.innerHTML = '';
+            
+            if (currentCategories.length === 0) {
+                categoryChipsContainer.innerHTML = `<p class="text-gray-500 italic text-sm">Aún no hay categorías definidas.</p>`;
+                categoryWarning.classList.remove('hidden');
+                return;
+            } else {
+                categoryWarning.classList.add('hidden');
+            }
+
+            currentCategories.forEach(category => {
+                const chip = document.createElement('button');
+                chip.type = 'button';
+                chip.className = 'flex items-center text-sm px-3 py-1 bg-pink-100 text-pink-700 rounded-full font-medium hover:bg-red-200 transition duration-150 group';
+                chip.innerHTML = `
+                    <span>${category.name}</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1 text-pink-500 group-hover:text-red-700" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                    </svg>
+                `;
+                chip.title = `Clic para eliminar categoría: ${category.name}`;
+                chip.onclick = () => deleteCategory(category.id);
+                categoryChipsContainer.appendChild(chip);
+            });
+        }
+
 
         // Crea la tarjeta (Card) de cada producto en la lista
         function createProductCard(product) {
@@ -741,7 +870,10 @@
             const content = `
                 <div class="mb-3 md:mb-0 md:w-1/2">
                     <p class="text-xs text-pink-600 font-medium mb-1 uppercase">${product.category || 'SIN CATEGORÍA'}</p> 
-                    <p class="text-lg font-bold text-gray-800">${product.name}</p>
+                    <div class="flex items-center">
+                        <span class="color-dot" style="background-color: ${product.color};" title="Color: ${product.colorName}"></span>
+                        <p class="text-lg font-bold text-gray-800">${product.name}</p>
+                    </div>
                     <p class="text-sm text-gray-600">
                         <span class="font-semibold">Talla:</span> ${product.size} |
                         <span class="font-semibold">Precio:</span> ${formatPrice(product.price)}
@@ -819,6 +951,10 @@
         });
         viewStockButton.addEventListener('click', scrollToInventory);
         
+        // Eventos de Ordenación
+        sortLowToHighButton.addEventListener('click', () => handleSortChange('stock-asc'));
+        sortHighToLowButton.addEventListener('click', () => handleSortChange('stock-desc'));
+
         // Eventos de Importar/Exportar
         exportDataButton.addEventListener('click', exportData);
         importFileInput.addEventListener('change', importData);
