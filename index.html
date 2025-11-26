@@ -16,11 +16,9 @@
             background-color: #f8f8f8;
         }
         .filter-button.selected, .sort-button.selected {
-            /* Estilo para el botón seleccionado */
             @apply bg-pink-600 text-white shadow-md ring-2 ring-pink-400;
         }
         .color-dot {
-            /* Estilo para el punto de color en las tarjetas de producto */
             width: 1.25rem; 
             height: 1.25rem; 
             border-radius: 50%;
@@ -30,16 +28,32 @@
             margin-right: 0.5rem;
         }
         .color-dot-small {
-            /* Estilo para el punto de color en los chips de filtro/gestión */
             width: 1rem; 
             height: 1rem;
             border-radius: 50%;
             border: 1px solid #ccc;
             flex-shrink: 0;
         }
-        /* Estilo para los títulos de sección */
         .section-title-bar {
-            @apply bg-pink-600 text-white p-3 rounded-t-xl font-semibold flex items-center justify-between;
+            @apply bg-gradient-to-r from-pink-600 to-pink-700 text-white p-4 rounded-t-xl font-semibold flex items-center justify-between;
+        }
+        .stats-card {
+            @apply bg-white rounded-xl shadow-md p-4 flex flex-col items-center justify-center transition-transform duration-200 hover:shadow-lg hover:-translate-y-1;
+        }
+        .product-card {
+            @apply bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-200 hover:shadow-md hover:border-pink-200;
+        }
+        .stock-indicator {
+            @apply text-xs font-bold px-2 py-1 rounded-full;
+        }
+        .stock-low {
+            @apply bg-red-100 text-red-800;
+        }
+        .stock-medium {
+            @apply bg-yellow-100 text-yellow-800;
+        }
+        .stock-high {
+            @apply bg-green-100 text-green-800;
         }
     </style>
 </head>
@@ -50,37 +64,51 @@
 
         <!-- Encabezado y Título Principal -->
         <header class="mb-8">
-            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between">
-                <h1 class="text-4xl font-extrabold tracking-tight text-pink-700">
-                    Gestión de Inventario
-                </h1>
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6">
+                <div class="flex items-center">
+                    <div class="bg-pink-600 p-3 rounded-xl mr-4">
+                        <i data-lucide="shirt" class="w-8 h-8 text-white"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-4xl font-extrabold tracking-tight text-pink-700">
+                            Jessica Boutique
+                        </h1>
+                        <p class="text-gray-600 mt-1">Gestión de Inventario</p>
+                    </div>
+                </div>
                 
                 <!-- BARRA DE ACCIÓN GLOBAL: Advertencia, Exportar e Importar -->
                 <div class="mt-4 sm:mt-0 flex flex-wrap items-center gap-3 justify-end">
                     
                     <!-- Botones de Importar/Exportar -->
                     <button id="export-data-button" type="button" title="Exportar a JSON"
-                            class="bg-blue-600 hover:bg-blue-700 text-white font-bold p-2 rounded-lg transition duration-150 shadow-md">
-                        <i data-lucide="download" class="w-5 h-5"></i>
+                            class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-150 shadow-md flex items-center">
+                        <i data-lucide="download" class="w-5 h-5 mr-2"></i>
+                        Exportar
                     </button>
 
-                    <label for="import-file-input" class="cursor-pointer bg-purple-600 hover:bg-purple-700 text-white font-bold p-2 rounded-lg transition duration-150 shadow-md">
-                        <i data-lucide="upload" class="w-5 h-5"></i>
+                    <label for="import-file-input" class="cursor-pointer bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-lg transition duration-150 shadow-md flex items-center">
+                        <i data-lucide="upload" class="w-5 h-5 mr-2"></i>
+                        Importar
                     </label>
                     <input type="file" id="import-file-input" accept=".json" class="hidden">
 
                     <!-- Barra de Persistencia (Advertencia) -->
                     <div id="persistence-warning" 
-                         class="p-2 text-sm font-medium rounded-lg border border-yellow-400 bg-yellow-100 text-yellow-800 shadow-sm text-center">
-                        ⚠️ Los datos se pierden al recargar si no Exporta.
+                         class="p-3 text-sm font-medium rounded-lg border border-yellow-400 bg-yellow-100 text-yellow-800 shadow-sm flex items-center">
+                        <i data-lucide="alert-triangle" class="w-5 h-5 mr-2"></i>
+                        <span>Los datos se pierden al recargar si no exporta</span>
                     </div>
                 </div>
             </div>
             
             <!-- Barra de Búsqueda -->
-            <div class="relative mt-6">
-                <input type="text" id="search-input" placeholder="Buscar por Nombre, Categoría o Talla..."
-                       class="w-full p-3 border border-gray-300 rounded-xl focus:ring-pink-500 focus:border-pink-500 text-lg text-gray-900 shadow-sm">
+            <div class="relative">
+                <div class="flex items-center">
+                    <i data-lucide="search" class="absolute left-4 text-gray-400 w-5 h-5"></i>
+                    <input type="text" id="search-input" placeholder="Buscar por Nombre, Categoría, Talla o Color..."
+                           class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-pink-500 focus:border-pink-500 text-lg text-gray-900 shadow-sm">
+                </div>
                 <!-- Contenedor de Sugerencias -->
                 <div id="search-suggestions" class="absolute z-10 w-full bg-white border border-gray-300 rounded-xl mt-1 shadow-xl max-h-48 overflow-y-auto hidden">
                     <!-- Sugerencias se cargarán aquí -->
@@ -88,26 +116,66 @@
             </div>
 
             <!-- Indicadores de estado -->
-            <div id="loading-indicator" class="mt-2 text-pink-300 hidden">Cargando datos...</div>
+            <div id="loading-indicator" class="mt-2 text-pink-300 hidden flex items-center">
+                <i data-lucide="loader" class="w-4 h-4 mr-2 animate-spin"></i>
+                Cargando datos...
+            </div>
             <div id="error-message" class="mt-2 text-red-500 hidden"></div>
         </header>
 
+        <!-- Panel de Estadísticas -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            <div class="stats-card">
+                <div class="text-pink-600 mb-2">
+                    <i data-lucide="package" class="w-8 h-8"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-800" id="total-products-stat">0</h3>
+                <p class="text-gray-600 text-sm">Productos totales</p>
+            </div>
+            <div class="stats-card">
+                <div class="text-green-600 mb-2">
+                    <i data-lucide="trending-up" class="w-8 h-8"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-800" id="total-value-stat">S/ 0.00</h3>
+                <p class="text-gray-600 text-sm">Valor del inventario</p>
+            </div>
+            <div class="stats-card">
+                <div class="text-blue-600 mb-2">
+                    <i data-lucide="alert-circle" class="w-8 h-8"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-800" id="low-stock-stat">0</h3>
+                <p class="text-gray-600 text-sm">Productos con stock bajo</p>
+            </div>
+            <div class="stats-card">
+                <div class="text-purple-600 mb-2">
+                    <i data-lucide="tag" class="w-8 h-8"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-800" id="total-categories-stat">0</h3>
+                <p class="text-gray-600 text-sm">Categorías activas</p>
+            </div>
+        </div>
 
         <!-- VISTA 1: INVENTARIO (Visible por defecto) -->
         <section id="inventory-section" class="bg-white rounded-xl shadow-lg mb-8" data-view="inventory">
             <div class="section-title-bar">
-                <h2 class="text-2xl font-semibold">
-                    Inventario Actual (<span id="total-products">0</span>)
+                <h2 class="text-2xl font-semibold flex items-center">
+                    <i data-lucide="package" class="w-6 h-6 mr-2"></i>
+                    Inventario Actual (<span id="total-products">0</span> productos)
                 </h2>
                  <!-- BOTONES DE NAVEGACIÓN EN EL TÍTULO DEL INVENTARIO -->
                 <div class="flex gap-2">
+                    <button id="toggle-view-btn" type="button" title="Cambiar vista"
+                            class="bg-pink-800 hover:bg-pink-900 text-white text-sm font-medium px-3 py-2 rounded transition duration-150 shadow-md flex items-center">
+                        <i data-lucide="layout-grid" class="w-4 h-4 mr-1"></i>
+                        Vista de Tarjetas
+                    </button>
                     <button id="nav-manage-btn" type="button" title="Ir a Gestión de Catálogos"
-                            class="bg-pink-800 hover:bg-pink-900 text-white text-sm font-medium px-3 py-1 rounded transition duration-150 shadow-md flex items-center">
+                            class="bg-pink-800 hover:bg-pink-900 text-white text-sm font-medium px-3 py-2 rounded transition duration-150 shadow-md flex items-center">
                         <i data-lucide="list-checks" class="w-4 h-4 mr-1"></i>
                         Gestionar
                     </button>
                     <button id="nav-add-btn" type="button" title="Ir a Agregar Producto"
-                            class="bg-green-500 hover:bg-green-600 text-white text-sm font-medium px-3 py-1 rounded transition duration-150 shadow-md flex items-center">
+                            class="bg-green-500 hover:bg-green-600 text-white text-sm font-medium px-3 py-2 rounded transition duration-150 shadow-md flex items-center">
                         <i data-lucide="package-plus" class="w-4 h-4 mr-1"></i>
                         Agregar producto +
                     </button>
@@ -117,16 +185,31 @@
             <div id="inventory-content" class="p-6 space-y-6">
                  <!-- Controles de Ordenación y Filtros -->
                 <div class="flex flex-col gap-4">
-                    <!-- Ordenación por Stock (Flechas) -->
-                    <div class="flex items-center space-x-4">
-                        <span class="text-sm font-medium text-gray-700">Ordenar Stock:</span>
-                        <button id="sort-low-to-high" type="button" data-sort-by="stock-asc" title="Stock: Bajo a Alto"
-                                class="sort-button p-2 text-gray-600 rounded-full hover:bg-pink-100 transition duration-150">
-                            <i data-lucide="arrow-down-0-1" class="w-5 h-5"></i>
-                        </button>
-                        <button id="sort-high-to-low" type="button" data-sort-by="stock-desc" title="Stock: Alto a Bajo"
-                                class="sort-button p-2 text-gray-600 rounded-full hover:bg-pink-100 transition duration-150">
-                            <i data-lucide="arrow-up-1-0" class="w-5 h-5"></i>
+                    <!-- Ordenación -->
+                    <div class="flex flex-wrap items-center justify-between gap-4">
+                        <div class="flex items-center space-x-4">
+                            <span class="text-sm font-medium text-gray-700">Ordenar por:</span>
+                            <button id="sort-name" type="button" data-sort-by="name-asc" title="Nombre: A-Z"
+                                    class="sort-button p-2 text-gray-600 rounded-lg hover:bg-pink-100 transition duration-150 flex items-center">
+                                <i data-lucide="arrow-down-a-z" class="w-5 h-5 mr-1"></i>
+                                Nombre
+                            </button>
+                            <button id="sort-price" type="button" data-sort-by="price-desc" title="Precio: Mayor a Menor"
+                                    class="sort-button p-2 text-gray-600 rounded-lg hover:bg-pink-100 transition duration-150 flex items-center">
+                                <i data-lucide="dollar-sign" class="w-5 h-5 mr-1"></i>
+                                Precio
+                            </button>
+                            <button id="sort-stock" type="button" data-sort-by="stock-desc" title="Stock: Alto a Bajo"
+                                    class="sort-button p-2 text-gray-600 rounded-lg hover:bg-pink-100 transition duration-150 flex items-center">
+                                <i data-lucide="arrow-up-1-0" class="w-5 h-5 mr-1"></i>
+                                Stock
+                            </button>
+                        </div>
+                        
+                        <button id="clear-filters" type="button" 
+                                class="text-sm text-gray-600 hover:text-gray-800 flex items-center transition duration-150">
+                            <i data-lucide="filter-x" class="w-4 h-4 mr-1"></i>
+                            Limpiar filtros
                         </button>
                     </div>
                     
@@ -134,7 +217,10 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 border-t pt-4">
                         <!-- Filtros por Categoría -->
                         <div>
-                            <p class="text-sm font-medium text-gray-700 mb-2">Filtrar Categoría:</p>
+                            <p class="text-sm font-medium text-gray-700 mb-2 flex items-center">
+                                <i data-lucide="tag" class="w-4 h-4 mr-1"></i>
+                                Categoría:
+                            </p>
                             <div id="category-filter-container" class="flex flex-wrap gap-2">
                                 <!-- Los botones de categoría se cargarán aquí -->
                             </div>
@@ -142,7 +228,10 @@
     
                         <!-- Filtros por Talla -->
                         <div>
-                            <p class="text-sm font-medium text-gray-700 mb-2">Filtrar Talla:</p>
+                            <p class="text-sm font-medium text-gray-700 mb-2 flex items-center">
+                                <i data-lucide="ruler" class="w-4 h-4 mr-1"></i>
+                                Talla:
+                            </p>
                             <div id="size-filter-container" class="flex flex-wrap gap-2">
                                 <!-- Las tallas fijas se inicializan con JS -->
                             </div>
@@ -150,7 +239,10 @@
     
                         <!-- Filtros por Color -->
                         <div>
-                            <p class="text-sm font-medium text-gray-700 mb-2">Filtrar Color:</p>
+                            <p class="text-sm font-medium text-gray-700 mb-2 flex items-center">
+                                <i data-lucide="palette" class="w-4 h-4 mr-1"></i>
+                                Color:
+                            </p>
                             <div id="color-filter-container" class="flex flex-wrap gap-2">
                                 <!-- Los colores únicos se cargarán aquí -->
                             </div>
@@ -158,13 +250,37 @@
                     </div>
                 </div>
 
-                <!-- Lista de Inventario -->
-                <div id="inventory-list" class="space-y-4 pt-4 border-t">
+                <!-- Lista de Inventario - Vista de Tarjetas -->
+                <div id="inventory-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-4">
                     <!-- Los productos se cargarán aquí -->
-                    <p id="no-data-message" class="text-center text-gray-500 py-10 hidden">
-                        ¡Tu inventario está vacío o no coincide con los filtros!
-                    </p>
                 </div>
+                
+                <!-- Lista de Inventario - Vista de Tabla (oculta por defecto) -->
+                <div id="inventory-table" class="hidden pt-4">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Producto</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Categoría</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Talla</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Color</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Precio</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="inventory-table-body" class="bg-white divide-y divide-gray-200">
+                                <!-- Los productos se cargarán aquí -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <p id="no-data-message" class="text-center text-gray-500 py-10 hidden">
+                    <i data-lucide="package-x" class="w-12 h-12 mx-auto mb-4 text-gray-300"></i>
+                    ¡Tu inventario está vacío o no coincide con los filtros!
+                </p>
             </div>
         </section>
 
@@ -172,9 +288,12 @@
         <!-- VISTA 2: GESTIÓN (Oculta por defecto) -->
         <section id="management-section" class="bg-white rounded-xl shadow-lg mb-8 hidden" data-view="management">
             <div class="section-title-bar">
-                <h2 class="text-2xl font-semibold">Gestión de Catálogos</h2>
+                <h2 class="text-2xl font-semibold flex items-center">
+                    <i data-lucide="settings" class="w-6 h-6 mr-2"></i>
+                    Gestión de Catálogos
+                </h2>
                 <button id="back-to-inventory-1" type="button" title="Regresar al Inventario"
-                        class="bg-pink-800 hover:bg-pink-900 text-white text-sm font-medium px-3 py-1 rounded transition duration-150 shadow-md flex items-center">
+                        class="bg-pink-800 hover:bg-pink-900 text-white text-sm font-medium px-3 py-2 rounded transition duration-150 shadow-md flex items-center">
                     <i data-lucide="arrow-left" class="w-4 h-4 mr-1"></i>
                     Regresar al Inventario
                 </button>
@@ -184,11 +303,14 @@
                 
                 <!-- Subsección: Gestión de Categorías -->
                 <div>
-                    <h3 class="text-xl font-semibold mb-3 text-pink-600">Categorías</h3>
+                    <h3 class="text-xl font-semibold mb-3 text-pink-600 flex items-center">
+                        <i data-lucide="tag" class="w-5 h-5 mr-2"></i>
+                        Categorías
+                    </h3>
                     <form id="category-form" class="flex gap-2 mb-4">
                         <input type="text" id="new-category-name" placeholder="Nueva Categoría (Ej: Jeans, Vestidos)" required
                                class="flex-grow p-3 border border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500">
-                        <button type="submit" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold p-3 rounded-lg transition duration-150 shadow-md">
+                        <button type="submit" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold p-3 rounded-lg transition duration-150 shadow-md flex items-center">
                             <i data-lucide="plus" class="w-5 h-5"></i>
                         </button>
                     </form>
@@ -199,7 +321,10 @@
 
                 <!-- Subsección: Gestión de Colores -->
                 <div>
-                    <h3 class="text-xl font-semibold mb-3 text-pink-600">Colores</h3>
+                    <h3 class="text-xl font-semibold mb-3 text-pink-600 flex items-center">
+                        <i data-lucide="palette" class="w-5 h-5 mr-2"></i>
+                        Colores
+                    </h3>
                     <form id="color-form" class="flex gap-2 mb-4">
                         <div class="flex items-center p-3 border border-gray-300 rounded-lg bg-white flex-grow">
                              <label for="new-color-picker" class="text-gray-700 text-sm font-medium mr-2">Color:</label>
@@ -208,7 +333,7 @@
                             <input type="text" id="new-color-name" placeholder="Nombre (Ej: Negro Ónix)" required
                                    class="flex-grow ml-3 p-0 border-none focus:ring-0 focus:border-none text-gray-900">
                         </div>
-                        <button type="submit" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold p-3 rounded-lg transition duration-150 shadow-md">
+                        <button type="submit" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold p-3 rounded-lg transition duration-150 shadow-md flex items-center">
                             <i data-lucide="plus" class="w-5 h-5"></i>
                         </button>
                     </form>
@@ -224,9 +349,12 @@
         <!-- VISTA 3: AGREGAR NUEVO PRODUCTO (Oculta por defecto) -->
         <section id="add-product-section" class="bg-white rounded-xl shadow-lg mb-8 hidden" data-view="add-product">
              <div class="section-title-bar">
-                <h2 class="text-2xl font-semibold">Agregar Nuevo Producto / Variante</h2>
+                <h2 class="text-2xl font-semibold flex items-center">
+                    <i data-lucide="package-plus" class="w-6 h-6 mr-2"></i>
+                    Agregar Nuevo Producto / Variante
+                </h2>
                 <button id="back-to-inventory-2" type="button" title="Regresar al Inventario"
-                        class="bg-pink-800 hover:bg-pink-900 text-white text-sm font-medium px-3 py-1 rounded transition duration-150 shadow-md flex items-center">
+                        class="bg-pink-800 hover:bg-pink-900 text-white text-sm font-medium px-3 py-2 rounded transition duration-150 shadow-md flex items-center">
                     <i data-lucide="arrow-left" class="w-4 h-4 mr-1"></i>
                     Regresar al Inventario
                 </button>
@@ -260,12 +388,16 @@
                     </select>
                     
                     <p class="col-span-full text-sm text-red-500 mt-2 hidden" id="product-pre-requisite-warning">
-                        ⚠️ Para agregar productos, debe definir al menos una Categoría y un Color en la sección de **Gestión**.
+                        <i data-lucide="alert-circle" class="w-4 h-4 inline mr-1"></i>
+                        Para agregar productos, debe definir al menos una Categoría y un Color en la sección de <strong>Gestión</strong>.
                     </p>
 
                     <!-- Fila 2 - Selección de Tallas (Checkboxes para múltiples variantes) -->
                     <div class="col-span-full border-t pt-4 mt-4">
-                        <p class="text-sm font-medium text-gray-700 mb-3">Tallas disponibles para crear variantes (Seleccione una o más):</p>
+                        <p class="text-sm font-medium text-gray-700 mb-3 flex items-center">
+                            <i data-lucide="ruler" class="w-4 h-4 mr-1"></i>
+                            Tallas disponibles para crear variantes (Seleccione una o más):
+                        </p>
                         <div id="size-checkbox-container" class="flex flex-wrap gap-3">
                             <!-- Checkboxes de tallas se cargarán aquí -->
                         </div>
@@ -291,6 +423,7 @@
         const availableSizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'Stándard'];
         let userId = 'USUARIO_LOCAL_DEMO'; 
         let currentView = 'inventory'; // Estado de la vista actual
+        let currentViewMode = 'grid'; // 'grid' o 'table'
         
         // Datos In-Memory de Ejemplo 
         let currentInventory = [
@@ -317,11 +450,13 @@
         let selectedCategoryFilter = 'TODOS';
         let selectedSizeFilter = 'TODOS';
         let selectedColorFilter = 'TODOS';
-        let currentSort = 'name-asc'; // Opciones: 'name-asc', 'stock-asc', 'stock-desc'
+        let currentSort = 'name-asc'; // Opciones: 'name-asc', 'price-asc', 'price-desc', 'stock-asc', 'stock-desc'
 
 
         // --- ELEMENTOS DEL DOM ---
-        const inventoryList = document.getElementById('inventory-list');
+        const inventoryGrid = document.getElementById('inventory-grid');
+        const inventoryTable = document.getElementById('inventory-table');
+        const inventoryTableBody = document.getElementById('inventory-table-body');
         const productForm = document.getElementById('product-form');
         const categoryForm = document.getElementById('category-form');
         const colorForm = document.getElementById('color-form');
@@ -350,9 +485,11 @@
         const categoryFilterContainer = document.getElementById('category-filter-container');
         const sizeFilterContainer = document.getElementById('size-filter-container');
         const colorFilterContainer = document.getElementById('color-filter-container');
-        const sortLowToHighButton = document.getElementById('sort-low-to-high');
-        const sortHighToLowButton = document.getElementById('sort-high-to-low');
-
+        const sortNameButton = document.getElementById('sort-name');
+        const sortPriceButton = document.getElementById('sort-price');
+        const sortStockButton = document.getElementById('sort-stock');
+        const clearFiltersButton = document.getElementById('clear-filters');
+        
         // Navegación DOM
         const navManageBtn = document.getElementById('nav-manage-btn');
         const navAddBtn = document.getElementById('nav-add-btn');
@@ -361,10 +498,17 @@
         const inventorySection = document.getElementById('inventory-section');
         const managementSection = document.getElementById('management-section');
         const addProductSection = document.getElementById('add-product-section');
+        const toggleViewBtn = document.getElementById('toggle-view-btn');
         
         // Persistencia DOM
         const exportDataButton = document.getElementById('export-data-button');
         const importFileInput = document.getElementById('import-file-input');
+        
+        // Estadísticas DOM
+        const totalProductsStat = document.getElementById('total-products-stat');
+        const totalValueStat = document.getElementById('total-value-stat');
+        const lowStockStat = document.getElementById('low-stock-stat');
+        const totalCategoriesStat = document.getElementById('total-categories-stat');
 
         // --- UTILS ---
 
@@ -423,7 +567,6 @@
             initializeLucideIcons();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-
 
         // --- PERSISTENCIA (IMPORTAR/EXPORTAR JSON) ---
         function exportData() {
@@ -735,6 +878,12 @@
                 case 'stock-desc':
                     filteredProducts.sort((a, b) => (b.stock || 0) - (a.stock || 0));
                     break;
+                case 'price-asc':
+                    filteredProducts.sort((a, b) => (a.price || 0) - (b.price || 0));
+                    break;
+                case 'price-desc':
+                    filteredProducts.sort((a, b) => (b.price || 0) - (a.price || 0));
+                    break;
                 case 'name-asc':
                 default:
                     // Ordenación alfabética por nombre como fallback
@@ -894,16 +1043,62 @@
         }
 
         function renderInventory(productsToDisplay) {
-            inventoryList.innerHTML = '';
-            totalProductsSpan.textContent = productsToDisplay.length;
+            // Actualizar estadísticas
+            updateStatistics(productsToDisplay);
             
+            // Mostrar/ocultar mensaje de no datos
             noDataMessage.classList.toggle('hidden', productsToDisplay.length > 0);
-
-            productsToDisplay.forEach(product => {
-                inventoryList.appendChild(createProductCard(product));
-            });
+            
+            // Renderizar según el modo de vista actual
+            if (currentViewMode === 'grid') {
+                inventoryGrid.classList.remove('hidden');
+                inventoryTable.classList.add('hidden');
+                renderInventoryGrid(productsToDisplay);
+            } else {
+                inventoryGrid.classList.add('hidden');
+                inventoryTable.classList.remove('hidden');
+                renderInventoryTable(productsToDisplay);
+            }
+            
             // Re-inicializar iconos después de renderizar el inventario
             initializeLucideIcons(); 
+        }
+
+        function renderInventoryGrid(productsToDisplay) {
+            inventoryGrid.innerHTML = '';
+            totalProductsSpan.textContent = productsToDisplay.length;
+
+            productsToDisplay.forEach(product => {
+                inventoryGrid.appendChild(createProductCard(product));
+            });
+        }
+
+        function renderInventoryTable(productsToDisplay) {
+            inventoryTableBody.innerHTML = '';
+            totalProductsSpan.textContent = productsToDisplay.length;
+
+            productsToDisplay.forEach(product => {
+                inventoryTableBody.appendChild(createProductTableRow(product));
+            });
+        }
+
+        function updateStatistics(productsToDisplay) {
+            // Actualizar estadísticas generales
+            totalProductsStat.textContent = productsToDisplay.length;
+            
+            // Calcular valor total del inventario
+            const totalValue = productsToDisplay.reduce((sum, product) => {
+                return sum + (product.price * product.stock);
+            }, 0);
+            totalValueStat.textContent = formatPrice(totalValue);
+            
+            // Calcular productos con stock bajo (< 5)
+            const lowStockCount = productsToDisplay.filter(product => product.stock < 5).length;
+            lowStockStat.textContent = lowStockCount;
+            
+            // Calcular categorías activas
+            const activeCategories = new Set(productsToDisplay.map(product => product.category)).size;
+            totalCategoriesStat.textContent = activeCategories;
         }
 
         function renderCategorySelect() {
@@ -1001,87 +1196,192 @@
 
         function createProductCard(product) {
             const card = document.createElement('div');
-            // Usamos flex-col y luego sm:flex-row para adaptabilidad móvil
-            card.className = 'flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-gray-50 border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition duration-150';
+            card.className = 'product-card';
+            
+            // Determinar clase de stock
+            let stockClass = 'stock-high';
+            let stockText = 'Alto';
+            if (product.stock < 5) {
+                stockClass = 'stock-low';
+                stockText = 'Bajo';
+            } else if (product.stock < 10) {
+                stockClass = 'stock-medium';
+                stockText = 'Medio';
+            }
 
-            // Contenido del Producto
-            const contentHTML = `
-                <div class="mb-3 sm:mb-0 sm:w-1/2">
-                    <p class="text-xs text-pink-600 font-medium mb-1 uppercase">${product.category || 'SIN CATEGORÍA'}</p> 
-                    <div class="flex items-center">
-                        <span class="color-dot mr-2" style="background-color: ${product.colorHex}; border-color: ${product.colorHex === '#ffffff' ? '#999' : product.colorHex};" title="Color: ${product.colorName}"></span>
-                        <p class="text-lg font-bold text-gray-800">${product.name}</p>
+            card.innerHTML = `
+                <div class="p-4">
+                    <div class="flex justify-between items-start mb-3">
+                        <span class="text-xs font-medium text-pink-600 bg-pink-50 px-2 py-1 rounded-full">${product.category || 'SIN CATEGORÍA'}</span>
+                        <span class="stock-indicator ${stockClass}">${stockText}</span>
                     </div>
-                    <p class="text-sm text-gray-600">
-                        <span class="font-semibold">Talla:</span> ${product.size} |
-                        <span class="font-semibold">Color:</span> ${product.colorName} |
-                        <span class="font-semibold">Precio:</span> ${formatPrice(product.price)}
-                    </p>
+                    
+                    <div class="flex items-center mb-3">
+                        <span class="color-dot" style="background-color: ${product.colorHex}; border-color: ${product.colorHex === '#ffffff' ? '#999' : product.colorHex};" title="Color: ${product.colorName}"></span>
+                        <h3 class="text-lg font-bold text-gray-800 truncate">${product.name}</h3>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-2 text-sm text-gray-600 mb-4">
+                        <div class="flex items-center">
+                            <i data-lucide="ruler" class="w-4 h-4 mr-1 text-gray-400"></i>
+                            <span>Talla: ${product.size}</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i data-lucide="palette" class="w-4 h-4 mr-1 text-gray-400"></i>
+                            <span>${product.colorName}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between items-center">
+                        <span class="text-lg font-bold text-gray-800">${formatPrice(product.price)}</span>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-sm font-medium text-gray-700">Stock:</span>
+                            <span class="text-lg font-bold ${stockClass.replace('stock-', 'text-')}">${product.stock}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 p-3 border-t border-gray-100 flex justify-between">
+                    <div class="flex space-x-1">
+                        <button type="button" data-action="decrement" class="p-1 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition duration-150" title="Reducir Stock">
+                            <i data-lucide="minus" class="w-4 h-4"></i>
+                        </button>
+                        <button type="button" data-action="increment" class="p-1 bg-green-100 text-green-600 rounded-lg hover:bg-green-200 transition duration-150" title="Aumentar Stock">
+                            <i data-lucide="plus" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                    <button type="button" class="p-1 bg-gray-200 text-gray-600 rounded-lg hover:bg-red-500 hover:text-white transition duration-150" title="Eliminar Producto">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    </button>
                 </div>
             `;
-            card.innerHTML += contentHTML;
 
-            // Controles de Stock y Acciones
-            const actionsContainer = document.createElement('div');
-            actionsContainer.className = 'flex items-center space-x-3 w-full sm:w-auto mt-3 sm:mt-0';
-
-            // Controles de Stock
-            const stockControl = document.createElement('div');
-            stockControl.className = 'flex items-center space-x-1 flex-grow sm:flex-grow-0';
-            // Clases para el input de stock
-            const stockInputClasses = "w-16 text-center border border-gray-300 rounded-lg p-1 text-sm font-medium focus:ring-pink-500 focus:border-pink-500";
-            stockControl.innerHTML = `
-                <span class="text-sm font-semibold text-gray-700 mr-2">Stock:</span>
-                <button type="button" data-action="decrement" class="p-1 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition duration-150 text-xl font-bold" title="Reducir Stock">
-                    -
-                </button>
-                <input type="number" value="${product.stock}" min="0" data-stock-id="${product.id}"
-                       class="${stockInputClasses}">
-                <button type="button" data-action="increment" class="p-1 bg-green-100 text-green-600 rounded-lg hover:bg-green-200 transition duration-150 text-xl font-bold" title="Aumentar Stock">
-                    +
-                </button>
-            `;
-
-            // Botón de Eliminar
-            const deleteButton = document.createElement('button');
-            deleteButton.type = 'button';
-            deleteButton.className = 'p-2 bg-gray-200 text-gray-600 rounded-lg hover:bg-red-500 hover:text-white transition duration-150 shadow-sm flex-shrink-0';
-            deleteButton.innerHTML = `<i data-lucide="trash-2" class="h-5 w-5"></i>`;
-            deleteButton.title = "Eliminar Producto";
-            deleteButton.onclick = () => deleteProduct(product.id);
-
-            actionsContainer.appendChild(stockControl);
-            actionsContainer.appendChild(deleteButton);
-            card.appendChild(actionsContainer);
-
-            // Manejar los eventos de los botones de stock
-            const input = stockControl.querySelector('input[type="number"]');
-            const decrementBtn = stockControl.querySelector('button[data-action="decrement"]');
-            const incrementBtn = stockControl.querySelector('button[data-action="increment"]');
+            // Manejar eventos de los botones
+            const decrementBtn = card.querySelector('button[data-action="decrement"]');
+            const incrementBtn = card.querySelector('button[data-action="increment"]');
+            const deleteBtn = card.querySelector('button:last-child');
 
             decrementBtn.addEventListener('click', () => {
-                const currentStock = parseInt(input.value, 10);
-                if (currentStock > 0) { 
-                    updateStock(product.id, currentStock - 1); 
+                if (product.stock > 0) { 
+                    updateStock(product.id, product.stock - 1); 
                 } else {
                     displayError('El stock no puede ser negativo.');
                 }
             });
+            
             incrementBtn.addEventListener('click', () => {
-                const currentStock = parseInt(input.value, 10);
-                updateStock(product.id, currentStock + 1);
+                updateStock(product.id, product.stock + 1);
             });
-            input.addEventListener('change', (e) => {
-                const newStock = parseInt(e.target.value, 10);
-                if (isNaN(newStock) || newStock < 0) {
-                     e.target.value = product.stock; // Revertir a valor anterior
-                     displayError('Stock debe ser un número positivo.');
-                     return;
-                }
-                updateStock(product.id, newStock);
-            });
+            
+            deleteBtn.addEventListener('click', () => deleteProduct(product.id));
 
             return card;
+        }
+
+        function createProductTableRow(product) {
+            const row = document.createElement('tr');
+            
+            // Determinar clase de stock
+            let stockClass = 'stock-high';
+            if (product.stock < 5) {
+                stockClass = 'stock-low';
+            } else if (product.stock < 10) {
+                stockClass = 'stock-medium';
+            }
+
+            row.innerHTML = `
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                        <span class="color-dot-small mr-3" style="background-color: ${product.colorHex}; border-color: ${product.colorHex === '#ffffff' ? '#999' : product.colorHex};"></span>
+                        <div>
+                            <div class="text-sm font-medium text-gray-900">${product.name}</div>
+                            <div class="text-sm text-gray-500">${product.colorName}</div>
+                        </div>
+                    </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="text-sm text-gray-900">${product.category}</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="text-sm text-gray-900">${product.size}</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                        <span class="color-dot-small mr-2" style="background-color: ${product.colorHex}; border-color: ${product.colorHex === '#ffffff' ? '#999' : product.colorHex};"></span>
+                        <span class="text-sm text-gray-900">${product.colorName}</span>
+                    </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="text-sm text-gray-900 font-medium">${formatPrice(product.price)}</div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="flex items-center">
+                        <span class="stock-indicator ${stockClass} mr-2">${product.stock}</span>
+                        <div class="flex space-x-1">
+                            <button type="button" data-action="decrement" class="p-1 bg-red-100 text-red-600 rounded hover:bg-red-200 transition duration-150" title="Reducir Stock">
+                                <i data-lucide="minus" class="w-3 h-3"></i>
+                            </button>
+                            <button type="button" data-action="increment" class="p-1 bg-green-100 text-green-600 rounded hover:bg-green-200 transition duration-150" title="Aumentar Stock">
+                                <i data-lucide="plus" class="w-3 h-3"></i>
+                            </button>
+                        </div>
+                    </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <button type="button" class="text-red-600 hover:text-red-900 transition duration-150" title="Eliminar Producto">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    </button>
+                </td>
+            `;
+
+            // Manejar eventos de los botones
+            const decrementBtn = row.querySelector('button[data-action="decrement"]');
+            const incrementBtn = row.querySelector('button[data-action="increment"]');
+            const deleteBtn = row.querySelector('button:last-child');
+
+            decrementBtn.addEventListener('click', () => {
+                if (product.stock > 0) { 
+                    updateStock(product.id, product.stock - 1); 
+                } else {
+                    displayError('El stock no puede ser negativo.');
+                }
+            });
+            
+            incrementBtn.addEventListener('click', () => {
+                updateStock(product.id, product.stock + 1);
+            });
+            
+            deleteBtn.addEventListener('click', () => deleteProduct(product.id));
+
+            return row;
+        }
+
+        function toggleViewMode() {
+            if (currentViewMode === 'grid') {
+                currentViewMode = 'table';
+                toggleViewBtn.innerHTML = `
+                    <i data-lucide="layout-grid" class="w-4 h-4 mr-1"></i>
+                    Vista de Tarjetas
+                `;
+            } else {
+                currentViewMode = 'grid';
+                toggleViewBtn.innerHTML = `
+                    <i data-lucide="table" class="w-4 h-4 mr-1"></i>
+                    Vista de Tabla
+                `;
+            }
+            loadInventory();
+        }
+
+        function clearFilters() {
+            selectedCategoryFilter = 'TODOS';
+            selectedSizeFilter = 'TODOS';
+            selectedColorFilter = 'TODOS';
+            searchInput.value = '';
+            renderCategoryFilterButtons();
+            renderSizeFilterButtons();
+            renderColorFilterButtons();
+            handleSearch();
         }
 
 
@@ -1097,6 +1397,8 @@
             navAddBtn.addEventListener('click', () => switchView('add-product'));
             backToInventory1.addEventListener('click', () => switchView('inventory'));
             backToInventory2.addEventListener('click', () => switchView('inventory'));
+            toggleViewBtn.addEventListener('click', toggleViewMode);
+            clearFiltersButton.addEventListener('click', clearFilters);
 
             // Event Listeners de formularios y búsqueda
             productForm.addEventListener('submit', saveProductVariants);
@@ -1112,8 +1414,9 @@
             });
             
             // Eventos de Ordenación
-            sortLowToHighButton.addEventListener('click', () => handleSortChange('stock-asc'));
-            sortHighToLowButton.addEventListener('click', () => handleSortChange('stock-desc'));
+            sortNameButton.addEventListener('click', () => handleSortChange('name-asc'));
+            sortPriceButton.addEventListener('click', () => handleSortChange('price-desc'));
+            sortStockButton.addEventListener('click', () => handleSortChange('stock-desc'));
 
             // Eventos de Importar/Exportar
             exportDataButton.addEventListener('click', exportData);
