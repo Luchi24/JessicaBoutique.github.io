@@ -22,7 +22,7 @@
             width: 1.25rem; 
             height: 1.25rem; 
             border-radius: 50%;
-            border: 2px solid #ccc;
+            border: 2px solid #ec4899;
             display: inline-block;
             flex-shrink: 0;
             margin-right: 0.5rem;
@@ -31,7 +31,7 @@
             width: 1rem; 
             height: 1rem;
             border-radius: 50%;
-            border: 1px solid #ccc;
+            border: 1px solid #ec4899;
             flex-shrink: 0;
         }
         .section-title-bar {
@@ -55,6 +55,9 @@
         .stock-high {
             @apply bg-green-100 text-green-800;
         }
+        .size-quantity-input {
+            @apply w-16 text-center border border-gray-300 rounded-lg p-2 text-sm font-medium focus:ring-pink-500 focus:border-pink-500;
+        }
     </style>
 </head>
 <body class="min-h-screen">
@@ -77,8 +80,18 @@
                     </div>
                 </div>
                 
-                <!-- BARRA DE ACCIÓN GLOBAL: Advertencia, Exportar e Importar -->
+                <!-- BARRA DE ACCIÓN GLOBAL: Botones de Navegación -->
                 <div class="mt-4 sm:mt-0 flex flex-wrap items-center gap-3 justify-end">
+                    <button id="nav-manage-btn" type="button" title="Ir a Gestión de Catálogos"
+                            class="bg-pink-800 hover:bg-pink-900 text-white text-sm font-medium px-4 py-2 rounded transition duration-150 shadow-md flex items-center">
+                        <i data-lucide="list-checks" class="w-4 h-4 mr-1"></i>
+                        Gestionar Catálogos
+                    </button>
+                    <button id="nav-add-btn" type="button" title="Ir a Agregar Producto"
+                            class="bg-green-500 hover:bg-green-600 text-white text-sm font-medium px-4 py-2 rounded transition duration-150 shadow-md flex items-center">
+                        <i data-lucide="package-plus" class="w-4 h-4 mr-1"></i>
+                        Agregar Producto +
+                    </button>
                     
                     <!-- Botones de Importar/Exportar -->
                     <button id="export-data-button" type="button" title="Exportar a JSON"
@@ -92,13 +105,6 @@
                         Importar
                     </label>
                     <input type="file" id="import-file-input" accept=".json" class="hidden">
-
-                    <!-- Barra de Persistencia (Advertencia) -->
-                    <div id="persistence-warning" 
-                         class="p-3 text-sm font-medium rounded-lg border border-yellow-400 bg-yellow-100 text-yellow-800 shadow-sm flex items-center">
-                        <i data-lucide="alert-triangle" class="w-5 h-5 mr-2"></i>
-                        <span>Los datos se pierden al recargar si no exporta</span>
-                    </div>
                 </div>
             </div>
             
@@ -162,22 +168,12 @@
                     <i data-lucide="package" class="w-6 h-6 mr-2"></i>
                     Inventario Actual (<span id="total-products">0</span> productos)
                 </h2>
-                 <!-- BOTONES DE NAVEGACIÓN EN EL TÍTULO DEL INVENTARIO -->
+                 <!-- BOTÓN DE VISTA SOLAMENTE -->
                 <div class="flex gap-2">
                     <button id="toggle-view-btn" type="button" title="Cambiar vista"
                             class="bg-pink-800 hover:bg-pink-900 text-white text-sm font-medium px-3 py-2 rounded transition duration-150 shadow-md flex items-center">
                         <i data-lucide="layout-grid" class="w-4 h-4 mr-1"></i>
                         Vista de Tarjetas
-                    </button>
-                    <button id="nav-manage-btn" type="button" title="Ir a Gestión de Catálogos"
-                            class="bg-pink-800 hover:bg-pink-900 text-white text-sm font-medium px-3 py-2 rounded transition duration-150 shadow-md flex items-center">
-                        <i data-lucide="list-checks" class="w-4 h-4 mr-1"></i>
-                        Gestionar
-                    </button>
-                    <button id="nav-add-btn" type="button" title="Ir a Agregar Producto"
-                            class="bg-green-500 hover:bg-green-600 text-white text-sm font-medium px-3 py-2 rounded transition duration-150 shadow-md flex items-center">
-                        <i data-lucide="package-plus" class="w-4 h-4 mr-1"></i>
-                        Agregar producto +
                     </button>
                 </div>
             </div>
@@ -293,7 +289,7 @@
                     Gestión de Catálogos
                 </h2>
                 <button id="back-to-inventory-1" type="button" title="Regresar al Inventario"
-                        class="bg-pink-800 hover:bg-pink-900 text-white text-sm font-medium px-3 py-2 rounded transition duration-150 shadow-md flex items-center">
+                        class="bg-pink-800 hover:bg-pink-900 text-white text-sm font-medium px-4 py-2 rounded transition duration-150 shadow-md flex items-center">
                     <i data-lucide="arrow-left" class="w-4 h-4 mr-1"></i>
                     Regresar al Inventario
                 </button>
@@ -329,7 +325,7 @@
                         <div class="flex items-center p-3 border border-gray-300 rounded-lg bg-white flex-grow">
                              <label for="new-color-picker" class="text-gray-700 text-sm font-medium mr-2">Color:</label>
                             <input type="color" id="new-color-picker" value="#000000" title="Seleccionar Color"
-                                   class="w-8 h-8 rounded-full border-none p-0 overflow-hidden cursor-pointer">
+                                   class="w-8 h-8 rounded-full border-2 border-pink-500 p-0 overflow-hidden cursor-pointer">
                             <input type="text" id="new-color-name" placeholder="Nombre (Ej: Negro Ónix)" required
                                    class="flex-grow ml-3 p-0 border-none focus:ring-0 focus:border-none text-gray-900">
                         </div>
@@ -354,7 +350,7 @@
                     Agregar Nuevo Producto / Variante
                 </h2>
                 <button id="back-to-inventory-2" type="button" title="Regresar al Inventario"
-                        class="bg-pink-800 hover:bg-pink-900 text-white text-sm font-medium px-3 py-2 rounded transition duration-150 shadow-md flex items-center">
+                        class="bg-pink-800 hover:bg-pink-900 text-white text-sm font-medium px-4 py-2 rounded transition duration-150 shadow-md flex items-center">
                     <i data-lucide="arrow-left" class="w-4 h-4 mr-1"></i>
                     Regresar al Inventario
                 </button>
@@ -363,7 +359,7 @@
             <div id="add-product-content" class="p-6">
                 <form id="product-form" class="grid grid-cols-1 md:grid-cols-6 gap-4">
                     
-                    <!-- Fila 1 - Nombre, Categoría, Precio, Stock -->
+                    <!-- Fila 1 - Nombre, Categoría, Precio -->
                     <input type="text" id="name" placeholder="Nombre (Ej: Blusa Satinada)" required
                            class="col-span-1 md:col-span-2 p-3 border border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500">
     
@@ -376,9 +372,6 @@
 
                     <input type="number" id="price" placeholder="Precio (Ej: 49.99)" step="0.01" min="0.01" required
                            class="col-span-1 md:col-span-1 p-3 border border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500">
-    
-                    <input type="number" id="stock" placeholder="Stock Inicial" min="0" required
-                           class="col-span-1 md:col-span-1 p-3 border border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500">
 
                     <!-- SELECT de Color (Dinámico) -->
                     <select id="color-select" required
@@ -387,19 +380,25 @@
                         <!-- Opciones de color se llenarán con JS -->
                     </select>
                     
+                    <!-- Indicador de Stock Total -->
+                    <div class="col-span-1 md:col-span-1 flex items-center justify-center bg-gray-50 rounded-lg border border-gray-300">
+                        <span class="text-sm font-medium text-gray-700">Stock Total: </span>
+                        <span id="total-stock-display" class="ml-2 text-lg font-bold text-green-600">0</span>
+                    </div>
+                    
                     <p class="col-span-full text-sm text-red-500 mt-2 hidden" id="product-pre-requisite-warning">
                         <i data-lucide="alert-circle" class="w-4 h-4 inline mr-1"></i>
                         Para agregar productos, debe definir al menos una Categoría y un Color en la sección de <strong>Gestión</strong>.
                     </p>
 
-                    <!-- Fila 2 - Selección de Tallas (Checkboxes para múltiples variantes) -->
+                    <!-- Fila 2 - Selección de Tallas con Cantidades -->
                     <div class="col-span-full border-t pt-4 mt-4">
                         <p class="text-sm font-medium text-gray-700 mb-3 flex items-center">
                             <i data-lucide="ruler" class="w-4 h-4 mr-1"></i>
-                            Tallas disponibles para crear variantes (Seleccione una o más):
+                            Especificar cantidad por talla:
                         </p>
-                        <div id="size-checkbox-container" class="flex flex-wrap gap-3">
-                            <!-- Checkboxes de tallas se cargarán aquí -->
+                        <div id="size-quantity-container" class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <!-- Los inputs de cantidad por talla se cargarán aquí -->
                         </div>
                     </div>
                     
@@ -479,7 +478,8 @@
         
         // Producto DOM
         const productPreRequisiteWarning = document.getElementById('product-pre-requisite-warning');
-        const sizeCheckboxContainer = document.getElementById('size-checkbox-container');
+        const sizeQuantityContainer = document.getElementById('size-quantity-container');
+        const totalStockDisplay = document.getElementById('total-stock-display');
         
         // Filtros y Ordenación DOM
         const categoryFilterContainer = document.getElementById('category-filter-container');
@@ -704,6 +704,7 @@
             // Esto asegura que los filtros del inventario estén siempre actualizados
             renderCategoryFilterButtons(); 
             renderColorFilterButtons();
+            renderSizeQuantityInputs();
         }
 
         // --- INVENTORY CRUD OPERATIONS ---
@@ -715,20 +716,33 @@
             
             const name = document.getElementById('name').value.trim();
             const price = parseFloat(document.getElementById('price').value);
-            const stock = parseInt(document.getElementById('stock').value, 10);
             
             const selectedColor = currentColors.find(c => c.id === colorId);
 
-            const selectedSizes = Array.from(sizeCheckboxContainer.querySelectorAll('input[type="checkbox"]:checked'))
-                                       .map(input => input.value);
+            // Obtener las cantidades por talla
+            const sizeQuantities = {};
+            let totalStock = 0;
+            let hasValidQuantity = false;
+            
+            availableSizes.forEach(size => {
+                const input = document.getElementById(`quantity-${size}`);
+                if (input) {
+                    const quantity = parseInt(input.value, 10) || 0;
+                    if (quantity > 0) {
+                        sizeQuantities[size] = quantity;
+                        totalStock += quantity;
+                        hasValidQuantity = true;
+                    }
+                }
+            });
 
             // Validaciones
-            if (!name || !categoryName || !colorId || selectedSizes.length === 0) {
-                 displayError("Complete todos los campos requeridos y seleccione al menos una Talla.");
+            if (!name || !categoryName || !colorId || !hasValidQuantity) {
+                 displayError("Complete todos los campos requeridos y especifique al menos una cantidad para alguna talla.");
                  return;
             }
-            if (isNaN(price) || isNaN(stock) || price <= 0 || stock < 0) {
-                 displayError("Por favor, ingrese valores válidos para Precio y Stock.");
+            if (isNaN(price) || price <= 0) {
+                 displayError("Por favor, ingrese un valor válido para el Precio.");
                  return;
             }
             if (!selectedColor) {
@@ -737,31 +751,36 @@
             }
 
             let productsAddedCount = 0;
-            selectedSizes.forEach(size => {
-                const newProduct = {
-                    id: generateId(),
-                    name: name,
-                    category: categoryName, 
-                    size: size,
-                    colorHex: selectedColor.hex,
-                    colorName: selectedColor.name,
-                    price: price,
-                    stock: stock,
-                    timestamp: new Date().getTime() 
-                };
-                currentInventory.push(newProduct);
-                productsAddedCount++;
+            Object.keys(sizeQuantities).forEach(size => {
+                const quantity = sizeQuantities[size];
+                if (quantity > 0) {
+                    const newProduct = {
+                        id: generateId(),
+                        name: name,
+                        category: categoryName, 
+                        size: size,
+                        colorHex: selectedColor.hex,
+                        colorName: selectedColor.name,
+                        price: price,
+                        stock: quantity,
+                        timestamp: new Date().getTime() 
+                    };
+                    currentInventory.push(newProduct);
+                    productsAddedCount++;
+                }
             });
 
             if (productsAddedCount > 0) {
-                // Resetear formulario (excepto Nombre y Categoría para facilitar la carga continua)
+                // Resetear formulario
+                document.getElementById('name').value = '';
                 document.getElementById('price').value = '';
-                document.getElementById('stock').value = '';
                 
-                // Deseleccionar tallas
-                selectedSizes.forEach(size => {
-                    sizeCheckboxContainer.querySelector(`input[value="${size}"]`).checked = false;
+                // Resetear cantidades
+                availableSizes.forEach(size => {
+                    const input = document.getElementById(`quantity-${size}`);
+                    if (input) input.value = '';
                 });
+                updateTotalStockDisplay();
                 
                 loadInventory(); 
                 displaySuccess(`${productsAddedCount} variante(s) de "${name}" agregada(s).`);
@@ -769,7 +788,7 @@
                 // Opcional: regresar al inventario después de agregar
                 switchView('inventory');
             } else {
-                displayError("No se agregó ningún producto. Revise las tallas seleccionadas.");
+                displayError("No se agregó ningún producto. Revise las cantidades por talla.");
             }
         }
 
@@ -944,20 +963,41 @@
 
         // --- UI RENDERING & HELPERS ---
 
-        function renderSizeCheckboxes() {
-            sizeCheckboxContainer.innerHTML = '';
+        function renderSizeQuantityInputs() {
+            sizeQuantityContainer.innerHTML = '';
 
             availableSizes.forEach(size => {
-                const id = `size-checkbox-${size}`;
+                const container = document.createElement('div');
+                container.className = 'flex flex-col items-center bg-gray-50 p-3 rounded-lg border border-gray-200';
+                
                 const label = document.createElement('label');
-                label.htmlFor = id;
-                label.className = 'flex items-center space-x-2 p-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-pink-100 transition duration-150';
-                label.innerHTML = `
-                    <input type="checkbox" id="${id}" value="${size}" class="form-checkbox h-5 w-5 text-pink-600 rounded focus:ring-pink-500">
-                    <span class="text-sm font-medium text-gray-700">${size}</span>
-                `;
-                sizeCheckboxContainer.appendChild(label);
+                label.htmlFor = `quantity-${size}`;
+                label.className = 'text-sm font-medium text-gray-700 mb-2';
+                label.textContent = `Talla ${size}`;
+                
+                const input = document.createElement('input');
+                input.type = 'number';
+                input.id = `quantity-${size}`;
+                input.min = '0';
+                input.placeholder = '0';
+                input.className = 'size-quantity-input';
+                input.addEventListener('input', updateTotalStockDisplay);
+                
+                container.appendChild(label);
+                container.appendChild(input);
+                sizeQuantityContainer.appendChild(container);
             });
+        }
+        
+        function updateTotalStockDisplay() {
+            let total = 0;
+            availableSizes.forEach(size => {
+                const input = document.getElementById(`quantity-${size}`);
+                if (input) {
+                    total += parseInt(input.value, 10) || 0;
+                }
+            });
+            totalStockDisplay.textContent = total;
         }
         
         function renderSizeFilterButtons() {
@@ -1020,7 +1060,7 @@
                 button.setAttribute('data-filter-type', 'color');
                 button.setAttribute('data-filter-value', color.name);
                 button.innerHTML = `
-                    <span class="color-dot-small mr-2" style="background-color: ${color.hex}; border-color: ${color.hex === '#ffffff' ? '#999' : color.hex};"></span>
+                    <span class="color-dot-small mr-2" style="background-color: ${color.hex};"></span>
                     <span>${color.name}</span>
                 `;
                 colorFilterContainer.appendChild(button);
@@ -1183,7 +1223,7 @@
                 chip.className = 'flex items-center text-sm px-3 py-1 bg-pink-100 text-pink-700 rounded-full font-medium hover:bg-red-200 transition duration-150 group';
                 chip.title = `Clic para eliminar color: ${color.name} (${color.hex})`;
                 chip.innerHTML = `
-                    <span class="color-dot-small mr-2" style="background-color: ${color.hex}; border-color: ${color.hex === '#ffffff' ? '#999' : color.hex};"></span>
+                    <span class="color-dot-small mr-2" style="background-color: ${color.hex};"></span>
                     <span>${color.name}</span>
                     <i data-lucide="trash-2" class="w-4 h-4 ml-2 text-pink-500 group-hover:text-red-700"></i>
                 `;
@@ -1217,7 +1257,7 @@
                     </div>
                     
                     <div class="flex items-center mb-3">
-                        <span class="color-dot" style="background-color: ${product.colorHex}; border-color: ${product.colorHex === '#ffffff' ? '#999' : product.colorHex};" title="Color: ${product.colorName}"></span>
+                        <span class="color-dot" style="background-color: ${product.colorHex};" title="Color: ${product.colorName}"></span>
                         <h3 class="text-lg font-bold text-gray-800 truncate">${product.name}</h3>
                     </div>
                     
@@ -1292,7 +1332,7 @@
             row.innerHTML = `
                 <td class="px-6 py-4 whitespace-nowrap">
                     <div class="flex items-center">
-                        <span class="color-dot-small mr-3" style="background-color: ${product.colorHex}; border-color: ${product.colorHex === '#ffffff' ? '#999' : product.colorHex};"></span>
+                        <span class="color-dot-small mr-3" style="background-color: ${product.colorHex};"></span>
                         <div>
                             <div class="text-sm font-medium text-gray-900">${product.name}</div>
                             <div class="text-sm text-gray-500">${product.colorName}</div>
@@ -1307,7 +1347,7 @@
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
                     <div class="flex items-center">
-                        <span class="color-dot-small mr-2" style="background-color: ${product.colorHex}; border-color: ${product.colorHex === '#ffffff' ? '#999' : product.colorHex};"></span>
+                        <span class="color-dot-small mr-2" style="background-color: ${product.colorHex};"></span>
                         <span class="text-sm text-gray-900">${product.colorName}</span>
                     </div>
                 </td>
@@ -1389,7 +1429,7 @@
         function initApp() {
             // Inicializar las dependencias y la data inicial
             loadManagementData(); 
-            renderSizeCheckboxes();
+            updateTotalStockDisplay();
             updateSortButtonState(); // Inicializa el estado visual de ordenación
             
             // Configurar Listeners de Navegación
