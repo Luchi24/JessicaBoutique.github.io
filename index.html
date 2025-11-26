@@ -6,6 +6,8 @@
     <title>Jessica Boutique | Gestión de Inventario</title>
     <!-- Carga de Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Carga de Lucide Icons (Iconos) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <!-- Configuración de fuente Inter -->
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
@@ -13,27 +15,31 @@
             font-family: 'Inter', sans-serif;
             background-color: #f8f8f8;
         }
-        /* Estilo para el botón de filtro/orden seleccionado */
         .filter-button.selected, .sort-button.selected {
+            /* Estilo para el botón seleccionado */
             @apply bg-pink-600 text-white shadow-md ring-2 ring-pink-400;
         }
-        /* Ocultar el scroll en las sugerencias por estética */
-        #search-suggestions::-webkit-scrollbar {
-            width: 6px;
-        }
-        #search-suggestions::-webkit-scrollbar-thumb {
-            background: #fbcfe8; /* pink-200 */
-            border-radius: 3px;
-        }
-        /* Clase para la bolita de color */
         .color-dot {
-            width: 1rem;
-            height: 1rem;
+            /* Estilo para el punto de color en las tarjetas de producto */
+            width: 1.25rem; 
+            height: 1.25rem; 
             border-radius: 50%;
-            border: 1px solid #ccc;
+            border: 2px solid #ccc;
             display: inline-block;
             flex-shrink: 0;
             margin-right: 0.5rem;
+        }
+        .color-dot-small {
+            /* Estilo para el punto de color en los chips de filtro/gestión */
+            width: 1rem; 
+            height: 1rem;
+            border-radius: 50%;
+            border: 1px solid #ccc;
+            flex-shrink: 0;
+        }
+        /* Estilo para los títulos de sección */
+        .section-title-bar {
+            @apply bg-pink-600 text-white p-3 rounded-t-xl font-semibold flex items-center justify-between;
         }
     </style>
 </head>
@@ -42,210 +48,255 @@
     <!-- Contenedor Principal -->
     <div class="container mx-auto p-4 md:p-8">
 
-        <!-- Encabezado, Título, Búsqueda y Barra de Persistencia -->
-        <header class="bg-pink-600 text-white p-6 rounded-xl shadow-lg mb-8">
-            
-            <!-- Título y Usuario ID -->
-            <div class="flex flex-col sm:flex-row items-baseline justify-between mb-4">
-                <h1 class="text-3xl font-extrabold tracking-tight">
+        <!-- Encabezado y Título Principal -->
+        <header class="mb-8">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between">
+                <h1 class="text-4xl font-extrabold tracking-tight text-pink-700">
                     Gestión de Inventario
                 </h1>
-                <div id="auth-status" class="mt-2 sm:mt-0 text-sm flex items-center">
-                    <span class="font-medium mr-2">UsuarioID:</span>
-                    <span id="user-id-display" class="bg-pink-700 p-1 px-2 rounded-md text-xs font-mono truncate">USUARIO_LOCAL_DEMO</span>
-                </div>
-            </div>
-
-            <!-- Barra de Búsqueda y Botón de Acción -->
-            <div class="flex items-stretch gap-4 mb-4">
-                <div class="relative flex-grow">
-                    <input type="text" id="search-input" placeholder="Buscar por Nombre del producto..."
-                           class="w-full p-3 border border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500 text-lg text-gray-900">
-                    <!-- Contenedor de Sugerencias -->
-                    <div id="search-suggestions" class="absolute z-10 w-full bg-white border border-gray-300 rounded-lg mt-1 shadow-xl max-h-48 overflow-y-auto hidden">
-                        <!-- Sugerencias se cargarán aquí -->
-                    </div>
-                </div>
-                <!-- Botón "Ver Stock" con scroll -->
-                <button id="view-stock-button" type="button" 
-                        class="bg-pink-500 hover:bg-pink-700 text-white font-bold p-3 rounded-lg transition duration-150 shadow-md flex-shrink-0">
-                    Ver Inventario ↓
-                </button>
-            </div>
-
-            <!-- Barra de Persistencia (Advertencia + Importar/Exportar) -->
-            <div id="persistence-warning" 
-                 class="mt-4 p-3 bg-yellow-100 text-yellow-800 rounded-lg text-sm font-medium border border-yellow-300 flex flex-col lg:flex-row items-center justify-between gap-3">
                 
-                <p class="font-medium text-center lg:text-left flex-grow">
-                    ⚠️ Los datos se perderán al recargar o cerrar la pestaña, asegúrese de **Exportar** previamente.
-                </p>
-                
-                <!-- Botones de Importar/Exportar -->
-                <div class="flex flex-shrink-0 gap-3 w-full lg:w-auto">
-                    <button id="export-data-button" type="button" 
-                            class="w-1/2 lg:w-auto bg-blue-700 hover:bg-blue-800 text-white font-bold px-3 py-2 rounded-lg transition duration-150 shadow-md flex items-center justify-center text-sm">
-                        <!-- Icono de Descarga (Exportar) -->
-                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                        Exportar
+                <!-- BARRA DE ACCIÓN GLOBAL: Advertencia, Exportar e Importar -->
+                <div class="mt-4 sm:mt-0 flex flex-wrap items-center gap-3 justify-end">
+                    
+                    <!-- Botones de Importar/Exportar -->
+                    <button id="export-data-button" type="button" title="Exportar a JSON"
+                            class="bg-blue-600 hover:bg-blue-700 text-white font-bold p-2 rounded-lg transition duration-150 shadow-md">
+                        <i data-lucide="download" class="w-5 h-5"></i>
                     </button>
 
-                    <label for="import-file-input" class="w-1/2 lg:w-auto cursor-pointer bg-purple-700 hover:bg-purple-800 text-white font-bold px-3 py-2 rounded-lg transition duration-150 shadow-md flex items-center justify-center text-sm">
-                        <!-- Icono de Carga (Importar) -->
-                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
-                        Importar
+                    <label for="import-file-input" class="cursor-pointer bg-purple-600 hover:bg-purple-700 text-white font-bold p-2 rounded-lg transition duration-150 shadow-md">
+                        <i data-lucide="upload" class="w-5 h-5"></i>
                     </label>
                     <input type="file" id="import-file-input" accept=".json" class="hidden">
+
+                    <!-- Barra de Persistencia (Advertencia) -->
+                    <div id="persistence-warning" 
+                         class="p-2 text-sm font-medium rounded-lg border border-yellow-400 bg-yellow-100 text-yellow-800 shadow-sm text-center">
+                        ⚠️ Los datos se pierden al recargar si no Exporta.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Barra de Búsqueda -->
+            <div class="relative mt-6">
+                <input type="text" id="search-input" placeholder="Buscar por Nombre, Categoría o Talla..."
+                       class="w-full p-3 border border-gray-300 rounded-xl focus:ring-pink-500 focus:border-pink-500 text-lg text-gray-900 shadow-sm">
+                <!-- Contenedor de Sugerencias -->
+                <div id="search-suggestions" class="absolute z-10 w-full bg-white border border-gray-300 rounded-xl mt-1 shadow-xl max-h-48 overflow-y-auto hidden">
+                    <!-- Sugerencias se cargarán aquí -->
                 </div>
             </div>
 
             <!-- Indicadores de estado -->
-            <div id="loading-indicator" class="mt-2 text-yellow-300 hidden">Cargando datos...</div>
-            <div id="error-message" class="mt-2 text-red-300 hidden"></div>
-            
+            <div id="loading-indicator" class="mt-2 text-pink-300 hidden">Cargando datos...</div>
+            <div id="error-message" class="mt-2 text-red-500 hidden"></div>
         </header>
 
 
-        <!-- Inventario Actual (Objetivo de scroll) - MOVIDO AQUÍ -->
-        <div id="inventory-section" class="bg-white p-6 rounded-xl shadow-lg mb-8">
-            <div class="flex flex-col md:flex-row items-start md:items-center justify-between mb-4">
-                <h2 class="text-2xl font-semibold text-gray-800">Inventario Actual (<span id="total-products">0</span>)</h2>
-                
-                <!-- Controles de Ordenación -->
-                <div class="flex items-center space-x-2 mt-2 md:mt-0">
-                    <span class="text-sm font-medium text-gray-700">Ordenar por Stock:</span>
-                    <button id="sort-low-to-high" type="button" data-sort-by="stock-asc" class="sort-button px-3 py-1 bg-gray-200 text-gray-700 text-sm rounded-full hover:bg-gray-300 transition duration-150">
-                        Bajo a Alto
+        <!-- VISTA 1: INVENTARIO (Visible por defecto) -->
+        <section id="inventory-section" class="bg-white rounded-xl shadow-lg mb-8" data-view="inventory">
+            <div class="section-title-bar">
+                <h2 class="text-2xl font-semibold">
+                    Inventario Actual (<span id="total-products">0</span>)
+                </h2>
+                 <!-- BOTONES DE NAVEGACIÓN EN EL TÍTULO DEL INVENTARIO -->
+                <div class="flex gap-2">
+                    <button id="nav-manage-btn" type="button" title="Ir a Gestión de Catálogos"
+                            class="bg-pink-800 hover:bg-pink-900 text-white text-sm font-medium px-3 py-1 rounded transition duration-150 shadow-md flex items-center">
+                        <i data-lucide="list-checks" class="w-4 h-4 mr-1"></i>
+                        Gestionar
                     </button>
-                    <button id="sort-high-to-low" type="button" data-sort-by="stock-desc" class="sort-button px-3 py-1 bg-gray-200 text-gray-700 text-sm rounded-full hover:bg-gray-300 transition duration-150">
-                        Alto a Bajo
+                    <button id="nav-add-btn" type="button" title="Ir a Agregar Producto"
+                            class="bg-green-500 hover:bg-green-600 text-white text-sm font-medium px-3 py-1 rounded transition duration-150 shadow-md flex items-center">
+                        <i data-lucide="package-plus" class="w-4 h-4 mr-1"></i>
+                        Agregar producto +
                     </button>
-                    <!-- El botón de ordenación por Nombre es el estado por defecto, no necesita botón propio a menos que se quiera resetear -->
                 </div>
             </div>
 
-            <!-- FILTROS DE INVENTARIO -->
-            <div class="flex flex-col gap-4 mb-6 pt-2 border-b pb-4">
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                    <!-- Filtros por Categoría -->
-                    <div>
-                        <p class="text-sm font-medium text-gray-700 mb-2">Filtrar por Categoría:</p>
-                        <div id="category-filter-container" class="flex flex-wrap gap-2">
-                            <!-- Los botones de categoría se cargarán aquí -->
-                        </div>
+            <div id="inventory-content" class="p-6 space-y-6">
+                 <!-- Controles de Ordenación y Filtros -->
+                <div class="flex flex-col gap-4">
+                    <!-- Ordenación por Stock (Flechas) -->
+                    <div class="flex items-center space-x-4">
+                        <span class="text-sm font-medium text-gray-700">Ordenar Stock:</span>
+                        <button id="sort-low-to-high" type="button" data-sort-by="stock-asc" title="Stock: Bajo a Alto"
+                                class="sort-button p-2 text-gray-600 rounded-full hover:bg-pink-100 transition duration-150">
+                            <i data-lucide="arrow-down-0-1" class="w-5 h-5"></i>
+                        </button>
+                        <button id="sort-high-to-low" type="button" data-sort-by="stock-desc" title="Stock: Alto a Bajo"
+                                class="sort-button p-2 text-gray-600 rounded-full hover:bg-pink-100 transition duration-150">
+                            <i data-lucide="arrow-up-1-0" class="w-5 h-5"></i>
+                        </button>
                     </div>
-
-                    <!-- Filtros por Talla -->
-                    <div class="pt-4 lg:pt-0 lg:border-l lg:pl-4">
-                        <p class="text-sm font-medium text-gray-700 mb-2">Filtrar por Talla:</p>
-                        <div id="size-filter-container" class="flex flex-wrap gap-2">
-                            <!-- Las tallas fijas se inicializan con JS -->
+                    
+                    <!-- FILTROS DE INVENTARIO -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 border-t pt-4">
+                        <!-- Filtros por Categoría -->
+                        <div>
+                            <p class="text-sm font-medium text-gray-700 mb-2">Filtrar Categoría:</p>
+                            <div id="category-filter-container" class="flex flex-wrap gap-2">
+                                <!-- Los botones de categoría se cargarán aquí -->
+                            </div>
                         </div>
-                    </div>
-
-                    <!-- Filtros por Color -->
-                    <div class="pt-4 lg:pt-0 lg:border-l lg:pl-4">
-                        <p class="text-sm font-medium text-gray-700 mb-2">Filtrar por Color:</p>
-                        <div id="color-filter-container" class="flex flex-wrap gap-2">
-                            <!-- Los colores únicos se cargarán aquí -->
+    
+                        <!-- Filtros por Talla -->
+                        <div>
+                            <p class="text-sm font-medium text-gray-700 mb-2">Filtrar Talla:</p>
+                            <div id="size-filter-container" class="flex flex-wrap gap-2">
+                                <!-- Las tallas fijas se inicializan con JS -->
+                            </div>
+                        </div>
+    
+                        <!-- Filtros por Color -->
+                        <div>
+                            <p class="text-sm font-medium text-gray-700 mb-2">Filtrar Color:</p>
+                            <div id="color-filter-container" class="flex flex-wrap gap-2">
+                                <!-- Los colores únicos se cargarán aquí -->
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Lista de Inventario -->
-            <div id="inventory-list" class="space-y-4">
-                <!-- Los productos se cargarán aquí -->
-                <p id="no-data-message" class="text-center text-gray-500 py-10 hidden">
-                    ¡Tu inventario está vacío! Agrega tu primer producto arriba.
-                </p>
+                <!-- Lista de Inventario -->
+                <div id="inventory-list" class="space-y-4 pt-4 border-t">
+                    <!-- Los productos se cargarán aquí -->
+                    <p id="no-data-message" class="text-center text-gray-500 py-10 hidden">
+                        ¡Tu inventario está vacío o no coincide con los filtros!
+                    </p>
+                </div>
             </div>
-        </div>
+        </section>
 
-        <!-- Sección: Gestión de Categorías -->
-        <div class="bg-white p-6 rounded-xl shadow-lg mb-8">
-            <h2 class="text-2xl font-semibold mb-4 text-gray-800">Gestión de Categorías</h2>
-            <form id="category-form" class="flex flex-col md:flex-row gap-4 mb-4">
-                <input type="text" id="new-category-name" placeholder="Nueva Categoría (Ej: Jeans, Vestidos, etc.)" required
-                       class="flex-grow p-3 border border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500">
-                <button type="submit" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold p-3 rounded-lg transition duration-150 shadow-md md:w-32">
-                    + Añadir
+
+        <!-- VISTA 2: GESTIÓN (Oculta por defecto) -->
+        <section id="management-section" class="bg-white rounded-xl shadow-lg mb-8 hidden" data-view="management">
+            <div class="section-title-bar">
+                <h2 class="text-2xl font-semibold">Gestión de Catálogos</h2>
+                <button id="back-to-inventory-1" type="button" title="Regresar al Inventario"
+                        class="bg-pink-800 hover:bg-pink-900 text-white text-sm font-medium px-3 py-1 rounded transition duration-150 shadow-md flex items-center">
+                    <i data-lucide="arrow-left" class="w-4 h-4 mr-1"></i>
+                    Regresar al Inventario
                 </button>
-            </form>
-            <p class="text-sm font-medium text-gray-700 mb-2 mt-4">Categorías Guardadas (Clic en chip para eliminar):</p>
-            <!-- Contenedor de chips de Categoría -->
-            <div id="category-chips-container" class="flex flex-wrap gap-2 pt-2 border-t mt-2">
-                <p id="no-categories-message-display" class="text-gray-500 italic text-sm">Cargando categorías...</p>
             </div>
-        </div>
-
-        <!-- Formulario para Agregar Producto -->
-        <div class="bg-white p-6 rounded-xl shadow-lg mb-8">
-            <h2 class="text-2xl font-semibold mb-4 text-gray-800">Agregar Nuevo Producto</h2>
-            <!-- Usamos un grid de 7 columnas en desktop para la distribución de campos (6 + 1 para el botón) -->
-            <form id="product-form" class="grid grid-cols-1 md:grid-cols-7 gap-4">
+            
+            <div id="management-content" class="p-6 grid grid-cols-1 lg:grid-cols-2 gap-8">
                 
-                <!-- Fila 1 -->
-                <input type="text" id="name" placeholder="Nombre (Ej: Vestido Floral)" required
-                       class="col-span-1 md:col-span-3 p-3 border border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500">
-
-                <!-- SELECT de Categoría (Dinámico) -->
-                <select id="category-select" required
-                       class="col-span-1 md:col-span-2 p-3 border border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500 text-gray-700 disabled:bg-gray-100 disabled:text-gray-500">
-                    <option value="" disabled selected>Seleccione Categoría</option>
-                    <!-- Opciones de categoría se llenarán con JS -->
-                </select>
-                
-                <!-- SELECT de Talla (Fijo) -->
-                <select id="size-select" required
-                       class="col-span-1 md:col-span-2 p-3 border border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500 text-gray-700">
-                    <option value="" disabled selected>Seleccione Talla</option>
-                    <!-- Las tallas fijas se inicializarán en JS -->
-                </select>
-                
-                <!-- Fila 2 - Datos Numéricos y Color -->
-                <input type="number" id="price" placeholder="Precio (Ej: 49.99)" step="0.01" min="0.01" required
-                       class="col-span-1 md:col-span-2 p-3 border border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500">
-
-                <input type="number" id="stock" placeholder="Stock Inicial" min="0" required
-                       class="col-span-1 md:col-span-1 p-3 border border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500">
-
-                <!-- Selector de Color -->
-                <div class="col-span-1 md:col-span-2 flex items-center p-3 border border-gray-300 rounded-lg bg-white">
-                    <label for="color-picker" class="text-gray-700 text-sm font-medium mr-2">Color:</label>
-                    <input type="color" id="color-picker" value="#ff0000" title="Seleccionar Color"
-                           class="w-8 h-8 rounded-full border-none p-0 overflow-hidden cursor-pointer">
-                    <input type="text" id="color-name" placeholder="Nombre (Ej: Rojo)" value="Rojo" required
-                           class="flex-grow ml-2 p-0 border-none focus:ring-0 focus:border-none text-gray-900">
+                <!-- Subsección: Gestión de Categorías -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-3 text-pink-600">Categorías</h3>
+                    <form id="category-form" class="flex gap-2 mb-4">
+                        <input type="text" id="new-category-name" placeholder="Nueva Categoría (Ej: Jeans, Vestidos)" required
+                               class="flex-grow p-3 border border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500">
+                        <button type="submit" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold p-3 rounded-lg transition duration-150 shadow-md">
+                            <i data-lucide="plus" class="w-5 h-5"></i>
+                        </button>
+                    </form>
+                    <div id="category-chips-container" class="flex flex-wrap gap-2 pt-2 border-t mt-2">
+                        <p id="no-categories-message-display" class="text-gray-500 italic text-sm">Cargando categorías...</p>
+                    </div>
                 </div>
 
-                <button type="submit"
-                        class="col-span-1 md:col-span-2 bg-green-500 hover:bg-green-600 text-white font-bold p-3 rounded-lg transition duration-150 shadow-md">
-                    Agregar Producto
+                <!-- Subsección: Gestión de Colores -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-3 text-pink-600">Colores</h3>
+                    <form id="color-form" class="flex gap-2 mb-4">
+                        <div class="flex items-center p-3 border border-gray-300 rounded-lg bg-white flex-grow">
+                             <label for="new-color-picker" class="text-gray-700 text-sm font-medium mr-2">Color:</label>
+                            <input type="color" id="new-color-picker" value="#000000" title="Seleccionar Color"
+                                   class="w-8 h-8 rounded-full border-none p-0 overflow-hidden cursor-pointer">
+                            <input type="text" id="new-color-name" placeholder="Nombre (Ej: Negro Ónix)" required
+                                   class="flex-grow ml-3 p-0 border-none focus:ring-0 focus:border-none text-gray-900">
+                        </div>
+                        <button type="submit" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold p-3 rounded-lg transition duration-150 shadow-md">
+                            <i data-lucide="plus" class="w-5 h-5"></i>
+                        </button>
+                    </form>
+                    <div id="color-chips-container" class="flex flex-wrap gap-2 pt-2 border-t mt-2">
+                        <p id="no-colors-message-display" class="text-gray-500 italic text-sm">Aún no hay colores definidos.</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- VISTA 3: AGREGAR NUEVO PRODUCTO (Oculta por defecto) -->
+        <section id="add-product-section" class="bg-white rounded-xl shadow-lg mb-8 hidden" data-view="add-product">
+             <div class="section-title-bar">
+                <h2 class="text-2xl font-semibold">Agregar Nuevo Producto / Variante</h2>
+                <button id="back-to-inventory-2" type="button" title="Regresar al Inventario"
+                        class="bg-pink-800 hover:bg-pink-900 text-white text-sm font-medium px-3 py-1 rounded transition duration-150 shadow-md flex items-center">
+                    <i data-lucide="arrow-left" class="w-4 h-4 mr-1"></i>
+                    Regresar al Inventario
                 </button>
-            </form>
-            <p id="product-category-warning" class="text-sm text-red-500 mt-2 hidden">
-                ⚠️ Primero debe agregar al menos una categoría en la sección superior para poder añadir productos.
-            </p>
-        </div>
+            </div>
+
+            <div id="add-product-content" class="p-6">
+                <form id="product-form" class="grid grid-cols-1 md:grid-cols-6 gap-4">
+                    
+                    <!-- Fila 1 - Nombre, Categoría, Precio, Stock -->
+                    <input type="text" id="name" placeholder="Nombre (Ej: Blusa Satinada)" required
+                           class="col-span-1 md:col-span-2 p-3 border border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500">
+    
+                    <!-- SELECT de Categoría (Dinámico) -->
+                    <select id="category-select" required
+                           class="col-span-1 md:col-span-1 p-3 border border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500 text-gray-700 disabled:bg-gray-100 disabled:text-gray-500">
+                        <option value="" disabled selected>Seleccione Categoría</option>
+                        <!-- Opciones de categoría se llenarán con JS -->
+                    </select>
+
+                    <input type="number" id="price" placeholder="Precio (Ej: 49.99)" step="0.01" min="0.01" required
+                           class="col-span-1 md:col-span-1 p-3 border border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500">
+    
+                    <input type="number" id="stock" placeholder="Stock Inicial" min="0" required
+                           class="col-span-1 md:col-span-1 p-3 border border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500">
+
+                    <!-- SELECT de Color (Dinámico) -->
+                    <select id="color-select" required
+                            class="col-span-1 md:col-span-1 p-3 border border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500 text-gray-700 disabled:bg-gray-100 disabled:text-gray-500">
+                        <option value="" disabled selected>Seleccione Color</option>
+                        <!-- Opciones de color se llenarán con JS -->
+                    </select>
+                    
+                    <p class="col-span-full text-sm text-red-500 mt-2 hidden" id="product-pre-requisite-warning">
+                        ⚠️ Para agregar productos, debe definir al menos una Categoría y un Color en la sección de **Gestión**.
+                    </p>
+
+                    <!-- Fila 2 - Selección de Tallas (Checkboxes para múltiples variantes) -->
+                    <div class="col-span-full border-t pt-4 mt-4">
+                        <p class="text-sm font-medium text-gray-700 mb-3">Tallas disponibles para crear variantes (Seleccione una o más):</p>
+                        <div id="size-checkbox-container" class="flex flex-wrap gap-3">
+                            <!-- Checkboxes de tallas se cargarán aquí -->
+                        </div>
+                    </div>
+                    
+                    <!-- Botón de Envío -->
+                    <button type="submit" id="add-variants-button"
+                            class="col-span-full bg-green-500 hover:bg-green-600 text-white font-bold p-4 rounded-lg transition duration-150 shadow-md disabled:bg-gray-400 mt-4 flex items-center justify-center">
+                        <i data-lucide="package-plus" class="w-5 h-5 mr-2"></i>
+                        Agregar Producto(s) como Variante
+                    </button>
+                </form>
+            </div>
+        </section>
 
     </div>
 
     <!-- Script de Lógica de la Aplicación (In-Memory) -->
     <script type="module">
-        // La aplicación usa arrays de JavaScript en memoria para simular datos.
         // ADVERTENCIA: Los datos se perderán al recargar la página si no se usa Exportar/Importar.
 
-        // Tallas disponibles
-        const availableSizes = ['XS', 'S', 'M', 'L', 'Stándard'];
-
+        // --- CONSTANTES Y ESTADO INICIAL ---
+        const availableSizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'Stándard'];
         let userId = 'USUARIO_LOCAL_DEMO'; 
+        let currentView = 'inventory'; // Estado de la vista actual
         
-        // Datos In-Memory de Ejemplo (IDs simplificados)
+        // Datos In-Memory de Ejemplo 
         let currentInventory = [
-            { id: 'p1', name: 'Vestido de Noche Rojo', category: 'Vestidos', size: 'M', price: 89.90, stock: 5, color: '#ff0000', colorName: 'Rojo', timestamp: Date.now() - 10000 },
-            { id: 'p2', name: 'Jeans Clásicos Azul', category: 'Jeans', size: 'L', price: 65.00, stock: 12, color: '#0000ff', colorName: 'Azul Marino', timestamp: Date.now() - 5000 },
-            { id: 'p3', name: 'Blusa de Seda Beige', category: 'Blusas', size: 'S', price: 45.00, stock: 3, color: '#f5f5dc', colorName: 'Beige', timestamp: Date.now() - 2000 },
+            { id: 'p1', name: 'Vestido de Noche', category: 'Vestidos', size: 'M', price: 89.90, stock: 5, colorHex: '#ff0000', colorName: 'Rojo Pasión', timestamp: Date.now() - 10000 },
+            { id: 'p2', name: 'Jeans Clásicos', category: 'Jeans', size: 'L', price: 65.00, stock: 12, colorHex: '#0000ff', colorName: 'Azul Marino', timestamp: Date.now() - 5000 },
+            { id: 'p3', name: 'Blusa de Seda', category: 'Blusas', size: 'S', price: 45.00, stock: 3, colorHex: '#f5f5dc', colorName: 'Beige', timestamp: Date.now() - 2000 },
         ]; 
         
         let currentCategories = [
@@ -254,6 +305,14 @@
             { id: 'c3', name: 'Blusas' }
         ]; 
         
+        // Gestión de Colores
+        let currentColors = [
+            { id: 'cl1', name: 'Rojo Pasión', hex: '#ff0000' },
+            { id: 'cl2', name: 'Azul Marino', hex: '#0000ff' },
+            { id: 'cl3', name: 'Beige', hex: '#f5f5dc' },
+            { id: 'cl4', name: 'Negro Ónix', hex: '#000000' }
+        ];
+        
         // Estado de filtros y ordenación
         let selectedCategoryFilter = 'TODOS';
         let selectedSizeFilter = 'TODOS';
@@ -261,93 +320,117 @@
         let currentSort = 'name-asc'; // Opciones: 'name-asc', 'stock-asc', 'stock-desc'
 
 
-        // Elementos del DOM
+        // --- ELEMENTOS DEL DOM ---
         const inventoryList = document.getElementById('inventory-list');
         const productForm = document.getElementById('product-form');
         const categoryForm = document.getElementById('category-form');
-        const userIdDisplay = document.getElementById('user-id-display');
+        const colorForm = document.getElementById('color-form');
         const totalProductsSpan = document.getElementById('total-products');
-        const loadingIndicator = document.getElementById('loading-indicator');
         const errorMessage = document.getElementById('error-message');
         const noDataMessage = document.getElementById('no-data-message');
         const searchInput = document.getElementById('search-input');
         const searchSuggestions = document.getElementById('search-suggestions');
+        
+        // Categorías DOM
         const newCategoryInput = document.getElementById('new-category-name');
         const categoryChipsContainer = document.getElementById('category-chips-container');
         const categorySelect = document.getElementById('category-select');
-        const sizeSelect = document.getElementById('size-select');
-        const categoryWarning = document.getElementById('product-category-warning');
-        const viewStockButton = document.getElementById('view-stock-button');
-        const inventorySection = document.getElementById('inventory-section');
+        
+        // Colores DOM
+        const newColorNameInput = document.getElementById('new-color-name');
+        const newColorPicker = document.getElementById('new-color-picker');
+        const colorChipsContainer = document.getElementById('color-chips-container');
+        const colorSelect = document.getElementById('color-select');
+        
+        // Producto DOM
+        const productPreRequisiteWarning = document.getElementById('product-pre-requisite-warning');
+        const sizeCheckboxContainer = document.getElementById('size-checkbox-container');
+        
+        // Filtros y Ordenación DOM
         const categoryFilterContainer = document.getElementById('category-filter-container');
         const sizeFilterContainer = document.getElementById('size-filter-container');
         const colorFilterContainer = document.getElementById('color-filter-container');
-        const exportDataButton = document.getElementById('export-data-button');
-        const importFileInput = document.getElementById('import-file-input');
-        const colorPicker = document.getElementById('color-picker');
-        const colorNameInput = document.getElementById('color-name');
         const sortLowToHighButton = document.getElementById('sort-low-to-high');
         const sortHighToLowButton = document.getElementById('sort-high-to-low');
 
+        // Navegación DOM
+        const navManageBtn = document.getElementById('nav-manage-btn');
+        const navAddBtn = document.getElementById('nav-add-btn');
+        const backToInventory1 = document.getElementById('back-to-inventory-1');
+        const backToInventory2 = document.getElementById('back-to-inventory-2');
+        const inventorySection = document.getElementById('inventory-section');
+        const managementSection = document.getElementById('management-section');
+        const addProductSection = document.getElementById('add-product-section');
+        
+        // Persistencia DOM
+        const exportDataButton = document.getElementById('export-data-button');
+        const importFileInput = document.getElementById('import-file-input');
+
         // --- UTILS ---
 
-        // Función para manejar el formato de precios
+        // Inicializa los iconos de Lucide
+        function initializeLucideIcons() {
+            lucide.createIcons();
+        }
+
         const formatPrice = (price) => {
             return new Intl.NumberFormat('es-PE', { style: 'currency', currency: 'PEN' }).format(price);
         };
 
-        // Función para mostrar mensajes de error (reemplaza alert)
         const displayError = (message) => {
             console.error(message);
-            // Implementación simple de notificación de error/éxito en UI
-            const statusMessage = document.getElementById('error-message');
-            statusMessage.textContent = message;
-            statusMessage.classList.remove('hidden', 'text-green-300');
-            statusMessage.classList.add('text-red-300');
-            setTimeout(() => {
-                statusMessage.classList.add('hidden');
-            }, 5000); 
+            errorMessage.textContent = message;
+            errorMessage.classList.remove('hidden', 'text-green-500');
+            errorMessage.classList.add('text-red-500');
+            setTimeout(() => { errorMessage.classList.add('hidden'); }, 5000); 
         };
 
-        // Función para mostrar mensaje de éxito
         const displaySuccess = (message) => {
-            const statusMessage = document.getElementById('error-message');
-            statusMessage.textContent = message;
-            statusMessage.classList.remove('text-red-300');
-            statusMessage.classList.add('text-green-300');
-            statusMessage.classList.remove('hidden');
-            setTimeout(() => {
-                statusMessage.classList.add('hidden');
-                statusMessage.classList.remove('text-green-300');
-                statusMessage.classList.add('text-red-300'); // Volver al estado de error
-            }, 3000);
+            errorMessage.textContent = message;
+            errorMessage.classList.remove('text-red-500');
+            errorMessage.classList.add('text-green-500');
+            errorMessage.classList.remove('hidden');
+            setTimeout(() => { errorMessage.classList.add('hidden'); }, 3000);
         };
+
+        const generateId = () => Date.now().toString() + Math.random().toString(36).substring(2, 9);
         
-        // Función para el scroll suave
-        const scrollToInventory = () => {
-             inventorySection.scrollIntoView({ behavior: 'smooth' });
-        };
-
-
-        // Función de inicialización de la Aplicación (In-Memory)
-        async function initApp() {
-            userIdDisplay.textContent = userId;
-            loadingIndicator.classList.add('hidden');
+        // --- NAVEGACIÓN SPA ---
+        function switchView(viewName) {
+            currentView = viewName;
             
-            renderSizeSelectOptions(); 
-            loadCategories(); 
-            loadInventory(); // Esto dispara la renderización inicial y filtros
-            updateSortButtonState();
+            // Ocultar todas las vistas
+            inventorySection.classList.add('hidden');
+            managementSection.classList.add('hidden');
+            addProductSection.classList.add('hidden');
+            
+            // Mostrar la vista solicitada
+            switch(viewName) {
+                case 'inventory':
+                    inventorySection.classList.remove('hidden');
+                    // Asegurarse de que el inventario se refresque al volver
+                    loadInventory(); 
+                    break;
+                case 'management':
+                    managementSection.classList.remove('hidden');
+                    loadManagementData(); // Asegura que los chips estén actualizados
+                    break;
+                case 'add-product':
+                    addProductSection.classList.remove('hidden');
+                    loadManagementData(); // Asegura que los selects estén actualizados
+                    break;
+            }
+            initializeLucideIcons();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
+
         // --- PERSISTENCIA (IMPORTAR/EXPORTAR JSON) ---
-        
-        // 1. Exportar Datos a JSON
         function exportData() {
-            // Empaquetar el inventario y las categorías en un solo objeto
             const dataToExport = {
                 inventory: currentInventory,
                 categories: currentCategories,
+                colors: currentColors,
                 exportTime: new Date().toISOString()
             };
             
@@ -367,35 +450,32 @@
             displaySuccess('Datos exportados con éxito.');
         }
 
-        // 2. Importar Datos desde JSON
         function importData(event) {
             const file = event.target.files[0];
-            if (!file) {
-                return;
-            }
+            if (!file) return;
 
             const reader = new FileReader();
             reader.onload = (e) => {
                 try {
                     const importedData = JSON.parse(e.target.result);
                     
-                    if (!importedData.inventory || !importedData.categories) {
-                        throw new Error("El archivo no contiene las estructuras 'inventory' y 'categories' requeridas.");
+                    if (!importedData.inventory || !importedData.categories || !importedData.colors) {
+                        throw new Error("El archivo JSON debe contener las estructuras 'inventory', 'categories' y 'colors'.");
                     }
 
                     // Reemplazar los arrays en memoria
                     currentInventory = importedData.inventory;
                     currentCategories = importedData.categories;
+                    currentColors = importedData.colors;
                     
                     // Re-renderizar toda la interfaz con los datos nuevos
-                    loadCategories();
+                    loadManagementData();
                     loadInventory();
                     
                     displaySuccess('Datos importados correctamente. Inventario actualizado.');
                 } catch (error) {
                     displayError(`Error al procesar el archivo: ${error.message}`);
                 } finally {
-                    // Resetear el input file para permitir la recarga del mismo archivo
                     importFileInput.value = '';
                 }
             };
@@ -408,8 +488,7 @@
             reader.readAsText(file);
         }
 
-
-        // --- CATEGORY CRUD OPERATIONS (In-Memory) ---
+        // --- MANAGEMENT CRUD OPERATIONS ---
         function saveCategory(event) {
             event.preventDefault();
             const name = newCategoryInput.value.trim();
@@ -420,107 +499,140 @@
                 displayError(`La categoría "${normalizedName}" ya existe.`);
                 return;
             }
-            const newId = Date.now().toString() + Math.random().toString(36).substring(2, 9);
-            currentCategories.push({ id: newId, name: normalizedName, timestamp: new Date().getTime() });
+            currentCategories.push({ id: generateId(), name: normalizedName });
             newCategoryInput.value = '';
-            loadCategories(); 
-            loadInventory(); 
-        }
-
-        function loadCategories() {
-            currentCategories.sort((a, b) => a.name.localeCompare(b.name));
-            renderCategoryManagement();
-            renderCategorySelect(); 
-            renderCategoryFilterButtons(); 
+            loadManagementData(); 
         }
 
         function deleteCategory(categoryId) {
-            if (!confirm(`¿Estás seguro de que quieres eliminar esta categoría?`)) {
-                return;
-            }
+            if (!confirm(`¿Estás seguro de eliminar esta categoría? Los productos asociados quedarán "SIN CATEGORÍA".`)) return;
             const deletedCategory = currentCategories.find(cat => cat.id === categoryId);
             currentCategories = currentCategories.filter(cat => cat.id !== categoryId);
-             currentInventory = currentInventory.map(product => {
+            // Actualizar inventario: Si se elimina una categoría, los productos que la tenían quedan "SIN CATEGORÍA"
+            currentInventory = currentInventory.map(product => {
                 if (product.category === deletedCategory?.name) {
                     return { ...product, category: 'SIN CATEGORÍA' };
                 }
                 return product;
             });
-            loadCategories();
-            loadInventory(); 
+            loadManagementData();
+            loadInventory(); // Refrescar inventario para reflejar el cambio
             displaySuccess('Categoría eliminada.');
         }
 
-        // --- INVENTORY CRUD OPERATIONS (In-Memory) ---
-        function saveProduct(event) {
+        function saveColor(event) {
+            event.preventDefault();
+            const name = newColorNameInput.value.trim();
+            const hex = newColorPicker.value;
+            if (name.length === 0) return;
+            const normalizedName = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+            
+            const exists = currentColors.some(color => color.name === normalizedName || color.hex === hex);
+            if (exists) {
+                displayError(`El nombre o código de color ya existe.`);
+                return;
+            }
+            currentColors.push({ id: generateId(), name: normalizedName, hex: hex });
+            newColorNameInput.value = '';
+            newColorPicker.value = '#000000'; // Reset color picker
+            loadManagementData(); 
+        }
+
+        function deleteColor(colorId) {
+            if (!confirm(`¿Estás seguro de eliminar este color? Los productos existentes mantendrán el color, pero no podrá seleccionarlo para productos nuevos.`)) return;
+            
+            const deletedColor = currentColors.find(col => col.id === colorId);
+            currentColors = currentColors.filter(col => col.id !== colorId);
+            
+            // Nota: No se actualiza el inventario ya que los productos existentes guardan el HEX y el Name.
+            loadManagementData();
+            displaySuccess(`Color "${deletedColor.name}" eliminado.`);
+        }
+
+        function loadManagementData() {
+            // Ordenar alfabéticamente
+            currentCategories.sort((a, b) => a.name.localeCompare(b.name));
+            currentColors.sort((a, b) => a.name.localeCompare(b.name));
+            
+            renderCategoryManagement();
+            renderColorManagement();
+            renderCategorySelect(); 
+            renderColorSelect(); 
+            // Esto asegura que los filtros del inventario estén siempre actualizados
+            renderCategoryFilterButtons(); 
+            renderColorFilterButtons();
+        }
+
+        // --- INVENTORY CRUD OPERATIONS ---
+        function saveProductVariants(event) {
             event.preventDefault();
 
             const categoryName = categorySelect.value;
-            const size = sizeSelect.value;
-            const colorCode = colorPicker.value;
-            const colorName = colorNameInput.value.trim();
-
-            if (!categoryName || !size) {
-                 displayError("Debe seleccionar Categoría y Talla.");
-                 return;
-            } 
-            if (!colorName) {
-                 displayError("Debe ingresar un Nombre de Color.");
-                 return;
-            }
-
-            const name = document.getElementById('name').value;
+            const colorId = colorSelect.value; 
+            
+            const name = document.getElementById('name').value.trim();
             const price = parseFloat(document.getElementById('price').value);
             const stock = parseInt(document.getElementById('stock').value, 10);
+            
+            const selectedColor = currentColors.find(c => c.id === colorId);
 
+            const selectedSizes = Array.from(sizeCheckboxContainer.querySelectorAll('input[type="checkbox"]:checked'))
+                                       .map(input => input.value);
+
+            // Validaciones
+            if (!name || !categoryName || !colorId || selectedSizes.length === 0) {
+                 displayError("Complete todos los campos requeridos y seleccione al menos una Talla.");
+                 return;
+            }
             if (isNaN(price) || isNaN(stock) || price <= 0 || stock < 0) {
                  displayError("Por favor, ingrese valores válidos para Precio y Stock.");
                  return;
             }
+            if (!selectedColor) {
+                 displayError("Error interno: Color seleccionado no encontrado.");
+                 return;
+            }
 
-            const newId = Date.now().toString() + Math.random().toString(36).substring(2, 9);
-            
-            const newProduct = {
-                id: newId,
-                name: name.trim(),
-                category: categoryName, 
-                size: size,
-                color: colorCode,
-                colorName: colorName.charAt(0).toUpperCase() + colorName.slice(1).toLowerCase(), // Normalizar el nombre del color
-                price: price,
-                stock: stock,
-                timestamp: new Date().getTime() 
-            };
+            let productsAddedCount = 0;
+            selectedSizes.forEach(size => {
+                const newProduct = {
+                    id: generateId(),
+                    name: name,
+                    category: categoryName, 
+                    size: size,
+                    colorHex: selectedColor.hex,
+                    colorName: selectedColor.name,
+                    price: price,
+                    stock: stock,
+                    timestamp: new Date().getTime() 
+                };
+                currentInventory.push(newProduct);
+                productsAddedCount++;
+            });
 
-            currentInventory.push(newProduct);
-            
-            productForm.reset(); 
-            colorPicker.value = '#ff0000';
-            colorNameInput.value = 'Rojo';
-            
-            loadInventory(); 
-            displaySuccess(`Producto "${name}" agregado.`);
+            if (productsAddedCount > 0) {
+                // Resetear formulario (excepto Nombre y Categoría para facilitar la carga continua)
+                document.getElementById('price').value = '';
+                document.getElementById('stock').value = '';
+                
+                // Deseleccionar tallas
+                selectedSizes.forEach(size => {
+                    sizeCheckboxContainer.querySelector(`input[value="${size}"]`).checked = false;
+                });
+                
+                loadInventory(); 
+                displaySuccess(`${productsAddedCount} variante(s) de "${name}" agregada(s).`);
+
+                // Opcional: regresar al inventario después de agregar
+                switchView('inventory');
+            } else {
+                displayError("No se agregó ningún producto. Revise las tallas seleccionadas.");
+            }
         }
 
         function loadInventory() {
-            // La ordenación por defecto es por nombre (name-asc)
-            
-            let sortedInventory = [...currentInventory];
-
-            switch (currentSort) {
-                case 'name-asc':
-                    sortedInventory.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
-                    break;
-                case 'stock-asc':
-                    sortedInventory.sort((a, b) => (a.stock || 0) - (b.stock || 0));
-                    break;
-                case 'stock-desc':
-                    sortedInventory.sort((a, b) => (b.stock || 0) - (a.stock || 0));
-                    break;
-            }
-
-            handleSearch(); // Llama a la búsqueda y renderiza con los datos ordenados
-            renderColorFilterButtons(); // Actualiza los filtros de color basados en el nuevo inventario
+            // Llama a la búsqueda para aplicar filtros, ordenación y renderizado
+            handleSearch(); 
         }
 
         function updateStock(productId, newStock) {
@@ -528,15 +640,15 @@
             const productIndex = currentInventory.findIndex(p => p.id === productId);
             if (productIndex !== -1) {
                 currentInventory[productIndex].stock = newStock;
-                currentInventory[productIndex].timestamp = new Date().getTime(); 
-                loadInventory(); 
+                currentInventory[productIndex].timestamp = new Date().getTime(); // Marca de tiempo de última actualización
+                loadInventory(); // Refresca la lista
             }
         }
 
         function deleteProduct(productId) {
-            if (!confirm(`¿Estás seguro de que quieres eliminar este producto?`)) {
-                return;
-            }
+            // Usamos un custom modal en un entorno real, pero aquí usamos confirm
+            // según las reglas de Immersive.
+            if (!confirm(`¿Estás seguro de que quieres eliminar este producto?`)) return; 
             currentInventory = currentInventory.filter(p => p.id !== productId);
             loadInventory(); 
             displaySuccess('Producto eliminado.');
@@ -551,21 +663,22 @@
         }
 
         function updateSortButtonState() {
-            // Limpiar clases de todos los botones de ordenación
-            document.querySelectorAll('.sort-button').forEach(btn => btn.classList.remove('selected'));
+            // Limpiar selección de todos los botones de ordenación
+            document.querySelectorAll('.sort-button').forEach(btn => btn.classList.remove('selected', 'bg-pink-600', 'text-white', 'text-gray-600', 'hover:bg-pink-100'));
             
-            // Aplicar clase al botón seleccionado
-            if (currentSort === 'stock-asc') {
-                sortLowToHighButton.classList.add('selected');
-            } else if (currentSort === 'stock-desc') {
-                sortHighToLowButton.classList.add('selected');
+            // Seleccionar el botón actual
+            const selectedButton = document.querySelector(`.sort-button[data-sort-by="${currentSort}"]`);
+            if (selectedButton) {
+                selectedButton.classList.add('selected', 'bg-pink-600', 'text-white');
             }
-            // Por defecto, si es 'name-asc', no se selecciona ningún botón de stock.
+            // Asegurar que los no seleccionados tengan el estilo por defecto
+            document.querySelectorAll('.sort-button:not(.selected)').forEach(btn => btn.classList.add('text-gray-600', 'hover:bg-pink-100'));
         }
 
         function handleFilterClick(filterType, value) {
             let filterState;
             
+            // Lógica para alternar el filtro
             switch (filterType) {
                 case 'category':
                     filterState = selectedCategoryFilter;
@@ -584,7 +697,7 @@
                     break;
             }
             
-            handleSearch(); // Re-ejecutar búsqueda y filtros
+            handleSearch();
         }
 
 
@@ -593,7 +706,28 @@
             
             let filteredProducts = [...currentInventory]; 
             
-            // Aplicar ordenación
+            // 1. Aplicar búsqueda (Name, Category, Size, ColorName)
+            if (query) {
+                 filteredProducts = filteredProducts.filter(product =>
+                    (product.name || '').toLowerCase().includes(query) ||
+                    (product.category || '').toLowerCase().includes(query) ||
+                    (product.size || '').toLowerCase().includes(query) ||
+                    (product.colorName || '').toLowerCase().includes(query)
+                );
+            }
+
+            // 2. Aplicar filtros
+            if (selectedCategoryFilter !== 'TODOS') {
+                filteredProducts = filteredProducts.filter(product => product.category === selectedCategoryFilter);
+            }
+            if (selectedSizeFilter !== 'TODOS') {
+                filteredProducts = filteredProducts.filter(product => product.size === selectedSizeFilter);
+            }
+            if (selectedColorFilter !== 'TODOS') {
+                filteredProducts = filteredProducts.filter(product => product.colorName === selectedColorFilter);
+            }
+            
+            // 3. Aplicar ordenación
             switch (currentSort) {
                 case 'stock-asc':
                     filteredProducts.sort((a, b) => (a.stock || 0) - (b.stock || 0));
@@ -603,35 +737,9 @@
                     break;
                 case 'name-asc':
                 default:
+                    // Ordenación alfabética por nombre como fallback
                     filteredProducts.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
                     break;
-            }
-
-
-            // Aplicar búsqueda (sobre el set ordenado)
-            if (query) {
-                 filteredProducts = filteredProducts.filter(product =>
-                    (product.name || '').toLowerCase().includes(query)
-                );
-            }
-
-            // Aplicar filtros
-            if (selectedCategoryFilter !== 'TODOS') {
-                filteredProducts = filteredProducts.filter(product =>
-                    product.category === selectedCategoryFilter
-                );
-            }
-
-            if (selectedSizeFilter !== 'TODOS') {
-                filteredProducts = filteredProducts.filter(product =>
-                    product.size === selectedSizeFilter
-                );
-            }
-
-            if (selectedColorFilter !== 'TODOS') {
-                filteredProducts = filteredProducts.filter(product =>
-                    product.colorName === selectedColorFilter
-                );
             }
             
             renderInventory(filteredProducts);
@@ -645,13 +753,22 @@
             const uniqueSuggestions = new Set();
             const maxSuggestions = 5;
             
-            const searchFilteredProducts = currentInventory.filter(product =>
-                (product.name || '').toLowerCase().includes(query)
-            );
-
-            searchFilteredProducts.forEach(product => {
-                if (uniqueSuggestions.size < maxSuggestions) {
+            const normalizedQuery = query.toLowerCase();
+            
+            currentInventory.forEach(product => {
+                const name = (product.name || '').toLowerCase();
+                const category = (product.category || '').toLowerCase();
+                const size = (product.size || '').toLowerCase();
+                
+                // Solo sugerir si la palabra clave coincide
+                if (normalizedQuery && name.includes(normalizedQuery) && uniqueSuggestions.size < maxSuggestions) {
                     uniqueSuggestions.add(product.name);
+                }
+                if (normalizedQuery && category.includes(normalizedQuery) && uniqueSuggestions.size < maxSuggestions) {
+                    uniqueSuggestions.add(product.category);
+                }
+                if (normalizedQuery && size.includes(normalizedQuery) && uniqueSuggestions.size < maxSuggestions) {
+                    uniqueSuggestions.add(product.size);
                 }
             });
 
@@ -661,6 +778,7 @@
                     const item = document.createElement('div');
                     item.className = 'p-2 cursor-pointer hover:bg-pink-100 transition duration-100 border-b border-gray-100 last:border-b-0 text-gray-800';
                     item.textContent = suggestion;
+                    // Usamos mousedown para que el evento click no pierda el foco del input
                     item.addEventListener('mousedown', (e) => {
                         e.preventDefault(); 
                         searchInput.value = suggestion;
@@ -676,26 +794,23 @@
         }
 
         // --- UI RENDERING & HELPERS ---
-        
-        // Renderiza las opciones en el SELECT de Talla (Fijo) - FUNCIÓN AÑADIDA
-        function renderSizeSelectOptions() {
-            sizeSelect.innerHTML = '';
-            const defaultOption = document.createElement('option');
-            defaultOption.value = '';
-            defaultOption.textContent = 'Seleccione Talla';
-            defaultOption.disabled = true;
-            defaultOption.selected = true;
-            sizeSelect.appendChild(defaultOption);
+
+        function renderSizeCheckboxes() {
+            sizeCheckboxContainer.innerHTML = '';
 
             availableSizes.forEach(size => {
-                const option = document.createElement('option');
-                option.value = size;
-                option.textContent = size;
-                sizeSelect.appendChild(option);
+                const id = `size-checkbox-${size}`;
+                const label = document.createElement('label');
+                label.htmlFor = id;
+                label.className = 'flex items-center space-x-2 p-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-pink-100 transition duration-150';
+                label.innerHTML = `
+                    <input type="checkbox" id="${id}" value="${size}" class="form-checkbox h-5 w-5 text-pink-600 rounded focus:ring-pink-500">
+                    <span class="text-sm font-medium text-gray-700">${size}</span>
+                `;
+                sizeCheckboxContainer.appendChild(label);
             });
         }
         
-        // Renderiza los botones de filtro de Talla
         function renderSizeFilterButtons() {
             sizeFilterContainer.innerHTML = '';
             
@@ -714,12 +829,12 @@
             
             sizeFilterContainer.querySelectorAll('.filter-button').forEach(btn => {
                 btn.addEventListener('click', (e) => {
+                    // Si se hace clic en el propio botón, obtenemos su valor.
                     handleFilterClick('size', e.target.getAttribute('data-filter-value'));
                 });
             });
         }
         
-        // Renderiza los botones de filtro de Categoría
         function renderCategoryFilterButtons() {
             categoryFilterContainer.innerHTML = '';
             
@@ -743,159 +858,185 @@
             });
         }
 
-        // Renderiza los botones de filtro de Color (basado en colores existentes en el inventario)
         function renderColorFilterButtons() {
             colorFilterContainer.innerHTML = '';
             
-            // 1. Obtener colores únicos y normalizados presentes en el inventario
-            const uniqueColors = [...new Set(currentInventory.map(p => p.colorName).filter(Boolean))].sort();
-
             // Botón TODOS
             colorFilterContainer.innerHTML += `<button type="button" data-filter-type="color" data-filter-value="TODOS" class="filter-button px-3 py-1 bg-gray-200 text-gray-700 text-sm rounded-full hover:bg-gray-300 transition duration-150 ${selectedColorFilter === 'TODOS' ? 'selected' : ''}">TODOS</button>`;
             
-            uniqueColors.forEach(colorName => {
-                // Obtener el código de color para la bolita (solo para la visualización)
-                const productWithColor = currentInventory.find(p => p.colorName === colorName);
-                const colorCode = productWithColor ? productWithColor.color : '#ffffff';
-
+            currentColors.forEach(color => {
                 const button = document.createElement('button');
                 button.type = 'button';
-                button.className = `filter-button flex items-center px-3 py-1 bg-pink-100 text-pink-700 text-sm rounded-full hover:bg-pink-200 transition duration-150 ${selectedColorFilter === colorName ? 'selected' : ''}`;
+                button.className = `filter-button flex items-center px-3 py-1 bg-pink-100 text-pink-700 text-sm rounded-full hover:bg-pink-200 transition duration-150 ${selectedColorFilter === color.name ? 'selected' : ''}`;
                 button.setAttribute('data-filter-type', 'color');
-                button.setAttribute('data-filter-value', colorName);
+                button.setAttribute('data-filter-value', color.name);
                 button.innerHTML = `
-                    <span class="color-dot mr-2" style="background-color: ${colorCode}; border-color: #999;"></span>
-                    <span>${colorName}</span>
+                    <span class="color-dot-small mr-2" style="background-color: ${color.hex}; border-color: ${color.hex === '#ffffff' ? '#999' : color.hex};"></span>
+                    <span>${color.name}</span>
                 `;
                 colorFilterContainer.appendChild(button);
             });
 
             colorFilterContainer.querySelectorAll('.filter-button').forEach(btn => {
                 btn.addEventListener('click', (e) => {
-                    // Prevenir que el click en el span o dot active el botón sin valor
+                    // Necesitamos obtener el valor del atributo data-filter-value, 
+                    // ya sea del botón o de un span/dot interno.
                     let value = e.target.getAttribute('data-filter-value');
-                    if (!value) {
-                         value = e.target.closest('.filter-button').getAttribute('data-filter-value');
+                    if (!value) { 
+                        // Si el clic fue en un elemento hijo (span o dot), subimos al padre .filter-button
+                        value = e.target.closest('.filter-button')?.getAttribute('data-filter-value'); 
                     }
-                    handleFilterClick('color', value);
+                    if (value) {
+                         handleFilterClick('color', value);
+                    }
                 });
             });
         }
 
-
-        // Renderiza el inventario
         function renderInventory(productsToDisplay) {
             inventoryList.innerHTML = '';
             totalProductsSpan.textContent = productsToDisplay.length;
+            
+            noDataMessage.classList.toggle('hidden', productsToDisplay.length > 0);
 
-            if (productsToDisplay.length === 0) {
-                noDataMessage.classList.remove('hidden');
-            } else {
-                noDataMessage.classList.add('hidden');
-                productsToDisplay.forEach(product => {
-                    inventoryList.appendChild(createProductCard(product));
-                });
-            }
+            productsToDisplay.forEach(product => {
+                inventoryList.appendChild(createProductCard(product));
+            });
+            // Re-inicializar iconos después de renderizar el inventario
+            initializeLucideIcons(); 
         }
 
-        // Renderiza las opciones en el SELECT de Categoría
         function renderCategorySelect() {
             const currentSelectedValue = categorySelect.value;
-            categorySelect.innerHTML = '';
+            categorySelect.innerHTML = '<option value="" disabled selected>Seleccione Categoría</option>';
             
-            const defaultOption = document.createElement('option');
-            defaultOption.value = '';
-            defaultOption.textContent = 'Seleccione Categoría';
-            defaultOption.disabled = true;
-            categorySelect.appendChild(defaultOption);
+            const hasPreRequisites = currentCategories.length > 0 && currentColors.length > 0;
+            productPreRequisiteWarning.classList.toggle('hidden', hasPreRequisites);
             
             if (currentCategories.length === 0) {
                 categorySelect.disabled = true;
-                categoryWarning.classList.remove('hidden');
             } else {
                 categorySelect.disabled = false;
-                categoryWarning.classList.add('hidden');
-                
                 currentCategories.forEach(category => {
                     const option = document.createElement('option');
                     option.value = category.name;
                     option.textContent = category.name;
-                    if (category.name === currentSelectedValue) {
-                        option.selected = true;
-                    }
+                    if (category.name === currentSelectedValue) { option.selected = true; }
                     categorySelect.appendChild(option);
                 });
-                
-                if (currentCategories.every(cat => cat.name !== currentSelectedValue)) {
-                    defaultOption.selected = true;
-                }
+            }
+        }
+        
+        function renderColorSelect() {
+            const currentSelectedValue = colorSelect.value;
+            colorSelect.innerHTML = '<option value="" disabled selected>Seleccione Color</option>';
+            
+            const hasPreRequisites = currentCategories.length > 0 && currentColors.length > 0;
+            productPreRequisiteWarning.classList.toggle('hidden', hasPreRequisites);
+
+            if (currentColors.length === 0) {
+                colorSelect.disabled = true;
+            } else {
+                colorSelect.disabled = false;
+                currentColors.forEach(color => {
+                    const option = document.createElement('option');
+                    option.value = color.id; // Usamos el ID del color para referencia en el formulario
+                    option.textContent = color.name;
+                    if (color.id === currentSelectedValue) { option.selected = true; }
+                    colorSelect.appendChild(option);
+                });
             }
         }
 
-        // Renderiza los chips de categoría en la sección de Gestión
         function renderCategoryManagement() {
             categoryChipsContainer.innerHTML = '';
-            
-            if (currentCategories.length === 0) {
+            const noCategories = currentCategories.length === 0;
+            categoryChipsContainer.classList.toggle('justify-center', noCategories);
+            if (noCategories) {
                 categoryChipsContainer.innerHTML = `<p class="text-gray-500 italic text-sm">Aún no hay categorías definidas.</p>`;
-                categoryWarning.classList.remove('hidden');
                 return;
-            } else {
-                categoryWarning.classList.add('hidden');
             }
 
             currentCategories.forEach(category => {
                 const chip = document.createElement('button');
                 chip.type = 'button';
                 chip.className = 'flex items-center text-sm px-3 py-1 bg-pink-100 text-pink-700 rounded-full font-medium hover:bg-red-200 transition duration-150 group';
+                chip.title = `Clic para eliminar categoría: ${category.name}`;
                 chip.innerHTML = `
                     <span>${category.name}</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1 text-pink-500 group-hover:text-red-700" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
-                    </svg>
+                    <i data-lucide="trash-2" class="w-4 h-4 ml-2 text-pink-500 group-hover:text-red-700"></i>
                 `;
-                chip.title = `Clic para eliminar categoría: ${category.name}`;
                 chip.onclick = () => deleteCategory(category.id);
                 categoryChipsContainer.appendChild(chip);
             });
+            // Re-renderizar iconos en el área de gestión
+            initializeLucideIcons(); 
+        }
+        
+        function renderColorManagement() {
+            colorChipsContainer.innerHTML = '';
+            const noColors = currentColors.length === 0;
+            colorChipsContainer.classList.toggle('justify-center', noColors);
+            if (noColors) {
+                colorChipsContainer.innerHTML = `<p class="text-gray-500 italic text-sm">Aún no hay colores definidos.</p>`;
+                return;
+            }
+
+            currentColors.forEach(color => {
+                const chip = document.createElement('button');
+                chip.type = 'button';
+                chip.className = 'flex items-center text-sm px-3 py-1 bg-pink-100 text-pink-700 rounded-full font-medium hover:bg-red-200 transition duration-150 group';
+                chip.title = `Clic para eliminar color: ${color.name} (${color.hex})`;
+                chip.innerHTML = `
+                    <span class="color-dot-small mr-2" style="background-color: ${color.hex}; border-color: ${color.hex === '#ffffff' ? '#999' : color.hex};"></span>
+                    <span>${color.name}</span>
+                    <i data-lucide="trash-2" class="w-4 h-4 ml-2 text-pink-500 group-hover:text-red-700"></i>
+                `;
+                chip.onclick = () => deleteColor(color.id);
+                colorChipsContainer.appendChild(chip);
+            });
+            // Re-renderizar iconos en el área de gestión
+            initializeLucideIcons(); 
         }
 
-
-        // Crea la tarjeta (Card) de cada producto en la lista
         function createProductCard(product) {
             const card = document.createElement('div');
-            card.className = 'flex flex-col md:flex-row items-start md:items-center justify-between p-4 bg-gray-50 border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition duration-150';
+            // Usamos flex-col y luego sm:flex-row para adaptabilidad móvil
+            card.className = 'flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-gray-50 border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition duration-150';
 
             // Contenido del Producto
-            const content = `
-                <div class="mb-3 md:mb-0 md:w-1/2">
+            const contentHTML = `
+                <div class="mb-3 sm:mb-0 sm:w-1/2">
                     <p class="text-xs text-pink-600 font-medium mb-1 uppercase">${product.category || 'SIN CATEGORÍA'}</p> 
                     <div class="flex items-center">
-                        <span class="color-dot" style="background-color: ${product.color};" title="Color: ${product.colorName}"></span>
+                        <span class="color-dot mr-2" style="background-color: ${product.colorHex}; border-color: ${product.colorHex === '#ffffff' ? '#999' : product.colorHex};" title="Color: ${product.colorName}"></span>
                         <p class="text-lg font-bold text-gray-800">${product.name}</p>
                     </div>
                     <p class="text-sm text-gray-600">
                         <span class="font-semibold">Talla:</span> ${product.size} |
+                        <span class="font-semibold">Color:</span> ${product.colorName} |
                         <span class="font-semibold">Precio:</span> ${formatPrice(product.price)}
                     </p>
                 </div>
             `;
-            card.innerHTML += content;
+            card.innerHTML += contentHTML;
 
             // Controles de Stock y Acciones
             const actionsContainer = document.createElement('div');
-            actionsContainer.className = 'flex items-center space-x-3 w-full md:w-auto';
+            actionsContainer.className = 'flex items-center space-x-3 w-full sm:w-auto mt-3 sm:mt-0';
 
             // Controles de Stock
             const stockControl = document.createElement('div');
-            stockControl.className = 'flex items-center space-x-1';
+            stockControl.className = 'flex items-center space-x-1 flex-grow sm:flex-grow-0';
+            // Clases para el input de stock
+            const stockInputClasses = "w-16 text-center border border-gray-300 rounded-lg p-1 text-sm font-medium focus:ring-pink-500 focus:border-pink-500";
             stockControl.innerHTML = `
                 <span class="text-sm font-semibold text-gray-700 mr-2">Stock:</span>
                 <button type="button" data-action="decrement" class="p-1 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition duration-150 text-xl font-bold" title="Reducir Stock">
                     -
                 </button>
                 <input type="number" value="${product.stock}" min="0" data-stock-id="${product.id}"
-                       class="w-16 text-center border border-gray-300 rounded-lg p-1 text-sm font-medium focus:ring-pink-500 focus:border-pink-500">
+                       class="${stockInputClasses}">
                 <button type="button" data-action="increment" class="p-1 bg-green-100 text-green-600 rounded-lg hover:bg-green-200 transition duration-150 text-xl font-bold" title="Aumentar Stock">
                     +
                 </button>
@@ -904,10 +1045,8 @@
             // Botón de Eliminar
             const deleteButton = document.createElement('button');
             deleteButton.type = 'button';
-            deleteButton.className = 'p-2 bg-gray-200 text-gray-600 rounded-lg hover:bg-red-500 hover:text-white transition duration-150 shadow-sm';
-            deleteButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 10-2 0v6a1 1 0 102 0V8z" clip-rule="evenodd" />
-            </svg>`;
+            deleteButton.className = 'p-2 bg-gray-200 text-gray-600 rounded-lg hover:bg-red-500 hover:text-white transition duration-150 shadow-sm flex-shrink-0';
+            deleteButton.innerHTML = `<i data-lucide="trash-2" class="h-5 w-5"></i>`;
             deleteButton.title = "Eliminar Producto";
             deleteButton.onclick = () => deleteProduct(product.id);
 
@@ -922,18 +1061,23 @@
 
             decrementBtn.addEventListener('click', () => {
                 const currentStock = parseInt(input.value, 10);
-                if (currentStock > 0) {
-                    updateStock(product.id, currentStock - 1);
+                if (currentStock > 0) { 
+                    updateStock(product.id, currentStock - 1); 
+                } else {
+                    displayError('El stock no puede ser negativo.');
                 }
             });
-
             incrementBtn.addEventListener('click', () => {
                 const currentStock = parseInt(input.value, 10);
                 updateStock(product.id, currentStock + 1);
             });
-
             input.addEventListener('change', (e) => {
                 const newStock = parseInt(e.target.value, 10);
+                if (isNaN(newStock) || newStock < 0) {
+                     e.target.value = product.stock; // Revertir a valor anterior
+                     displayError('Stock debe ser un número positivo.');
+                     return;
+                }
                 updateStock(product.id, newStock);
             });
 
@@ -942,24 +1086,44 @@
 
 
         // --- INICIALIZACIÓN ---
-        productForm.addEventListener('submit', saveProduct);
-        categoryForm.addEventListener('submit', saveCategory);
-        searchInput.addEventListener('input', handleSearch); 
-        searchInput.addEventListener('focus', handleSearch); 
-        searchInput.addEventListener('blur', () => {
-            setTimeout(() => { searchSuggestions.classList.add('hidden'); }, 200);
-        });
-        viewStockButton.addEventListener('click', scrollToInventory);
+        function initApp() {
+            // Inicializar las dependencias y la data inicial
+            loadManagementData(); 
+            renderSizeCheckboxes();
+            updateSortButtonState(); // Inicializa el estado visual de ordenación
+            
+            // Configurar Listeners de Navegación
+            navManageBtn.addEventListener('click', () => switchView('management'));
+            navAddBtn.addEventListener('click', () => switchView('add-product'));
+            backToInventory1.addEventListener('click', () => switchView('inventory'));
+            backToInventory2.addEventListener('click', () => switchView('inventory'));
+
+            // Event Listeners de formularios y búsqueda
+            productForm.addEventListener('submit', saveProductVariants);
+            categoryForm.addEventListener('submit', saveCategory);
+            colorForm.addEventListener('submit', saveColor);
+            
+            // Búsqueda y Sugerencias
+            searchInput.addEventListener('input', handleSearch); 
+            searchInput.addEventListener('focus', handleSearch); 
+            // Manejamos el blur con un timeout para permitir el click en las sugerencias
+            searchInput.addEventListener('blur', () => {
+                setTimeout(() => { searchSuggestions.classList.add('hidden'); }, 200);
+            });
+            
+            // Eventos de Ordenación
+            sortLowToHighButton.addEventListener('click', () => handleSortChange('stock-asc'));
+            sortHighToLowButton.addEventListener('click', () => handleSortChange('stock-desc'));
+
+            // Eventos de Importar/Exportar
+            exportDataButton.addEventListener('click', exportData);
+            importFileInput.addEventListener('change', importData);
+
+            // Iniciar en la vista de Inventario
+            switchView('inventory'); 
+        }
         
-        // Eventos de Ordenación
-        sortLowToHighButton.addEventListener('click', () => handleSortChange('stock-asc'));
-        sortHighToLowButton.addEventListener('click', () => handleSortChange('stock-desc'));
-
-        // Eventos de Importar/Exportar
-        exportDataButton.addEventListener('click', exportData);
-        importFileInput.addEventListener('change', importData);
-
-
+        // Ejecutar la inicialización cuando el script se cargue
         initApp(); 
 
     </script>
