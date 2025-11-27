@@ -3,206 +3,1482 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jessica Boutique - Gestión de Inventario</title>
+    <title>Jessica Boutique | Gestión de Inventario</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Carga de Lucide Icons (Iconos) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Configuración de fuente Inter -->
     <style>
-        :root {
-            --primary-color: #8a4fff;
-            --secondary-color: #ff6b9d;
-            --background-color: #f8f9fa;
-            --card-color: #ffffff;
-            --text-color: #333333;
-            --light-text: #6c757d;
-            --border-color: #e0e0e0;
-            --success-color: #28a745;
-            --warning-color: #ffc107;
-            --danger-color: #dc3545;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
         body {
-            background-color: var(--background-color);
-            color: var(--text-color);
-            line-height: 1.6;
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f8f8;
         }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
+        .filter-button.selected, .sort-button.selected {
+            @apply bg-pink-600 text-white shadow-md ring-2 ring-pink-400;
         }
-
-        /* Barra de navegación horizontal */
-        .navbar {
-            background-color: var(--card-color);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .nav-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--primary-color);
-        }
-
-        .logo i {
-            margin-right: 10px;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-        }
-
-        .nav-links li {
-            margin-left: 25px;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: var(--text-color);
-            font-weight: 500;
-            transition: color 0.3s;
-            padding: 8px 12px;
-            border-radius: 4px;
-        }
-
-        .nav-links a:hover, .nav-links a.active {
-            color: var(--primary-color);
-            background-color: rgba(138, 79, 255, 0.1);
-        }
-
-        .user-actions {
-            display: flex;
-            align-items: center;
-        }
-
-        .search-bar {
-            position: relative;
-            margin-right: 20px;
-        }
-
-        .search-bar input {
-            padding: 8px 15px 8px 35px;
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            width: 200px;
-            font-size: 0.9rem;
-            transition: all 0.3s;
-        }
-
-        .search-bar input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            width: 250px;
-        }
-
-        .search-bar i {
-            position: absolute;
-            left: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--light-text);
-        }
-
-        .user-profile {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-        }
-
-        .user-profile img {
-            width: 35px;
-            height: 35px;
+        .color-dot {
+            width: 1.25rem; 
+            height: 1.25rem; 
             border-radius: 50%;
-            margin-right: 8px;
-            object-fit: cover;
+            border: 2px solid #ec4899;
+            display: inline-block;
+            flex-shrink: 0;
+            margin-right: 0.5rem;
+        }
+        .color-dot-small {
+            width: 1rem; 
+            height: 1rem;
+            border-radius: 50%;
+            border: 1px solid #ec4899;
+            flex-shrink: 0;
+        }
+        .section-title-bar {
+            @apply bg-gradient-to-r from-pink-600 to-pink-700 text-white p-4 rounded-t-xl font-semibold flex items-center justify-between;
+        }
+        .stats-card {
+            @apply bg-white rounded-xl shadow-md p-4 flex flex-col items-center justify-center transition-transform duration-200 hover:shadow-lg hover:-translate-y-1;
+        }
+        .product-card {
+            @apply bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-200 hover:shadow-md hover:border-pink-200;
+        }
+        .stock-indicator {
+            @apply text-xs font-bold px-2 py-1 rounded-full;
+        }
+        .stock-low {
+            @apply bg-red-100 text-red-800;
+        }
+        .stock-medium {
+            @apply bg-yellow-100 text-yellow-800;
+        }
+        .stock-high {
+            @apply bg-green-100 text-green-800;
+        }
+        .size-quantity-input {
+            @apply w-full text-center border border-gray-300 rounded-lg p-2 text-sm font-medium focus:ring-pink-500 focus:border-pink-500;
+        }
+        .nav-section {
+            @apply bg-white rounded-xl shadow-md p-4 mb-4;
+        }
+        .nav-tabs {
+            @apply flex overflow-x-auto pb-2 space-x-2;
+        }
+        .nav-tab {
+            @apply flex-1 min-w-max bg-pink-100 text-pink-700 px-4 py-3 rounded-lg font-medium text-center transition-all duration-200;
+        }
+        .nav-tab.active {
+            @apply bg-pink-600 text-white shadow-md;
+        }
+        .input-container {
+            @apply w-full p-3 border border-gray-300 rounded-lg focus-within:ring-2 focus-within:ring-pink-500 focus-within:border-pink-500;
+        }
+        .input-field {
+            @apply w-full border-none focus:ring-0 p-0 text-gray-900;
+        }
+        .btn-primary {
+            @apply bg-pink-600 hover:bg-pink-700 text-white font-medium py-3 px-4 rounded-lg transition duration-150 shadow-md w-full flex items-center justify-center;
+        }
+        .btn-secondary {
+            @apply bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-3 px-4 rounded-lg transition duration-150 shadow-md w-full flex items-center justify-center;
+        }
+        .btn-success {
+            @apply bg-green-500 hover:bg-green-600 text-white font-medium py-3 px-4 rounded-lg transition duration-150 shadow-md w-full flex items-center justify-center;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- Contenedor Principal -->
+    <div class="container mx-auto p-4">
+
+        <!-- Encabezado -->
+        <header class="mb-6">
+            <div class="flex items-center mb-4">
+                <div class="bg-pink-600 p-3 rounded-xl mr-4">
+                    <i data-lucide="shirt" class="w-8 h-8 text-white"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-extrabold tracking-tight text-pink-700">
+                        Jessica Boutique
+                    </h1>
+                    <p class="text-gray-600 text-sm">Gestión de Inventario</p>
+                </div>
+            </div>
+            
+            <!-- Barra de Navegación por Secciones -->
+            <div class="nav-section">
+                <div class="nav-tabs">
+                    <div class="nav-tab active" data-section="inventory">
+                        <i data-lucide="package" class="w-4 h-4 mr-2"></i>
+                        Inventario
+                    </div>
+                    <div class="nav-tab" data-section="management">
+                        <i data-lucide="settings" class="w-4 h-4 mr-2"></i>
+                        Gestión
+                    </div>
+                    <div class="nav-tab" data-section="add-product">
+                        <i data-lucide="package-plus" class="w-4 h-4 mr-2"></i>
+                        Agregar
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Barra de Búsqueda -->
+            <div class="relative">
+                <div class="flex items-center">
+                    <i data-lucide="search" class="absolute left-4 text-gray-400 w-5 h-5"></i>
+                    <input type="text" id="search-input" placeholder="Buscar productos..."
+                           class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-pink-500 focus:border-pink-500 text-gray-900 shadow-sm">
+                </div>
+                <!-- Contenedor de Sugerencias -->
+                <div id="search-suggestions" class="absolute z-10 w-full bg-white border border-gray-300 rounded-xl mt-1 shadow-xl max-h-48 overflow-y-auto hidden">
+                    <!-- Sugerencias se cargarán aquí -->
+                </div>
+            </div>
+
+            <!-- Indicadores de estado -->
+            <div id="loading-indicator" class="mt-2 text-pink-300 hidden flex items-center">
+                <i data-lucide="loader" class="w-4 h-4 mr-2 animate-spin"></i>
+                Cargando datos...
+            </div>
+            <div id="error-message" class="mt-2 text-red-500 hidden"></div>
+        </header>
+
+        <!-- Panel de Estadísticas -->
+        <div class="grid grid-cols-2 gap-3 mb-6">
+            <div class="stats-card bg-pink-50 border border-pink-200">
+                <div class="text-pink-600 mb-2">
+                    <i data-lucide="package" class="w-6 h-6"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800" id="total-products-stat">0</h3>
+                <p class="text-gray-600 text-xs">Productos</p>
+            </div>
+            <div class="stats-card bg-pink-50 border border-pink-200">
+                <div class="text-pink-600 mb-2">
+                    <i data-lucide="trending-up" class="w-6 h-6"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800" id="total-value-stat">S/ 0.00</h3>
+                <p class="text-gray-600 text-xs">Valor</p>
+            </div>
+            <div class="stats-card bg-pink-50 border border-pink-200">
+                <div class="text-pink-600 mb-2">
+                    <i data-lucide="alert-circle" class="w-6 h-6"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800" id="low-stock-stat">0</h3>
+                <p class="text-gray-600 text-xs">Stock Bajo</p>
+            </div>
+            <div class="stats-card bg-pink-50 border border-pink-200">
+                <div class="text-pink-600 mb-2">
+                    <i data-lucide="tag" class="w-6 h-6"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800" id="total-categories-stat">0</h3>
+                <p class="text-gray-600 text-xs">Categorías</p>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 1: INVENTARIO (Visible por defecto) -->
+        <section id="inventory-section" class="content-section" data-section="inventory">
+            <div class="bg-white rounded-xl shadow-lg mb-4">
+                <div class="section-title-bar">
+                    <h2 class="text-xl font-semibold flex items-center">
+                        <i data-lucide="package" class="w-5 h-5 mr-2"></i>
+                        Inventario (<span id="total-products">0</span>)
+                    </h2>
+                </div>
+
+                <div class="p-4 space-y-4">
+                    <!-- Controles de Vista y Filtros -->
+                    <div class="flex space-x-2 mb-4">
+                        <button id="toggle-view-btn" type="button" title="Cambiar vista"
+                                class="btn-secondary flex-1">
+                            <i data-lucide="layout-grid" class="w-4 h-4 mr-1"></i>
+                            Tarjetas
+                        </button>
+                        <button id="clear-filters" type="button" 
+                                class="btn-secondary flex-1">
+                            <i data-lucide="filter-x" class="w-4 h-4 mr-1"></i>
+                            Limpiar
+                        </button>
+                    </div>
+                    
+                    <!-- Ordenación -->
+                    <div class="bg-gray-50 p-3 rounded-lg">
+                        <p class="text-sm font-medium text-gray-700 mb-2">Ordenar por:</p>
+                        <div class="flex space-x-2 overflow-x-auto pb-2">
+                            <button id="sort-name" type="button" data-sort-by="name-asc" 
+                                    class="sort-button text-nowrap px-3 py-2 bg-white text-gray-700 text-sm rounded-lg border border-gray-300 flex items-center">
+                                <i data-lucide="arrow-down-a-z" class="w-4 h-4 mr-1"></i>
+                                Nombre
+                            </button>
+                            <button id="sort-price" type="button" data-sort-by="price-desc" 
+                                    class="sort-button text-nowrap px-3 py-2 bg-white text-gray-700 text-sm rounded-lg border border-gray-300 flex items-center">
+                                <i data-lucide="dollar-sign" class="w-4 h-4 mr-1"></i>
+                                Precio
+                            </button>
+                            <button id="sort-stock" type="button" data-sort-by="stock-desc" 
+                                    class="sort-button text-nowrap px-3 py-2 bg-white text-gray-700 text-sm rounded-lg border border-gray-300 flex items-center">
+                                <i data-lucide="arrow-up-1-0" class="w-4 h-4 mr-1"></i>
+                                Stock
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Filtros -->
+                    <div class="bg-gray-50 p-3 rounded-lg">
+                        <p class="text-sm font-medium text-gray-700 mb-2">Filtros:</p>
+                        
+                        <!-- Filtro por Categoría -->
+                        <div class="mb-3">
+                            <p class="text-xs font-medium text-gray-600 mb-1">Categoría:</p>
+                            <div id="category-filter-container" class="flex flex-wrap gap-1">
+                                <!-- Los botones de categoría se cargarán aquí -->
+                            </div>
+                        </div>
+                        
+                        <!-- Filtro por Talla -->
+                        <div class="mb-3">
+                            <p class="text-xs font-medium text-gray-600 mb-1">Talla:</p>
+                            <div id="size-filter-container" class="flex flex-wrap gap-1">
+                                <!-- Las tallas fijas se inicializan con JS -->
+                            </div>
+                        </div>
+                        
+                        <!-- Filtro por Color -->
+                        <div>
+                            <p class="text-xs font-medium text-gray-600 mb-1">Color:</p>
+                            <div id="color-filter-container" class="flex flex-wrap gap-1">
+                                <!-- Los colores únicos se cargarán aquí -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lista de Inventario - Vista de Tarjetas -->
+                    <div id="inventory-grid" class="grid grid-cols-1 gap-3 pt-2">
+                        <!-- Los productos se cargarán aquí -->
+                    </div>
+                    
+                    <!-- Lista de Inventario - Vista de Tabla (oculta por defecto) -->
+                    <div id="inventory-table" class="hidden pt-2">
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200 text-sm">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Producto</th>
+                                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Talla</th>
+                                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
+                                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="inventory-table-body" class="bg-white divide-y divide-gray-200">
+                                    <!-- Los productos se cargarán aquí -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <p id="no-data-message" class="text-center text-gray-500 py-6 hidden">
+                        <i data-lucide="package-x" class="w-10 h-10 mx-auto mb-2 text-gray-300"></i>
+                        ¡No hay productos que coincidan!
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Botones de Acción Global -->
+            <div class="grid grid-cols-2 gap-3 mt-4">
+                <button id="export-data-button" type="button"
+                        class="btn-secondary">
+                    <i data-lucide="download" class="w-4 h-4 mr-2"></i>
+                    Exportar
+                </button>
+                <label for="import-file-input" class="btn-secondary cursor-pointer">
+                    <i data-lucide="upload" class="w-4 h-4 mr-2"></i>
+                    Importar
+                </label>
+                <input type="file" id="import-file-input" accept=".json" class="hidden">
+            </div>
+        </section>
+
+        <!-- SECCIÓN 2: GESTIÓN (Oculta por defecto) -->
+        <section id="management-section" class="content-section hidden" data-section="management">
+            <div class="bg-white rounded-xl shadow-lg mb-4">
+                <div class="section-title-bar">
+                    <h2 class="text-xl font-semibold flex items-center">
+                        <i data-lucide="settings" class="w-5 h-5 mr-2"></i>
+                        Gestión de Catálogos
+                    </h2>
+                </div>
+                
+                <div class="p-4 space-y-6">
+                    
+                    <!-- Subsección: Gestión de Categorías -->
+                    <div>
+                        <h3 class="text-lg font-semibold mb-3 text-pink-600 flex items-center">
+                            <i data-lucide="tag" class="w-4 h-4 mr-2"></i>
+                            Categorías
+                        </h3>
+                        <form id="category-form" class="flex gap-2 mb-4">
+                            <div class="input-container flex-grow">
+                                <input type="text" id="new-category-name" placeholder="Nueva Categoría" required
+                                       class="input-field">
+                            </div>
+                            <button type="submit" class="btn-primary flex-none w-auto px-4">
+                                <i data-lucide="plus" class="w-5 h-5"></i>
+                            </button>
+                        </form>
+                        <div id="category-chips-container" class="flex flex-wrap gap-2 pt-2 border-t mt-2">
+                            <p id="no-categories-message-display" class="text-gray-500 italic text-sm">Cargando categorías...</p>
+                        </div>
+                    </div>
+
+                    <!-- Subsección: Gestión de Colores -->
+                    <div>
+                        <h3 class="text-lg font-semibold mb-3 text-pink-600 flex items-center">
+                            <i data-lucide="palette" class="w-4 h-4 mr-2"></i>
+                            Colores
+                        </h3>
+                        <form id="color-form" class="flex flex-col gap-3 mb-4">
+                            <div class="input-container flex items-center">
+                                <label for="new-color-picker" class="text-gray-700 text-sm font-medium mr-3">Color:</label>
+                                <input type="color" id="new-color-picker" value="#000000" title="Seleccionar Color"
+                                       class="w-8 h-8 rounded-full border-2 border-pink-500 p-0 overflow-hidden cursor-pointer">
+                            </div>
+                            <div class="input-container">
+                                <input type="text" id="new-color-name" placeholder="Nombre del color" required
+                                       class="input-field">
+                            </div>
+                            <button type="submit" class="btn-primary">
+                                <i data-lucide="plus" class="w-5 h-5 mr-2"></i>
+                                Agregar Color
+                            </button>
+                        </form>
+                        <div id="color-chips-container" class="flex flex-wrap gap-2 pt-2 border-t mt-2">
+                            <p id="no-colors-message-display" class="text-gray-500 italic text-sm">Aún no hay colores definidos.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 3: AGREGAR NUEVO PRODUCTO (Oculta por defecto) -->
+        <section id="add-product-section" class="content-section hidden" data-section="add-product">
+            <div class="bg-white rounded-xl shadow-lg mb-4">
+                <div class="section-title-bar">
+                    <h2 class="text-xl font-semibold flex items-center">
+                        <i data-lucide="package-plus" class="w-5 h-5 mr-2"></i>
+                        Agregar Producto
+                    </h2>
+                </div>
+
+                <div class="p-4">
+                    <form id="product-form" class="space-y-4">
+                        
+                        <!-- Información Básica -->
+                        <div class="grid grid-cols-1 gap-4">
+                            <div class="input-container">
+                                <input type="text" id="name" placeholder="Nombre del producto" required
+                                       class="input-field">
+                            </div>
+                            
+                            <div class="input-container">
+                                <select id="category-select" required
+                                       class="input-field text-gray-700 disabled:bg-gray-100 disabled:text-gray-500">
+                                    <option value="" disabled selected>Seleccione Categoría</option>
+                                    <!-- Opciones de categoría se llenarán con JS -->
+                                </select>
+                            </div>
+
+                            <div class="input-container">
+                                <input type="number" id="price" placeholder="Precio (Ej: 49.99)" step="0.01" min="0.01" required
+                                       class="input-field">
+                            </div>
+
+                            <div class="input-container">
+                                <select id="color-select" required
+                                        class="input-field text-gray-700 disabled:bg-gray-100 disabled:text-gray-500">
+                                    <option value="" disabled selected>Seleccione Color</option>
+                                    <!-- Opciones de color se llenarán con JS -->
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <p class="text-sm text-red-500 hidden" id="product-pre-requisite-warning">
+                            <i data-lucide="alert-circle" class="w-4 h-4 inline mr-1"></i>
+                            Para agregar productos, debe definir al menos una Categoría y un Color.
+                        </p>
+
+                        <!-- Cantidades por Talla y Color -->
+                        <div class="border-t pt-4 mt-4">
+                            <p class="text-sm font-medium text-gray-700 mb-3 flex items-center">
+                                <i data-lucide="ruler" class="w-4 h-4 mr-1"></i>
+                                Cantidades por Talla:
+                            </p>
+                            <div id="size-quantity-container" class="grid grid-cols-2 gap-3">
+                                <!-- Los inputs de cantidad por talla se cargarán aquí -->
+                            </div>
+                            
+                            <!-- Indicador de Stock Total -->
+                            <div class="mt-4 p-3 bg-pink-50 rounded-lg border border-pink-200 flex items-center justify-between">
+                                <span class="text-sm font-medium text-gray-700">Stock Total: </span>
+                                <span id="total-stock-display" class="text-lg font-bold text-green-600">0</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Botón de Envío -->
+                        <button type="submit" id="add-variants-button"
+                                class="btn-success mt-4">
+                            <i data-lucide="package-plus" class="w-5 h-5 mr-2"></i>
+                            Agregar Producto(s)
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Script de Lógica de la Aplicación -->
+    <script>
+        // ADVERTENCIA: Los datos se perderán al recargar la página si no se usa Exportar/Importar.
+
+        // --- CONSTANTES Y ESTADO INICIAL ---
+        const availableSizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'Única'];
+        let currentSection = 'inventory'; // Estado de la sección actual
+        let currentViewMode = 'grid'; // 'grid' o 'table'
+        
+        // Datos In-Memory de Ejemplo 
+        let currentInventory = [
+            { id: 'p1', name: 'Vestido de Noche', category: 'Vestidos', size: 'M', price: 89.90, stock: 5, colorHex: '#ff0000', colorName: 'Rojo Pasión', timestamp: Date.now() - 10000 },
+            { id: 'p2', name: 'Jeans Clásicos', category: 'Jeans', size: 'L', price: 65.00, stock: 12, colorHex: '#0000ff', colorName: 'Azul Marino', timestamp: Date.now() - 5000 },
+            { id: 'p3', name: 'Blusa de Seda', category: 'Blusas', size: 'S', price: 45.00, stock: 3, colorHex: '#f5f5dc', colorName: 'Beige', timestamp: Date.now() - 2000 },
+        ]; 
+        
+        let currentCategories = [
+            { id: 'c1', name: 'Vestidos' }, 
+            { id: 'c2', name: 'Jeans' },
+            { id: 'c3', name: 'Blusas' }
+        ]; 
+        
+        // Gestión de Colores
+        let currentColors = [
+            { id: 'cl1', name: 'Rojo Pasión', hex: '#ff0000' },
+            { id: 'cl2', name: 'Azul Marino', hex: '#0000ff' },
+            { id: 'cl3', name: 'Beige', hex: '#f5f5dc' },
+            { id: 'cl4', name: 'Negro Ónix', hex: '#000000' }
+        ];
+        
+        // Estado de filtros y ordenación
+        let selectedCategoryFilter = 'TODOS';
+        let selectedSizeFilter = 'TODOS';
+        let selectedColorFilter = 'TODOS';
+        let currentSort = 'name-asc'; // Opciones: 'name-asc', 'price-asc', 'price-desc', 'stock-asc', 'stock-desc'
+
+        // --- ELEMENTOS DEL DOM ---
+        const inventoryGrid = document.getElementById('inventory-grid');
+        const inventoryTable = document.getElementById('inventory-table');
+        const inventoryTableBody = document.getElementById('inventory-table-body');
+        const productForm = document.getElementById('product-form');
+        const categoryForm = document.getElementById('category-form');
+        const colorForm = document.getElementById('color-form');
+        const totalProductsSpan = document.getElementById('total-products');
+        const errorMessage = document.getElementById('error-message');
+        const noDataMessage = document.getElementById('no-data-message');
+        const searchInput = document.getElementById('search-input');
+        const searchSuggestions = document.getElementById('search-suggestions');
+        
+        // Categorías DOM
+        const newCategoryInput = document.getElementById('new-category-name');
+        const categoryChipsContainer = document.getElementById('category-chips-container');
+        const categorySelect = document.getElementById('category-select');
+        
+        // Colores DOM
+        const newColorNameInput = document.getElementById('new-color-name');
+        const newColorPicker = document.getElementById('new-color-picker');
+        const colorChipsContainer = document.getElementById('color-chips-container');
+        const colorSelect = document.getElementById('color-select');
+        
+        // Producto DOM
+        const productPreRequisiteWarning = document.getElementById('product-pre-requisite-warning');
+        const sizeQuantityContainer = document.getElementById('size-quantity-container');
+        const totalStockDisplay = document.getElementById('total-stock-display');
+        
+        // Filtros y Ordenación DOM
+        const categoryFilterContainer = document.getElementById('category-filter-container');
+        const sizeFilterContainer = document.getElementById('size-filter-container');
+        const colorFilterContainer = document.getElementById('color-filter-container');
+        const sortNameButton = document.getElementById('sort-name');
+        const sortPriceButton = document.getElementById('sort-price');
+        const sortStockButton = document.getElementById('sort-stock');
+        const clearFiltersButton = document.getElementById('clear-filters');
+        
+        // Navegación DOM
+        const navTabs = document.querySelectorAll('.nav-tab');
+        const contentSections = document.querySelectorAll('.content-section');
+        const toggleViewBtn = document.getElementById('toggle-view-btn');
+        
+        // Persistencia DOM
+        const exportDataButton = document.getElementById('export-data-button');
+        const importFileInput = document.getElementById('import-file-input');
+        
+        // Estadísticas DOM
+        const totalProductsStat = document.getElementById('total-products-stat');
+        const totalValueStat = document.getElementById('total-value-stat');
+        const lowStockStat = document.getElementById('low-stock-stat');
+        const totalCategoriesStat = document.getElementById('total-categories-stat');
+
+        // --- UTILS ---
+
+        // Inicializa los iconos de Lucide
+        function initializeLucideIcons() {
+            lucide.createIcons();
         }
 
-        /* Contenido principal */
-        .main-content {
-            padding: 30px 0;
+        const formatPrice = (price) => {
+            return new Intl.NumberFormat('es-PE', { style: 'currency', currency: 'PEN' }).format(price);
+        };
+
+        const displayError = (message) => {
+            console.error(message);
+            errorMessage.textContent = message;
+            errorMessage.classList.remove('hidden', 'text-green-500');
+            errorMessage.classList.add('text-red-500');
+            setTimeout(() => { errorMessage.classList.add('hidden'); }, 5000); 
+        };
+
+        const displaySuccess = (message) => {
+            errorMessage.textContent = message;
+            errorMessage.classList.remove('text-red-500');
+            errorMessage.classList.add('text-green-500');
+            errorMessage.classList.remove('hidden');
+            setTimeout(() => { errorMessage.classList.add('hidden'); }, 3000);
+        };
+
+        const generateId = () => Date.now().toString() + Math.random().toString(36).substring(2, 9);
+        
+        // --- NAVEGACIÓN POR SECCIONES ---
+        function switchSection(sectionName) {
+            currentSection = sectionName;
+            
+            // Actualizar pestañas activas
+            navTabs.forEach(tab => {
+                if (tab.getAttribute('data-section') === sectionName) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+            
+            // Ocultar todas las secciones de contenido
+            contentSections.forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Mostrar la sección solicitada
+            document.getElementById(`${sectionName}-section`).classList.remove('hidden');
+            
+            // Inicializar datos si es necesario
+            if (sectionName === 'inventory') {
+                loadInventory(); 
+            } else if (sectionName === 'management') {
+                loadManagementData();
+            } else if (sectionName === 'add-product') {
+                loadManagementData();
+            }
+            
+            initializeLucideIcons();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        .page-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
+        // --- PERSISTENCIA (IMPORTAR/EXPORTAR JSON) ---
+        function exportData() {
+            const dataToExport = {
+                inventory: currentInventory,
+                categories: currentCategories,
+                colors: currentColors,
+                exportTime: new Date().toISOString()
+            };
+            
+            const dataStr = JSON.stringify(dataToExport, null, 2); 
+            const blob = new Blob([dataStr], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+            
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `inventario_jessica_boutique_${new Date().toISOString().slice(0, 10)}.json`;
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+
+            displaySuccess('Datos exportados con éxito.');
         }
 
-        .page-title h1 {
-            font-size: 2rem;
-            color: var(--text-color);
-            margin-bottom: 5px;
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const importedData = JSON.parse(e.target.result);
+                    
+                    if (!importedData.inventory || !importedData.categories || !importedData.colors) {
+                        throw new Error("El archivo JSON debe contener las estructuras 'inventory', 'categories' y 'colors'.");
+                    }
+
+                    // Reemplazar los arrays en memoria
+                    currentInventory = importedData.inventory;
+                    currentCategories = importedData.categories;
+                    currentColors = importedData.colors;
+                    
+                    // Re-renderizar toda la interfaz con los datos nuevos
+                    loadManagementData();
+                    loadInventory();
+                    
+                    displaySuccess('Datos importados correctamente. Inventario actualizado.');
+                } catch (error) {
+                    displayError(`Error al procesar el archivo: ${error.message}`);
+                } finally {
+                    importFileInput.value = '';
+                }
+            };
+            
+            reader.onerror = () => {
+                displayError('Error al leer el archivo.');
+                importFileInput.value = '';
+            };
+
+            reader.readAsText(file);
         }
 
-        .page-title p {
-            color: var(--light-text);
+        // --- MANAGEMENT CRUD OPERATIONS ---
+        function saveCategory(event) {
+            event.preventDefault();
+            const name = newCategoryInput.value.trim();
+            if (name.length === 0) return;
+            const normalizedName = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+            const exists = currentCategories.some(cat => cat.name === normalizedName);
+            if (exists) {
+                displayError(`La categoría "${normalizedName}" ya existe.`);
+                return;
+            }
+            currentCategories.push({ id: generateId(), name: normalizedName });
+            newCategoryInput.value = '';
+            loadManagementData(); 
+            displaySuccess(`Categoría "${normalizedName}" agregada.`);
         }
 
-        .add-product-btn {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            display: flex;
-            align-items: center;
+        function deleteCategory(categoryId) {
+            if (!confirm(`¿Estás seguro de eliminar esta categoría? Los productos asociados quedarán "SIN CATEGORÍA".`)) return;
+            const deletedCategory = currentCategories.find(cat => cat.id === categoryId);
+            currentCategories = currentCategories.filter(cat => cat.id !== categoryId);
+            // Actualizar inventario: Si se elimina una categoría, los productos que la tenían quedan "SIN CATEGORÍA"
+            currentInventory = currentInventory.map(product => {
+                if (product.category === deletedCategory?.name) {
+                    return { ...product, category: 'SIN CATEGORÍA' };
+                }
+                return product;
+            });
+            loadManagementData();
+            loadInventory(); // Refrescar inventario para reflejar el cambio
+            displaySuccess('Categoría eliminada.');
         }
 
-        .add-product-btn i {
-            margin-right: 8px;
+        function saveColor(event) {
+            event.preventDefault();
+            const name = newColorNameInput.value.trim();
+            const hex = newColorPicker.value;
+            if (name.length === 0) return;
+            const normalizedName = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+            
+            const exists = currentColors.some(color => color.name === normalizedName || color.hex === hex);
+            if (exists) {
+                displayError(`El nombre o código de color ya existe.`);
+                return;
+            }
+            currentColors.push({ id: generateId(), name: normalizedName, hex: hex });
+            newColorNameInput.value = '';
+            newColorPicker.value = '#000000'; // Reset color picker
+            loadManagementData(); 
+            displaySuccess(`Color "${normalizedName}" agregado.`);
         }
 
-        .add-product-btn:hover {
-            background-color: #7a3fe6;
+        function deleteColor(colorId) {
+            if (!confirm(`¿Estás seguro de eliminar este color? Los productos existentes mantendrán el color, pero no podrá seleccionarlo para productos nuevos.`)) return;
+            
+            const deletedColor = currentColors.find(col => col.id === colorId);
+            currentColors = currentColors.filter(col => col.id !== colorId);
+            
+            // Nota: No se actualiza el inventario ya que los productos existentes guardan el HEX y el Name.
+            loadManagementData();
+            displaySuccess(`Color "${deletedColor.name}" eliminado.`);
         }
 
-        /* Tarjetas de resumen */
-        .summary-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+        function loadManagementData() {
+            // Ordenar alfabéticamente
+            currentCategories.sort((a, b) => a.name.localeCompare(b.name));
+            currentColors.sort((a, b) => a.name.localeCompare(b.name));
+            
+            renderCategoryManagement();
+            renderColorManagement();
+            renderCategorySelect(); 
+            renderColorSelect(); 
+            // Esto asegura que los filtros del inventario estén siempre actualizados
+            renderCategoryFilterButtons(); 
+            renderColorFilterButtons();
+            renderSizeQuantityInputs();
         }
 
-        .summary-card {
-            background-color: var(--card-color);
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s, box-shadow 0.3s;
-            display: flex;
-            flex-direction: column;
+        // --- INVENTORY CRUD OPERATIONS ---
+        function saveProductVariants(event) {
+            event.preventDefault();
+
+            const categoryName = categorySelect.value;
+            const colorId = colorSelect.value; 
+            
+            const name = document.getElementById('name').value.trim();
+            const price = parseFloat(document.getElementById('price').value);
+            
+            const selectedColor = currentColors.find(c => c.id === colorId);
+
+            // Obtener las cantidades por talla
+            const sizeQuantities = {};
+            let totalStock = 0;
+            let hasValidQuantity = false;
+            
+            availableSizes.forEach(size => {
+                const input = document.getElementById(`quantity-${size}`);
+                if (input) {
+                    const quantity = parseInt(input.value, 10) || 0;
+                    if (quantity > 0) {
+                        sizeQuantities[size] = quantity;
+                        totalStock += quantity;
+                        hasValidQuantity = true;
+                    }
+                }
+            });
+
+            // Validaciones
+            if (!name || !categoryName || !colorId || !hasValidQuantity) {
+                 displayError("Complete todos los campos requeridos y especifique al menos una cantidad para alguna talla.");
+                 return;
+            }
+            if (isNaN(price) || price <= 0) {
+                 displayError("Por favor, ingrese un valor válido para el Precio.");
+                 return;
+            }
+            if (!selectedColor) {
+                 displayError("Error interno: Color seleccionado no encontrado.");
+                 return;
+            }
+
+            let productsAddedCount = 0;
+            Object.keys(sizeQuantities).forEach(size => {
+                const quantity = sizeQuantities[size];
+                if (quantity > 0) {
+                    const newProduct = {
+                        id: generateId(),
+                        name: name,
+                        category: categoryName, 
+                        size: size,
+                        colorHex: selectedColor.hex,
+                        colorName: selectedColor.name,
+                        price: price,
+                        stock: quantity,
+                        timestamp: new Date().getTime() 
+                    };
+                    currentInventory.push(newProduct);
+                    productsAddedCount++;
+                }
+            });
+
+            if (productsAddedCount > 0) {
+                // Resetear formulario
+                document.getElementById('name').value = '';
+                document.getElementById('price').value = '';
+                categorySelect.selectedIndex = 0;
+                colorSelect.selectedIndex = 0;
+                
+                // Resetear cantidades
+                availableSizes.forEach(size => {
+                    const input = document.getElementById(`quantity-${size}`);
+                    if (input) input.value = '';
+                });
+                updateTotalStockDisplay();
+                
+                loadInventory(); 
+                displaySuccess(`${productsAddedCount} variante(s) de "${name}" agregada(s).`);
+
+                // Regresar a la sección de inventario
+                switchSection('inventory');
+            } else {
+                displayError("No se agregó ningún producto. Revise las cantidades por talla.");
+            }
         }
 
-        .summary-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        function loadInventory() {
+            // Llama a la búsqueda para aplicar filtros, ordenación y renderizado
+            handleSearch(); 
         }
 
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom:
+        function updateStock(productId, newStock) {
+            if (isNaN(newStock) || newStock < 0) return;
+            const productIndex = currentInventory.findIndex(p => p.id === productId);
+            if (productIndex !== -1) {
+                currentInventory[productIndex].stock = newStock;
+                currentInventory[productIndex].timestamp = new Date().getTime(); // Marca de tiempo de última actualización
+                loadInventory(); // Refresca la lista
+            }
+        }
+
+        function deleteProduct(productId) {
+            if (!confirm(`¿Estás seguro de que quieres eliminar este producto?`)) return; 
+            currentInventory = currentInventory.filter(p => p.id !== productId);
+            loadInventory(); 
+            displaySuccess('Producto eliminado.');
+        }
+
+        // --- FILTERING AND SEARCH ---
+
+        function handleSortChange(sortBy) {
+            currentSort = sortBy;
+            updateSortButtonState();
+            loadInventory();
+        }
+
+        function updateSortButtonState() {
+            // Limpiar selección de todos los botones de ordenación
+            document.querySelectorAll('.sort-button').forEach(btn => btn.classList.remove('selected', 'bg-pink-600', 'text-white', 'text-gray-600', 'hover:bg-pink-100'));
+            
+            // Seleccionar el botón actual
+            const selectedButton = document.querySelector(`.sort-button[data-sort-by="${currentSort}"]`);
+            if (selectedButton) {
+                selectedButton.classList.add('selected', 'bg-pink-600', 'text-white');
+            }
+            // Asegurar que los no seleccionados tengan el estilo por defecto
+            document.querySelectorAll('.sort-button:not(.selected)').forEach(btn => btn.classList.add('text-gray-600', 'hover:bg-pink-100'));
+        }
+
+        function handleFilterClick(filterType, value) {
+            let filterState;
+            
+            // Lógica para alternar el filtro
+            switch (filterType) {
+                case 'category':
+                    filterState = selectedCategoryFilter;
+                    selectedCategoryFilter = (value !== 'TODOS' && filterState === value) ? 'TODOS' : value;
+                    renderCategoryFilterButtons();
+                    break;
+                case 'size':
+                    filterState = selectedSizeFilter;
+                    selectedSizeFilter = (value !== 'TODOS' && filterState === value) ? 'TODOS' : value;
+                    renderSizeFilterButtons();
+                    break;
+                case 'color':
+                    filterState = selectedColorFilter;
+                    selectedColorFilter = (value !== 'TODOS' && filterState === value) ? 'TODOS' : value;
+                    renderColorFilterButtons();
+                    break;
+            }
+            
+            handleSearch();
+        }
+
+        function handleSearch() {
+            const query = searchInput.value.toLowerCase().trim();
+            
+            let filteredProducts = [...currentInventory]; 
+            
+            // 1. Aplicar búsqueda (Name, Category, Size, ColorName)
+            if (query) {
+                 filteredProducts = filteredProducts.filter(product =>
+                    (product.name || '').toLowerCase().includes(query) ||
+                    (product.category || '').toLowerCase().includes(query) ||
+                    (product.size || '').toLowerCase().includes(query) ||
+                    (product.colorName || '').toLowerCase().includes(query)
+                );
+            }
+
+            // 2. Aplicar filtros
+            if (selectedCategoryFilter !== 'TODOS') {
+                filteredProducts = filteredProducts.filter(product => product.category === selectedCategoryFilter);
+            }
+            if (selectedSizeFilter !== 'TODOS') {
+                filteredProducts = filteredProducts.filter(product => product.size === selectedSizeFilter);
+            }
+            if (selectedColorFilter !== 'TODOS') {
+                filteredProducts = filteredProducts.filter(product => product.colorName === selectedColorFilter);
+            }
+            
+            // 3. Aplicar ordenación
+            switch (currentSort) {
+                case 'stock-asc':
+                    filteredProducts.sort((a, b) => (a.stock || 0) - (b.stock || 0));
+                    break;
+                case 'stock-desc':
+                    filteredProducts.sort((a, b) => (b.stock || 0) - (a.stock || 0));
+                    break;
+                case 'price-asc':
+                    filteredProducts.sort((a, b) => (a.price || 0) - (b.price || 0));
+                    break;
+                case 'price-desc':
+                    filteredProducts.sort((a, b) => (b.price || 0) - (a.price || 0));
+                    break;
+                case 'name-asc':
+                default:
+                    // Ordenación alfabética por nombre como fallback
+                    filteredProducts.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+                    break;
+            }
+            
+            renderInventory(filteredProducts);
+
+            if (document.activeElement === searchInput) {
+                showSuggestions(query);
+            }
+        }
+
+        function showSuggestions(query) {
+            const uniqueSuggestions = new Set();
+            const maxSuggestions = 5;
+            
+            const normalizedQuery = query.toLowerCase();
+            
+            currentInventory.forEach(product => {
+                const name = (product.name || '').toLowerCase();
+                const category = (product.category || '').toLowerCase();
+                const size = (product.size || '').toLowerCase();
+                
+                // Solo sugerir si la palabra clave coincide
+                if (normalizedQuery && name.includes(normalizedQuery) && uniqueSuggestions.size < maxSuggestions) {
+                    uniqueSuggestions.add(product.name);
+                }
+                if (normalizedQuery && category.includes(normalizedQuery) && uniqueSuggestions.size < maxSuggestions) {
+                    uniqueSuggestions.add(product.category);
+                }
+                if (normalizedQuery && size.includes(normalizedQuery) && uniqueSuggestions.size < maxSuggestions) {
+                    uniqueSuggestions.add(product.size);
+                }
+            });
+
+            searchSuggestions.innerHTML = '';
+            if (uniqueSuggestions.size > 0 && query.length > 0) {
+                uniqueSuggestions.forEach(suggestion => {
+                    const item = document.createElement('div');
+                    item.className = 'p-2 cursor-pointer hover:bg-pink-100 transition duration-100 border-b border-gray-100 last:border-b-0 text-gray-800';
+                    item.textContent = suggestion;
+                    // Usamos mousedown para que el evento click no pierda el foco del input
+                    item.addEventListener('mousedown', (e) => {
+                        e.preventDefault(); 
+                        searchInput.value = suggestion;
+                        handleSearch();
+                        searchSuggestions.classList.add('hidden');
+                    });
+                    searchSuggestions.appendChild(item);
+                });
+                searchSuggestions.classList.remove('hidden');
+            } else {
+                searchSuggestions.classList.add('hidden');
+            }
+        }
+
+        // --- UI RENDERING & HELPERS ---
+
+        function renderSizeQuantityInputs() {
+            sizeQuantityContainer.innerHTML = '';
+
+            availableSizes.forEach(size => {
+                const container = document.createElement('div');
+                container.className = 'flex flex-col items-center bg-gray-50 p-3 rounded-lg border border-gray-200';
+                
+                const label = document.createElement('label');
+                label.htmlFor = `quantity-${size}`;
+                label.className = 'text-sm font-medium text-gray-700 mb-2';
+                label.textContent = `Talla ${size}`;
+                
+                const input = document.createElement('input');
+                input.type = 'number';
+                input.id = `quantity-${size}`;
+                input.min = '0';
+                input.placeholder = '0';
+                input.className = 'size-quantity-input';
+                input.addEventListener('input', updateTotalStockDisplay);
+                
+                container.appendChild(label);
+                container.appendChild(input);
+                sizeQuantityContainer.appendChild(container);
+            });
+        }
+        
+        function updateTotalStockDisplay() {
+            let total = 0;
+            availableSizes.forEach(size => {
+                const input = document.getElementById(`quantity-${size}`);
+                if (input) {
+                    total += parseInt(input.value, 10) || 0;
+                }
+            });
+            totalStockDisplay.textContent = total;
+        }
+        
+        function renderSizeFilterButtons() {
+            sizeFilterContainer.innerHTML = '';
+            
+            // Botón TODOS
+            sizeFilterContainer.innerHTML += `<button type="button" data-filter-type="size" data-filter-value="TODOS" class="filter-button px-3 py-1 bg-gray-200 text-gray-700 text-sm rounded-full hover:bg-gray-300 transition duration-150 ${selectedSizeFilter === 'TODOS' ? 'selected' : ''}">TODOS</button>`;
+
+            availableSizes.forEach(size => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.textContent = size;
+                button.className = `filter-button px-3 py-1 bg-pink-100 text-pink-700 text-sm rounded-full hover:bg-pink-200 transition duration-150 ${selectedSizeFilter === size ? 'selected' : ''}`;
+                button.setAttribute('data-filter-type', 'size');
+                button.setAttribute('data-filter-value', size);
+                sizeFilterContainer.appendChild(button);
+            });
+            
+            sizeFilterContainer.querySelectorAll('.filter-button').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    // Si se hace clic en el propio botón, obtenemos su valor.
+                    handleFilterClick('size', e.target.getAttribute('data-filter-value'));
+                });
+            });
+        }
+        
+        function renderCategoryFilterButtons() {
+            categoryFilterContainer.innerHTML = '';
+            
+            // Botón TODOS
+            categoryFilterContainer.innerHTML += `<button type="button" data-filter-type="category" data-filter-value="TODOS" class="filter-button px-3 py-1 bg-gray-200 text-gray-700 text-sm rounded-full hover:bg-gray-300 transition duration-150 ${selectedCategoryFilter === 'TODOS' ? 'selected' : ''}">TODOS</button>`;
+            
+            currentCategories.forEach(category => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.textContent = category.name;
+                button.className = `filter-button px-3 py-1 bg-pink-100 text-pink-700 text-sm rounded-full hover:bg-pink-200 transition duration-150 ${selectedCategoryFilter === category.name ? 'selected' : ''}`;
+                button.setAttribute('data-filter-type', 'category');
+                button.setAttribute('data-filter-value', category.name);
+                categoryFilterContainer.appendChild(button);
+            });
+
+            categoryFilterContainer.querySelectorAll('.filter-button').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    handleFilterClick('category', e.target.getAttribute('data-filter-value'));
+                });
+            });
+        }
+
+        function renderColorFilterButtons() {
+            colorFilterContainer.innerHTML = '';
+            
+            // Botón TODOS
+            colorFilterContainer.innerHTML += `<button type="button" data-filter-type="color" data-filter-value="TODOS" class="filter-button px-3 py-1 bg-gray-200 text-gray-700 text-sm rounded-full hover:bg-gray-300 transition duration-150 ${selectedColorFilter === 'TODOS' ? 'selected' : ''}">TODOS</button>`;
+            
+            currentColors.forEach(color => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = `filter-button flex items-center px-3 py-1 bg-pink-100 text-pink-700 text-sm rounded-full hover:bg-pink-200 transition duration-150 ${selectedColorFilter === color.name ? 'selected' : ''}`;
+                button.setAttribute('data-filter-type', 'color');
+                button.setAttribute('data-filter-value', color.name);
+                button.innerHTML = `
+                    <span class="color-dot-small mr-2" style="background-color: ${color.hex};"></span>
+                    <span>${color.name}</span>
+                `;
+                colorFilterContainer.appendChild(button);
+            });
+
+            colorFilterContainer.querySelectorAll('.filter-button').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    // Necesitamos obtener el valor del atributo data-filter-value, 
+                    // ya sea del botón o de un span/dot interno.
+                    let value = e.target.getAttribute('data-filter-value');
+                    if (!value) { 
+                        // Si el clic fue en un elemento hijo (span o dot), subimos al padre .filter-button
+                        value = e.target.closest('.filter-button')?.getAttribute('data-filter-value'); 
+                    }
+                    if (value) {
+                         handleFilterClick('color', value);
+                    }
+                });
+            });
+        }
+
+        function renderInventory(productsToDisplay) {
+            // Actualizar estadísticas
+            updateStatistics(productsToDisplay);
+            
+            // Mostrar/ocultar mensaje de no datos
+            noDataMessage.classList.toggle('hidden', productsToDisplay.length > 0);
+            
+            // Renderizar según el modo de vista actual
+            if (currentViewMode === 'grid') {
+                inventoryGrid.classList.remove('hidden');
+                inventoryTable.classList.add('hidden');
+                renderInventoryGrid(productsToDisplay);
+            } else {
+                inventoryGrid.classList.add('hidden');
+                inventoryTable.classList.remove('hidden');
+                renderInventoryTable(productsToDisplay);
+            }
+            
+            // Re-inicializar iconos después de renderizar el inventario
+            initializeLucideIcons(); 
+        }
+
+        function renderInventoryGrid(productsToDisplay) {
+            inventoryGrid.innerHTML = '';
+            totalProductsSpan.textContent = productsToDisplay.length;
+
+            productsToDisplay.forEach(product => {
+                inventoryGrid.appendChild(createProductCard(product));
+            });
+        }
+
+        function renderInventoryTable(productsToDisplay) {
+            inventoryTableBody.innerHTML = '';
+            totalProductsSpan.textContent = productsToDisplay.length;
+
+            productsToDisplay.forEach(product => {
+                inventoryTableBody.appendChild(createProductTableRow(product));
+            });
+        }
+
+        function updateStatistics(productsToDisplay) {
+            // Actualizar estadísticas generales
+            totalProductsStat.textContent = productsToDisplay.length;
+            
+            // Calcular valor total del inventario
+            const totalValue = productsToDisplay.reduce((sum, product) => {
+                return sum + (product.price * product.stock);
+            }, 0);
+            totalValueStat.textContent = formatPrice(totalValue);
+            
+            // Calcular productos con stock bajo (< 5)
+            const lowStockCount = productsToDisplay.filter(product => product.stock < 5).length;
+            lowStockStat.textContent = lowStockCount;
+            
+            // Calcular categorías activas
+            const activeCategories = new Set(productsToDisplay.map(product => product.category)).size;
+            totalCategoriesStat.textContent = activeCategories;
+        }
+
+        function renderCategorySelect() {
+            const currentSelectedValue = categorySelect.value;
+            categorySelect.innerHTML = '<option value="" disabled selected>Seleccione Categoría</option>';
+            
+            const hasPreRequisites = currentCategories.length > 0 && currentColors.length > 0;
+            productPreRequisiteWarning.classList.toggle('hidden', hasPreRequisites);
+            
+            if (currentCategories.length === 0) {
+                categorySelect.disabled = true;
+            } else {
+                categorySelect.disabled = false;
+                currentCategories.forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category.name;
+                    option.textContent = category.name;
+                    if (category.name === currentSelectedValue) { option.selected = true; }
+                    categorySelect.appendChild(option);
+                });
+            }
+        }
+        
+        function renderColorSelect() {
+            const currentSelectedValue = colorSelect.value;
+            colorSelect.innerHTML = '<option value="" disabled selected>Seleccione Color</option>';
+            
+            const hasPreRequisites = currentCategories.length > 0 && currentColors.length > 0;
+            productPreRequisiteWarning.classList.toggle('hidden', hasPreRequisites);
+
+            if (currentColors.length === 0) {
+                colorSelect.disabled = true;
+            } else {
+                colorSelect.disabled = false;
+                currentColors.forEach(color => {
+                    const option = document.createElement('option');
+                    option.value = color.id; // Usamos el ID del color para referencia en el formulario
+                    option.textContent = color.name;
+                    if (color.id === currentSelectedValue) { option.selected = true; }
+                    colorSelect.appendChild(option);
+                });
+            }
+        }
+
+        function renderCategoryManagement() {
+            categoryChipsContainer.innerHTML = '';
+            const noCategories = currentCategories.length === 0;
+            categoryChipsContainer.classList.toggle('justify-center', noCategories);
+            if (noCategories) {
+                categoryChipsContainer.innerHTML = `<p class="text-gray-500 italic text-sm">Aún no hay categorías definidas.</p>`;
+                return;
+            }
+
+            currentCategories.forEach(category => {
+                const chip = document.createElement('button');
+                chip.type = 'button';
+                chip.className = 'flex items-center text-sm px-3 py-1 bg-pink-100 text-pink-700 rounded-full font-medium hover:bg-red-200 transition duration-150 group';
+                chip.title = `Clic para eliminar categoría: ${category.name}`;
+                chip.innerHTML = `
+                    <span>${category.name}</span>
+                    <i data-lucide="trash-2" class="w-4 h-4 ml-2 text-pink-500 group-hover:text-red-700"></i>
+                `;
+                chip.onclick = () => deleteCategory(category.id);
+                categoryChipsContainer.appendChild(chip);
+            });
+            // Re-renderizar iconos en el área de gestión
+            initializeLucideIcons(); 
+        }
+        
+        function renderColorManagement() {
+            colorChipsContainer.innerHTML = '';
+            const noColors = currentColors.length === 0;
+            colorChipsContainer.classList.toggle('justify-center', noColors);
+            if (noColors) {
+                colorChipsContainer.innerHTML = `<p class="text-gray-500 italic text-sm">Aún no hay colores definidos.</p>`;
+                return;
+            }
+
+            currentColors.forEach(color => {
+                const chip = document.createElement('button');
+                chip.type = 'button';
+                chip.className = 'flex items-center text-sm px-3 py-1 bg-pink-100 text-pink-700 rounded-full font-medium hover:bg-red-200 transition duration-150 group';
+                chip.title = `Clic para eliminar color: ${color.name} (${color.hex})`;
+                chip.innerHTML = `
+                    <span class="color-dot-small mr-2" style="background-color: ${color.hex};"></span>
+                    <span>${color.name}</span>
+                    <i data-lucide="trash-2" class="w-4 h-4 ml-2 text-pink-500 group-hover:text-red-700"></i>
+                `;
+                chip.onclick = () => deleteColor(color.id);
+                colorChipsContainer.appendChild(chip);
+            });
+            // Re-renderizar iconos en el área de gestión
+            initializeLucideIcons(); 
+        }
+
+        function createProductCard(product) {
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            
+            // Determinar clase de stock
+            let stockClass = 'stock-high';
+            let stockText = 'Alto';
+            if (product.stock < 5) {
+                stockClass = 'stock-low';
+                stockText = 'Bajo';
+            } else if (product.stock < 10) {
+                stockClass = 'stock-medium';
+                stockText = 'Medio';
+            }
+
+            card.innerHTML = `
+                <div class="p-4">
+                    <div class="flex justify-between items-start mb-3">
+                        <span class="text-xs font-medium text-pink-600 bg-pink-50 px-2 py-1 rounded-full">${product.category || 'SIN CATEGORÍA'}</span>
+                        <span class="stock-indicator ${stockClass}">${stockText}</span>
+                    </div>
+                    
+                    <div class="flex items-center mb-3">
+                        <span class="color-dot" style="background-color: ${product.colorHex};" title="Color: ${product.colorName}"></span>
+                        <h3 class="text-lg font-bold text-gray-800 truncate">${product.name}</h3>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-2 text-sm text-gray-600 mb-4">
+                        <div class="flex items-center">
+                            <i data-lucide="ruler" class="w-4 h-4 mr-1 text-gray-400"></i>
+                            <span>Talla: ${product.size}</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i data-lucide="palette" class="w-4 h-4 mr-1 text-gray-400"></i>
+                            <span>${product.colorName}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between items-center">
+                        <span class="text-lg font-bold text-gray-800">${formatPrice(product.price)}</span>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-sm font-medium text-gray-700">Stock:</span>
+                            <span class="text-lg font-bold ${stockClass.replace('stock-', 'text-')}">${product.stock}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 p-3 border-t border-gray-100 flex justify-between">
+                    <div class="flex space-x-1">
+                        <button type="button" data-action="decrement" class="p-1 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition duration-150" title="Reducir Stock">
+                            <i data-lucide="minus" class="w-4 h-4"></i>
+                        </button>
+                        <button type="button" data-action="increment" class="p-1 bg-green-100 text-green-600 rounded-lg hover:bg-green-200 transition duration-150" title="Aumentar Stock">
+                            <i data-lucide="plus" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                    <button type="button" class="p-1 bg-gray-200 text-gray-600 rounded-lg hover:bg-red-500 hover:text-white transition duration-150" title="Eliminar Producto">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            `;
+
+            // Manejar eventos de los botones
+            const decrementBtn = card.querySelector('button[data-action="decrement"]');
+            const incrementBtn = card.querySelector('button[data-action="increment"]');
+            const deleteBtn = card.querySelector('button:last-child');
+
+            decrementBtn.addEventListener('click', () => {
+                if (product.stock > 0) { 
+                    updateStock(product.id, product.stock - 1); 
+                } else {
+                    displayError('El stock no puede ser negativo.');
+                }
+            });
+            
+            incrementBtn.addEventListener('click', () => {
+                updateStock(product.id, product.stock + 1);
+            });
+            
+            deleteBtn.addEventListener('click', () => deleteProduct(product.id));
+
+            return card;
+        }
+
+        function createProductTableRow(product) {
+            const row = document.createElement('tr');
+            
+            // Determinar clase de stock
+            let stockClass = 'stock-high';
+            if (product.stock < 5) {
+                stockClass = 'stock-low';
+            } else if (product.stock < 10) {
+                stockClass = 'stock-medium';
+            }
+
+            row.innerHTML = `
+                <td class="px-3 py-2 whitespace-nowrap">
+                    <div class="flex items-center">
+                        <span class="color-dot-small mr-3" style="background-color: ${product.colorHex};"></span>
+                        <div>
+                            <div class="text-sm font-medium text-gray-900">${product.name}</div>
+                            <div class="text-sm text-gray-500">${product.colorName}</div>
+                        </div>
+                    </div>
+                </td>
+                <td class="px-3 py-2 whitespace-nowrap">
+                    <div class="text-sm text-gray-900">${product.size}</div>
+                </td>
+                <td class="px-3 py-2 whitespace-nowrap">
+                    <div class="flex items-center">
+                        <span class="stock-indicator ${stockClass} mr-2">${product.stock}</span>
+                        <div class="flex space-x-1">
+                            <button type="button" data-action="decrement" class="p-1 bg-red-100 text-red-600 rounded hover:bg-red-200 transition duration-150" title="Reducir Stock">
+                                <i data-lucide="minus" class="w-3 h-3"></i>
+                            </button>
+                            <button type="button" data-action="increment" class="p-1 bg-green-100 text-green-600 rounded hover:bg-green-200 transition duration-150" title="Aumentar Stock">
+                                <i data-lucide="plus" class="w-3 h-3"></i>
+                            </button>
+                        </div>
+                    </div>
+                </td>
+                <td class="px-3 py-2 whitespace-nowrap text-sm font-medium">
+                    <button type="button" class="text-red-600 hover:text-red-900 transition duration-150" title="Eliminar Producto">
+                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                    </button>
+                </td>
+            `;
+
+            // Manejar eventos de los botones
+            const decrementBtn = row.querySelector('button[data-action="decrement"]');
+            const incrementBtn = row.querySelector('button[data-action="increment"]');
+            const deleteBtn = row.querySelector('button:last-child');
+
+            decrementBtn.addEventListener('click', () => {
+                if (product.stock > 0) { 
+                    updateStock(product.id, product.stock - 1); 
+                } else {
+                    displayError('El stock no puede ser negativo.');
+                }
+            });
+            
+            incrementBtn.addEventListener('click', () => {
+                updateStock(product.id, product.stock + 1);
+            });
+            
+            deleteBtn.addEventListener('click', () => deleteProduct(product.id));
+
+            return row;
+        }
+
+        function toggleViewMode() {
+            if (currentViewMode === 'grid') {
+                currentViewMode = 'table';
+                toggleViewBtn.innerHTML = `
+                    <i data-lucide="layout-grid" class="w-4 h-4 mr-1"></i>
+                    Vista de Tarjetas
+                `;
+            } else {
+                currentViewMode = 'grid';
+                toggleViewBtn.innerHTML = `
+                    <i data-lucide="table" class="w-4 h-4 mr-1"></i>
+                    Vista de Tabla
+                `;
+            }
+            loadInventory();
+        }
+
+        function clearFilters() {
+            selectedCategoryFilter = 'TODOS';
+            selectedSizeFilter = 'TODOS';
+            selectedColorFilter = 'TODOS';
+            searchInput.value = '';
+            renderCategoryFilterButtons();
+            renderSizeFilterButtons();
+            renderColorFilterButtons();
+            handleSearch();
+        }
+
+        // --- INICIALIZACIÓN ---
+        function initApp() {
+            // Inicializar las dependencias y la data inicial
+            loadManagementData(); 
+            updateTotalStockDisplay();
+            updateSortButtonState(); // Inicializa el estado visual de ordenación
+            
+            // Configurar Listeners de Navegación
+            navTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    switchSection(tab.getAttribute('data-section'));
+                });
+            });
+            
+            toggleViewBtn.addEventListener('click', toggleViewMode);
+            clearFiltersButton.addEventListener('click', clearFilters);
+
+            // Event Listeners de formularios y búsqueda
+            productForm.addEventListener('submit', saveProductVariants);
+            categoryForm.addEventListener('submit', saveCategory);
+            colorForm.addEventListener('submit', saveColor);
+            
+            // Búsqueda y Sugerencias
+            searchInput.addEventListener('input', handleSearch); 
+            searchInput.addEventListener('focus', handleSearch); 
+            // Manejamos el blur con un timeout para permitir el click en las sugerencias
+            searchInput.addEventListener('blur', () => {
+                setTimeout(() => { searchSuggestions.classList.add('hidden'); }, 200);
+            });
+            
+            // Eventos de Ordenación
+            sortNameButton.addEventListener('click', () => handleSortChange('name-asc'));
+            sortPriceButton.addEventListener('click', () => handleSortChange('price-desc'));
+            sortStockButton.addEventListener('click', () => handleSortChange('stock-desc'));
+
+            // Eventos de Importar/Exportar
+            exportDataButton.addEventListener('click', exportData);
+            importFileInput.addEventListener('change', importData);
+
+            // Iniciar en la sección de Inventario
+            switchSection('inventory'); 
+        }
+        
+        // Ejecutar la inicialización cuando el script se cargue
+        initApp(); 
+    </script>
+</body>
+</html>
