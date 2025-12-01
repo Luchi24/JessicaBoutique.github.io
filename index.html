@@ -3,416 +3,296 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jessica Boutique | Sistema de Gestión</title>
-    
-    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <script src="https://unpkg.com/lucide@latest"></script>
-    
+    <title>Jessica Boutique | Inventario</title>
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/components.css">
-    <link rel="stylesheet" href="css/responsive.css">
-    
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        pink: {
-                            50: '#fdf2f8',
-                            100: '#fce7f3',
-                            200: '#fbcfe8',
-                            300: '#f9a8d4',
-                            400: '#f472b6',
-                            500: '#ec4899',
-                            600: '#db2777',
-                            700: '#be185d',
-                            800: '#9d174d',
-                            900: '#831843',
-                            950: '#500724',
-                        },
-                        rose: {
-                            50: '#fff1f2',
-                            100: '#ffe4e6',
-                            500: '#f43f5e',
-                            600: '#e11d48',
-                        }
-                    },
-                    fontFamily: {
-                        'inter': ['Inter', 'sans-serif'],
-                    },
-                    animation: {
-                        'fade-in': 'fadeIn 0.5s ease-in-out',
-                        'slide-up': 'slideUp 0.3s ease-out',
-                        'slide-down': 'slideDown 0.3s ease-out',
-                        'pulse-glow': 'pulseGlow 2s ease-in-out infinite',
-                    },
-                    keyframes: {
-                        fadeIn: {
-                            '0%': { opacity: '0' },
-                            '100%': { opacity: '1' },
-                        },
-                        slideUp: {
-                            '0%': { transform: 'translateY(20px)', opacity: '0' },
-                            '100%': { transform: 'translateY(0)', opacity: '1' },
-                        },
-                        slideDown: {
-                            '0%': { transform: 'translateY(-20px)', opacity: '0' },
-                            '100%': { transform: 'translateY(0)', opacity: '1' },
-                        },
-                        pulseGlow: {
-                            '0%, 100%': { boxShadow: '0 0 5px rgba(236, 72, 153, 0.3)' },
-                            '50%': { boxShadow: '0 0 20px rgba(236, 72, 153, 0.6)' },
-                        }
-                    },
-                    backgroundImage: {
-                        'gradient-radial-pink': 'radial-gradient(circle at center, rgba(251, 207, 232, 0.4) 0%, rgba(252, 231, 243, 0.1) 70%)',
-                        'gradient-navbar': 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(253, 242, 248, 0.98) 100%)',
-                    }
-                }
-            },
-            plugins: [],
-        }
-    </script>
-    
-    <link rel="preload" href="js/utils.js" as="script">
-    <link rel="preload" href="components/header.html" as="fetch" crossorigin="anonymous">
-    
-    <meta name="description" content="Sistema de gestión de inventario para Jessica Boutique">
-    <meta name="keywords" content="inventario, boutique, moda, gestión, stock">
-    <meta name="author" content="Jessica Boutique">
-    
-    <meta property="og:title" content="Jessica Boutique | Sistema de Gestión">
-    <meta property="og:description" content="Sistema profesional de gestión de inventario">
-    <meta property="og:type" content="website">
-    
-    <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png">
-    
-    <style>
-        .loading-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            transition: opacity 0.5s ease;
-        }
-        
-        .loading-logo {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #ec4899, #db2777);
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-            animation: pulse 1.5s ease-in-out infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-        
-        .loading-text {
-            font-family: 'Inter', sans-serif;
-            font-weight: 500;
-            color: #db2777;
-            font-size: 1.1rem;
-        }
-        
-        .js-loading * {
-            animation-play-state: paused !important;
-            transition: none !important;
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="font-inter bg-gradient-to-br from-pink-50 via-white to-rose-50 min-h-screen js-loading">
-    
-    <div id="loadingScreen" class="loading-screen">
-        <div class="loading-logo">
-            <i data-lucide="shopping-bag" class="text-white w-10 h-10"></i>
+<body>
+    <!-- Barra de navegación -->
+    <div class="navbar">
+        <div class="logo">
+            <i class="fas fa-store"></i>
+            <h1>Jessica Boutique</h1>
+            <span class="subtitle">Sistema de Inventario</span>
         </div>
-        <div class="loading-text">Cargando Jessica Boutique...</div>
+        <div class="nav-buttons">
+            <button class="nav-btn active" onclick="mostrarSeccion('inventario')">
+                <i class="fas fa-boxes"></i> Inventario
+            </button>
+            <button class="nav-btn" onclick="mostrarSeccion('agregar')">
+                <i class="fas fa-plus-circle"></i> Agregar Producto
+            </button>
+            <button class="nav-btn" onclick="mostrarSeccion('gestion')">
+                <i class="fas fa-cog"></i> Gestión
+            </button>
+        </div>
     </div>
-    
-    <div id="app" class="min-h-screen flex flex-col opacity-0 transition-opacity duration-500">
-        
-        <header id="header-container" class="sticky top-0 z-50 bg-gradient-navbar backdrop-blur-md border-b border-pink-200/50 shadow-sm">
-        </header>
-        
-        <main id="app-container" class="flex-grow container mx-auto px-4 py-6 md:py-8 lg:py-10 max-w-7xl">
-            <div id="default-content" class="text-center py-20">
-                <div class="w-24 h-24 bg-gradient-to-r from-pink-400 to-rose-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-                    <i data-lucide="shopping-bag" class="text-white w-12 h-12"></i>
+
+    <div class="container">
+        <!-- Sección 1: INVENTARIO -->
+        <div id="inventario" class="seccion activa">
+            <div class="seccion-header">
+                <h2><i class="fas fa-boxes"></i> Inventario de Productos</h2>
+                <div class="acciones">
+                    <button class="btn-accion" onclick="exportarDatos()">
+                        <i class="fas fa-download"></i> Exportar
+                    </button>
+                    <button class="btn-accion" onclick="document.getElementById('importar-file').click()">
+                        <i class="fas fa-upload"></i> Importar
+                    </button>
+                    <input type="file" id="importar-file" accept=".json" style="display: none;" onchange="importarDatos(event)">
                 </div>
-                <h1 class="text-3xl font-bold text-gray-800 mb-3">Bienvenida a Jessica Boutique</h1>
-                <p class="text-gray-600 max-w-md mx-auto mb-8">Sistema de gestión de inventario profesional</p>
-                <div class="animate-pulse-glow">
-                    <div class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-pink-500 to-rose-500 text-white rounded-xl font-semibold">
-                        <i data-lucide="package" class="w-5 h-5"></i>
-                        Cargando inventario...
+            </div>
+
+            <!-- Barra de búsqueda y filtros -->
+            <div class="filtros">
+                <div class="busqueda">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="buscar-producto" placeholder="Buscar por nombre..." onkeyup="filtrarProductos()">
+                </div>
+                <select id="filtro-categoria" onchange="filtrarProductos()">
+                    <option value="">Todas las categorías</option>
+                </select>
+                <select id="filtro-talla" onchange="filtrarProductos()">
+                    <option value="">Todas las tallas</option>
+                    <option value="XS">XS</option>
+                    <option value="S">S</option>
+                    <option value="M">M</option>
+                    <option value="L">L</option>
+                    <option value="XL">XL</option>
+                    <option value="Única">Única</option>
+                </select>
+                <select id="ordenar-por" onchange="ordenarProductos()">
+                    <option value="nombre">Ordenar por: Nombre</option>
+                    <option value="cantidad">Ordenar por: Cantidad</option>
+                    <option value="precio">Ordenar por: Precio</option>
+                </select>
+            </div>
+
+            <!-- Tabla de productos -->
+            <div class="tabla-contenedor">
+                <table id="tabla-productos">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Categoría</th>
+                            <th>Talla</th>
+                            <th>Color</th>
+                            <th>Cantidad</th>
+                            <th>Precio</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lista-productos">
+                        <!-- Los productos se cargarán aquí -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Estadísticas -->
+            <div class="estadisticas">
+                <div class="estadistica">
+                    <h3>Total Productos</h3>
+                    <p id="total-productos">0</p>
+                </div>
+                <div class="estadistica">
+                    <h3>Stock Bajo (< 5)</h3>
+                    <p id="stock-bajo">0</p>
+                </div>
+                <div class="estadistica">
+                    <h3>Valor Total</h3>
+                    <p id="valor-total">$0.00</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección 2: AGREGAR PRODUCTO -->
+        <div id="agregar" class="seccion">
+            <div class="seccion-header">
+                <h2><i class="fas fa-plus-circle"></i> Agregar Nuevo Producto</h2>
+            </div>
+
+            <div class="formulario-contenedor">
+                <form id="form-agregar-producto" onsubmit="agregarProducto(event)">
+                    <div class="grupo-formulario">
+                        <label for="nombre-producto">
+                            <i class="fas fa-tag"></i> Nombre del Producto *
+                        </label>
+                        <input type="text" id="nombre-producto" required placeholder="Ej: Vestido Floral">
+                    </div>
+
+                    <div class="grupo-doble">
+                        <div class="grupo-formulario">
+                            <label for="categoria-producto">
+                                <i class="fas fa-folder"></i> Categoría *
+                            </label>
+                            <select id="categoria-producto" required>
+                                <option value="">Seleccionar categoría</option>
+                                <!-- Las categorías se cargarán aquí -->
+                            </select>
+                        </div>
+                        <div class="grupo-formulario">
+                            <label for="talla-producto">
+                                <i class="fas fa-ruler"></i> Talla *
+                            </label>
+                            <select id="talla-producto" required>
+                                <option value="">Seleccionar talla</option>
+                                <option value="XS">XS</option>
+                                <option value="S">S</option>
+                                <option value="M">M</option>
+                                <option value="L">L</option>
+                                <option value="XL">XL</option>
+                                <option value="Única">Única</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grupo-doble">
+                        <div class="grupo-formulario">
+                            <label for="color-producto">
+                                <i class="fas fa-palette"></i> Color *
+                            </label>
+                            <select id="color-producto" required>
+                                <option value="">Seleccionar color</option>
+                                <!-- Los colores se cargarán aquí -->
+                            </select>
+                        </div>
+                        <div class="grupo-formulario">
+                            <label for="precio-producto">
+                                <i class="fas fa-dollar-sign"></i> Precio *
+                            </label>
+                            <input type="number" id="precio-producto" required min="0" step="0.01" placeholder="0.00">
+                        </div>
+                    </div>
+
+                    <div class="grupo-formulario">
+                        <label for="cantidad-producto">
+                            <i class="fas fa-box"></i> Cantidad *
+                        </label>
+                        <input type="number" id="cantidad-producto" required min="0" placeholder="0">
+                    </div>
+
+                    <div class="botones-formulario">
+                        <button type="reset" class="btn-secundario">
+                            <i class="fas fa-times"></i> Limpiar
+                        </button>
+                        <button type="submit" class="btn-principal">
+                            <i class="fas fa-save"></i> Guardar Producto
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Vista previa del producto -->
+                <div class="vista-previa">
+                    <h3><i class="fas fa-eye"></i> Vista Previa</h3>
+                    <div class="producto-preview">
+                        <div class="preview-header">
+                            <span id="preview-nombre">Nombre del Producto</span>
+                            <span id="preview-categoria" class="badge">Categoría</span>
+                        </div>
+                        <div class="preview-detalles">
+                            <div class="detalle">
+                                <span>Talla:</span>
+                                <span id="preview-talla">-</span>
+                            </div>
+                            <div class="detalle">
+                                <span>Color:</span>
+                                <span id="preview-color">-</span>
+                            </div>
+                            <div class="detalle">
+                                <span>Precio:</span>
+                                <span id="preview-precio">$0.00</span>
+                            </div>
+                            <div class="detalle">
+                                <span>Cantidad:</span>
+                                <span id="preview-cantidad">0</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </main>
-        
-        <footer id="footer-container" class="bg-white/80 border-t border-pink-100">
-        </footer>
-        
-        <div id="global-modal" class="fixed inset-0 z-[100] hidden">
-            <div class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
-            <div class="absolute inset-0 flex items-center justify-center p-4">
-                <div id="modal-content" class="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto animate-slide-up">
+        </div>
+
+        <!-- Sección 3: GESTIÓN -->
+        <div id="gestion" class="seccion">
+            <div class="seccion-header">
+                <h2><i class="fas fa-cog"></i> Gestión del Sistema</h2>
+            </div>
+
+            <div class="gestion-contenedor">
+                <!-- Gestión de Colores -->
+                <div class="gestion-item">
+                    <h3><i class="fas fa-palette"></i> Gestión de Colores</h3>
+                    <p class="descripcion">Agrega y gestiona los colores disponibles para los productos</p>
+                    
+                    <div class="agregar-item">
+                        <input type="text" id="nuevo-color" placeholder="Nombre del color (Ej: Rojo, Azul, Negro)">
+                        <button class="btn-principal" onclick="agregarColor()">
+                            <i class="fas fa-plus"></i> Agregar Color
+                        </button>
+                    </div>
+
+                    <div class="lista-items" id="lista-colores">
+                        <!-- Los colores se cargarán aquí -->
+                    </div>
+                </div>
+
+                <!-- Gestión de Categorías -->
+                <div class="gestion-item">
+                    <h3><i class="fas fa-folder"></i> Gestión de Categorías</h3>
+                    <p class="descripcion">Crea y organiza las categorías de productos</p>
+                    
+                    <div class="agregar-item">
+                        <input type="text" id="nueva-categoria" placeholder="Nombre de categoría (Ej: Blusas, Pantalones)">
+                        <button class="btn-principal" onclick="agregarCategoria()">
+                            <i class="fas fa-plus"></i> Agregar Categoría
+                        </button>
+                    </div>
+
+                    <div class="lista-items" id="lista-categorias">
+                        <!-- Las categorías se cargarán aquí -->
+                    </div>
+                </div>
+
+                <!-- Importar/Exportar -->
+                <div class="gestion-item">
+                    <h3><i class="fas fa-database"></i> Respaldo de Datos</h3>
+                    <p class="descripcion">Exporta o importa todos los datos del sistema en formato JSON</p>
+                    
+                    <div class="acciones-backup">
+                        <button class="btn-principal" onclick="exportarDatos()">
+                            <i class="fas fa-download"></i> Exportar Todo
+                        </button>
+                        <button class="btn-secundario" onclick="document.getElementById('importar-backup').click()">
+                            <i class="fas fa-upload"></i> Importar Backup
+                        </button>
+                        <input type="file" id="importar-backup" accept=".json" style="display: none;" onchange="importarBackup(event)">
+                    </div>
+
+                    <div class="info-backup">
+                        <p><i class="fas fa-info-circle"></i> Exporta todos los datos (productos, colores, categorías) en un archivo JSON</p>
+                    </div>
                 </div>
             </div>
         </div>
-        
-        <div id="toast-container" class="fixed bottom-4 right-4 z-[90] space-y-3"></div>
-        
-        <div id="offline-indicator" class="fixed top-4 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg hidden z-[80]">
-            <div class="flex items-center gap-2">
-                <i data-lucide="wifi-off" class="w-4 h-4"></i>
-                <span>Sin conexión a internet</span>
+    </div>
+
+    <!-- Modal para editar/eliminar producto -->
+    <div id="modal-producto" class="modal">
+        <div class="modal-contenido">
+            <div class="modal-header">
+                <h3><i class="fas fa-edit"></i> Editar Producto</h3>
+                <button class="btn-cerrar" onclick="cerrarModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- Contenido del modal se cargará dinámicamente -->
             </div>
         </div>
-        
-        <button id="back-to-top" class="fixed bottom-6 right-6 bg-gradient-to-r from-pink-500 to-rose-500 text-white p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 opacity-0 transform translate-y-10 z-40">
-            <i data-lucide="chevron-up" class="w-5 h-5"></i>
-        </button>
-        
     </div>
-    
-    <script src="js/utils.js"></script>
-    
-    <script>
-        async function loadComponent(componentId, componentPath) {
-            try {
-                const response = await fetch(componentPath);
-                if (!response.ok) throw new Error('Componente no encontrado');
-                const html = await response.text();
-                document.getElementById(componentId).innerHTML = html;
-                
-                const scripts = document.getElementById(componentId).querySelectorAll('script');
-                scripts.forEach(script => {
-                    const newScript = document.createElement('script');
-                    if (script.src) {
-                        newScript.src = script.src;
-                    } else {
-                        newScript.textContent = script.textContent;
-                    }
-                    document.body.appendChild(newScript);
-                });
-            } catch (error) {
-                console.warn(`Error cargando ${componentPath}:`, error);
-                if (componentId === 'header-container') {
-                    document.getElementById(componentId).innerHTML = `
-                        <div class="container mx-auto px-4 py-4">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 bg-gradient-to-r from-pink-500 to-rose-500 rounded-xl flex items-center justify-center">
-                                        <i data-lucide="shopping-bag" class="text-white w-5 h-5"></i>
-                                    </div>
-                                    <div>
-                                        <h1 class="text-xl font-bold text-gray-800">Jessica Boutique</h1>
-                                        <p class="text-xs text-gray-500">Gestión de Inventario</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                }
-            }
-        }
-        
-        document.addEventListener('DOMContentLoaded', async () => {
-            setTimeout(() => {
-                document.getElementById('loadingScreen').style.opacity = '0';
-                setTimeout(() => {
-                    document.getElementById('loadingScreen').style.display = 'none';
-                    document.getElementById('app').style.opacity = '1';
-                    document.body.classList.remove('js-loading');
-                }, 500);
-            }, 800);
-            
-            await Promise.all([
-                loadComponent('header-container', 'components/header.html'),
-                loadComponent('footer-container', 'components/footer.html')
-            ]);
-            
-            if (window.lucide) {
-                lucide.createIcons();
-            }
-            
-            const hash = window.location.hash.substring(1) || 'inventario';
-            if (typeof window.loadSection === 'function') {
-                await window.loadSection(hash);
-            } else {
-                const navScript = document.createElement('script');
-                navScript.src = 'js/navigation.js';
-                navScript.onload = () => {
-                    if (window.loadSection) window.loadSection(hash);
-                };
-                document.body.appendChild(navScript);
-            }
-            
-            const scripts = [
-                'js/app.js',
-                'js/products.js',
-                'js/categories.js',
-                'js/inventory.js',
-                'js/statistics.js',
-                'js/config.js'
-            ];
-            
-            scripts.forEach(src => {
-                const script = document.createElement('script');
-                script.src = src;
-                script.async = true;
-                document.body.appendChild(script);
-            });
-            
-            initializeBasicFeatures();
-        });
-        
-        function initializeBasicFeatures() {
-            const backToTopBtn = document.getElementById('back-to-top');
-            if (backToTopBtn) {
-                window.addEventListener('scroll', () => {
-                    if (window.scrollY > 300) {
-                        backToTopBtn.classList.remove('opacity-0', 'translate-y-10');
-                        backToTopBtn.classList.add('opacity-100', 'translate-y-0');
-                    } else {
-                        backToTopBtn.classList.remove('opacity-100', 'translate-y-0');
-                        backToTopBtn.classList.add('opacity-0', 'translate-y-10');
-                    }
-                });
-                
-                backToTopBtn.addEventListener('click', () => {
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                });
-            }
-            
-            window.addEventListener('online', () => {
-                document.getElementById('offline-indicator').classList.add('hidden');
-                showToast('Conexión restablecida', 'success');
-            });
-            
-            window.addEventListener('offline', () => {
-                document.getElementById('offline-indicator').classList.remove('hidden');
-                showToast('Sin conexión a internet', 'warning');
-            });
-            
-            window.showToast = function(message, type = 'info') {
-                const toastContainer = document.getElementById('toast-container');
-                const toastId = 'toast-' + Date.now();
-                
-                const colors = {
-                    success: 'bg-green-500',
-                    error: 'bg-red-500',
-                    warning: 'bg-yellow-500',
-                    info: 'bg-blue-500'
-                };
-                
-                const icons = {
-                    success: 'check-circle',
-                    error: 'alert-circle',
-                    warning: 'alert-triangle',
-                    info: 'info'
-                };
-                
-                const toast = document.createElement('div');
-                toast.id = toastId;
-                toast.className = `${colors[type] || colors.info} text-white px-4 py-3 rounded-lg shadow-lg flex items-center gap-3 animate-slide-up`;
-                toast.innerHTML = `
-                    <i data-lucide="${icons[type] || 'info'}" class="w-5 h-5"></i>
-                    <span>${message}</span>
-                    <button onclick="document.getElementById('${toastId}').remove()" class="ml-auto">
-                        <i data-lucide="x" class="w-4 h-4"></i>
-                    </button>
-                `;
-                
-                toastContainer.appendChild(toast);
-                
-                lucide.createIcons();
-                
-                setTimeout(() => {
-                    if (document.getElementById(toastId)) {
-                        toast.classList.add('opacity-0', 'transition-opacity', 'duration-300');
-                        setTimeout(() => {
-                            if (document.getElementById(toastId)) {
-                                document.getElementById(toastId).remove();
-                            }
-                        }, 300);
-                    }
-                }, 5000);
-            };
-            
-            window.showModal = function(content) {
-                const modal = document.getElementById('global-modal');
-                const modalContent = document.getElementById('modal-content');
-                
-                modalContent.innerHTML = content;
-                modal.classList.remove('hidden');
-                
-                setTimeout(() => lucide.createIcons(), 100);
-                
-                modal.addEventListener('click', function(e) {
-                    if (e.target === modal) {
-                        closeModal();
-                    }
-                });
-                
-                document.addEventListener('keydown', function escHandler(e) {
-                    if (e.key === 'Escape') {
-                        closeModal();
-                        document.removeEventListener('keydown', escHandler);
-                    }
-                });
-            };
-            
-            window.closeModal = function() {
-                const modal = document.getElementById('global-modal');
-                modal.classList.add('hidden');
-            };
-        }
-    </script>
-    
-    <script>
-        if (typeof tailwind === 'undefined') {
-            const style = document.createElement('style');
-            style.textContent = `
-                body { font-family: 'Inter', sans-serif; margin: 0; }
-                .container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
-            `;
-            document.head.appendChild(style);
-        }
-        
-        if (typeof lucide === 'undefined') {
-            const script = document.createElement('script');
-            script.src = 'https://unpkg.com/lucide@latest';
-            script.onload = () => {
-                if (window.lucide) {
-                    lucide.createIcons();
-                }
-            };
-            document.body.appendChild(script);
-        }
-    </script>
-    
+
+    <!-- Notificaciones -->
+    <div id="notificaciones" class="notificaciones"></div>
+
+    <script src="js/main.js"></script>
 </body>
 </html>
