@@ -1,0 +1,190 @@
+<!-- Componente: Tarjetas de Estadísticas -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+    <!-- Tarjeta 1: Productos Totales -->
+    <div class="stats-card">
+        <div class="flex items-center justify-between w-full mb-3">
+            <div>
+                <h3 class="text-sm md:text-base font-semibold text-gray-700">Productos Totales</h3>
+                <p class="text-xs text-gray-500">En inventario activo</p>
+            </div>
+            <div class="stats-card-icon bg-pink-100 text-pink-600">
+                <i data-lucide="package" class="w-5 h-5"></i>
+            </div>
+        </div>
+        <p class="stats-card-value">147</p>
+        <div class="stats-card-trend positive">
+            <i data-lucide="trending-up" class="w-4 h-4"></i>
+            <span>+12 este mes</span>
+        </div>
+    </div>
+    
+    <!-- Tarjeta 2: Stock Bajo -->
+    <div class="stats-card">
+        <div class="flex items-center justify-between w-full mb-3">
+            <div>
+                <h3 class="text-sm md:text-base font-semibold text-gray-700">Stock Bajo</h3>
+                <p class="text-xs text-gray-500">Necesitan reabastecimiento</p>
+            </div>
+            <div class="stats-card-icon bg-red-100 text-red-600">
+                <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+            </div>
+        </div>
+        <p class="stats-card-value">8</p>
+        <div class="stats-card-trend negative">
+            <i data-lucide="trending-down" class="w-4 h-4"></i>
+            <span>-2 esta semana</span>
+        </div>
+    </div>
+    
+    <!-- Tarjeta 3: Valor Total -->
+    <div class="stats-card">
+        <div class="flex items-center justify-between w-full mb-3">
+            <div>
+                <h3 class="text-sm md:text-base font-semibold text-gray-700">Valor Total</h3>
+                <p class="text-xs text-gray-500">Inventario actual</p>
+            </div>
+            <div class="stats-card-icon bg-green-100 text-green-600">
+                <i data-lucide="dollar-sign" class="w-5 h-5"></i>
+            </div>
+        </div>
+        <p class="stats-card-value">$8,450</p>
+        <div class="stats-card-trend positive">
+            <i data-lucide="trending-up" class="w-4 h-4"></i>
+            <span>+$1,240 este mes</span>
+        </div>
+    </div>
+    
+    <!-- Tarjeta 4: Categorías -->
+    <div class="stats-card">
+        <div class="flex items-center justify-between w-full mb-3">
+            <div>
+                <h3 class="text-sm md:text-base font-semibold text-gray-700">Categorías</h3>
+                <p class="text-xs text-gray-500">Activas</p>
+            </div>
+            <div class="stats-card-icon bg-blue-100 text-blue-600">
+                <i data-lucide="layers" class="w-5 h-5"></i>
+            </div>
+        </div>
+        <p class="stats-card-value">14</p>
+        <div class="stats-card-trend neutral">
+            <i data-lucide="minus" class="w-4 h-4"></i>
+            <span>Sin cambios</span>
+        </div>
+    </div>
+</div>
+
+<!-- Tarjetas adicionales para otras secciones -->
+<div id="extra-stats-cards" class="hidden">
+    <!-- Para sección de estadísticas -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="stats-card-lg">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-gray-800">Ventas Mensuales</h3>
+                <div class="stats-card-icon-lg bg-purple-100 text-purple-600">
+                    <i data-lucide="shopping-cart" class="w-6 h-6"></i>
+                </div>
+            </div>
+            <p class="text-3xl font-bold text-gray-900">$12,580</p>
+            <div class="mt-4">
+                <div class="flex items-center justify-between text-sm mb-1">
+                    <span class="text-gray-600">Meta: $15,000</span>
+                    <span class="font-semibold text-green-600">83.9%</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full" style="width: 83.9%"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="stats-card-lg">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-gray-800">Productos Más Vendidos</h3>
+                <div class="stats-card-icon-lg bg-amber-100 text-amber-600">
+                    <i data-lucide="star" class="w-6 h-6"></i>
+                </div>
+            </div>
+            <p class="text-3xl font-bold text-gray-900">Vestido Floral</p>
+            <div class="mt-4">
+                <p class="text-sm text-gray-600">45 unidades vendidas</p>
+                <p class="text-xs text-gray-500 mt-1">Este mes</p>
+            </div>
+        </div>
+        
+        <div class="stats-card-lg">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-gray-800">Clientes Nuevos</h3>
+                <div class="stats-card-icon-lg bg-cyan-100 text-cyan-600">
+                    <i data-lucide="users" class="w-6 h-6"></i>
+                </div>
+            </div>
+            <p class="text-3xl font-bold text-gray-900">128</p>
+            <div class="mt-4">
+                <div class="flex items-center gap-4">
+                    <div class="text-center">
+                        <p class="text-lg font-bold text-green-600">+24%</p>
+                        <p class="text-xs text-gray-500">vs mes anterior</p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-lg font-bold text-cyan-600">58%</p>
+                        <p class="text-xs text-gray-500">Mujeres</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Estilos para las tarjetas de estadísticas */
+    .stats-card {
+        @apply bg-white rounded-2xl p-4 md:p-6 border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300;
+    }
+    
+    .stats-card:hover {
+        @apply border-pink-200 transform -translate-y-1;
+    }
+    
+    .stats-card-icon {
+        @apply w-10 h-10 rounded-xl flex items-center justify-center;
+    }
+    
+    .stats-card-value {
+        @apply text-2xl md:text-3xl font-bold text-gray-800 my-2;
+    }
+    
+    .stats-card-trend {
+        @apply flex items-center gap-2 text-sm font-medium mt-2;
+    }
+    
+    .stats-card-trend.positive {
+        @apply text-green-600;
+    }
+    
+    .stats-card-trend.negative {
+        @apply text-red-600;
+    }
+    
+    .stats-card-trend.neutral {
+        @apply text-gray-600;
+    }
+    
+    /* Tarjetas grandes */
+    .stats-card-lg {
+        @apply bg-white rounded-2xl p-6 border border-gray-100 shadow-sm;
+    }
+    
+    .stats-card-icon-lg {
+        @apply w-12 h-12 rounded-xl flex items-center justify-center;
+    }
+</style>
+
+<script>
+    // Funcionalidad para actualizar estadísticas
+    function updateStatsCards(data) {
+        // Esta función se llamaría con datos reales
+        console.log('Actualizando estadísticas:', data);
+    }
+    
+    // Exportar función para uso global
+    window.updateStatsCards = updateStatsCards;
+</script>
