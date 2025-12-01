@@ -1,0 +1,438 @@
+<!-- Header Principal -->
+<header class="bg-white/90 backdrop-blur-md border-b border-pink-200/50 shadow-sm">
+    <div class="container mx-auto px-4 py-3">
+        <!-- Primera fila: Logo y usuario -->
+        <div class="flex items-center justify-between mb-3">
+            <!-- Logo y título -->
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center shadow-md">
+                    <i data-lucide="shopping-bag" class="text-white w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-800 tracking-tight">Jessica Boutique</h1>
+                    <p class="text-xs text-pink-600 font-medium">Gestión de Inventario Profesional</p>
+                </div>
+            </div>
+            
+            <!-- Información del usuario y acciones -->
+            <div class="flex items-center gap-4">
+                <!-- Notificaciones -->
+                <div class="relative">
+                    <button id="notifications-btn" class="p-2 hover:bg-pink-50 rounded-lg transition-colors relative">
+                        <i data-lucide="bell" class="w-5 h-5 text-gray-700"></i>
+                        <span class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">3</span>
+                    </button>
+                    
+                    <!-- Dropdown notificaciones -->
+                    <div id="notifications-dropdown" class="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-xl border border-gray-200 z-50 hidden">
+                        <div class="p-4 border-b border-gray-100">
+                            <h3 class="font-semibold text-gray-800">Notificaciones</h3>
+                            <p class="text-xs text-gray-500">Tienes 3 alertas pendientes</p>
+                        </div>
+                        <div class="max-h-96 overflow-y-auto">
+                            <div class="p-3 border-b border-gray-100 hover:bg-pink-50">
+                                <div class="flex items-start gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0">
+                                        <i data-lucide="alert-triangle" class="w-4 h-4 text-red-600"></i>
+                                    </div>
+                                    <div class="flex-grow">
+                                        <p class="text-sm font-medium text-gray-800">Stock bajo en Vestidos</p>
+                                        <p class="text-xs text-gray-500">Solo quedan 2 unidades</p>
+                                        <p class="text-xs text-gray-400 mt-1">Hace 2 horas</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-3 border-b border-gray-100 hover:bg-pink-50">
+                                <div class="flex items-start gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+                                        <i data-lucide="package" class="w-4 h-4 text-green-600"></i>
+                                    </div>
+                                    <div class="flex-grow">
+                                        <p class="text-sm font-medium text-gray-800">Nuevo producto agregado</p>
+                                        <p class="text-xs text-gray-500">"Bolso Elegante" fue añadido</p>
+                                        <p class="text-xs text-gray-400 mt-1">Hace 1 día</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-3 border-t border-gray-100">
+                            <a href="#" class="text-sm text-pink-600 font-medium hover:text-pink-700 flex items-center gap-2">
+                                Ver todas las notificaciones
+                                <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Modo oscuro/claro (toggle) -->
+                <button id="theme-toggle" class="p-2 hover:bg-pink-50 rounded-lg transition-colors">
+                    <i data-lucide="sun" class="w-5 h-5 text-gray-700 hidden dark-mode-icon"></i>
+                    <i data-lucide="moon" class="w-5 h-5 text-gray-700 dark-mode-icon"></i>
+                </button>
+                
+                <!-- Perfil de usuario -->
+                <div class="relative">
+                    <button id="user-menu-btn" class="flex items-center gap-2 p-2 hover:bg-pink-50 rounded-lg transition-colors">
+                        <div class="w-9 h-9 rounded-full bg-gradient-to-br from-pink-400 to-rose-500 flex items-center justify-center">
+                            <i data-lucide="user" class="text-white w-4 h-4"></i>
+                        </div>
+                        <div class="hidden md:block text-left">
+                            <p class="text-sm font-medium text-gray-800">Jessica Admin</p>
+                            <p class="text-xs text-gray-500">Administradora</p>
+                        </div>
+                        <i data-lucide="chevron-down" class="w-4 h-4 text-gray-500"></i>
+                    </button>
+                    
+                    <!-- Dropdown perfil -->
+                    <div id="user-menu-dropdown" class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-200 z-50 hidden">
+                        <div class="p-4 border-b border-gray-100">
+                            <p class="text-sm font-medium text-gray-800">Jessica Admin</p>
+                            <p class="text-xs text-gray-500">admin@jessicaboutique.com</p>
+                        </div>
+                        <div class="py-2">
+                            <a href="#" class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-pink-50">
+                                <i data-lucide="user" class="w-4 h-4"></i>
+                                Mi perfil
+                            </a>
+                            <a href="#" class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-pink-50">
+                                <i data-lucide="settings" class="w-4 h-4"></i>
+                                Configuración
+                            </a>
+                            <div class="border-t border-gray-100 mt-2 pt-2">
+                                <a href="#" class="flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50">
+                                    <i data-lucide="log-out" class="w-4 h-4"></i>
+                                    Cerrar sesión
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Segunda fila: Navegación principal -->
+        <div class="border-t border-pink-100 pt-3">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <!-- Barra de búsqueda -->
+                <div class="relative flex-grow max-w-2xl">
+                    <i data-lucide="search" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5"></i>
+                    <input type="search" placeholder="Buscar productos, categorías, referencias..." 
+                           class="w-full pl-10 pr-4 py-2.5 bg-pink-50 border border-pink-200 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-pink-500 focus:bg-white transition-all">
+                    <div class="absolute right-3 top-1/2 transform -translate-y-1/2">
+                        <kbd class="px-2 py-1 text-xs bg-white border border-gray-300 rounded text-gray-500 hidden md:inline">⌘K</kbd>
+                    </div>
+                </div>
+                
+                <!-- Botones de acción rápida -->
+                <div class="flex items-center gap-2">
+                    <button class="btn-quick-action bg-pink-500 hover:bg-pink-600 text-white">
+                        <i data-lucide="plus" class="w-4 h-4"></i>
+                        <span class="hidden md:inline">Nuevo Producto</span>
+                    </button>
+                    <button class="btn-quick-action bg-white border border-pink-200 text-pink-600 hover:bg-pink-50">
+                        <i data-lucide="printer" class="w-4 h-4"></i>
+                        <span class="hidden md:inline">Reporte</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Tercera fila: Navegación por secciones -->
+    <nav class="bg-gradient-to-r from-pink-50/80 to-rose-50/80 border-t border-pink-100">
+        <div class="container mx-auto px-4">
+            <div class="flex overflow-x-auto scrollbar-hide -mb-px">
+                <div class="flex space-x-1">
+                    <!-- Enlace Inventario -->
+                    <a href="#inventario" data-section="inventario" 
+                       class="nav-section-link active group">
+                        <div class="nav-section-icon">
+                            <i data-lucide="package" class="w-5 h-5"></i>
+                        </div>
+                        <span>Inventario</span>
+                        <div class="nav-section-indicator"></div>
+                    </a>
+                    
+                    <!-- Enlace Categorías -->
+                    <a href="#categorias" data-section="categorias" 
+                       class="nav-section-link group">
+                        <div class="nav-section-icon">
+                            <i data-lucide="layers" class="w-5 h-5"></i>
+                        </div>
+                        <span>Categorías</span>
+                        <div class="nav-section-indicator"></div>
+                    </a>
+                    
+                    <!-- Enlace Agregar Productos -->
+                    <a href="#añadir-productos" data-section="añadir-productos" 
+                       class="nav-section-link group">
+                        <div class="nav-section-icon">
+                            <i data-lucide="plus-circle" class="w-5 h-5"></i>
+                        </div>
+                        <span>Agregar Productos</span>
+                        <div class="nav-section-indicator"></div>
+                    </a>
+                    
+                    <!-- Enlace Estadísticas -->
+                    <a href="#resumen" data-section="resumen" 
+                       class="nav-section-link group">
+                        <div class="nav-section-icon">
+                            <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
+                        </div>
+                        <span>Estadísticas</span>
+                        <div class="nav-section-indicator"></div>
+                    </a>
+                    
+                    <!-- Enlace Configuración -->
+                    <a href="#configuraciones" data-section="configuraciones" 
+                       class="nav-section-link group">
+                        <div class="nav-section-icon">
+                            <i data-lucide="settings" class="w-5 h-5"></i>
+                        </div>
+                        <span>Configuración</span>
+                        <div class="nav-section-indicator"></div>
+                    </a>
+                    
+                    <!-- Enlace Proveedores (extra) -->
+                    <a href="#proveedores" data-section="proveedores" 
+                       class="nav-section-link group">
+                        <div class="nav-section-icon">
+                            <i data-lucide="truck" class="w-5 h-5"></i>
+                        </div>
+                        <span>Proveedores</span>
+                        <div class="nav-section-indicator"></div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<!-- Menú móvil (off-canvas) -->
+<div id="mobile-menu" class="fixed inset-0 z-[100] hidden">
+    <div class="absolute inset-0 bg-black/50" onclick="closeMobileMenu()"></div>
+    <div class="absolute inset-y-0 right-0 w-80 bg-white shadow-xl">
+        <div class="p-6">
+            <div class="flex items-center justify-between mb-8">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center">
+                        <i data-lucide="shopping-bag" class="text-white w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-bold text-gray-800">Jessica Boutique</h2>
+                        <p class="text-xs text-gray-500">Menú</p>
+                    </div>
+                </div>
+                <button onclick="closeMobileMenu()" class="p-2 hover:bg-gray-100 rounded-lg">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            
+            <div class="space-y-1">
+                <a href="#inventario" data-section="inventario" onclick="closeMobileMenu()" 
+                   class="mobile-nav-link active">
+                    <i data-lucide="package" class="w-5 h-5"></i>
+                    Inventario
+                </a>
+                <a href="#categorias" data-section="categorias" onclick="closeMobileMenu()" 
+                   class="mobile-nav-link">
+                    <i data-lucide="layers" class="w-5 h-5"></i>
+                    Categorías
+                </a>
+                <a href="#añadir-productos" data-section="añadir-productos" onclick="closeMobileMenu()" 
+                   class="mobile-nav-link">
+                    <i data-lucide="plus-circle" class="w-5 h-5"></i>
+                    Agregar Productos
+                </a>
+                <a href="#resumen" data-section="resumen" onclick="closeMobileMenu()" 
+                   class="mobile-nav-link">
+                    <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
+                    Estadísticas
+                </a>
+                <a href="#configuraciones" data-section="configuraciones" onclick="closeMobileMenu()" 
+                   class="mobile-nav-link">
+                    <i data-lucide="settings" class="w-5 h-5"></i>
+                    Configuración
+                </a>
+            </div>
+            
+            <div class="mt-8 pt-8 border-t border-gray-200">
+                <div class="flex items-center gap-3 p-3 bg-pink-50 rounded-xl">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-pink-400 to-rose-500 flex items-center justify-center">
+                        <i data-lucide="user" class="text-white w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-gray-800">Jessica Admin</p>
+                        <p class="text-xs text-gray-500">Administradora</p>
+                    </div>
+                </div>
+                
+                <div class="mt-4 space-y-1">
+                    <a href="#" class="flex items-center gap-3 p-3 text-gray-700 hover:bg-gray-100 rounded-lg">
+                        <i data-lucide="user" class="w-4 h-4"></i>
+                        Mi perfil
+                    </a>
+                    <a href="#" class="flex items-center gap-3 p-3 text-gray-700 hover:bg-gray-100 rounded-lg">
+                        <i data-lucide="settings" class="w-4 h-4"></i>
+                        Configuración
+                    </a>
+                    <a href="#" class="flex items-center gap-3 p-3 text-red-600 hover:bg-red-50 rounded-lg">
+                        <i data-lucide="log-out" class="w-4 h-4"></i>
+                        Cerrar sesión
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Botón menú móvil (flotante) -->
+<button id="mobile-menu-btn" class="fixed bottom-6 left-6 md:hidden z-40 w-14 h-14 bg-gradient-to-br from-pink-500 to-rose-500 text-white rounded-full shadow-xl flex items-center justify-center">
+    <i data-lucide="menu" class="w-6 h-6"></i>
+</button>
+
+<script>
+    // Funciones para el header
+    function openMobileMenu() {
+        document.getElementById('mobile-menu').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+    
+    function closeMobileMenu() {
+        document.getElementById('mobile-menu').classList.add('hidden');
+        document.body.style.overflow = '';
+    }
+    
+    // Inicializar eventos del header
+    document.addEventListener('DOMContentLoaded', function() {
+        // Botón menú móvil
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', openMobileMenu);
+        }
+        
+        // Dropdown notificaciones
+        const notificationsBtn = document.getElementById('notifications-btn');
+        const notificationsDropdown = document.getElementById('notifications-dropdown');
+        
+        if (notificationsBtn && notificationsDropdown) {
+            notificationsBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                notificationsDropdown.classList.toggle('hidden');
+            });
+            
+            // Cerrar al hacer clic fuera
+            document.addEventListener('click', function() {
+                notificationsDropdown.classList.add('hidden');
+            });
+            
+            notificationsDropdown.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+        }
+        
+        // Dropdown usuario
+        const userMenuBtn = document.getElementById('user-menu-btn');
+        const userMenuDropdown = document.getElementById('user-menu-dropdown');
+        
+        if (userMenuBtn && userMenuDropdown) {
+            userMenuBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                userMenuDropdown.classList.toggle('hidden');
+            });
+            
+            // Cerrar al hacer clic fuera
+            document.addEventListener('click', function() {
+                userMenuDropdown.classList.add('hidden');
+            });
+            
+            userMenuDropdown.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+        }
+        
+        // Toggle tema claro/oscuro
+        const themeToggle = document.getElementById('theme-toggle');
+        if (themeToggle) {
+            themeToggle.addEventListener('click', function() {
+                const isDark = document.documentElement.classList.contains('dark');
+                if (isDark) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('theme', 'dark');
+                }
+                updateThemeIcons();
+            });
+            
+            // Verificar tema guardado
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.documentElement.classList.add('dark');
+            }
+            updateThemeIcons();
+        }
+        
+        function updateThemeIcons() {
+            const isDark = document.documentElement.classList.contains('dark');
+            const darkIcons = document.querySelectorAll('.dark-mode-icon');
+            darkIcons.forEach(icon => {
+                if (isDark) {
+                    icon.classList.toggle('hidden', icon.querySelector('lucide-icon').getAttribute('name') !== 'sun');
+                } else {
+                    icon.classList.toggle('hidden', icon.querySelector('lucide-icon').getAttribute('name') !== 'moon');
+                }
+            });
+        }
+    });
+</script>
+
+<style>
+    /* Estilos específicos para el header */
+    .btn-quick-action {
+        @apply px-4 py-2 rounded-xl font-medium flex items-center gap-2 transition-all duration-200 text-sm shadow-sm;
+    }
+    
+    .nav-section-link {
+        @apply flex items-center gap-3 px-5 py-3 text-gray-700 hover:text-pink-600 relative transition-colors whitespace-nowrap font-medium;
+    }
+    
+    .nav-section-link.active {
+        @apply text-pink-600 font-semibold;
+    }
+    
+    .nav-section-icon {
+        @apply w-8 h-8 rounded-lg flex items-center justify-center bg-pink-100 text-pink-600;
+    }
+    
+    .nav-section-link.active .nav-section-icon {
+        @apply bg-gradient-to-br from-pink-500 to-rose-500 text-white;
+    }
+    
+    .nav-section-indicator {
+        @apply absolute bottom-0 left-0 w-full h-1 bg-transparent;
+    }
+    
+    .nav-section-link.active .nav-section-indicator {
+        @apply bg-gradient-to-r from-pink-500 to-rose-500;
+    }
+    
+    .mobile-nav-link {
+        @apply flex items-center gap-3 p-3 rounded-xl text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-colors;
+    }
+    
+    .mobile-nav-link.active {
+        @apply bg-gradient-to-r from-pink-50 to-rose-50 text-pink-600 border-r-4 border-pink-500;
+    }
+    
+    /* Scrollbar personalizado */
+    .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+    }
+</style>
