@@ -59,13 +59,41 @@
             @apply w-16 text-center border border-gray-300 rounded-lg p-2 text-sm font-medium focus:ring-pink-500 focus:border-pink-500;
         }
         .nav-link {
-            @apply flex items-center gap-2 px-4 py-3 rounded-lg transition-all duration-200 hover:bg-pink-50;
+            @apply flex items-center gap-2 px-4 py-3 rounded-lg transition-all duration-200 hover:bg-pink-50 text-gray-700 hover:text-pink-600 whitespace-nowrap;
         }
         .nav-link.active {
-            @apply bg-pink-600 text-white hover:bg-pink-700;
+            @apply bg-gradient-to-r from-pink-600 to-pink-700 text-white shadow-md hover:bg-gradient-to-r hover:from-pink-700 hover:to-pink-800;
         }
         .nav-link.active i {
             @apply text-white;
+        }
+        .section-content {
+            display: none;
+        }
+        .section-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .mobile-menu-btn {
+            @apply md:hidden p-2 rounded-lg hover:bg-gray-100;
+        }
+        .nav-container {
+            @apply transition-all duration-300;
+        }
+        /* Estilos para hacer la tabla responsive */
+        .table-responsive {
+            @apply block w-full overflow-x-auto;
+        }
+        .product-card-mobile {
+            @apply product-card p-4 mb-4;
+        }
+        /* Indicador de navegación activa */
+        .active-indicator {
+            @apply absolute bottom-0 left-0 w-full h-1 bg-pink-600 rounded-t-full hidden md:block;
         }
     </style>
     <!-- Configuración de Tailwind personalizada -->
@@ -103,152 +131,180 @@
                         <i data-lucide="shopping-bag" class="text-white w-5 h-5"></i>
                     </div>
                     <div>
-                        <h1 class="text-2xl font-bold text-gray-800">Jessica Boutique</h1>
-                        <p class="text-sm text-gray-500">Gestión de Inventario</p>
+                        <h1 class="text-xl md:text-2xl font-bold text-gray-800">Jessica Boutique</h1>
+                        <p class="text-xs md:text-sm text-gray-500">Gestión de Inventario</p>
                     </div>
                 </div>
                 
-                <!-- Información del usuario -->
-                <div class="flex items-center gap-4">
-                    <div class="hidden md:flex flex-col items-end">
+                <!-- Botón menú móvil -->
+                <button id="mobileMenuBtn" class="mobile-menu-btn">
+                    <i data-lucide="menu" class="w-6 h-6 text-gray-700"></i>
+                </button>
+                
+                <!-- Información del usuario (solo desktop) -->
+                <div class="hidden md:flex items-center gap-4">
+                    <div class="flex flex-col items-end">
                         <p class="font-medium text-gray-800">Administrador</p>
                         <p class="text-xs text-gray-500">Última conexión: Hoy</p>
                     </div>
-                    <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
-                        <i data-lucide="user" class="text-gray-600 w-5 h-5"></i>
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-r from-pink-500 to-pink-700 flex items-center justify-center">
+                        <i data-lucide="user" class="text-white w-5 h-5"></i>
                     </div>
                 </div>
             </div>
         </div>
         
-        <!-- Barra de navegación horizontal -->
-        <nav class="bg-white border-t border-gray-100">
+        <!-- Barra de navegación horizontal - Mejorada -->
+        <nav id="mainNav" class="nav-container bg-white border-t border-gray-100">
             <div class="container mx-auto px-4">
-                <div class="flex overflow-x-auto">
-                    <a href="#" class="nav-link active">
-                        <i data-lucide="package" class="w-4 h-4"></i>
-                        <span>Inventario</span>
-                    </a>
-                    <a href="#" class="nav-link">
-                        <i data-lucide="folder-tree" class="w-4 h-4"></i>
-                        <span>Gestionar Categorías</span>
-                    </a>
-                    <a href="#" class="nav-link">
-                        <i data-lucide="plus-circle" class="w-4 h-4"></i>
-                        <span>Añadir Productos</span>
-                    </a>
-                    <a href="#" class="nav-link">
-                        <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
-                        <span>Ver Resumen</span>
-                    </a>
-                    <a href="#" class="nav-link">
-                        <i data-lucide="settings" class="w-4 h-4"></i>
-                        <span>Configuraciones</span>
-                    </a>
+                <div class="flex overflow-x-auto py-2 md:py-0 scrollbar-hide">
+                    <!-- Contenedor para centrar en desktop -->
+                    <div class="flex w-full justify-center md:justify-start">
+                        <div class="flex space-x-1 md:space-x-2">
+                            <!-- Inventario -->
+                            <div class="relative">
+                                <a href="#inventario" data-section="inventario" class="nav-link active">
+                                    <i data-lucide="package" class="w-4 h-4 md:w-5 md:h-5"></i>
+                                    <span class="text-sm md:text-base">Inventario</span>
+                                </a>
+                                <div class="active-indicator"></div>
+                            </div>
+                            
+                            <!-- Gestionar Categorías -->
+                            <div class="relative">
+                                <a href="#categorias" data-section="categorias" class="nav-link">
+                                    <i data-lucide="folder-tree" class="w-4 h-4 md:w-5 md:h-5"></i>
+                                    <span class="text-sm md:text-base">Categorías</span>
+                                </a>
+                            </div>
+                            
+                            <!-- Añadir Productos -->
+                            <div class="relative">
+                                <a href="#añadir-productos" data-section="añadir-productos" class="nav-link">
+                                    <i data-lucide="plus-circle" class="w-4 h-4 md:w-5 md:h-5"></i>
+                                    <span class="text-sm md:text-base">Añadir</span>
+                                </a>
+                            </div>
+                            
+                            <!-- Ver Resumen -->
+                            <div class="relative">
+                                <a href="#resumen" data-section="resumen" class="nav-link">
+                                    <i data-lucide="bar-chart-3" class="w-4 h-4 md:w-5 md:h-5"></i>
+                                    <span class="text-sm md:text-base">Resumen</span>
+                                </a>
+                            </div>
+                            
+                            <!-- Configuraciones -->
+                            <div class="relative">
+                                <a href="#configuraciones" data-section="configuraciones" class="nav-link">
+                                    <i data-lucide="settings" class="w-4 h-4 md:w-5 md:h-5"></i>
+                                    <span class="text-sm md:text-base">Configuración</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </nav>
     </header>
 
     <!-- Contenido principal -->
-    <main class="container mx-auto px-4 py-8">
-        <!-- Sección de estadísticas -->
-        <section class="mb-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div class="stats-card">
-                    <div class="flex items-center justify-between w-full mb-2">
-                        <h3 class="text-lg font-semibold text-gray-700">Productos Total</h3>
-                        <div class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center">
-                            <i data-lucide="package" class="text-pink-600 w-5 h-5"></i>
+    <main class="container mx-auto px-4 py-6 md:py-8">
+        
+        <!-- Sección de Inventario (Activa por defecto) -->
+        <section id="inventario" class="section-content active">
+            <!-- Estadísticas -->
+            <div class="mb-6 md:mb-8">
+                <h2 class="text-xl md:text-2xl font-bold text-gray-800 mb-4">Resumen del Inventario</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
+                    <div class="stats-card">
+                        <div class="flex items-center justify-between w-full mb-2">
+                            <h3 class="text-sm md:text-lg font-semibold text-gray-700">Productos</h3>
+                            <div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-pink-100 flex items-center justify-center">
+                                <i data-lucide="package" class="text-pink-600 w-4 h-4 md:w-5 md:h-5"></i>
+                            </div>
                         </div>
+                        <p class="text-2xl md:text-3xl font-bold text-gray-800">124</p>
+                        <p class="text-xs md:text-sm text-gray-500 mt-1 md:mt-2">+5 esta semana</p>
                     </div>
-                    <p class="text-3xl font-bold text-gray-800">124</p>
-                    <p class="text-sm text-gray-500 mt-2">+5 esta semana</p>
-                </div>
-                
-                <div class="stats-card">
-                    <div class="flex items-center justify-between w-full mb-2">
-                        <h3 class="text-lg font-semibold text-gray-700">Stock Bajo</h3>
-                        <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
-                            <i data-lucide="alert-circle" class="text-red-600 w-5 h-5"></i>
+                    
+                    <div class="stats-card">
+                        <div class="flex items-center justify-between w-full mb-2">
+                            <h3 class="text-sm md:text-lg font-semibold text-gray-700">Stock Bajo</h3>
+                            <div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-red-100 flex items-center justify-center">
+                                <i data-lucide="alert-circle" class="text-red-600 w-4 h-4 md:w-5 md:h-5"></i>
+                            </div>
                         </div>
+                        <p class="text-2xl md:text-3xl font-bold text-gray-800">8</p>
+                        <p class="text-xs md:text-sm text-gray-500 mt-1 md:mt-2">Reabastecer</p>
                     </div>
-                    <p class="text-3xl font-bold text-gray-800">8</p>
-                    <p class="text-sm text-gray-500 mt-2">Reabastecimiento urgente</p>
-                </div>
-                
-                <div class="stats-card">
-                    <div class="flex items-center justify-between w-full mb-2">
-                        <h3 class="text-lg font-semibold text-gray-700">Valor Total</h3>
-                        <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-                            <i data-lucide="dollar-sign" class="text-green-600 w-5 h-5"></i>
+                    
+                    <div class="stats-card">
+                        <div class="flex items-center justify-between w-full mb-2">
+                            <h3 class="text-sm md:text-lg font-semibold text-gray-700">Valor Total</h3>
+                            <div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-green-100 flex items-center justify-center">
+                                <i data-lucide="dollar-sign" class="text-green-600 w-4 h-4 md:w-5 md:h-5"></i>
+                            </div>
                         </div>
+                        <p class="text-2xl md:text-3xl font-bold text-gray-800">$5,240</p>
+                        <p class="text-xs md:text-sm text-gray-500 mt-1 md:mt-2">Inventario</p>
                     </div>
-                    <p class="text-3xl font-bold text-gray-800">$5,240</p>
-                    <p class="text-sm text-gray-500 mt-2">Inventario actual</p>
-                </div>
-                
-                <div class="stats-card">
-                    <div class="flex items-center justify-between w-full mb-2">
-                        <h3 class="text-lg font-semibold text-gray-700">Categorías</h3>
-                        <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
-                            <i data-lucide="folder" class="text-blue-600 w-5 h-5"></i>
+                    
+                    <div class="stats-card">
+                        <div class="flex items-center justify-between w-full mb-2">
+                            <h3 class="text-sm md:text-lg font-semibold text-gray-700">Categorías</h3>
+                            <div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-blue-100 flex items-center justify-center">
+                                <i data-lucide="folder" class="text-blue-600 w-4 h-4 md:w-5 md:h-5"></i>
+                            </div>
                         </div>
+                        <p class="text-2xl md:text-3xl font-bold text-gray-800">12</p>
+                        <p class="text-xs md:text-sm text-gray-500 mt-1 md:mt-2">Activas</p>
                     </div>
-                    <p class="text-3xl font-bold text-gray-800">12</p>
-                    <p class="text-sm text-gray-500 mt-2">Activas</p>
                 </div>
             </div>
-        </section>
-
-        <!-- Sección de inventario -->
-        <section>
+            
+            <!-- Tabla de productos -->
             <div class="bg-white rounded-xl shadow-md overflow-hidden">
-                <!-- Encabezado de la sección -->
                 <div class="section-title-bar">
                     <div class="flex items-center gap-3">
                         <i data-lucide="package" class="w-5 h-5"></i>
-                        <h2 class="text-xl font-bold">Inventario de Productos</h2>
+                        <h2 class="text-lg md:text-xl font-bold">Inventario de Productos</h2>
                     </div>
                     <div class="flex items-center gap-2">
-                        <button class="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors">
-                            <i data-lucide="filter" class="w-4 h-4"></i>
-                            Filtrar
+                        <button class="bg-white/20 hover:bg-white/30 text-white px-3 md:px-4 py-2 rounded-lg text-xs md:text-sm font-medium flex items-center gap-2 transition-colors">
+                            <i data-lucide="filter" class="w-3 h-3 md:w-4 md:h-4"></i>
+                            <span class="hidden md:inline">Filtrar</span>
                         </button>
-                        <button class="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors">
-                            <i data-lucide="plus" class="w-4 h-4"></i>
-                            Nuevo Producto
+                        <button class="bg-white/20 hover:bg-white/30 text-white px-3 md:px-4 py-2 rounded-lg text-xs md:text-sm font-medium flex items-center gap-2 transition-colors">
+                            <i data-lucide="plus" class="w-3 h-3 md:w-4 md:h-4"></i>
+                            <span class="hidden md:inline">Nuevo</span>
                         </button>
                     </div>
                 </div>
                 
-                <!-- Contenido de la tabla -->
-                <div class="p-6">
+                <div class="p-4 md:p-6">
                     <!-- Barra de búsqueda y filtros -->
-                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
-                        <div class="relative w-full md:w-auto">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 md:gap-4 mb-4 md:mb-6">
+                        <div class="relative w-full">
                             <i data-lucide="search" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4"></i>
-                            <input type="text" placeholder="Buscar productos..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg w-full md:w-64 focus:ring-pink-500 focus:border-pink-500">
+                            <input type="text" placeholder="Buscar productos..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg w-full focus:ring-pink-500 focus:border-pink-500 text-sm md:text-base">
                         </div>
                         
-                        <div class="flex flex-wrap gap-2">
-                            <button class="filter-button selected px-4 py-2 bg-pink-600 text-white rounded-lg text-sm font-medium">
+                        <div class="flex flex-wrap gap-2 w-full md:w-auto">
+                            <button class="filter-button selected px-3 md:px-4 py-2 bg-pink-600 text-white rounded-lg text-xs md:text-sm font-medium">
                                 Todos
                             </button>
-                            <button class="filter-button px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200">
+                            <button class="filter-button px-3 md:px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-xs md:text-sm font-medium hover:bg-gray-200">
                                 Ropa
                             </button>
-                            <button class="filter-button px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200">
+                            <button class="filter-button px-3 md:px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-xs md:text-sm font-medium hover:bg-gray-200">
                                 Accesorios
-                            </button>
-                            <button class="filter-button px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200">
-                                Calzado
                             </button>
                         </div>
                     </div>
                     
-                    <!-- Tabla de productos -->
-                    <div class="overflow-x-auto rounded-lg border border-gray-200">
+                    <!-- Vista de tabla (Desktop) -->
+                    <div class="hidden md:block overflow-x-auto rounded-lg border border-gray-200">
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                                 <tr>
@@ -273,7 +329,7 @@
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
-                                <!-- Fila de producto 1 -->
+                                <!-- Productos de ejemplo -->
                                 <tr class="hover:bg-gray-50 transition-colors">
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex items-center">
@@ -304,9 +360,7 @@
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <span class="stock-indicator stock-high">45 unidades</span>
-                                        </div>
+                                        <span class="stock-indicator stock-high">45 unidades</span>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                         $39.99
@@ -319,91 +373,224 @@
                                             <button class="text-blue-600 hover:text-blue-900">
                                                 <i data-lucide="eye" class="w-4 h-4"></i>
                                             </button>
-                                            <button class="text-red-600 hover:text-red-900">
-                                                <i data-lucide="trash-2" class="w-4 h-4"></i>
-                                            </button>
                                         </div>
                                     </td>
                                 </tr>
-                                
-                                <!-- Fila de producto 2 -->
-                                <tr class="hover:bg-gray-50 transition-colors">
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <div class="flex-shrink-0 h-10 w-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                                                <i data-lucide="watch" class="text-blue-600 w-5 h-5"></i>
-                                            </div>
-                                            <div class="ml-4">
-                                                <div class="text-sm font-medium text-gray-900">Reloj Elegante</div>
-                                                <div class="text-sm text-gray-500">REF: AC-2024-015</div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                                            Accesorios
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="flex items-center gap-2">
-                                            <div class="flex flex-col">
-                                                <span class="text-sm text-gray-900">Única</span>
-                                                <div class="flex items-center mt-1">
-                                                    <div class="color-dot-small bg-gray-800"></div>
-                                                    <div class="color-dot-small bg-silver ml-1"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <span class="stock-indicator stock-low">3 unidades</span>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                        $89.99
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        <div class="flex gap-2">
-                                            <button class="text-pink-600 hover:text-pink-900">
-                                                <i data-lucide="edit" class="w-4 h-4"></i>
-                                            </button>
-                                            <button class="text-blue-600 hover:text-blue-900">
-                                                <i data-lucide="eye" class="w-4 h-4"></i>
-                                            </button>
-                                            <button class="text-red-600 hover:text-red-900">
-                                                <i data-lucide="trash-2" class="w-4 h-4"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                
-                                <!-- Más filas de productos... -->
                             </tbody>
                         </table>
                     </div>
                     
-                    <!-- Paginación -->
-                    <div class="flex items-center justify-between mt-6">
-                        <p class="text-sm text-gray-700">
-                            Mostrando <span class="font-medium">1</span> a <span class="font-medium">10</span> de <span class="font-medium">124</span> productos
-                        </p>
-                        <div class="flex gap-2">
-                            <button class="px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50">
-                                Anterior
+                    <!-- Vista móvil de productos -->
+                    <div class="md:hidden space-y-4">
+                        <!-- Card de producto móvil -->
+                        <div class="product-card-mobile">
+                            <div class="flex justify-between items-start mb-3">
+                                <div>
+                                    <h3 class="font-semibold text-gray-800">Vestido Floral</h3>
+                                    <p class="text-sm text-gray-500">REF: VF-2024-001</p>
+                                </div>
+                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-pink-100 text-pink-800">
+                                    Ropa
+                                </span>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-3 mb-3">
+                                <div>
+                                    <p class="text-sm text-gray-600 mb-1">Tallas</p>
+                                    <p class="font-medium">S, M, L</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-600 mb-1">Colores</p>
+                                    <div class="flex items-center">
+                                        <div class="color-dot-small bg-pink-300"></div>
+                                        <div class="color-dot-small bg-blue-300 ml-1"></div>
+                                        <div class="color-dot-small bg-green-300 ml-1"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <span class="stock-indicator stock-high">45 unidades</span>
+                                    <p class="text-lg font-bold text-gray-800 mt-1">$39.99</p>
+                                </div>
+                                <div class="flex gap-3">
+                                    <button class="text-pink-600">
+                                        <i data-lucide="edit" class="w-4 h-4"></i>
+                                    </button>
+                                    <button class="text-blue-600">
+                                        <i data-lucide="eye" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Sección de Categorías -->
+        <section id="categorias" class="section-content">
+            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                <div class="section-title-bar">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="folder-tree" class="w-5 h-5"></i>
+                        <h2 class="text-lg md:text-xl font-bold">Gestionar Categorías</h2>
+                    </div>
+                    <button class="bg-white/20 hover:bg-white/30 text-white px-3 md:px-4 py-2 rounded-lg text-xs md:text-sm font-medium flex items-center gap-2 transition-colors">
+                        <i data-lucide="plus" class="w-3 h-3 md:w-4 md:h-4"></i>
+                        <span class="hidden md:inline">Nueva Categoría</span>
+                        <span class="md:hidden">Nueva</span>
+                    </button>
+                </div>
+                
+                <div class="p-4 md:p-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <!-- Categorías de ejemplo -->
+                        <div class="bg-pink-50 border border-pink-100 rounded-xl p-4">
+                            <div class="flex justify-between items-start mb-3">
+                                <h3 class="font-semibold text-gray-800">Ropa</h3>
+                                <div class="flex gap-2">
+                                    <button class="text-pink-600 hover:text-pink-800">
+                                        <i data-lucide="edit-2" class="w-4 h-4"></i>
+                                    </button>
+                                    <button class="text-red-600 hover:text-red-800">
+                                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-3">Vestidos, blusas, pantalones, etc.</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs font-medium text-gray-500">24 productos</span>
+                                <span class="text-xs font-medium text-pink-600">Activa</span>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-blue-50 border border-blue-100 rounded-xl p-4">
+                            <div class="flex justify-between items-start mb-3">
+                                <h3 class="font-semibold text-gray-800">Accesorios</h3>
+                                <div class="flex gap-2">
+                                    <button class="text-blue-600 hover:text-blue-800">
+                                        <i data-lucide="edit-2" class="w-4 h-4"></i>
+                                    </button>
+                                    <button class="text-red-600 hover:text-red-800">
+                                        <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-600 mb-3">Bolsos, joyería, relojes, etc.</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs font-medium text-gray-500">18 productos</span>
+                                <span class="text-xs font-medium text-blue-600">Activa</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Sección de Añadir Productos -->
+        <section id="añadir-productos" class="section-content">
+            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                <div class="section-title-bar">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="plus-circle" class="w-5 h-5"></i>
+                        <h2 class="text-lg md:text-xl font-bold">Añadir Nuevo Producto</h2>
+                    </div>
+                </div>
+                
+                <div class="p-4 md:p-6">
+                    <form class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Nombre del Producto</label>
+                                <input type="text" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Categoría</label>
+                                <select class="w-full p-3 border border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500">
+                                    <option>Seleccionar categoría</option>
+                                    <option>Ropa</option>
+                                    <option>Accesorios</option>
+                                    <option>Calzado</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Descripción</label>
+                            <textarea rows="3" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500"></textarea>
+                        </div>
+                        
+                        <div class="flex justify-end gap-3 pt-4">
+                            <button type="button" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50">
+                                Cancelar
                             </button>
-                            <button class="px-3 py-2 border border-pink-600 bg-pink-600 text-white rounded-lg text-sm font-medium">
-                                1
+                            <button type="submit" class="px-4 py-2 bg-gradient-to-r from-pink-600 to-pink-700 text-white rounded-lg hover:from-pink-700 hover:to-pink-800">
+                                Guardar Producto
                             </button>
-                            <button class="px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50">
-                                2
-                            </button>
-                            <button class="px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50">
-                                3
-                            </button>
-                            <button class="px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50">
-                                Siguiente
-                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Sección de Resumen -->
+        <section id="resumen" class="section-content">
+            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                <div class="section-title-bar">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
+                        <h2 class="text-lg md:text-xl font-bold">Resumen y Estadísticas</h2>
+                    </div>
+                </div>
+                
+                <div class="p-4 md:p-6">
+                    <div class="text-center py-8 md:py-12">
+                        <i data-lucide="bar-chart-3" class="w-16 h-16 text-gray-300 mx-auto mb-4"></i>
+                        <h3 class="text-lg font-semibold text-gray-700 mb-2">Estadísticas Detalladas</h3>
+                        <p class="text-gray-500 mb-6">Próximamente: Gráficos y análisis detallados del inventario</p>
+                        <button class="px-4 py-2 bg-gradient-to-r from-pink-600 to-pink-700 text-white rounded-lg hover:from-pink-700 hover:to-pink-800">
+                            Generar Reporte
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Sección de Configuraciones -->
+        <section id="configuraciones" class="section-content">
+            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                <div class="section-title-bar">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="settings" class="w-5 h-5"></i>
+                        <h2 class="text-lg md:text-xl font-bold">Configuración del Sistema</h2>
+                    </div>
+                </div>
+                
+                <div class="p-4 md:p-6">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                            <div>
+                                <h3 class="font-medium text-gray-800">Notificaciones de Stock Bajo</h3>
+                                <p class="text-sm text-gray-500">Recibir alertas cuando el stock sea menor a 5 unidades</p>
+                            </div>
+                            <div class="relative">
+                                <input type="checkbox" class="sr-only" id="notifications" checked>
+                                <label for="notifications" class="block w-12 h-6 rounded-full bg-pink-600 cursor-pointer"></label>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                            <div>
+                                <h3 class="font-medium text-gray-800">Backup Automático</h3>
+                                <p class="text-sm text-gray-500">Realizar copias de seguridad diarias</p>
+                            </div>
+                            <div class="relative">
+                                <input type="checkbox" class="sr-only" id="backup">
+                                <label for="backup" class="block w-12 h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -412,61 +599,157 @@
     </main>
 
     <!-- Pie de página -->
-    <footer class="mt-12 border-t border-gray-200 py-6">
+    <footer class="mt-8 border-t border-gray-200 py-6">
         <div class="container mx-auto px-4">
             <div class="flex flex-col md:flex-row justify-between items-center">
-                <div class="mb-4 md:mb-0">
-                    <p class="text-sm text-gray-600">© 2024 Jessica Boutique. Todos los derechos reservados.</p>
+                <div class="mb-4 md:mb-0 text-center md:text-left">
+                    <p class="text-sm text-gray-600">© 2024 Jessica Boutique</p>
                     <p class="text-xs text-gray-500 mt-1">Sistema de Gestión de Inventario v2.1</p>
                 </div>
-                <div class="flex gap-6">
-                    <a href="#" class="text-sm text-gray-600 hover:text-pink-600">Política de Privacidad</a>
-                    <a href="#" class="text-sm text-gray-600 hover:text-pink-600">Términos de Servicio</a>
-                    <a href="#" class="text-sm text-gray-600 hover:text-pink-600">Soporte</a>
+                <div class="flex gap-4 md:gap-6">
+                    <a href="#" class="text-xs md:text-sm text-gray-600 hover:text-pink-600">Soporte</a>
+                    <a href="#" class="text-xs md:text-sm text-gray-600 hover:text-pink-600">Ayuda</a>
                 </div>
             </div>
         </div>
     </footer>
 
-    <!-- Script para inicializar los iconos -->
+    <!-- Script para funcionalidad -->
     <script>
         // Inicializar los iconos de Lucide
         lucide.createIcons();
         
-        // Agregar interactividad a los filtros
+        // Funcionalidad completa de navegación
         document.addEventListener('DOMContentLoaded', function() {
-            // Seleccionar todos los botones de filtro
-            const filterButtons = document.querySelectorAll('.filter-button');
-            
-            // Agregar evento click a cada botón de filtro
-            filterButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    // Remover la clase 'selected' de todos los botones
-                    filterButtons.forEach(btn => btn.classList.remove('selected'));
-                    
-                    // Agregar clases al botón seleccionado
-                    this.classList.add('selected');
-                    this.classList.remove('bg-gray-100', 'text-gray-700');
-                    this.classList.add('bg-pink-600', 'text-white');
-                });
-            });
-            
-            // Agregar evento click a los enlaces de navegación
+            // Elementos del DOM
             const navLinks = document.querySelectorAll('.nav-link');
+            const sectionContents = document.querySelectorAll('.section-content');
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mainNav = document.getElementById('mainNav');
+            const filterButtons = document.querySelectorAll('.filter-button');
+            let isMobileMenuOpen = false;
+            
+            // Función para cambiar de sección
+            function switchSection(sectionId) {
+                // Ocultar todas las secciones
+                sectionContents.forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                // Mostrar la sección seleccionada
+                const activeSection = document.getElementById(sectionId);
+                if (activeSection) {
+                    activeSection.classList.add('active');
+                }
+                
+                // Actualizar navegación activa
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    const indicator = link.parentElement.querySelector('.active-indicator');
+                    if (indicator) {
+                        indicator.style.display = 'none';
+                    }
+                });
+                
+                // Marcar enlace activo
+                const activeLink = document.querySelector(`.nav-link[data-section="${sectionId}"]`);
+                if (activeLink) {
+                    activeLink.classList.add('active');
+                    const indicator = activeLink.parentElement.querySelector('.active-indicator');
+                    if (indicator) {
+                        indicator.style.display = 'block';
+                    }
+                }
+                
+                // Cerrar menú móvil si está abierto
+                if (window.innerWidth < 768 && isMobileMenuOpen) {
+                    toggleMobileMenu();
+                }
+            }
+            
+            // Función para alternar menú móvil
+            function toggleMobileMenu() {
+                isMobileMenuOpen = !isMobileMenuOpen;
+                if (isMobileMenuOpen) {
+                    mainNav.classList.remove('hidden');
+                    mainNav.classList.add('block');
+                    mobileMenuBtn.innerHTML = '<i data-lucide="x" class="w-6 h-6 text-gray-700"></i>';
+                } else {
+                    mainNav.classList.remove('block');
+                    mainNav.classList.add('hidden');
+                    mobileMenuBtn.innerHTML = '<i data-lucide="menu" class="w-6 h-6 text-gray-700"></i>';
+                }
+                // Actualizar iconos
+                lucide.createIcons();
+            }
+            
+            // Agregar eventos a los enlaces de navegación
             navLinks.forEach(link => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
+                    const sectionId = this.getAttribute('data-section');
+                    switchSection(sectionId);
                     
-                    // Remover la clase 'active' de todos los enlaces
-                    navLinks.forEach(navLink => navLink.classList.remove('active'));
-                    
-                    // Agregar la clase 'active' al enlace clickeado
-                    this.classList.add('active');
-                    
-                    // Aquí podrías agregar lógica para cambiar el contenido de la página
-                    // según la sección seleccionada
+                    // Actualizar URL sin recargar la página
+                    history.pushState(null, null, `#${sectionId}`);
                 });
             });
+            
+            // Evento para botones de filtro
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    filterButtons.forEach(btn => {
+                        btn.classList.remove('selected', 'bg-pink-600', 'text-white');
+                        btn.classList.add('bg-gray-100', 'text-gray-700');
+                    });
+                    this.classList.add('selected', 'bg-pink-600', 'text-white');
+                    this.classList.remove('bg-gray-100', 'text-gray-700');
+                });
+            });
+            
+            // Evento para botón de menú móvil
+            mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+            
+            // Manejar navegación con botones de atrás/adelante
+            window.addEventListener('popstate', function() {
+                const hash = window.location.hash.substring(1);
+                if (hash) {
+                    switchSection(hash);
+                } else {
+                    switchSection('inventario');
+                }
+            });
+            
+            // Verificar hash en la URL al cargar
+            const initialHash = window.location.hash.substring(1);
+            if (initialHash && ['inventario', 'categorias', 'añadir-productos', 'resumen', 'configuraciones'].includes(initialHash)) {
+                switchSection(initialHash);
+            } else {
+                // Por defecto mostrar inventario
+                switchSection('inventario');
+            }
+            
+            // Ocultar menú en desktop
+            function handleResize() {
+                if (window.innerWidth >= 768) {
+                    mainNav.classList.remove('hidden');
+                    isMobileMenuOpen = false;
+                    mobileMenuBtn.innerHTML = '<i data-lucide="menu" class="w-6 h-6 text-gray-700"></i>';
+                } else {
+                    if (!isMobileMenuOpen) {
+                        mainNav.classList.add('hidden');
+                    }
+                }
+            }
+            
+            // Escuchar cambios de tamaño de ventana
+            window.addEventListener('resize', handleResize);
+            handleResize(); // Ejecutar al cargar
+            
+            // Actualizar iconos periódicamente para asegurar que se muestren
+            setInterval(() => {
+                lucide.createIcons();
+            }, 1000);
         });
     </script>
 </body>
