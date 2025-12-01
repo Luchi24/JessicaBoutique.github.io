@@ -1,0 +1,765 @@
+<!-- Componente: Formulario de Producto -->
+<div class="max-w-6xl mx-auto">
+    <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200">
+        <!-- Header del formulario -->
+        <div class="bg-gradient-to-r from-pink-500 to-rose-500 text-white p-6 md:p-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold">Agregar Nuevo Producto</h2>
+                    <p class="text-pink-100 mt-1">Completa todos los campos para agregar un producto al inventario</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="text-sm bg-white/20 px-3 py-1 rounded-full">Paso 1 de 3</span>
+                    <button class="p-2 hover:bg-white/20 rounded-lg">
+                        <i data-lucide="help-circle" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Progreso -->
+            <div class="mt-6">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-sm">Información básica</span>
+                    <span class="text-sm">Tallas y colores</span>
+                    <span class="text-sm">Imágenes y detalles</span>
+                </div>
+                <div class="w-full h-2 bg-white/30 rounded-full overflow-hidden">
+                    <div class="h-full bg-white rounded-full" style="width: 33%"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Formulario -->
+        <form id="product-form" class="p-6 md:p-8">
+            <div class="space-y-8">
+                <!-- Sección 1: Información Básica -->
+                <section>
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-10 h-10 rounded-xl bg-pink-100 text-pink-600 flex items-center justify-center">
+                            <i data-lucide="info" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-800">Información Básica</h3>
+                            <p class="text-sm text-gray-600">Datos principales del producto</p>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Nombre del producto -->
+                        <div>
+                            <label class="form-label">
+                                <span>Nombre del Producto *</span>
+                                <span class="text-xs text-gray-500">Mínimo 3 caracteres</span>
+                            </label>
+                            <input type="text" name="product_name" required 
+                                   class="form-input" 
+                                   placeholder="Ej: Vestido Floral Elegante">
+                            <div class="form-hint">El nombre aparecerá en el catálogo y facturas</div>
+                        </div>
+                        
+                        <!-- Código de referencia -->
+                        <div>
+                            <label class="form-label">
+                                <span>Código de Referencia</span>
+                                <span class="text-xs text-gray-500">Opcional</span>
+                            </label>
+                            <div class="flex gap-2">
+                                <input type="text" name="product_code" 
+                                       class="form-input" 
+                                       placeholder="Ej: VFE-2024">
+                                <button type="button" class="px-4 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">
+                                    Auto-generar
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Categoría -->
+                        <div>
+                            <label class="form-label">
+                                <span>Categoría *</span>
+                                <span class="text-xs text-gray-500">Selecciona una categoría</span>
+                            </label>
+                            <select name="category" required class="form-input">
+                                <option value="">Seleccionar categoría</option>
+                                <option value="ropa">Ropa</option>
+                                <option value="accesorios">Accesorios</option>
+                                <option value="calzado">Calzado</option>
+                                <option value="bolsos">Bolsos</option>
+                                <option value="joyeria">Joyería</option>
+                            </select>
+                            <div class="form-hint">
+                                <a href="#categorias" data-section="categorias" class="text-pink-600 hover:text-pink-700">
+                                    <i data-lucide="plus" class="w-3 h-3"></i> Crear nueva categoría
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <!-- Subcategoría -->
+                        <div>
+                            <label class="form-label">
+                                <span>Subcategoría</span>
+                                <span class="text-xs text-gray-500">Opcional</span>
+                            </label>
+                            <select name="subcategory" class="form-input">
+                                <option value="">Sin subcategoría</option>
+                                <option value="vestidos">Vestidos</option>
+                                <option value="blusas">Blusas</option>
+                                <option value="pantalones">Pantalones</option>
+                                <option value="faldas">Faldas</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Precio de venta -->
+                        <div>
+                            <label class="form-label">
+                                <span>Precio de Venta *</span>
+                                <span class="text-xs text-gray-500">Precio al público</span>
+                            </label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
+                                <input type="number" name="price" step="0.01" min="0" required 
+                                       class="form-input pl-8" 
+                                       placeholder="0.00">
+                            </div>
+                            <div class="form-hint">Precio incluyendo impuestos</div>
+                        </div>
+                        
+                        <!-- Precio de costo -->
+                        <div>
+                            <label class="form-label">
+                                <span>Precio de Costo</span>
+                                <span class="text-xs text-gray-500">Precio de compra</span>
+                            </label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
+                                <input type="number" name="cost_price" step="0.01" min="0" 
+                                       class="form-input pl-8" 
+                                       placeholder="0.00">
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Sección 2: Tallas y Colores -->
+                <section>
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-10 h-10 rounded-xl bg-pink-100 text-pink-600 flex items-center justify-center">
+                            <i data-lucide="ruler" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-800">Tallas y Colores</h3>
+                            <p class="text-sm text-gray-600">Especifica las variantes disponibles</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Tallas -->
+                    <div class="mb-8">
+                        <label class="form-label mb-4">
+                            <span>Tallas Disponibles *</span>
+                            <span class="text-xs text-gray-500">Selecciona o agrega nuevas tallas</span>
+                        </label>
+                        
+                        <!-- Tallas predefinidas -->
+                        <div class="mb-4">
+                            <div class="flex flex-wrap gap-2 mb-3">
+                                <span class="size-option">XS</span>
+                                <span class="size-option active">S</span>
+                                <span class="size-option active">M</span>
+                                <span class="size-option">L</span>
+                                <span class="size-option">XL</span>
+                                <span class="size-option">XXL</span>
+                                <span class="size-option">Única</span>
+                            </div>
+                            <div class="text-xs text-gray-500">Haz clic para seleccionar las tallas disponibles</div>
+                        </div>
+                        
+                        <!-- Agregar talla personalizada -->
+                        <div class="flex gap-2 mb-6">
+                            <input type="text" id="custom-size" 
+                                   class="form-input flex-grow" 
+                                   placeholder="Ej: 28, 29, 30 o Talla Especial">
+                            <button type="button" id="add-custom-size" 
+                                    class="px-4 bg-pink-500 text-white rounded-lg hover:bg-pink-600">
+                                Agregar Talla
+                            </button>
+                        </div>
+                        
+                        <!-- Tabla de cantidades por talla -->
+                        <div class="overflow-x-auto">
+                            <table class="w-full">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="py-3 px-4 text-left text-sm font-medium text-gray-700">Talla</th>
+                                        <th class="py-3 px-4 text-left text-sm font-medium text-gray-700">Stock Inicial</th>
+                                        <th class="py-3 px-4 text-left text-sm font-medium text-gray-700">Stock Mínimo</th>
+                                        <th class="py-3 px-4 text-left text-sm font-medium text-gray-700">Precio Extra</th>
+                                        <th class="py-3 px-4 text-left text-sm font-medium text-gray-700"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="size-quantities-table">
+                                    <!-- Se llenará dinámicamente -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Colores -->
+                    <div>
+                        <label class="form-label mb-4">
+                            <span>Colores Disponibles</span>
+                            <span class="text-xs text-gray-500">Selecciona los colores del producto</span>
+                        </label>
+                        
+                        <!-- Paleta de colores predefinidos -->
+                        <div class="mb-6">
+                            <div class="color-palette mb-3">
+                                <div class="color-option active" style="background-color: #ec4899;" data-color="#ec4899" data-name="Rosa"></div>
+                                <div class="color-option" style="background-color: #3b82f6;" data-color="#3b82f6" data-name="Azul"></div>
+                                <div class="color-option" style="background-color: #10b981;" data-color="#10b981" data-name="Verde"></div>
+                                <div class="color-option" style="background-color: #f59e0b;" data-color="#f59e0b" data-name="Amarillo"></div>
+                                <div class="color-option" style="background-color: #ef4444;" data-color="#ef4444" data-name="Rojo"></div>
+                                <div class="color-option" style="background-color: #8b5cf6;" data-color="#8b5cf6" data-name="Púrpura"></div>
+                                <div class="color-option" style="background-color: #000000;" data-color="#000000" data-name="Negro"></div>
+                                <div class="color-option" style="background-color: #ffffff; border: 2px solid #e5e7eb;" data-color="#ffffff" data-name="Blanco"></div>
+                            </div>
+                            
+                            <!-- Color personalizado -->
+                            <div class="flex items-center gap-4">
+                                <div class="flex items-center gap-2">
+                                    <input type="color" id="custom-color-picker" value="#ec4899" class="w-10 h-10 cursor-pointer">
+                                    <input type="text" id="custom-color-name" placeholder="Nombre del color" class="form-input">
+                                </div>
+                                <button type="button" id="add-custom-color" 
+                                        class="px-4 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">
+                                    Agregar Color
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Colores seleccionados -->
+                        <div id="selected-colors" class="space-y-2">
+                            <div class="text-sm font-medium text-gray-700 mb-2">Colores seleccionados:</div>
+                            <div class="flex flex-wrap gap-2">
+                                <!-- Se llenará dinámicamente -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Sección 3: Stock y Almacenamiento -->
+                <section>
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-10 h-10 rounded-xl bg-pink-100 text-pink-600 flex items-center justify-center">
+                            <i data-lucide="package" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-800">Stock y Almacenamiento</h3>
+                            <p class="text-sm text-gray-600">Control de inventario y ubicación</p>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Stock total inicial -->
+                        <div>
+                            <label class="form-label">
+                                <span>Stock Total Inicial</span>
+                                <span class="text-xs text-gray-500">Cantidad total disponible</span>
+                            </label>
+                            <input type="number" name="initial_stock" min="0" 
+                                   class="form-input" 
+                                   value="0">
+                        </div>
+                        
+                        <!-- Stock mínimo -->
+                        <div>
+                            <label class="form-label">
+                                <span>Stock Mínimo</span>
+                                <span class="text-xs text-gray-500">Alertas cuando baje de este nivel</span>
+                            </label>
+                            <input type="number" name="min_stock" min="0" 
+                                   class="form-input" 
+                                   value="5">
+                        </div>
+                        
+                        <!-- Ubicación en almacén -->
+                        <div>
+                            <label class="form-label">
+                                <span>Ubicación en Almacén</span>
+                                <span class="text-xs text-gray-500">Estante, pasillo, etc.</span>
+                            </label>
+                            <input type="text" name="location" 
+                                   class="form-input" 
+                                   placeholder="Ej: Estante A-3, Pasillo 2">
+                        </div>
+                        
+                        <!-- Proveedor -->
+                        <div>
+                            <label class="form-label">
+                                <span>Proveedor</span>
+                                <span class="text-xs text-gray-500">Opcional</span>
+                            </label>
+                            <select name="supplier" class="form-input">
+                                <option value="">Sin proveedor</option>
+                                <option value="proveedor1">Moda Elegante S.A.</option>
+                                <option value="proveedor2">Textiles Deluxe</option>
+                                <option value="proveedor3">Accesorios Premium</option>
+                            </select>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Sección 4: Descripción e Imágenes -->
+                <section>
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-10 h-10 rounded-xl bg-pink-100 text-pink-600 flex items-center justify-center">
+                            <i data-lucide="image" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-800">Descripción e Imágenes</h3>
+                            <p class="text-sm text-gray-600">Detalles y fotografías del producto</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Descripción -->
+                    <div class="mb-8">
+                        <label class="form-label">
+                            <span>Descripción del Producto</span>
+                            <span class="text-xs text-gray-500">Describe el producto en detalle</span>
+                        </label>
+                        <textarea name="description" rows="4" 
+                                  class="form-input" 
+                                  placeholder="Describe las características, materiales, cuidados..."></textarea>
+                        <div class="form-hint">Puedes usar formato HTML básico</div>
+                    </div>
+                    
+                    <!-- Imágenes -->
+                    <div>
+                        <label class="form-label">
+                            <span>Imágenes del Producto</span>
+                            <span class="text-xs text-gray-500">Máximo 5 imágenes, formato JPG o PNG</span>
+                        </label>
+                        
+                        <!-- Zona de arrastre -->
+                        <div id="drop-zone" 
+                             class="border-3 border-dashed border-gray-300 rounded-2xl p-8 text-center mb-6 cursor-pointer hover:border-pink-400 transition-colors">
+                            <i data-lucide="upload-cloud" class="w-12 h-12 text-gray-400 mx-auto mb-4"></i>
+                            <p class="text-gray-700 font-medium mb-2">Arrastra y suelta imágenes aquí</p>
+                            <p class="text-sm text-gray-500 mb-4">o haz clic para seleccionar archivos</p>
+                            <input type="file" id="product-images" multiple accept="image/*" class="hidden">
+                            <label for="product-images" 
+                                   class="inline-block px-6 py-3 bg-gradient-to-r from-pink-500 to-rose-500 text-white rounded-xl hover:from-pink-600 hover:to-rose-600 cursor-pointer font-medium">
+                                Seleccionar Imágenes
+                            </label>
+                        </div>
+                        
+                        <!-- Previsualización -->
+                        <div id="image-preview" class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                            <!-- Se llenará dinámicamente -->
+                        </div>
+                    </div>
+                </section>
+            </div>
+            
+            <!-- Botones de acción -->
+            <div class="flex flex-col md:flex-row justify-between gap-4 pt-8 mt-8 border-t border-gray-200">
+                <div class="flex gap-2">
+                    <button type="button" class="btn-secondary">
+                        <i data-lucide="save" class="w-4 h-4"></i>
+                        Guardar Borrador
+                    </button>
+                    <button type="button" class="btn-secondary">
+                        <i data-lucide="eye" class="w-4 h-4"></i>
+                        Vista Previa
+                    </button>
+                </div>
+                
+                <div class="flex gap-4">
+                    <button type="button" class="btn-cancel">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn-primary">
+                        <i data-lucide="check" class="w-5 h-5"></i>
+                        Guardar Producto
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    /* Estilos para el formulario */
+    .form-label {
+        @apply block mb-2;
+    }
+    
+    .form-label span:first-child {
+        @apply text-sm font-semibold text-gray-800;
+    }
+    
+    .form-label span:last-child {
+        @apply text-xs text-gray-500 ml-2;
+    }
+    
+    .form-input {
+        @apply w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-colors;
+    }
+    
+    .form-hint {
+        @apply text-xs text-gray-500 mt-1;
+    }
+    
+    .size-option {
+        @apply px-4 py-2 border-2 border-gray-300 rounded-lg cursor-pointer transition-all hover:border-pink-400;
+    }
+    
+    .size-option.active {
+        @apply bg-pink-500 text-white border-pink-500;
+    }
+    
+    .color-palette {
+        @apply flex flex-wrap gap-3;
+    }
+    
+    .color-option {
+        @apply w-10 h-10 rounded-full cursor-pointer border-2 border-transparent transition-transform;
+    }
+    
+    .color-option.active {
+        @apply border-black scale-110;
+    }
+    
+    .btn-primary {
+        @apply px-6 py-3 bg-gradient-to-r from-pink-500 to-rose-500 text-white rounded-xl hover:from-pink-600 hover:to-rose-600 font-semibold flex items-center gap-2 transition-all shadow-lg hover:shadow-xl;
+    }
+    
+    .btn-secondary {
+        @apply px-4 py-2 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 font-medium flex items-center gap-2 transition-colors;
+    }
+    
+    .btn-cancel {
+        @apply px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 font-semibold transition-colors;
+    }
+</style>
+
+<script>
+    // Funcionalidad del formulario de producto
+    class ProductForm {
+        constructor() {
+            this.selectedSizes = new Set(['S', 'M']);
+            this.selectedColors = new Map();
+            this.images = [];
+            this.init();
+        }
+        
+        init() {
+            this.bindEvents();
+            this.initializeColorPicker();
+            this.updateSelectedColorsDisplay();
+        }
+        
+        bindEvents() {
+            // Tallas
+            document.querySelectorAll('.size-option').forEach(option => {
+                option.addEventListener('click', (e) => {
+                    const size = e.target.textContent;
+                    if (this.selectedSizes.has(size)) {
+                        this.selectedSizes.delete(size);
+                        e.target.classList.remove('active');
+                    } else {
+                        this.selectedSizes.add(size);
+                        e.target.classList.add('active');
+                    }
+                    this.updateSizeQuantitiesTable();
+                });
+            });
+            
+            // Agregar talla personalizada
+            document.getElementById('add-custom-size')?.addEventListener('click', () => {
+                const input = document.getElementById('custom-size');
+                const size = input.value.trim();
+                
+                if (size && !this.selectedSizes.has(size)) {
+                    this.selectedSizes.add(size);
+                    
+                    // Agregar al UI
+                    const sizeOption = document.createElement('span');
+                    sizeOption.className = 'size-option active';
+                    sizeOption.textContent = size;
+                    sizeOption.addEventListener('click', (e) => {
+                        this.selectedSizes.delete(size);
+                        e.target.remove();
+                        this.updateSizeQuantitiesTable();
+                    });
+                    
+                    document.querySelector('.flex-wrap.gap-2').appendChild(sizeOption);
+                    input.value = '';
+                    this.updateSizeQuantitiesTable();
+                }
+            });
+            
+            // Colores
+            document.querySelectorAll('.color-option').forEach(option => {
+                option.addEventListener('click', (e) => {
+                    const color = e.target.dataset.color;
+                    const name = e.target.dataset.name;
+                    
+                    if (this.selectedColors.has(color)) {
+                        this.selectedColors.delete(color);
+                        e.target.classList.remove('active');
+                    } else {
+                        this.selectedColors.set(color, name);
+                        e.target.classList.add('active');
+                    }
+                    this.updateSelectedColorsDisplay();
+                });
+            });
+            
+            // Agregar color personalizado
+            document.getElementById('add-custom-color')?.addEventListener('click', () => {
+                const picker = document.getElementById('custom-color-picker');
+                const nameInput = document.getElementById('custom-color-name');
+                const color = picker.value;
+                const name = nameInput.value.trim() || `Color ${this.selectedColors.size + 1}`;
+                
+                if (!this.selectedColors.has(color)) {
+                    this.selectedColors.set(color, name);
+                    
+                    // Agregar a la paleta
+                    const colorOption = document.createElement('div');
+                    colorOption.className = 'color-option active';
+                    colorOption.style.backgroundColor = color;
+                    colorOption.dataset.color = color;
+                    colorOption.dataset.name = name;
+                    colorOption.title = name;
+                    
+                    colorOption.addEventListener('click', (e) => {
+                        this.selectedColors.delete(color);
+                        e.target.remove();
+                        this.updateSelectedColorsDisplay();
+                    });
+                    
+                    document.querySelector('.color-palette').appendChild(colorOption);
+                    nameInput.value = '';
+                    this.updateSelectedColorsDisplay();
+                }
+            });
+            
+            // Imágenes
+            const dropZone = document.getElementById('drop-zone');
+            const fileInput = document.getElementById('product-images');
+            
+            if (dropZone && fileInput) {
+                // Click en zona de arrastre
+                dropZone.addEventListener('click', () => fileInput.click());
+                
+                // Cambio en input de archivos
+                fileInput.addEventListener('change', (e) => this.handleImageUpload(e.target.files));
+                
+                // Drag and drop
+                dropZone.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    dropZone.classList.add('border-pink-500', 'bg-pink-50');
+                });
+                
+                dropZone.addEventListener('dragleave', () => {
+                    dropZone.classList.remove('border-pink-500', 'bg-pink-50');
+                });
+                
+                dropZone.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    dropZone.classList.remove('border-pink-500', 'bg-pink-50');
+                    if (e.dataTransfer.files.length) {
+                        this.handleImageUpload(e.dataTransfer.files);
+                    }
+                });
+            }
+            
+            // Envío del formulario
+            document.getElementById('product-form')?.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.submitForm();
+            });
+        }
+        
+        initializeColorPicker() {
+            // Seleccionar colores por defecto
+            const defaultColor = document.querySelector('.color-option[data-color="#ec4899"]');
+            if (defaultColor) {
+                this.selectedColors.set('#ec4899', 'Rosa');
+                defaultColor.classList.add('active');
+            }
+        }
+        
+        updateSizeQuantitiesTable() {
+            const tableBody = document.getElementById('size-quantities-table');
+            if (!tableBody) return;
+            
+            tableBody.innerHTML = '';
+            
+            this.selectedSizes.forEach(size => {
+                const row = document.createElement('tr');
+                row.className = 'border-b border-gray-100';
+                row.innerHTML = `
+                    <td class="py-3 px-4">
+                        <span class="font-medium">${size}</span>
+                    </td>
+                    <td class="py-3 px-4">
+                        <input type="number" min="0" value="0" 
+                               class="w-24 p-2 border border-gray-300 rounded-lg">
+                    </td>
+                    <td class="py-3 px-4">
+                        <input type="number" min="0" value="5" 
+                               class="w-24 p-2 border border-gray-300 rounded-lg">
+                    </td>
+                    <td class="py-3 px-4">
+                        <div class="flex items-center">
+                            <span class="text-gray-500 mr-1">$</span>
+                            <input type="number" step="0.01" min="0" value="0" 
+                                   class="w-24 p-2 border border-gray-300 rounded-lg">
+                        </div>
+                    </td>
+                    <td class="py-3 px-4">
+                        <button type="button" class="p-2 text-red-600 hover:bg-red-50 rounded-lg">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    </td>
+                `;
+                
+                // Evento para eliminar talla
+                row.querySelector('button').addEventListener('click', () => {
+                    this.selectedSizes.delete(size);
+                    this.updateSizeQuantitiesTable();
+                });
+                
+                tableBody.appendChild(row);
+            });
+        }
+        
+        updateSelectedColorsDisplay() {
+            const container = document.getElementById('selected-colors')?.querySelector('.flex-wrap');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            this.selectedColors.forEach((name, color) => {
+                const chip = document.createElement('div');
+                chip.className = 'flex items-center gap-2 px-3 py-1.5 bg-gray-100 rounded-full';
+                chip.innerHTML = `
+                    <div class="w-4 h-4 rounded-full border border-gray-300" style="background-color: ${color}"></div>
+                    <span class="text-sm text-gray-700">${name}</span>
+                    <button type="button" class="text-gray-500 hover:text-red-600">
+                        <i data-lucide="x" class="w-3 h-3"></i>
+                    </button>
+                `;
+                
+                // Evento para eliminar color
+                chip.querySelector('button').addEventListener('click', () => {
+                    this.selectedColors.delete(color);
+                    // Remover también de la paleta
+                    const colorOption = document.querySelector(`.color-option[data-color="${color}"]`);
+                    if (colorOption) colorOption.classList.remove('active');
+                    this.updateSelectedColorsDisplay();
+                });
+                
+                container.appendChild(chip);
+            });
+        }
+        
+        handleImageUpload(files) {
+            const previewContainer = document.getElementById('image-preview');
+            if (!previewContainer) return;
+            
+            Array.from(files).slice(0, 5 - this.images.length).forEach(file => {
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    
+                    reader.onload = (e) => {
+                        const imageData = {
+                            id: Date.now() + Math.random(),
+                            file: file,
+                            url: e.target.result
+                        };
+                        
+                        this.images.push(imageData);
+                        this.addImagePreview(imageData);
+                    };
+                    
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+        
+        addImagePreview(imageData) {
+            const previewContainer = document.getElementById('image-preview');
+            if (!previewContainer) return;
+            
+            const imageDiv = document.createElement('div');
+            imageDiv.className = 'relative group';
+            imageDiv.innerHTML = `
+                <img src="${imageData.url}" alt="Preview" class="w-full h-40 object-cover rounded-xl">
+                <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl flex items-center justify-center">
+                    <button type="button" class="p-2 bg-white/20 text-white rounded-full hover:bg-white/30">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+                <div class="absolute top-2 right-2">
+                    <span class="px-2 py-1 bg-black/70 text-white text-xs rounded-full">${this.images.length}</span>
+                </div>
+            `;
+            
+            // Evento para eliminar imagen
+            imageDiv.querySelector('button').addEventListener('click', () => {
+                this.images = this.images.filter(img => img.id !== imageData.id);
+                imageDiv.remove();
+            });
+            
+            previewContainer.appendChild(imageDiv);
+        }
+        
+        async submitForm() {
+            const form = document.getElementById('product-form');
+            const formData = new FormData(form);
+            
+            // Agregar datos adicionales
+            formData.append('sizes', JSON.stringify(Array.from(this.selectedSizes)));
+            formData.append('colors', JSON.stringify(Array.from(this.selectedColors.entries())));
+            
+            // Agregar imágenes
+            this.images.forEach((image, index) => {
+                formData.append(`image_${index}`, image.file);
+            });
+            
+            try {
+                // Aquí iría la llamada a la API
+                console.log('Enviando formulario:', Object.fromEntries(formData.entries()));
+                
+                // Simular envío
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                // Mostrar éxito
+                if (typeof window.showToast === 'function') {
+                    window.showToast('Producto agregado exitosamente', 'success');
+                }
+                
+                // Redirigir a inventario
+                if (typeof window.loadSection === 'function') {
+                    window.loadSection('inventario');
+                }
+                
+            } catch (error) {
+                console.error('Error al enviar formulario:', error);
+                if (typeof window.showToast === 'function') {
+                    window.showToast('Error al guardar el producto', 'error');
+                }
+            }
+        }
+    }
+    
+    // Inicializar formulario cuando se cargue
+    document.addEventListener('DOMContentLoaded', () => {
+        if (document.getElementById('product-form')) {
+            window.productForm = new ProductForm();
+        }
+    });
+</script>
