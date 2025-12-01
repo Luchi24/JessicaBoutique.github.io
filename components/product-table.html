@@ -1,0 +1,420 @@
+<!-- Componente: Tabla de Productos -->
+<div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+    <!-- Header de la tabla -->
+    <div class="border-b border-gray-200 bg-gradient-to-r from-pink-50 to-rose-50/50">
+        <div class="flex flex-col md:flex-row md:items-center justify-between p-4 md:p-6">
+            <div>
+                <h2 class="text-xl font-bold text-gray-800">Productos en Inventario</h2>
+                <p class="text-sm text-gray-600">Total: <span id="total-products">147</span> productos activos</p>
+            </div>
+            
+            <div class="flex flex-wrap gap-2 mt-4 md:mt-0">
+                <!-- Filtros rápidos -->
+                <div class="flex bg-white border border-gray-300 rounded-xl p-1">
+                    <button class="filter-quick-btn active">Todos</button>
+                    <button class="filter-quick-btn">Stock Bajo</button>
+                    <button class="filter-quick-btn">Sin Stock</button>
+                </div>
+                
+                <!-- Botones de acción -->
+                <div class="flex gap-2">
+                    <button class="btn-table-action bg-white border border-gray-300 text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="filter" class="w-4 h-4"></i>
+                        <span class="hidden md:inline">Filtrar</span>
+                    </button>
+                    <button class="btn-table-action bg-white border border-gray-300 text-gray-700 hover:bg-gray-50">
+                        <i data-lucide="download" class="w-4 h-4"></i>
+                        <span class="hidden md:inline">Exportar</span>
+                    </button>
+                    <button class="btn-table-action bg-gradient-to-r from-pink-500 to-rose-500 text-white hover:from-pink-600 hover:to-rose-600">
+                        <i data-lucide="plus" class="w-4 h-4"></i>
+                        <span class="hidden md:inline">Nuevo</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Filtros avanzados -->
+        <div id="advanced-filters" class="px-6 pb-6 hidden">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Categoría</label>
+                    <select class="w-full p-2 border border-gray-300 rounded-lg">
+                        <option value="">Todas las categorías</option>
+                        <option value="ropa">Ropa</option>
+                        <option value="accesorios">Accesorios</option>
+                        <option value="calzado">Calzado</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Precio</label>
+                    <div class="flex gap-2">
+                        <input type="number" placeholder="Mín" class="w-1/2 p-2 border border-gray-300 rounded-lg">
+                        <input type="number" placeholder="Máx" class="w-1/2 p-2 border border-gray-300 rounded-lg">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Stock</label>
+                    <select class="w-full p-2 border border-gray-300 rounded-lg">
+                        <option value="">Cualquier stock</option>
+                        <option value="low">Bajo (≤ 5)</option>
+                        <option value="medium">Medio (6-20)</option>
+                        <option value="high">Alto (>20)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="flex justify-end gap-2 mt-4">
+                <button class="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg">Limpiar</button>
+                <button class="px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600">Aplicar Filtros</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Tabla (Desktop) -->
+    <div class="hidden md:block overflow-x-auto">
+        <table class="w-full">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="table-header">
+                        <div class="flex items-center gap-2">
+                            <input type="checkbox" class="rounded border-gray-300 text-pink-600 focus:ring-pink-500">
+                            Producto
+                        </div>
+                    </th>
+                    <th class="table-header">Categoría</th>
+                    <th class="table-header">Tallas</th>
+                    <th class="table-header">Colores</th>
+                    <th class="table-header">Stock</th>
+                    <th class="table-header">Precio</th>
+                    <th class="table-header">Estado</th>
+                    <th class="table-header">Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="products-table-body">
+                <!-- Las filas se generarán dinámicamente con JavaScript -->
+                <!-- Ejemplo de fila: -->
+                <tr class="table-row hover:bg-pink-50/50">
+                    <td class="table-cell">
+                        <div class="flex items-center gap-3">
+                            <input type="checkbox" class="rounded border-gray-300 text-pink-600 focus:ring-pink-500">
+                            <div class="w-10 h-10 bg-pink-100 rounded-lg flex items-center justify-center">
+                                <i data-lucide="shirt" class="text-pink-600 w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <p class="font-medium text-gray-900">Vestido Floral</p>
+                                <p class="text-xs text-gray-500">REF: VF-2024-001</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="table-cell">
+                        <span class="product-category">Ropa</span>
+                    </td>
+                    <td class="table-cell">
+                        <div class="flex flex-wrap gap-1">
+                            <span class="size-tag">S</span>
+                            <span class="size-tag">M</span>
+                            <span class="size-tag">L</span>
+                        </div>
+                    </td>
+                    <td class="table-cell">
+                        <div class="flex items-center gap-1">
+                            <div class="w-4 h-4 rounded-full bg-pink-400 border border-pink-600"></div>
+                            <div class="w-4 h-4 rounded-full bg-blue-400 border border-blue-600"></div>
+                            <div class="w-4 h-4 rounded-full bg-green-400 border border-green-600"></div>
+                        </div>
+                    </td>
+                    <td class="table-cell">
+                        <div class="flex items-center gap-2">
+                            <span class="stock-badge high">45</span>
+                            <div class="w-24 h-2 bg-gray-200 rounded-full overflow-hidden">
+                                <div class="h-full bg-green-500" style="width: 90%"></div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="table-cell">
+                        <span class="font-semibold text-gray-900">$39.99</span>
+                    </td>
+                    <td class="table-cell">
+                        <span class="status-badge active">Activo</span>
+                    </td>
+                    <td class="table-cell">
+                        <div class="flex items-center gap-2">
+                            <button class="table-action-btn text-blue-600 hover:bg-blue-50">
+                                <i data-lucide="eye" class="w-4 h-4"></i>
+                            </button>
+                            <button class="table-action-btn text-pink-600 hover:bg-pink-50">
+                                <i data-lucide="edit" class="w-4 h-4"></i>
+                            </button>
+                            <button class="table-action-btn text-red-600 hover:bg-red-50">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Vista móvil -->
+    <div class="md:hidden space-y-4 p-4">
+        <!-- Las cards móviles se generarán dinámicamente -->
+        <div class="product-card-mobile">
+            <div class="flex items-start justify-between mb-3">
+                <div class="flex items-start gap-3">
+                    <div class="w-12 h-12 bg-pink-100 rounded-xl flex items-center justify-center">
+                        <i data-lucide="shirt" class="text-pink-600 w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-900">Vestido Floral</h3>
+                        <p class="text-xs text-gray-500">REF: VF-2024-001</p>
+                        <div class="flex items-center gap-2 mt-1">
+                            <span class="product-category">Ropa</span>
+                            <span class="status-badge active">Activo</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="p-2 hover:bg-gray-100 rounded-lg">
+                    <i data-lucide="more-vertical" class="w-5 h-5 text-gray-500"></i>
+                </button>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-3 mb-3">
+                <div>
+                    <p class="text-xs text-gray-500 mb-1">Tallas</p>
+                    <div class="flex gap-1">
+                        <span class="size-tag">S</span>
+                        <span class="size-tag">M</span>
+                        <span class="size-tag">L</span>
+                    </div>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-500 mb-1">Colores</p>
+                    <div class="flex gap-1">
+                        <div class="w-5 h-5 rounded-full bg-pink-400 border border-pink-600"></div>
+                        <div class="w-5 h-5 rounded-full bg-blue-400 border border-blue-600"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex items-center justify-between">
+                <div>
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="stock-badge high">45 unidades</span>
+                        <span class="font-semibold text-gray-900">$39.99</span>
+                    </div>
+                    <div class="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                        <div class="h-full bg-green-500" style="width: 90%"></div>
+                    </div>
+                </div>
+                <div class="flex gap-2">
+                    <button class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg">
+                        <i data-lucide="eye" class="w-4 h-4"></i>
+                    </button>
+                    <button class="p-2 text-pink-600 hover:bg-pink-50 rounded-lg">
+                        <i data-lucide="edit" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Paginación -->
+    <div class="border-t border-gray-200 p-4 md:p-6">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div class="text-sm text-gray-600">
+                Mostrando <span class="font-semibold">1-10</span> de <span class="font-semibold">147</span> productos
+            </div>
+            
+            <div class="flex items-center gap-2">
+                <button class="pagination-btn disabled">
+                    <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                </button>
+                
+                <button class="pagination-btn active">1</button>
+                <button class="pagination-btn">2</button>
+                <button class="pagination-btn">3</button>
+                <button class="pagination-btn">4</button>
+                <button class="pagination-btn">5</button>
+                
+                <span class="px-2 text-gray-500">...</span>
+                
+                <button class="pagination-btn">15</button>
+                
+                <button class="pagination-btn">
+                    <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                </button>
+            </div>
+            
+            <div class="text-sm text-gray-600">
+                <select class="p-2 border border-gray-300 rounded-lg bg-white">
+                    <option>10 por página</option>
+                    <option>25 por página</option>
+                    <option>50 por página</option>
+                    <option>100 por página</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Estilos para la tabla */
+    .table-header {
+        @apply px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider whitespace-nowrap;
+    }
+    
+    .table-cell {
+        @apply px-6 py-4 whitespace-nowrap text-sm;
+    }
+    
+    .table-row {
+        @apply border-b border-gray-100 transition-colors;
+    }
+    
+    .table-action-btn {
+        @apply p-2 rounded-lg transition-colors;
+    }
+    
+    .btn-table-action {
+        @apply px-3 md:px-4 py-2 rounded-xl font-medium flex items-center gap-2 text-sm transition-colors;
+    }
+    
+    .filter-quick-btn {
+        @apply px-3 py-1.5 text-sm rounded-lg transition-colors;
+    }
+    
+    .filter-quick-btn.active {
+        @apply bg-pink-500 text-white;
+    }
+    
+    .product-category {
+        @apply px-3 py-1 bg-pink-100 text-pink-800 text-xs font-medium rounded-full;
+    }
+    
+    .size-tag {
+        @apply px-2 py-0.5 bg-gray-100 text-gray-700 text-xs rounded-md border border-gray-200;
+    }
+    
+    .stock-badge {
+        @apply px-2 py-1 text-xs font-semibold rounded-full;
+    }
+    
+    .stock-badge.high {
+        @apply bg-green-100 text-green-800;
+    }
+    
+    .stock-badge.medium {
+        @apply bg-yellow-100 text-yellow-800;
+    }
+    
+    .stock-badge.low {
+        @apply bg-red-100 text-red-800;
+    }
+    
+    .status-badge {
+        @apply px-3 py-1 text-xs font-medium rounded-full;
+    }
+    
+    .status-badge.active {
+        @apply bg-green-100 text-green-800;
+    }
+    
+    .status-badge.inactive {
+        @apply bg-gray-100 text-gray-800;
+    }
+    
+    .product-card-mobile {
+        @apply bg-white border border-gray-200 rounded-xl p-4 shadow-sm;
+    }
+    
+    .pagination-btn {
+        @apply w-8 h-8 flex items-center justify-center border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors;
+    }
+    
+    .pagination-btn.active {
+        @apply bg-pink-500 text-white border-pink-500;
+    }
+    
+    .pagination-btn.disabled {
+        @apply opacity-50 cursor-not-allowed;
+    }
+</style>
+
+<script>
+    // Funcionalidad de la tabla
+    class ProductTable {
+        constructor() {
+            this.currentPage = 1;
+            this.itemsPerPage = 10;
+            this.currentFilter = 'all';
+            this.init();
+        }
+        
+        init() {
+            this.bindEvents();
+            this.loadProducts();
+        }
+        
+        bindEvents() {
+            // Filtros rápidos
+            document.querySelectorAll('.filter-quick-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    document.querySelectorAll('.filter-quick-btn').forEach(b => b.classList.remove('active'));
+                    e.target.classList.add('active');
+                    this.currentFilter = e.target.textContent.toLowerCase();
+                    this.loadProducts();
+                });
+            });
+            
+            // Botón de filtros avanzados
+            const filterBtn = document.querySelector('[class*="btn-table-action"]:first-child');
+            if (filterBtn) {
+                filterBtn.addEventListener('click', () => {
+                    document.getElementById('advanced-filters').classList.toggle('hidden');
+                });
+            }
+        }
+        
+        async loadProducts() {
+            // Aquí se cargarían los productos desde una API o localStorage
+            console.log('Cargando productos con filtro:', this.currentFilter);
+            
+            // Simular carga
+            await new Promise(resolve => setTimeout(resolve, 300));
+            
+            // Actualizar UI
+            this.updateTableUI();
+        }
+        
+        updateTableUI() {
+            // Actualizar contador
+            const totalElement = document.getElementById('total-products');
+            if (totalElement) {
+                totalElement.textContent = '147'; // Esto vendría de los datos
+            }
+        }
+        
+        // Métodos para manipulación de datos
+        addProduct(productData) {
+            console.log('Agregando producto:', productData);
+            // Lógica para agregar producto
+        }
+        
+        updateProduct(productId, productData) {
+            console.log('Actualizando producto:', productId, productData);
+            // Lógica para actualizar producto
+        }
+        
+        deleteProduct(productId) {
+            console.log('Eliminando producto:', productId);
+            // Lógica para eliminar producto
+        }
+    }
+    
+    // Inicializar tabla cuando el componente se cargue
+    document.addEventListener('DOMContentLoaded', () => {
+        if (document.querySelector('.product-table-component')) {
+            window.productTable = new ProductTable();
+        }
+    });
+</script>
