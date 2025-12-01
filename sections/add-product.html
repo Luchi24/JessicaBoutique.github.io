@@ -1,0 +1,218 @@
+<!-- Sección de Agregar Productos -->
+<div>
+    <!-- Header -->
+    <div class="mb-6 md:mb-8">
+        <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Agregar Nuevo Producto</h1>
+        <p class="text-gray-600 mt-1">Completa todos los campos para agregar un producto al inventario</p>
+    </div>
+    
+    <!-- Formulario Completo -->
+    <div data-component="product-form"></div>
+    
+    <!-- Plantillas de Producto -->
+    <div class="mt-8 bg-white rounded-2xl p-6 border border-gray-200">
+        <h3 class="text-lg font-semibold text-gray-800 mb-4">Plantillas de Producto</h3>
+        <p class="text-gray-600 mb-6">Usa una plantilla para agilizar la creación de productos similares</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <button class="template-card">
+                <div class="w-12 h-12 rounded-xl bg-pink-100 flex items-center justify-center mb-3">
+                    <i data-lucide="shirt" class="w-6 h-6 text-pink-600"></i>
+                </div>
+                <h4 class="font-medium text-gray-800">Prenda de Ropa</h4>
+                <p class="text-sm text-gray-600 mt-1">Vestidos, blusas, pantalones</p>
+            </button>
+            
+            <button class="template-card">
+                <div class="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center mb-3">
+                    <i data-lucide="watch" class="w-6 h-6 text-blue-600"></i>
+                </div>
+                <h4 class="font-medium text-gray-800">Accesorio</h4>
+                <p class="text-sm text-gray-600 mt-1">Relojes, joyería, gafas</p>
+            </button>
+            
+            <button class="template-card">
+                <div class="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center mb-3">
+                    <i data-lucide="shopping-bag" class="w-6 h-6 text-green-600"></i>
+                </div>
+                <h4 class="font-medium text-gray-800">Bolso</h4>
+                <p class="text-sm text-gray-600 mt-1">Bolsos, carteras, mochilas</p>
+            </button>
+        </div>
+    </div>
+    
+    <!-- Guía Rápida -->
+    <div class="mt-8 bg-gradient-to-r from-pink-50 to-rose-50 border border-pink-200 rounded-2xl p-6">
+        <div class="flex items-start gap-4">
+            <div class="w-12 h-12 rounded-xl bg-pink-100 flex items-center justify-center flex-shrink-0">
+                <i data-lucide="help-circle" class="w-6 h-6 text-pink-600"></i>
+            </div>
+            <div>
+                <h3 class="font-semibold text-gray-800 mb-3">Consejos para agregar productos</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="space-y-2">
+                        <div class="flex items-start gap-2">
+                            <i data-lucide="check" class="w-4 h-4 text-pink-500 mt-0.5 flex-shrink-0"></i>
+                            <span class="text-sm text-gray-700">Usa nombres descriptivos y claros</span>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <i data-lucide="check" class="w-4 h-4 text-pink-500 mt-0.5 flex-shrink-0"></i>
+                            <span class="text-sm text-gray-700">Sube imágenes de alta calidad</span>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <div class="flex items-start gap-2">
+                            <i data-lucide="check" class="w-4 h-4 text-pink-500 mt-0.5 flex-shrink-0"></i>
+                            <span class="text-sm text-gray-700">Especifica todas las tallas disponibles</span>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <i data-lucide="check" class="w-4 h-4 text-pink-500 mt-0.5 flex-shrink-0"></i>
+                            <span class="text-sm text-gray-700">Establece un stock mínimo para alertas</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .template-card {
+        @apply p-4 border-2 border-gray-200 rounded-xl text-left hover:border-pink-400 hover:bg-pink-50 transition-all cursor-pointer;
+    }
+    
+    .template-card:hover {
+        @apply transform -translate-y-1;
+    }
+</style>
+
+<script>
+    // Script para la sección de agregar productos
+    class AddProductSection {
+        constructor() {
+            this.init();
+        }
+        
+        init() {
+            this.bindEvents();
+            this.loadProductForm();
+        }
+        
+        async loadProductForm() {
+            // Cargar el formulario de producto desde componentes
+            const formContainer = document.querySelector('[data-component="product-form"]');
+            if (formContainer) {
+                try {
+                    const response = await fetch('components/product-form.html');
+                    const html = await response.text();
+                    formContainer.innerHTML = html;
+                    
+                    // Ejecutar scripts dentro del componente
+                    const scripts = formContainer.querySelectorAll('script');
+                    scripts.forEach(script => {
+                        const newScript = document.createElement('script');
+                        if (script.src) {
+                            newScript.src = script.src;
+                        } else {
+                            newScript.textContent = script.textContent;
+                        }
+                        document.body.appendChild(newScript);
+                    });
+                } catch (error) {
+                    console.warn('Error cargando el formulario:', error);
+                }
+            }
+        }
+        
+        bindEvents() {
+            // Plantillas de producto
+            document.addEventListener('click', (e) => {
+                if (e.target.closest('.template-card')) {
+                    const template = e.target.closest('.template-card');
+                    const templateName = template.querySelector('h4')?.textContent;
+                    this.loadTemplate(templateName);
+                }
+            });
+        }
+        
+        loadTemplate(templateName) {
+            let templateData = {};
+            
+            switch (templateName) {
+                case 'Prenda de Ropa':
+                    templateData = {
+                        category: 'ropa',
+                        sizes: ['XS', 'S', 'M', 'L', 'XL'],
+                        colors: ['#ec4899', '#000000', '#ffffff'],
+                        stockMin: 5
+                    };
+                    break;
+                    
+                case 'Accesorio':
+                    templateData = {
+                        category: 'accesorios',
+                        sizes: ['Única'],
+                        colors: ['#3b82f6', '#000000', '#f59e0b'],
+                        stockMin: 3
+                    };
+                    break;
+                    
+                case 'Bolso':
+                    templateData = {
+                        category: 'bolsos',
+                        sizes: ['Pequeño', 'Mediano', 'Grande'],
+                        colors: ['#8b5cf6', '#10b981', '#ef4444'],
+                        stockMin: 2
+                    };
+                    break;
+            }
+            
+            // Aplicar plantilla al formulario
+            this.applyTemplate(templateData);
+            
+            if (typeof window.showToast === 'function') {
+                window.showToast(`Plantilla "${templateName}" cargada`, 'success');
+            }
+        }
+        
+        applyTemplate(templateData) {
+            // Aquí aplicarías la plantilla al formulario cargado
+            console.log('Aplicando plantilla:', templateData);
+            
+            // Esto se integraría con el ProductForm del componente
+            if (window.productForm) {
+                // Limpiar selecciones actuales
+                window.productForm.selectedSizes.clear();
+                window.productForm.selectedColors.clear();
+                
+                // Aplicar nuevas selecciones
+                templateData.sizes.forEach(size => {
+                    window.productForm.selectedSizes.add(size);
+                });
+                
+                // Notificar al formulario para que se actualice
+                window.productForm.updateSizeQuantitiesTable();
+                
+                // Cambiar categoría
+                const categorySelect = document.querySelector('select[name="category"]');
+                if (categorySelect) {
+                    categorySelect.value = templateData.category;
+                }
+                
+                // Cambiar stock mínimo
+                const minStockInput = document.querySelector('input[name="min_stock"]');
+                if (minStockInput) {
+                    minStockInput.value = templateData.stockMin;
+                }
+            }
+        }
+    }
+    
+    // Inicializar cuando la sección se cargue
+    document.addEventListener('DOMContentLoaded', () => {
+        if (document.querySelector('section#añadir-productos.active') || 
+            window.location.hash === '#añadir-productos') {
+            window.addProductSection = new AddProductSection();
+        }
+    });
+</script>
