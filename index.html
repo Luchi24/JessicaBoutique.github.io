@@ -58,1417 +58,416 @@
         .size-quantity-input {
             @apply w-16 text-center border border-gray-300 rounded-lg p-2 text-sm font-medium focus:ring-pink-500 focus:border-pink-500;
         }
+        .nav-link {
+            @apply flex items-center gap-2 px-4 py-3 rounded-lg transition-all duration-200 hover:bg-pink-50;
+        }
+        .nav-link.active {
+            @apply bg-pink-600 text-white hover:bg-pink-700;
+        }
+        .nav-link.active i {
+            @apply text-white;
+        }
     </style>
+    <!-- Configuración de Tailwind personalizada -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pink: {
+                            50: '#fdf2f8',
+                            100: '#fce7f3',
+                            200: '#fbcfe8',
+                            300: '#f9a8d4',
+                            400: '#f472b6',
+                            500: '#ec4899',
+                            600: '#db2777',
+                            700: '#be185d',
+                            800: '#9d174d',
+                            900: '#831843',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body class="min-h-screen">
-
-    <!-- Contenedor Principal -->
-    <div class="container mx-auto p-4 md:p-8">
-
-        <!-- Encabezado y Título Principal -->
-        <header class="mb-8">
-            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6">
-                <div class="flex items-center">
-                    <div class="bg-pink-600 p-3 rounded-xl mr-4">
-                        <i data-lucide="shirt" class="w-8 h-8 text-white"></i>
+<body class="min-h-screen bg-gray-50">
+    <!-- Barra de navegación superior -->
+    <header class="sticky top-0 z-50 bg-white shadow-sm border-b border-gray-200">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between py-4">
+                <!-- Logo y título -->
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-r from-pink-500 to-pink-700 flex items-center justify-center">
+                        <i data-lucide="shopping-bag" class="text-white w-5 h-5"></i>
                     </div>
                     <div>
-                        <h1 class="text-4xl font-extrabold tracking-tight text-pink-700">
-                            Jessica Boutique
-                        </h1>
-                        <p class="text-gray-600 mt-1">Gestión de Inventario</p>
+                        <h1 class="text-2xl font-bold text-gray-800">Jessica Boutique</h1>
+                        <p class="text-sm text-gray-500">Gestión de Inventario</p>
                     </div>
                 </div>
                 
-                <!-- BARRA DE ACCIÓN GLOBAL: Botones de Navegación -->
-                <div class="mt-4 sm:mt-0 flex flex-wrap items-center gap-3 justify-end">
-                    <button id="nav-manage-btn" type="button" title="Ir a Gestión de Catálogos"
-                            class="bg-pink-800 hover:bg-pink-900 text-white text-sm font-medium px-4 py-2 rounded transition duration-150 shadow-md flex items-center">
-                        <i data-lucide="list-checks" class="w-4 h-4 mr-1"></i>
-                        Gestionar Catálogos
-                    </button>
-                    <button id="nav-add-btn" type="button" title="Ir a Agregar Producto"
-                            class="bg-green-500 hover:bg-green-600 text-white text-sm font-medium px-4 py-2 rounded transition duration-150 shadow-md flex items-center">
-                        <i data-lucide="package-plus" class="w-4 h-4 mr-1"></i>
-                        Agregar Producto +
-                    </button>
-                    
-                    <!-- Botones de Importar/Exportar -->
-                    <button id="export-data-button" type="button" title="Exportar a JSON"
-                            class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-150 shadow-md flex items-center">
-                        <i data-lucide="download" class="w-5 h-5 mr-2"></i>
-                        Exportar
-                    </button>
-
-                    <label for="import-file-input" class="cursor-pointer bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-lg transition duration-150 shadow-md flex items-center">
-                        <i data-lucide="upload" class="w-5 h-5 mr-2"></i>
-                        Importar
-                    </label>
-                    <input type="file" id="import-file-input" accept=".json" class="hidden">
+                <!-- Información del usuario -->
+                <div class="flex items-center gap-4">
+                    <div class="hidden md:flex flex-col items-end">
+                        <p class="font-medium text-gray-800">Administrador</p>
+                        <p class="text-xs text-gray-500">Última conexión: Hoy</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
+                        <i data-lucide="user" class="text-gray-600 w-5 h-5"></i>
+                    </div>
                 </div>
-            </div>
-            
-            <!-- Barra de Búsqueda -->
-            <div class="relative">
-                <div class="flex items-center">
-                    <i data-lucide="search" class="absolute left-4 text-gray-400 w-5 h-5"></i>
-                    <input type="text" id="search-input" placeholder="Buscar por Nombre, Categoría, Talla o Color..."
-                           class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-pink-500 focus:border-pink-500 text-lg text-gray-900 shadow-sm">
-                </div>
-                <!-- Contenedor de Sugerencias -->
-                <div id="search-suggestions" class="absolute z-10 w-full bg-white border border-gray-300 rounded-xl mt-1 shadow-xl max-h-48 overflow-y-auto hidden">
-                    <!-- Sugerencias se cargarán aquí -->
-                </div>
-            </div>
-
-            <!-- Indicadores de estado -->
-            <div id="loading-indicator" class="mt-2 text-pink-300 hidden flex items-center">
-                <i data-lucide="loader" class="w-4 h-4 mr-2 animate-spin"></i>
-                Cargando datos...
-            </div>
-            <div id="error-message" class="mt-2 text-red-500 hidden"></div>
-        </header>
-
-        <!-- Panel de Estadísticas -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-            <div class="stats-card">
-                <div class="text-pink-600 mb-2">
-                    <i data-lucide="package" class="w-8 h-8"></i>
-                </div>
-                <h3 class="text-2xl font-bold text-gray-800" id="total-products-stat">0</h3>
-                <p class="text-gray-600 text-sm">Productos totales</p>
-            </div>
-            <div class="stats-card">
-                <div class="text-green-600 mb-2">
-                    <i data-lucide="trending-up" class="w-8 h-8"></i>
-                </div>
-                <h3 class="text-2xl font-bold text-gray-800" id="total-value-stat">S/ 0.00</h3>
-                <p class="text-gray-600 text-sm">Valor del inventario</p>
-            </div>
-            <div class="stats-card">
-                <div class="text-blue-600 mb-2">
-                    <i data-lucide="alert-circle" class="w-8 h-8"></i>
-                </div>
-                <h3 class="text-2xl font-bold text-gray-800" id="low-stock-stat">0</h3>
-                <p class="text-gray-600 text-sm">Productos con stock bajo</p>
-            </div>
-            <div class="stats-card">
-                <div class="text-purple-600 mb-2">
-                    <i data-lucide="tag" class="w-8 h-8"></i>
-                </div>
-                <h3 class="text-2xl font-bold text-gray-800" id="total-categories-stat">0</h3>
-                <p class="text-gray-600 text-sm">Categorías activas</p>
             </div>
         </div>
-
-        <!-- VISTA 1: INVENTARIO (Visible por defecto) -->
-        <section id="inventory-section" class="bg-white rounded-xl shadow-lg mb-8" data-view="inventory">
-            <div class="section-title-bar">
-                <h2 class="text-2xl font-semibold flex items-center">
-                    <i data-lucide="package" class="w-6 h-6 mr-2"></i>
-                    Inventario Actual (<span id="total-products">0</span> productos)
-                </h2>
-                 <!-- BOTÓN DE VISTA SOLAMENTE -->
-                <div class="flex gap-2">
-                    <button id="toggle-view-btn" type="button" title="Cambiar vista"
-                            class="bg-pink-800 hover:bg-pink-900 text-white text-sm font-medium px-3 py-2 rounded transition duration-150 shadow-md flex items-center">
-                        <i data-lucide="layout-grid" class="w-4 h-4 mr-1"></i>
-                        Vista de Tarjetas
-                    </button>
+        
+        <!-- Barra de navegación horizontal -->
+        <nav class="bg-white border-t border-gray-100">
+            <div class="container mx-auto px-4">
+                <div class="flex overflow-x-auto">
+                    <a href="#" class="nav-link active">
+                        <i data-lucide="package" class="w-4 h-4"></i>
+                        <span>Inventario</span>
+                    </a>
+                    <a href="#" class="nav-link">
+                        <i data-lucide="folder-tree" class="w-4 h-4"></i>
+                        <span>Gestionar Categorías</span>
+                    </a>
+                    <a href="#" class="nav-link">
+                        <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                        <span>Añadir Productos</span>
+                    </a>
+                    <a href="#" class="nav-link">
+                        <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
+                        <span>Ver Resumen</span>
+                    </a>
+                    <a href="#" class="nav-link">
+                        <i data-lucide="settings" class="w-4 h-4"></i>
+                        <span>Configuraciones</span>
+                    </a>
                 </div>
             </div>
+        </nav>
+    </header>
 
-            <div id="inventory-content" class="p-6 space-y-6">
-                 <!-- Controles de Ordenación y Filtros -->
-                <div class="flex flex-col gap-4">
-                    <!-- Ordenación -->
-                    <div class="flex flex-wrap items-center justify-between gap-4">
-                        <div class="flex items-center space-x-4">
-                            <span class="text-sm font-medium text-gray-700">Ordenar por:</span>
-                            <button id="sort-name" type="button" data-sort-by="name-asc" title="Nombre: A-Z"
-                                    class="sort-button p-2 text-gray-600 rounded-lg hover:bg-pink-100 transition duration-150 flex items-center">
-                                <i data-lucide="arrow-down-a-z" class="w-5 h-5 mr-1"></i>
-                                Nombre
-                            </button>
-                            <button id="sort-price" type="button" data-sort-by="price-desc" title="Precio: Mayor a Menor"
-                                    class="sort-button p-2 text-gray-600 rounded-lg hover:bg-pink-100 transition duration-150 flex items-center">
-                                <i data-lucide="dollar-sign" class="w-5 h-5 mr-1"></i>
-                                Precio
-                            </button>
-                            <button id="sort-stock" type="button" data-sort-by="stock-desc" title="Stock: Alto a Bajo"
-                                    class="sort-button p-2 text-gray-600 rounded-lg hover:bg-pink-100 transition duration-150 flex items-center">
-                                <i data-lucide="arrow-up-1-0" class="w-5 h-5 mr-1"></i>
-                                Stock
-                            </button>
-                        </div>
-                        
-                        <button id="clear-filters" type="button" 
-                                class="text-sm text-gray-600 hover:text-gray-800 flex items-center transition duration-150">
-                            <i data-lucide="filter-x" class="w-4 h-4 mr-1"></i>
-                            Limpiar filtros
-                        </button>
-                    </div>
-                    
-                    <!-- FILTROS DE INVENTARIO -->
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 border-t pt-4">
-                        <!-- Filtros por Categoría -->
-                        <div>
-                            <p class="text-sm font-medium text-gray-700 mb-2 flex items-center">
-                                <i data-lucide="tag" class="w-4 h-4 mr-1"></i>
-                                Categoría:
-                            </p>
-                            <div id="category-filter-container" class="flex flex-wrap gap-2">
-                                <!-- Los botones de categoría se cargarán aquí -->
-                            </div>
-                        </div>
-    
-                        <!-- Filtros por Talla -->
-                        <div>
-                            <p class="text-sm font-medium text-gray-700 mb-2 flex items-center">
-                                <i data-lucide="ruler" class="w-4 h-4 mr-1"></i>
-                                Talla:
-                            </p>
-                            <div id="size-filter-container" class="flex flex-wrap gap-2">
-                                <!-- Las tallas fijas se inicializan con JS -->
-                            </div>
-                        </div>
-    
-                        <!-- Filtros por Color -->
-                        <div>
-                            <p class="text-sm font-medium text-gray-700 mb-2 flex items-center">
-                                <i data-lucide="palette" class="w-4 h-4 mr-1"></i>
-                                Color:
-                            </p>
-                            <div id="color-filter-container" class="flex flex-wrap gap-2">
-                                <!-- Los colores únicos se cargarán aquí -->
-                            </div>
+    <!-- Contenido principal -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Sección de estadísticas -->
+        <section class="mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="stats-card">
+                    <div class="flex items-center justify-between w-full mb-2">
+                        <h3 class="text-lg font-semibold text-gray-700">Productos Total</h3>
+                        <div class="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center">
+                            <i data-lucide="package" class="text-pink-600 w-5 h-5"></i>
                         </div>
                     </div>
-                </div>
-
-                <!-- Lista de Inventario - Vista de Tarjetas -->
-                <div id="inventory-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-4">
-                    <!-- Los productos se cargarán aquí -->
+                    <p class="text-3xl font-bold text-gray-800">124</p>
+                    <p class="text-sm text-gray-500 mt-2">+5 esta semana</p>
                 </div>
                 
-                <!-- Lista de Inventario - Vista de Tabla (oculta por defecto) -->
-                <div id="inventory-table" class="hidden pt-4">
-                    <div class="overflow-x-auto">
+                <div class="stats-card">
+                    <div class="flex items-center justify-between w-full mb-2">
+                        <h3 class="text-lg font-semibold text-gray-700">Stock Bajo</h3>
+                        <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
+                            <i data-lucide="alert-circle" class="text-red-600 w-5 h-5"></i>
+                        </div>
+                    </div>
+                    <p class="text-3xl font-bold text-gray-800">8</p>
+                    <p class="text-sm text-gray-500 mt-2">Reabastecimiento urgente</p>
+                </div>
+                
+                <div class="stats-card">
+                    <div class="flex items-center justify-between w-full mb-2">
+                        <h3 class="text-lg font-semibold text-gray-700">Valor Total</h3>
+                        <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
+                            <i data-lucide="dollar-sign" class="text-green-600 w-5 h-5"></i>
+                        </div>
+                    </div>
+                    <p class="text-3xl font-bold text-gray-800">$5,240</p>
+                    <p class="text-sm text-gray-500 mt-2">Inventario actual</p>
+                </div>
+                
+                <div class="stats-card">
+                    <div class="flex items-center justify-between w-full mb-2">
+                        <h3 class="text-lg font-semibold text-gray-700">Categorías</h3>
+                        <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+                            <i data-lucide="folder" class="text-blue-600 w-5 h-5"></i>
+                        </div>
+                    </div>
+                    <p class="text-3xl font-bold text-gray-800">12</p>
+                    <p class="text-sm text-gray-500 mt-2">Activas</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección de inventario -->
+        <section>
+            <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                <!-- Encabezado de la sección -->
+                <div class="section-title-bar">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="package" class="w-5 h-5"></i>
+                        <h2 class="text-xl font-bold">Inventario de Productos</h2>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button class="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors">
+                            <i data-lucide="filter" class="w-4 h-4"></i>
+                            Filtrar
+                        </button>
+                        <button class="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors">
+                            <i data-lucide="plus" class="w-4 h-4"></i>
+                            Nuevo Producto
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Contenido de la tabla -->
+                <div class="p-6">
+                    <!-- Barra de búsqueda y filtros -->
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+                        <div class="relative w-full md:w-auto">
+                            <i data-lucide="search" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4"></i>
+                            <input type="text" placeholder="Buscar productos..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg w-full md:w-64 focus:ring-pink-500 focus:border-pink-500">
+                        </div>
+                        
+                        <div class="flex flex-wrap gap-2">
+                            <button class="filter-button selected px-4 py-2 bg-pink-600 text-white rounded-lg text-sm font-medium">
+                                Todos
+                            </button>
+                            <button class="filter-button px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200">
+                                Ropa
+                            </button>
+                            <button class="filter-button px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200">
+                                Accesorios
+                            </button>
+                            <button class="filter-button px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200">
+                                Calzado
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Tabla de productos -->
+                    <div class="overflow-x-auto rounded-lg border border-gray-200">
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                                 <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Producto</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Categoría</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Talla</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Color</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Precio</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Producto
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Categoría
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Tallas / Colores
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Stock
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Precio
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Acciones
+                                    </th>
                                 </tr>
                             </thead>
-                            <tbody id="inventory-table-body" class="bg-white divide-y divide-gray-200">
-                                <!-- Los productos se cargarán aquí -->
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                <!-- Fila de producto 1 -->
+                                <tr class="hover:bg-gray-50 transition-colors">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 h-10 w-10 bg-pink-100 rounded-lg flex items-center justify-center">
+                                                <i data-lucide="shirt" class="text-pink-600 w-5 h-5"></i>
+                                            </div>
+                                            <div class="ml-4">
+                                                <div class="text-sm font-medium text-gray-900">Vestido Floral</div>
+                                                <div class="text-sm text-gray-500">REF: VF-2024-001</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-pink-100 text-pink-800">
+                                            Ropa
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center gap-2">
+                                            <div class="flex flex-col">
+                                                <span class="text-sm text-gray-900">S, M, L</span>
+                                                <div class="flex items-center mt-1">
+                                                    <div class="color-dot-small bg-pink-300"></div>
+                                                    <div class="color-dot-small bg-blue-300 ml-1"></div>
+                                                    <div class="color-dot-small bg-green-300 ml-1"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <span class="stock-indicator stock-high">45 unidades</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        $39.99
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                        <div class="flex gap-2">
+                                            <button class="text-pink-600 hover:text-pink-900">
+                                                <i data-lucide="edit" class="w-4 h-4"></i>
+                                            </button>
+                                            <button class="text-blue-600 hover:text-blue-900">
+                                                <i data-lucide="eye" class="w-4 h-4"></i>
+                                            </button>
+                                            <button class="text-red-600 hover:text-red-900">
+                                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <!-- Fila de producto 2 -->
+                                <tr class="hover:bg-gray-50 transition-colors">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <div class="flex-shrink-0 h-10 w-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                                                <i data-lucide="watch" class="text-blue-600 w-5 h-5"></i>
+                                            </div>
+                                            <div class="ml-4">
+                                                <div class="text-sm font-medium text-gray-900">Reloj Elegante</div>
+                                                <div class="text-sm text-gray-500">REF: AC-2024-015</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                            Accesorios
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center gap-2">
+                                            <div class="flex flex-col">
+                                                <span class="text-sm text-gray-900">Única</span>
+                                                <div class="flex items-center mt-1">
+                                                    <div class="color-dot-small bg-gray-800"></div>
+                                                    <div class="color-dot-small bg-silver ml-1"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <span class="stock-indicator stock-low">3 unidades</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        $89.99
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                        <div class="flex gap-2">
+                                            <button class="text-pink-600 hover:text-pink-900">
+                                                <i data-lucide="edit" class="w-4 h-4"></i>
+                                            </button>
+                                            <button class="text-blue-600 hover:text-blue-900">
+                                                <i data-lucide="eye" class="w-4 h-4"></i>
+                                            </button>
+                                            <button class="text-red-600 hover:text-red-900">
+                                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <!-- Más filas de productos... -->
                             </tbody>
                         </table>
                     </div>
-                </div>
-                
-                <p id="no-data-message" class="text-center text-gray-500 py-10 hidden">
-                    <i data-lucide="package-x" class="w-12 h-12 mx-auto mb-4 text-gray-300"></i>
-                    ¡Tu inventario está vacío o no coincide con los filtros!
-                </p>
-            </div>
-        </section>
-
-
-        <!-- VISTA 2: GESTIÓN (Oculta por defecto) -->
-        <section id="management-section" class="bg-white rounded-xl shadow-lg mb-8 hidden" data-view="management">
-            <div class="section-title-bar">
-                <h2 class="text-2xl font-semibold flex items-center">
-                    <i data-lucide="settings" class="w-6 h-6 mr-2"></i>
-                    Gestión de Catálogos
-                </h2>
-                <button id="back-to-inventory-1" type="button" title="Regresar al Inventario"
-                        class="bg-pink-800 hover:bg-pink-900 text-white text-sm font-medium px-4 py-2 rounded transition duration-150 shadow-md flex items-center">
-                    <i data-lucide="arrow-left" class="w-4 h-4 mr-1"></i>
-                    Regresar al Inventario
-                </button>
-            </div>
-            
-            <div id="management-content" class="p-6 grid grid-cols-1 lg:grid-cols-2 gap-8">
-                
-                <!-- Subsección: Gestión de Categorías -->
-                <div>
-                    <h3 class="text-xl font-semibold mb-3 text-pink-600 flex items-center">
-                        <i data-lucide="tag" class="w-5 h-5 mr-2"></i>
-                        Categorías
-                    </h3>
-                    <form id="category-form" class="flex gap-2 mb-4">
-                        <input type="text" id="new-category-name" placeholder="Nueva Categoría (Ej: Jeans, Vestidos)" required
-                               class="flex-grow p-3 border border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500">
-                        <button type="submit" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold p-3 rounded-lg transition duration-150 shadow-md flex items-center">
-                            <i data-lucide="plus" class="w-5 h-5"></i>
-                        </button>
-                    </form>
-                    <div id="category-chips-container" class="flex flex-wrap gap-2 pt-2 border-t mt-2">
-                        <p id="no-categories-message-display" class="text-gray-500 italic text-sm">Cargando categorías...</p>
-                    </div>
-                </div>
-
-                <!-- Subsección: Gestión de Colores -->
-                <div>
-                    <h3 class="text-xl font-semibold mb-3 text-pink-600 flex items-center">
-                        <i data-lucide="palette" class="w-5 h-5 mr-2"></i>
-                        Colores
-                    </h3>
-                    <form id="color-form" class="flex gap-2 mb-4">
-                        <div class="flex items-center p-3 border border-gray-300 rounded-lg bg-white flex-grow">
-                             <label for="new-color-picker" class="text-gray-700 text-sm font-medium mr-2">Color:</label>
-                            <input type="color" id="new-color-picker" value="#000000" title="Seleccionar Color"
-                                   class="w-8 h-8 rounded-full border-2 border-pink-500 p-0 overflow-hidden cursor-pointer">
-                            <input type="text" id="new-color-name" placeholder="Nombre (Ej: Negro Ónix)" required
-                                   class="flex-grow ml-3 p-0 border-none focus:ring-0 focus:border-none text-gray-900">
-                        </div>
-                        <button type="submit" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold p-3 rounded-lg transition duration-150 shadow-md flex items-center">
-                            <i data-lucide="plus" class="w-5 h-5"></i>
-                        </button>
-                    </form>
-                    <div id="color-chips-container" class="flex flex-wrap gap-2 pt-2 border-t mt-2">
-                        <p id="no-colors-message-display" class="text-gray-500 italic text-sm">Aún no hay colores definidos.</p>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-
-        <!-- VISTA 3: AGREGAR NUEVO PRODUCTO (Oculta por defecto) -->
-        <section id="add-product-section" class="bg-white rounded-xl shadow-lg mb-8 hidden" data-view="add-product">
-             <div class="section-title-bar">
-                <h2 class="text-2xl font-semibold flex items-center">
-                    <i data-lucide="package-plus" class="w-6 h-6 mr-2"></i>
-                    Agregar Nuevo Producto / Variante
-                </h2>
-                <button id="back-to-inventory-2" type="button" title="Regresar al Inventario"
-                        class="bg-pink-800 hover:bg-pink-900 text-white text-sm font-medium px-4 py-2 rounded transition duration-150 shadow-md flex items-center">
-                    <i data-lucide="arrow-left" class="w-4 h-4 mr-1"></i>
-                    Regresar al Inventario
-                </button>
-            </div>
-
-            <div id="add-product-content" class="p-6">
-                <form id="product-form" class="grid grid-cols-1 md:grid-cols-6 gap-4">
                     
-                    <!-- Fila 1 - Nombre, Categoría, Precio -->
-                    <input type="text" id="name" placeholder="Nombre (Ej: Blusa Satinada)" required
-                           class="col-span-1 md:col-span-2 p-3 border border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500">
-    
-                    <!-- SELECT de Categoría (Dinámico) -->
-                    <select id="category-select" required
-                           class="col-span-1 md:col-span-1 p-3 border border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500 text-gray-700 disabled:bg-gray-100 disabled:text-gray-500">
-                        <option value="" disabled selected>Seleccione Categoría</option>
-                        <!-- Opciones de categoría se llenarán con JS -->
-                    </select>
-
-                    <input type="number" id="price" placeholder="Precio (Ej: 49.99)" step="0.01" min="0.01" required
-                           class="col-span-1 md:col-span-1 p-3 border border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500">
-
-                    <!-- SELECT de Color (Dinámico) -->
-                    <select id="color-select" required
-                            class="col-span-1 md:col-span-1 p-3 border border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500 text-gray-700 disabled:bg-gray-100 disabled:text-gray-500">
-                        <option value="" disabled selected>Seleccione Color</option>
-                        <!-- Opciones de color se llenarán con JS -->
-                    </select>
-                    
-                    <!-- Indicador de Stock Total -->
-                    <div class="col-span-1 md:col-span-1 flex items-center justify-center bg-gray-50 rounded-lg border border-gray-300">
-                        <span class="text-sm font-medium text-gray-700">Stock Total: </span>
-                        <span id="total-stock-display" class="ml-2 text-lg font-bold text-green-600">0</span>
-                    </div>
-                    
-                    <p class="col-span-full text-sm text-red-500 mt-2 hidden" id="product-pre-requisite-warning">
-                        <i data-lucide="alert-circle" class="w-4 h-4 inline mr-1"></i>
-                        Para agregar productos, debe definir al menos una Categoría y un Color en la sección de <strong>Gestión</strong>.
-                    </p>
-
-                    <!-- Fila 2 - Selección de Tallas con Cantidades -->
-                    <div class="col-span-full border-t pt-4 mt-4">
-                        <p class="text-sm font-medium text-gray-700 mb-3 flex items-center">
-                            <i data-lucide="ruler" class="w-4 h-4 mr-1"></i>
-                            Especificar cantidad por talla:
+                    <!-- Paginación -->
+                    <div class="flex items-center justify-between mt-6">
+                        <p class="text-sm text-gray-700">
+                            Mostrando <span class="font-medium">1</span> a <span class="font-medium">10</span> de <span class="font-medium">124</span> productos
                         </p>
-                        <div id="size-quantity-container" class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                            <!-- Los inputs de cantidad por talla se cargarán aquí -->
+                        <div class="flex gap-2">
+                            <button class="px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50">
+                                Anterior
+                            </button>
+                            <button class="px-3 py-2 border border-pink-600 bg-pink-600 text-white rounded-lg text-sm font-medium">
+                                1
+                            </button>
+                            <button class="px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50">
+                                2
+                            </button>
+                            <button class="px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50">
+                                3
+                            </button>
+                            <button class="px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50">
+                                Siguiente
+                            </button>
                         </div>
                     </div>
-                    
-                    <!-- Botón de Envío -->
-                    <button type="submit" id="add-variants-button"
-                            class="col-span-full bg-green-500 hover:bg-green-600 text-white font-bold p-4 rounded-lg transition duration-150 shadow-md disabled:bg-gray-400 mt-4 flex items-center justify-center">
-                        <i data-lucide="package-plus" class="w-5 h-5 mr-2"></i>
-                        Agregar Producto(s) como Variante
-                    </button>
-                </form>
+                </div>
             </div>
         </section>
+    </main>
 
-    </div>
-
-    <!-- Script de Lógica de la Aplicación (In-Memory) -->
-    <script type="module">
-        // ADVERTENCIA: Los datos se perderán al recargar la página si no se usa Exportar/Importar.
-
-        // --- CONSTANTES Y ESTADO INICIAL ---
-        const availableSizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'Stándard'];
-        let userId = 'USUARIO_LOCAL_DEMO'; 
-        let currentView = 'inventory'; // Estado de la vista actual
-        let currentViewMode = 'grid'; // 'grid' o 'table'
-        
-        // Datos In-Memory de Ejemplo 
-        let currentInventory = [
-            { id: 'p1', name: 'Vestido de Noche', category: 'Vestidos', size: 'M', price: 89.90, stock: 5, colorHex: '#ff0000', colorName: 'Rojo Pasión', timestamp: Date.now() - 10000 },
-            { id: 'p2', name: 'Jeans Clásicos', category: 'Jeans', size: 'L', price: 65.00, stock: 12, colorHex: '#0000ff', colorName: 'Azul Marino', timestamp: Date.now() - 5000 },
-            { id: 'p3', name: 'Blusa de Seda', category: 'Blusas', size: 'S', price: 45.00, stock: 3, colorHex: '#f5f5dc', colorName: 'Beige', timestamp: Date.now() - 2000 },
-        ]; 
-        
-        let currentCategories = [
-            { id: 'c1', name: 'Vestidos' }, 
-            { id: 'c2', name: 'Jeans' },
-            { id: 'c3', name: 'Blusas' }
-        ]; 
-        
-        // Gestión de Colores
-        let currentColors = [
-            { id: 'cl1', name: 'Rojo Pasión', hex: '#ff0000' },
-            { id: 'cl2', name: 'Azul Marino', hex: '#0000ff' },
-            { id: 'cl3', name: 'Beige', hex: '#f5f5dc' },
-            { id: 'cl4', name: 'Negro Ónix', hex: '#000000' }
-        ];
-        
-        // Estado de filtros y ordenación
-        let selectedCategoryFilter = 'TODOS';
-        let selectedSizeFilter = 'TODOS';
-        let selectedColorFilter = 'TODOS';
-        let currentSort = 'name-asc'; // Opciones: 'name-asc', 'price-asc', 'price-desc', 'stock-asc', 'stock-desc'
-
-
-        // --- ELEMENTOS DEL DOM ---
-        const inventoryGrid = document.getElementById('inventory-grid');
-        const inventoryTable = document.getElementById('inventory-table');
-        const inventoryTableBody = document.getElementById('inventory-table-body');
-        const productForm = document.getElementById('product-form');
-        const categoryForm = document.getElementById('category-form');
-        const colorForm = document.getElementById('color-form');
-        const totalProductsSpan = document.getElementById('total-products');
-        const errorMessage = document.getElementById('error-message');
-        const noDataMessage = document.getElementById('no-data-message');
-        const searchInput = document.getElementById('search-input');
-        const searchSuggestions = document.getElementById('search-suggestions');
-        
-        // Categorías DOM
-        const newCategoryInput = document.getElementById('new-category-name');
-        const categoryChipsContainer = document.getElementById('category-chips-container');
-        const categorySelect = document.getElementById('category-select');
-        
-        // Colores DOM
-        const newColorNameInput = document.getElementById('new-color-name');
-        const newColorPicker = document.getElementById('new-color-picker');
-        const colorChipsContainer = document.getElementById('color-chips-container');
-        const colorSelect = document.getElementById('color-select');
-        
-        // Producto DOM
-        const productPreRequisiteWarning = document.getElementById('product-pre-requisite-warning');
-        const sizeQuantityContainer = document.getElementById('size-quantity-container');
-        const totalStockDisplay = document.getElementById('total-stock-display');
-        
-        // Filtros y Ordenación DOM
-        const categoryFilterContainer = document.getElementById('category-filter-container');
-        const sizeFilterContainer = document.getElementById('size-filter-container');
-        const colorFilterContainer = document.getElementById('color-filter-container');
-        const sortNameButton = document.getElementById('sort-name');
-        const sortPriceButton = document.getElementById('sort-price');
-        const sortStockButton = document.getElementById('sort-stock');
-        const clearFiltersButton = document.getElementById('clear-filters');
-        
-        // Navegación DOM
-        const navManageBtn = document.getElementById('nav-manage-btn');
-        const navAddBtn = document.getElementById('nav-add-btn');
-        const backToInventory1 = document.getElementById('back-to-inventory-1');
-        const backToInventory2 = document.getElementById('back-to-inventory-2');
-        const inventorySection = document.getElementById('inventory-section');
-        const managementSection = document.getElementById('management-section');
-        const addProductSection = document.getElementById('add-product-section');
-        const toggleViewBtn = document.getElementById('toggle-view-btn');
-        
-        // Persistencia DOM
-        const exportDataButton = document.getElementById('export-data-button');
-        const importFileInput = document.getElementById('import-file-input');
-        
-        // Estadísticas DOM
-        const totalProductsStat = document.getElementById('total-products-stat');
-        const totalValueStat = document.getElementById('total-value-stat');
-        const lowStockStat = document.getElementById('low-stock-stat');
-        const totalCategoriesStat = document.getElementById('total-categories-stat');
-
-        // --- UTILS ---
-
-        // Inicializa los iconos de Lucide
-        function initializeLucideIcons() {
-            lucide.createIcons();
-        }
-
-        const formatPrice = (price) => {
-            return new Intl.NumberFormat('es-PE', { style: 'currency', currency: 'PEN' }).format(price);
-        };
-
-        const displayError = (message) => {
-            console.error(message);
-            errorMessage.textContent = message;
-            errorMessage.classList.remove('hidden', 'text-green-500');
-            errorMessage.classList.add('text-red-500');
-            setTimeout(() => { errorMessage.classList.add('hidden'); }, 5000); 
-        };
-
-        const displaySuccess = (message) => {
-            errorMessage.textContent = message;
-            errorMessage.classList.remove('text-red-500');
-            errorMessage.classList.add('text-green-500');
-            errorMessage.classList.remove('hidden');
-            setTimeout(() => { errorMessage.classList.add('hidden'); }, 3000);
-        };
-
-        const generateId = () => Date.now().toString() + Math.random().toString(36).substring(2, 9);
-        
-        // --- NAVEGACIÓN SPA ---
-        function switchView(viewName) {
-            currentView = viewName;
-            
-            // Ocultar todas las vistas
-            inventorySection.classList.add('hidden');
-            managementSection.classList.add('hidden');
-            addProductSection.classList.add('hidden');
-            
-            // Mostrar la vista solicitada
-            switch(viewName) {
-                case 'inventory':
-                    inventorySection.classList.remove('hidden');
-                    // Asegurarse de que el inventario se refresque al volver
-                    loadInventory(); 
-                    break;
-                case 'management':
-                    managementSection.classList.remove('hidden');
-                    loadManagementData(); // Asegura que los chips estén actualizados
-                    break;
-                case 'add-product':
-                    addProductSection.classList.remove('hidden');
-                    loadManagementData(); // Asegura que los selects estén actualizados
-                    break;
-            }
-            initializeLucideIcons();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        // --- PERSISTENCIA (IMPORTAR/EXPORTAR JSON) ---
-        function exportData() {
-            const dataToExport = {
-                inventory: currentInventory,
-                categories: currentCategories,
-                colors: currentColors,
-                exportTime: new Date().toISOString()
-            };
-            
-            const dataStr = JSON.stringify(dataToExport, null, 2); 
-            const blob = new Blob([dataStr], { type: "application/json" });
-            const url = URL.createObjectURL(blob);
-            
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `inventario_jessica_boutique_${new Date().toISOString().slice(0, 10)}.json`;
-            
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
-
-            displaySuccess('Datos exportados con éxito.');
-        }
-
-        function importData(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                try {
-                    const importedData = JSON.parse(e.target.result);
-                    
-                    if (!importedData.inventory || !importedData.categories || !importedData.colors) {
-                        throw new Error("El archivo JSON debe contener las estructuras 'inventory', 'categories' y 'colors'.");
-                    }
-
-                    // Reemplazar los arrays en memoria
-                    currentInventory = importedData.inventory;
-                    currentCategories = importedData.categories;
-                    currentColors = importedData.colors;
-                    
-                    // Re-renderizar toda la interfaz con los datos nuevos
-                    loadManagementData();
-                    loadInventory();
-                    
-                    displaySuccess('Datos importados correctamente. Inventario actualizado.');
-                } catch (error) {
-                    displayError(`Error al procesar el archivo: ${error.message}`);
-                } finally {
-                    importFileInput.value = '';
-                }
-            };
-            
-            reader.onerror = () => {
-                displayError('Error al leer el archivo.');
-                importFileInput.value = '';
-            };
-
-            reader.readAsText(file);
-        }
-
-        // --- MANAGEMENT CRUD OPERATIONS ---
-        function saveCategory(event) {
-            event.preventDefault();
-            const name = newCategoryInput.value.trim();
-            if (name.length === 0) return;
-            const normalizedName = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
-            const exists = currentCategories.some(cat => cat.name === normalizedName);
-            if (exists) {
-                displayError(`La categoría "${normalizedName}" ya existe.`);
-                return;
-            }
-            currentCategories.push({ id: generateId(), name: normalizedName });
-            newCategoryInput.value = '';
-            loadManagementData(); 
-        }
-
-        function deleteCategory(categoryId) {
-            if (!confirm(`¿Estás seguro de eliminar esta categoría? Los productos asociados quedarán "SIN CATEGORÍA".`)) return;
-            const deletedCategory = currentCategories.find(cat => cat.id === categoryId);
-            currentCategories = currentCategories.filter(cat => cat.id !== categoryId);
-            // Actualizar inventario: Si se elimina una categoría, los productos que la tenían quedan "SIN CATEGORÍA"
-            currentInventory = currentInventory.map(product => {
-                if (product.category === deletedCategory?.name) {
-                    return { ...product, category: 'SIN CATEGORÍA' };
-                }
-                return product;
-            });
-            loadManagementData();
-            loadInventory(); // Refrescar inventario para reflejar el cambio
-            displaySuccess('Categoría eliminada.');
-        }
-
-        function saveColor(event) {
-            event.preventDefault();
-            const name = newColorNameInput.value.trim();
-            const hex = newColorPicker.value;
-            if (name.length === 0) return;
-            const normalizedName = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
-            
-            const exists = currentColors.some(color => color.name === normalizedName || color.hex === hex);
-            if (exists) {
-                displayError(`El nombre o código de color ya existe.`);
-                return;
-            }
-            currentColors.push({ id: generateId(), name: normalizedName, hex: hex });
-            newColorNameInput.value = '';
-            newColorPicker.value = '#000000'; // Reset color picker
-            loadManagementData(); 
-        }
-
-        function deleteColor(colorId) {
-            if (!confirm(`¿Estás seguro de eliminar este color? Los productos existentes mantendrán el color, pero no podrá seleccionarlo para productos nuevos.`)) return;
-            
-            const deletedColor = currentColors.find(col => col.id === colorId);
-            currentColors = currentColors.filter(col => col.id !== colorId);
-            
-            // Nota: No se actualiza el inventario ya que los productos existentes guardan el HEX y el Name.
-            loadManagementData();
-            displaySuccess(`Color "${deletedColor.name}" eliminado.`);
-        }
-
-        function loadManagementData() {
-            // Ordenar alfabéticamente
-            currentCategories.sort((a, b) => a.name.localeCompare(b.name));
-            currentColors.sort((a, b) => a.name.localeCompare(b.name));
-            
-            renderCategoryManagement();
-            renderColorManagement();
-            renderCategorySelect(); 
-            renderColorSelect(); 
-            // Esto asegura que los filtros del inventario estén siempre actualizados
-            renderCategoryFilterButtons(); 
-            renderColorFilterButtons();
-            renderSizeQuantityInputs();
-        }
-
-        // --- INVENTORY CRUD OPERATIONS ---
-        function saveProductVariants(event) {
-            event.preventDefault();
-
-            const categoryName = categorySelect.value;
-            const colorId = colorSelect.value; 
-            
-            const name = document.getElementById('name').value.trim();
-            const price = parseFloat(document.getElementById('price').value);
-            
-            const selectedColor = currentColors.find(c => c.id === colorId);
-
-            // Obtener las cantidades por talla
-            const sizeQuantities = {};
-            let totalStock = 0;
-            let hasValidQuantity = false;
-            
-            availableSizes.forEach(size => {
-                const input = document.getElementById(`quantity-${size}`);
-                if (input) {
-                    const quantity = parseInt(input.value, 10) || 0;
-                    if (quantity > 0) {
-                        sizeQuantities[size] = quantity;
-                        totalStock += quantity;
-                        hasValidQuantity = true;
-                    }
-                }
-            });
-
-            // Validaciones
-            if (!name || !categoryName || !colorId || !hasValidQuantity) {
-                 displayError("Complete todos los campos requeridos y especifique al menos una cantidad para alguna talla.");
-                 return;
-            }
-            if (isNaN(price) || price <= 0) {
-                 displayError("Por favor, ingrese un valor válido para el Precio.");
-                 return;
-            }
-            if (!selectedColor) {
-                 displayError("Error interno: Color seleccionado no encontrado.");
-                 return;
-            }
-
-            let productsAddedCount = 0;
-            Object.keys(sizeQuantities).forEach(size => {
-                const quantity = sizeQuantities[size];
-                if (quantity > 0) {
-                    const newProduct = {
-                        id: generateId(),
-                        name: name,
-                        category: categoryName, 
-                        size: size,
-                        colorHex: selectedColor.hex,
-                        colorName: selectedColor.name,
-                        price: price,
-                        stock: quantity,
-                        timestamp: new Date().getTime() 
-                    };
-                    currentInventory.push(newProduct);
-                    productsAddedCount++;
-                }
-            });
-
-            if (productsAddedCount > 0) {
-                // Resetear formulario
-                document.getElementById('name').value = '';
-                document.getElementById('price').value = '';
-                
-                // Resetear cantidades
-                availableSizes.forEach(size => {
-                    const input = document.getElementById(`quantity-${size}`);
-                    if (input) input.value = '';
-                });
-                updateTotalStockDisplay();
-                
-                loadInventory(); 
-                displaySuccess(`${productsAddedCount} variante(s) de "${name}" agregada(s).`);
-
-                // Opcional: regresar al inventario después de agregar
-                switchView('inventory');
-            } else {
-                displayError("No se agregó ningún producto. Revise las cantidades por talla.");
-            }
-        }
-
-        function loadInventory() {
-            // Llama a la búsqueda para aplicar filtros, ordenación y renderizado
-            handleSearch(); 
-        }
-
-        function updateStock(productId, newStock) {
-            if (isNaN(newStock) || newStock < 0) return;
-            const productIndex = currentInventory.findIndex(p => p.id === productId);
-            if (productIndex !== -1) {
-                currentInventory[productIndex].stock = newStock;
-                currentInventory[productIndex].timestamp = new Date().getTime(); // Marca de tiempo de última actualización
-                loadInventory(); // Refresca la lista
-            }
-        }
-
-        function deleteProduct(productId) {
-            // Usamos un custom modal en un entorno real, pero aquí usamos confirm
-            // según las reglas de Immersive.
-            if (!confirm(`¿Estás seguro de que quieres eliminar este producto?`)) return; 
-            currentInventory = currentInventory.filter(p => p.id !== productId);
-            loadInventory(); 
-            displaySuccess('Producto eliminado.');
-        }
-
-        // --- FILTERING AND SEARCH ---
-
-        function handleSortChange(sortBy) {
-            currentSort = sortBy;
-            updateSortButtonState();
-            loadInventory();
-        }
-
-        function updateSortButtonState() {
-            // Limpiar selección de todos los botones de ordenación
-            document.querySelectorAll('.sort-button').forEach(btn => btn.classList.remove('selected', 'bg-pink-600', 'text-white', 'text-gray-600', 'hover:bg-pink-100'));
-            
-            // Seleccionar el botón actual
-            const selectedButton = document.querySelector(`.sort-button[data-sort-by="${currentSort}"]`);
-            if (selectedButton) {
-                selectedButton.classList.add('selected', 'bg-pink-600', 'text-white');
-            }
-            // Asegurar que los no seleccionados tengan el estilo por defecto
-            document.querySelectorAll('.sort-button:not(.selected)').forEach(btn => btn.classList.add('text-gray-600', 'hover:bg-pink-100'));
-        }
-
-        function handleFilterClick(filterType, value) {
-            let filterState;
-            
-            // Lógica para alternar el filtro
-            switch (filterType) {
-                case 'category':
-                    filterState = selectedCategoryFilter;
-                    selectedCategoryFilter = (value !== 'TODOS' && filterState === value) ? 'TODOS' : value;
-                    renderCategoryFilterButtons();
-                    break;
-                case 'size':
-                    filterState = selectedSizeFilter;
-                    selectedSizeFilter = (value !== 'TODOS' && filterState === value) ? 'TODOS' : value;
-                    renderSizeFilterButtons();
-                    break;
-                case 'color':
-                    filterState = selectedColorFilter;
-                    selectedColorFilter = (value !== 'TODOS' && filterState === value) ? 'TODOS' : value;
-                    renderColorFilterButtons();
-                    break;
-            }
-            
-            handleSearch();
-        }
-
-
-        function handleSearch() {
-            const query = searchInput.value.toLowerCase().trim();
-            
-            let filteredProducts = [...currentInventory]; 
-            
-            // 1. Aplicar búsqueda (Name, Category, Size, ColorName)
-            if (query) {
-                 filteredProducts = filteredProducts.filter(product =>
-                    (product.name || '').toLowerCase().includes(query) ||
-                    (product.category || '').toLowerCase().includes(query) ||
-                    (product.size || '').toLowerCase().includes(query) ||
-                    (product.colorName || '').toLowerCase().includes(query)
-                );
-            }
-
-            // 2. Aplicar filtros
-            if (selectedCategoryFilter !== 'TODOS') {
-                filteredProducts = filteredProducts.filter(product => product.category === selectedCategoryFilter);
-            }
-            if (selectedSizeFilter !== 'TODOS') {
-                filteredProducts = filteredProducts.filter(product => product.size === selectedSizeFilter);
-            }
-            if (selectedColorFilter !== 'TODOS') {
-                filteredProducts = filteredProducts.filter(product => product.colorName === selectedColorFilter);
-            }
-            
-            // 3. Aplicar ordenación
-            switch (currentSort) {
-                case 'stock-asc':
-                    filteredProducts.sort((a, b) => (a.stock || 0) - (b.stock || 0));
-                    break;
-                case 'stock-desc':
-                    filteredProducts.sort((a, b) => (b.stock || 0) - (a.stock || 0));
-                    break;
-                case 'price-asc':
-                    filteredProducts.sort((a, b) => (a.price || 0) - (b.price || 0));
-                    break;
-                case 'price-desc':
-                    filteredProducts.sort((a, b) => (b.price || 0) - (a.price || 0));
-                    break;
-                case 'name-asc':
-                default:
-                    // Ordenación alfabética por nombre como fallback
-                    filteredProducts.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
-                    break;
-            }
-            
-            renderInventory(filteredProducts);
-
-            if (document.activeElement === searchInput) {
-                showSuggestions(query);
-            }
-        }
-
-        function showSuggestions(query) {
-            const uniqueSuggestions = new Set();
-            const maxSuggestions = 5;
-            
-            const normalizedQuery = query.toLowerCase();
-            
-            currentInventory.forEach(product => {
-                const name = (product.name || '').toLowerCase();
-                const category = (product.category || '').toLowerCase();
-                const size = (product.size || '').toLowerCase();
-                
-                // Solo sugerir si la palabra clave coincide
-                if (normalizedQuery && name.includes(normalizedQuery) && uniqueSuggestions.size < maxSuggestions) {
-                    uniqueSuggestions.add(product.name);
-                }
-                if (normalizedQuery && category.includes(normalizedQuery) && uniqueSuggestions.size < maxSuggestions) {
-                    uniqueSuggestions.add(product.category);
-                }
-                if (normalizedQuery && size.includes(normalizedQuery) && uniqueSuggestions.size < maxSuggestions) {
-                    uniqueSuggestions.add(product.size);
-                }
-            });
-
-            searchSuggestions.innerHTML = '';
-            if (uniqueSuggestions.size > 0 && query.length > 0) {
-                uniqueSuggestions.forEach(suggestion => {
-                    const item = document.createElement('div');
-                    item.className = 'p-2 cursor-pointer hover:bg-pink-100 transition duration-100 border-b border-gray-100 last:border-b-0 text-gray-800';
-                    item.textContent = suggestion;
-                    // Usamos mousedown para que el evento click no pierda el foco del input
-                    item.addEventListener('mousedown', (e) => {
-                        e.preventDefault(); 
-                        searchInput.value = suggestion;
-                        handleSearch();
-                        searchSuggestions.classList.add('hidden');
-                    });
-                    searchSuggestions.appendChild(item);
-                });
-                searchSuggestions.classList.remove('hidden');
-            } else {
-                searchSuggestions.classList.add('hidden');
-            }
-        }
-
-        // --- UI RENDERING & HELPERS ---
-
-        function renderSizeQuantityInputs() {
-            sizeQuantityContainer.innerHTML = '';
-
-            availableSizes.forEach(size => {
-                const container = document.createElement('div');
-                container.className = 'flex flex-col items-center bg-gray-50 p-3 rounded-lg border border-gray-200';
-                
-                const label = document.createElement('label');
-                label.htmlFor = `quantity-${size}`;
-                label.className = 'text-sm font-medium text-gray-700 mb-2';
-                label.textContent = `Talla ${size}`;
-                
-                const input = document.createElement('input');
-                input.type = 'number';
-                input.id = `quantity-${size}`;
-                input.min = '0';
-                input.placeholder = '0';
-                input.className = 'size-quantity-input';
-                input.addEventListener('input', updateTotalStockDisplay);
-                
-                container.appendChild(label);
-                container.appendChild(input);
-                sizeQuantityContainer.appendChild(container);
-            });
-        }
-        
-        function updateTotalStockDisplay() {
-            let total = 0;
-            availableSizes.forEach(size => {
-                const input = document.getElementById(`quantity-${size}`);
-                if (input) {
-                    total += parseInt(input.value, 10) || 0;
-                }
-            });
-            totalStockDisplay.textContent = total;
-        }
-        
-        function renderSizeFilterButtons() {
-            sizeFilterContainer.innerHTML = '';
-            
-            // Botón TODOS
-            sizeFilterContainer.innerHTML += `<button type="button" data-filter-type="size" data-filter-value="TODOS" class="filter-button px-3 py-1 bg-gray-200 text-gray-700 text-sm rounded-full hover:bg-gray-300 transition duration-150 ${selectedSizeFilter === 'TODOS' ? 'selected' : ''}">TODOS</button>`;
-
-            availableSizes.forEach(size => {
-                const button = document.createElement('button');
-                button.type = 'button';
-                button.textContent = size;
-                button.className = `filter-button px-3 py-1 bg-pink-100 text-pink-700 text-sm rounded-full hover:bg-pink-200 transition duration-150 ${selectedSizeFilter === size ? 'selected' : ''}`;
-                button.setAttribute('data-filter-type', 'size');
-                button.setAttribute('data-filter-value', size);
-                sizeFilterContainer.appendChild(button);
-            });
-            
-            sizeFilterContainer.querySelectorAll('.filter-button').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    // Si se hace clic en el propio botón, obtenemos su valor.
-                    handleFilterClick('size', e.target.getAttribute('data-filter-value'));
-                });
-            });
-        }
-        
-        function renderCategoryFilterButtons() {
-            categoryFilterContainer.innerHTML = '';
-            
-            // Botón TODOS
-            categoryFilterContainer.innerHTML += `<button type="button" data-filter-type="category" data-filter-value="TODOS" class="filter-button px-3 py-1 bg-gray-200 text-gray-700 text-sm rounded-full hover:bg-gray-300 transition duration-150 ${selectedCategoryFilter === 'TODOS' ? 'selected' : ''}">TODOS</button>`;
-            
-            currentCategories.forEach(category => {
-                const button = document.createElement('button');
-                button.type = 'button';
-                button.textContent = category.name;
-                button.className = `filter-button px-3 py-1 bg-pink-100 text-pink-700 text-sm rounded-full hover:bg-pink-200 transition duration-150 ${selectedCategoryFilter === category.name ? 'selected' : ''}`;
-                button.setAttribute('data-filter-type', 'category');
-                button.setAttribute('data-filter-value', category.name);
-                categoryFilterContainer.appendChild(button);
-            });
-
-            categoryFilterContainer.querySelectorAll('.filter-button').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    handleFilterClick('category', e.target.getAttribute('data-filter-value'));
-                });
-            });
-        }
-
-        function renderColorFilterButtons() {
-            colorFilterContainer.innerHTML = '';
-            
-            // Botón TODOS
-            colorFilterContainer.innerHTML += `<button type="button" data-filter-type="color" data-filter-value="TODOS" class="filter-button px-3 py-1 bg-gray-200 text-gray-700 text-sm rounded-full hover:bg-gray-300 transition duration-150 ${selectedColorFilter === 'TODOS' ? 'selected' : ''}">TODOS</button>`;
-            
-            currentColors.forEach(color => {
-                const button = document.createElement('button');
-                button.type = 'button';
-                button.className = `filter-button flex items-center px-3 py-1 bg-pink-100 text-pink-700 text-sm rounded-full hover:bg-pink-200 transition duration-150 ${selectedColorFilter === color.name ? 'selected' : ''}`;
-                button.setAttribute('data-filter-type', 'color');
-                button.setAttribute('data-filter-value', color.name);
-                button.innerHTML = `
-                    <span class="color-dot-small mr-2" style="background-color: ${color.hex};"></span>
-                    <span>${color.name}</span>
-                `;
-                colorFilterContainer.appendChild(button);
-            });
-
-            colorFilterContainer.querySelectorAll('.filter-button').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    // Necesitamos obtener el valor del atributo data-filter-value, 
-                    // ya sea del botón o de un span/dot interno.
-                    let value = e.target.getAttribute('data-filter-value');
-                    if (!value) { 
-                        // Si el clic fue en un elemento hijo (span o dot), subimos al padre .filter-button
-                        value = e.target.closest('.filter-button')?.getAttribute('data-filter-value'); 
-                    }
-                    if (value) {
-                         handleFilterClick('color', value);
-                    }
-                });
-            });
-        }
-
-        function renderInventory(productsToDisplay) {
-            // Actualizar estadísticas
-            updateStatistics(productsToDisplay);
-            
-            // Mostrar/ocultar mensaje de no datos
-            noDataMessage.classList.toggle('hidden', productsToDisplay.length > 0);
-            
-            // Renderizar según el modo de vista actual
-            if (currentViewMode === 'grid') {
-                inventoryGrid.classList.remove('hidden');
-                inventoryTable.classList.add('hidden');
-                renderInventoryGrid(productsToDisplay);
-            } else {
-                inventoryGrid.classList.add('hidden');
-                inventoryTable.classList.remove('hidden');
-                renderInventoryTable(productsToDisplay);
-            }
-            
-            // Re-inicializar iconos después de renderizar el inventario
-            initializeLucideIcons(); 
-        }
-
-        function renderInventoryGrid(productsToDisplay) {
-            inventoryGrid.innerHTML = '';
-            totalProductsSpan.textContent = productsToDisplay.length;
-
-            productsToDisplay.forEach(product => {
-                inventoryGrid.appendChild(createProductCard(product));
-            });
-        }
-
-        function renderInventoryTable(productsToDisplay) {
-            inventoryTableBody.innerHTML = '';
-            totalProductsSpan.textContent = productsToDisplay.length;
-
-            productsToDisplay.forEach(product => {
-                inventoryTableBody.appendChild(createProductTableRow(product));
-            });
-        }
-
-        function updateStatistics(productsToDisplay) {
-            // Actualizar estadísticas generales
-            totalProductsStat.textContent = productsToDisplay.length;
-            
-            // Calcular valor total del inventario
-            const totalValue = productsToDisplay.reduce((sum, product) => {
-                return sum + (product.price * product.stock);
-            }, 0);
-            totalValueStat.textContent = formatPrice(totalValue);
-            
-            // Calcular productos con stock bajo (< 5)
-            const lowStockCount = productsToDisplay.filter(product => product.stock < 5).length;
-            lowStockStat.textContent = lowStockCount;
-            
-            // Calcular categorías activas
-            const activeCategories = new Set(productsToDisplay.map(product => product.category)).size;
-            totalCategoriesStat.textContent = activeCategories;
-        }
-
-        function renderCategorySelect() {
-            const currentSelectedValue = categorySelect.value;
-            categorySelect.innerHTML = '<option value="" disabled selected>Seleccione Categoría</option>';
-            
-            const hasPreRequisites = currentCategories.length > 0 && currentColors.length > 0;
-            productPreRequisiteWarning.classList.toggle('hidden', hasPreRequisites);
-            
-            if (currentCategories.length === 0) {
-                categorySelect.disabled = true;
-            } else {
-                categorySelect.disabled = false;
-                currentCategories.forEach(category => {
-                    const option = document.createElement('option');
-                    option.value = category.name;
-                    option.textContent = category.name;
-                    if (category.name === currentSelectedValue) { option.selected = true; }
-                    categorySelect.appendChild(option);
-                });
-            }
-        }
-        
-        function renderColorSelect() {
-            const currentSelectedValue = colorSelect.value;
-            colorSelect.innerHTML = '<option value="" disabled selected>Seleccione Color</option>';
-            
-            const hasPreRequisites = currentCategories.length > 0 && currentColors.length > 0;
-            productPreRequisiteWarning.classList.toggle('hidden', hasPreRequisites);
-
-            if (currentColors.length === 0) {
-                colorSelect.disabled = true;
-            } else {
-                colorSelect.disabled = false;
-                currentColors.forEach(color => {
-                    const option = document.createElement('option');
-                    option.value = color.id; // Usamos el ID del color para referencia en el formulario
-                    option.textContent = color.name;
-                    if (color.id === currentSelectedValue) { option.selected = true; }
-                    colorSelect.appendChild(option);
-                });
-            }
-        }
-
-        function renderCategoryManagement() {
-            categoryChipsContainer.innerHTML = '';
-            const noCategories = currentCategories.length === 0;
-            categoryChipsContainer.classList.toggle('justify-center', noCategories);
-            if (noCategories) {
-                categoryChipsContainer.innerHTML = `<p class="text-gray-500 italic text-sm">Aún no hay categorías definidas.</p>`;
-                return;
-            }
-
-            currentCategories.forEach(category => {
-                const chip = document.createElement('button');
-                chip.type = 'button';
-                chip.className = 'flex items-center text-sm px-3 py-1 bg-pink-100 text-pink-700 rounded-full font-medium hover:bg-red-200 transition duration-150 group';
-                chip.title = `Clic para eliminar categoría: ${category.name}`;
-                chip.innerHTML = `
-                    <span>${category.name}</span>
-                    <i data-lucide="trash-2" class="w-4 h-4 ml-2 text-pink-500 group-hover:text-red-700"></i>
-                `;
-                chip.onclick = () => deleteCategory(category.id);
-                categoryChipsContainer.appendChild(chip);
-            });
-            // Re-renderizar iconos en el área de gestión
-            initializeLucideIcons(); 
-        }
-        
-        function renderColorManagement() {
-            colorChipsContainer.innerHTML = '';
-            const noColors = currentColors.length === 0;
-            colorChipsContainer.classList.toggle('justify-center', noColors);
-            if (noColors) {
-                colorChipsContainer.innerHTML = `<p class="text-gray-500 italic text-sm">Aún no hay colores definidos.</p>`;
-                return;
-            }
-
-            currentColors.forEach(color => {
-                const chip = document.createElement('button');
-                chip.type = 'button';
-                chip.className = 'flex items-center text-sm px-3 py-1 bg-pink-100 text-pink-700 rounded-full font-medium hover:bg-red-200 transition duration-150 group';
-                chip.title = `Clic para eliminar color: ${color.name} (${color.hex})`;
-                chip.innerHTML = `
-                    <span class="color-dot-small mr-2" style="background-color: ${color.hex};"></span>
-                    <span>${color.name}</span>
-                    <i data-lucide="trash-2" class="w-4 h-4 ml-2 text-pink-500 group-hover:text-red-700"></i>
-                `;
-                chip.onclick = () => deleteColor(color.id);
-                colorChipsContainer.appendChild(chip);
-            });
-            // Re-renderizar iconos en el área de gestión
-            initializeLucideIcons(); 
-        }
-
-        function createProductCard(product) {
-            const card = document.createElement('div');
-            card.className = 'product-card';
-            
-            // Determinar clase de stock
-            let stockClass = 'stock-high';
-            let stockText = 'Alto';
-            if (product.stock < 5) {
-                stockClass = 'stock-low';
-                stockText = 'Bajo';
-            } else if (product.stock < 10) {
-                stockClass = 'stock-medium';
-                stockText = 'Medio';
-            }
-
-            card.innerHTML = `
-                <div class="p-4">
-                    <div class="flex justify-between items-start mb-3">
-                        <span class="text-xs font-medium text-pink-600 bg-pink-50 px-2 py-1 rounded-full">${product.category || 'SIN CATEGORÍA'}</span>
-                        <span class="stock-indicator ${stockClass}">${stockText}</span>
-                    </div>
-                    
-                    <div class="flex items-center mb-3">
-                        <span class="color-dot" style="background-color: ${product.colorHex};" title="Color: ${product.colorName}"></span>
-                        <h3 class="text-lg font-bold text-gray-800 truncate">${product.name}</h3>
-                    </div>
-                    
-                    <div class="grid grid-cols-2 gap-2 text-sm text-gray-600 mb-4">
-                        <div class="flex items-center">
-                            <i data-lucide="ruler" class="w-4 h-4 mr-1 text-gray-400"></i>
-                            <span>Talla: ${product.size}</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i data-lucide="palette" class="w-4 h-4 mr-1 text-gray-400"></i>
-                            <span>${product.colorName}</span>
-                        </div>
-                    </div>
-                    
-                    <div class="flex justify-between items-center">
-                        <span class="text-lg font-bold text-gray-800">${formatPrice(product.price)}</span>
-                        <div class="flex items-center space-x-2">
-                            <span class="text-sm font-medium text-gray-700">Stock:</span>
-                            <span class="text-lg font-bold ${stockClass.replace('stock-', 'text-')}">${product.stock}</span>
-                        </div>
-                    </div>
+    <!-- Pie de página -->
+    <footer class="mt-12 border-t border-gray-200 py-6">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <p class="text-sm text-gray-600">© 2024 Jessica Boutique. Todos los derechos reservados.</p>
+                    <p class="text-xs text-gray-500 mt-1">Sistema de Gestión de Inventario v2.1</p>
                 </div>
-                
-                <div class="bg-gray-50 p-3 border-t border-gray-100 flex justify-between">
-                    <div class="flex space-x-1">
-                        <button type="button" data-action="decrement" class="p-1 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition duration-150" title="Reducir Stock">
-                            <i data-lucide="minus" class="w-4 h-4"></i>
-                        </button>
-                        <button type="button" data-action="increment" class="p-1 bg-green-100 text-green-600 rounded-lg hover:bg-green-200 transition duration-150" title="Aumentar Stock">
-                            <i data-lucide="plus" class="w-4 h-4"></i>
-                        </button>
-                    </div>
-                    <button type="button" class="p-1 bg-gray-200 text-gray-600 rounded-lg hover:bg-red-500 hover:text-white transition duration-150" title="Eliminar Producto">
-                        <i data-lucide="trash-2" class="w-4 h-4"></i>
-                    </button>
+                <div class="flex gap-6">
+                    <a href="#" class="text-sm text-gray-600 hover:text-pink-600">Política de Privacidad</a>
+                    <a href="#" class="text-sm text-gray-600 hover:text-pink-600">Términos de Servicio</a>
+                    <a href="#" class="text-sm text-gray-600 hover:text-pink-600">Soporte</a>
                 </div>
-            `;
+            </div>
+        </div>
+    </footer>
 
-            // Manejar eventos de los botones
-            const decrementBtn = card.querySelector('button[data-action="decrement"]');
-            const incrementBtn = card.querySelector('button[data-action="increment"]');
-            const deleteBtn = card.querySelector('button:last-child');
-
-            decrementBtn.addEventListener('click', () => {
-                if (product.stock > 0) { 
-                    updateStock(product.id, product.stock - 1); 
-                } else {
-                    displayError('El stock no puede ser negativo.');
-                }
-            });
-            
-            incrementBtn.addEventListener('click', () => {
-                updateStock(product.id, product.stock + 1);
-            });
-            
-            deleteBtn.addEventListener('click', () => deleteProduct(product.id));
-
-            return card;
-        }
-
-        function createProductTableRow(product) {
-            const row = document.createElement('tr');
-            
-            // Determinar clase de stock
-            let stockClass = 'stock-high';
-            if (product.stock < 5) {
-                stockClass = 'stock-low';
-            } else if (product.stock < 10) {
-                stockClass = 'stock-medium';
-            }
-
-            row.innerHTML = `
-                <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="flex items-center">
-                        <span class="color-dot-small mr-3" style="background-color: ${product.colorHex};"></span>
-                        <div>
-                            <div class="text-sm font-medium text-gray-900">${product.name}</div>
-                            <div class="text-sm text-gray-500">${product.colorName}</div>
-                        </div>
-                    </div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="text-sm text-gray-900">${product.category}</div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="text-sm text-gray-900">${product.size}</div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="flex items-center">
-                        <span class="color-dot-small mr-2" style="background-color: ${product.colorHex};"></span>
-                        <span class="text-sm text-gray-900">${product.colorName}</span>
-                    </div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="text-sm text-gray-900 font-medium">${formatPrice(product.price)}</div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                    <div class="flex items-center">
-                        <span class="stock-indicator ${stockClass} mr-2">${product.stock}</span>
-                        <div class="flex space-x-1">
-                            <button type="button" data-action="decrement" class="p-1 bg-red-100 text-red-600 rounded hover:bg-red-200 transition duration-150" title="Reducir Stock">
-                                <i data-lucide="minus" class="w-3 h-3"></i>
-                            </button>
-                            <button type="button" data-action="increment" class="p-1 bg-green-100 text-green-600 rounded hover:bg-green-200 transition duration-150" title="Aumentar Stock">
-                                <i data-lucide="plus" class="w-3 h-3"></i>
-                            </button>
-                        </div>
-                    </div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <button type="button" class="text-red-600 hover:text-red-900 transition duration-150" title="Eliminar Producto">
-                        <i data-lucide="trash-2" class="w-4 h-4"></i>
-                    </button>
-                </td>
-            `;
-
-            // Manejar eventos de los botones
-            const decrementBtn = row.querySelector('button[data-action="decrement"]');
-            const incrementBtn = row.querySelector('button[data-action="increment"]');
-            const deleteBtn = row.querySelector('button:last-child');
-
-            decrementBtn.addEventListener('click', () => {
-                if (product.stock > 0) { 
-                    updateStock(product.id, product.stock - 1); 
-                } else {
-                    displayError('El stock no puede ser negativo.');
-                }
-            });
-            
-            incrementBtn.addEventListener('click', () => {
-                updateStock(product.id, product.stock + 1);
-            });
-            
-            deleteBtn.addEventListener('click', () => deleteProduct(product.id));
-
-            return row;
-        }
-
-        function toggleViewMode() {
-            if (currentViewMode === 'grid') {
-                currentViewMode = 'table';
-                toggleViewBtn.innerHTML = `
-                    <i data-lucide="layout-grid" class="w-4 h-4 mr-1"></i>
-                    Vista de Tarjetas
-                `;
-            } else {
-                currentViewMode = 'grid';
-                toggleViewBtn.innerHTML = `
-                    <i data-lucide="table" class="w-4 h-4 mr-1"></i>
-                    Vista de Tabla
-                `;
-            }
-            loadInventory();
-        }
-
-        function clearFilters() {
-            selectedCategoryFilter = 'TODOS';
-            selectedSizeFilter = 'TODOS';
-            selectedColorFilter = 'TODOS';
-            searchInput.value = '';
-            renderCategoryFilterButtons();
-            renderSizeFilterButtons();
-            renderColorFilterButtons();
-            handleSearch();
-        }
-
-
-        // --- INICIALIZACIÓN ---
-        function initApp() {
-            // Inicializar las dependencias y la data inicial
-            loadManagementData(); 
-            updateTotalStockDisplay();
-            updateSortButtonState(); // Inicializa el estado visual de ordenación
-            
-            // Configurar Listeners de Navegación
-            navManageBtn.addEventListener('click', () => switchView('management'));
-            navAddBtn.addEventListener('click', () => switchView('add-product'));
-            backToInventory1.addEventListener('click', () => switchView('inventory'));
-            backToInventory2.addEventListener('click', () => switchView('inventory'));
-            toggleViewBtn.addEventListener('click', toggleViewMode);
-            clearFiltersButton.addEventListener('click', clearFilters);
-
-            // Event Listeners de formularios y búsqueda
-            productForm.addEventListener('submit', saveProductVariants);
-            categoryForm.addEventListener('submit', saveCategory);
-            colorForm.addEventListener('submit', saveColor);
-            
-            // Búsqueda y Sugerencias
-            searchInput.addEventListener('input', handleSearch); 
-            searchInput.addEventListener('focus', handleSearch); 
-            // Manejamos el blur con un timeout para permitir el click en las sugerencias
-            searchInput.addEventListener('blur', () => {
-                setTimeout(() => { searchSuggestions.classList.add('hidden'); }, 200);
-            });
-            
-            // Eventos de Ordenación
-            sortNameButton.addEventListener('click', () => handleSortChange('name-asc'));
-            sortPriceButton.addEventListener('click', () => handleSortChange('price-desc'));
-            sortStockButton.addEventListener('click', () => handleSortChange('stock-desc'));
-
-            // Eventos de Importar/Exportar
-            exportDataButton.addEventListener('click', exportData);
-            importFileInput.addEventListener('change', importData);
-
-            // Iniciar en la vista de Inventario
-            switchView('inventory'); 
-        }
+    <!-- Script para inicializar los iconos -->
+    <script>
+        // Inicializar los iconos de Lucide
+        lucide.createIcons();
         
-        // Ejecutar la inicialización cuando el script se cargue
-        initApp(); 
-
+        // Agregar interactividad a los filtros
+        document.addEventListener('DOMContentLoaded', function() {
+            // Seleccionar todos los botones de filtro
+            const filterButtons = document.querySelectorAll('.filter-button');
+            
+            // Agregar evento click a cada botón de filtro
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remover la clase 'selected' de todos los botones
+                    filterButtons.forEach(btn => btn.classList.remove('selected'));
+                    
+                    // Agregar clases al botón seleccionado
+                    this.classList.add('selected');
+                    this.classList.remove('bg-gray-100', 'text-gray-700');
+                    this.classList.add('bg-pink-600', 'text-white');
+                });
+            });
+            
+            // Agregar evento click a los enlaces de navegación
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remover la clase 'active' de todos los enlaces
+                    navLinks.forEach(navLink => navLink.classList.remove('active'));
+                    
+                    // Agregar la clase 'active' al enlace clickeado
+                    this.classList.add('active');
+                    
+                    // Aquí podrías agregar lógica para cambiar el contenido de la página
+                    // según la sección seleccionada
+                });
+            });
+        });
     </script>
 </body>
 </html>
