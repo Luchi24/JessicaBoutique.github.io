@@ -3,829 +3,477 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jessica Boutique | Gestión de Inventario</title>
-    <!-- Carga de Tailwind CSS -->
+    <title>Jessica Boutique | Sistema de Gestión de Inventario</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN (solo para desarrollo) -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Configuración de fuente Inter -->
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- CSS Personalizado -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    
+    <!-- Configuración de Tailwind personalizada -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        pink: {
+                            50: '#fdf2f8',
+                            100: '#fce7f3',
+                            200: '#fbcfe8',
+                            300: '#f9a8d4',
+                            400: '#f472b6',
+                            500: '#ec4899',
+                            600: '#db2777',
+                            700: '#be185d',
+                            800: '#9d174d',
+                            900: '#831843',
+                            950: '#500724',
+                        },
+                        rose: {
+                            50: '#fff1f2',
+                            100: '#ffe4e6',
+                            500: '#f43f5e',
+                            600: '#e11d48',
+                        }
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'slide-up': 'slideUp 0.3s ease-out',
+                        'slide-down': 'slideDown 0.3s ease-out',
+                        'pulse-glow': 'pulseGlow 2s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        slideDown: {
+                            '0%': { transform: 'translateY(-20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { boxShadow: '0 0 5px rgba(236, 72, 153, 0.3)' },
+                            '50%': { boxShadow: '0 0 20px rgba(236, 72, 153, 0.6)' },
+                        }
+                    },
+                    backgroundImage: {
+                        'gradient-radial-pink': 'radial-gradient(circle at center, rgba(251, 207, 232, 0.4) 0%, rgba(252, 231, 243, 0.1) 70%)',
+                        'gradient-navbar': 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(253, 242, 248, 0.98) 100%)',
+                    }
+                }
+            },
+            plugins: [],
+        }
+    </script>
+    
+    <!-- Preload crítico -->
+    <link rel="preload" href="js/utils.js" as="script">
+    <link rel="preload" href="components/header.html" as="fetch" crossorigin="anonymous">
+    
+    <!-- Meta tags para SEO -->
+    <meta name="description" content="Sistema de gestión de inventario para Jessica Boutique. Controla stock, categorías, productos y estadísticas en tiempo real.">
+    <meta name="keywords" content="inventario, boutique, moda, gestión, stock, productos, Jessica Boutique">
+    <meta name="author" content="Jessica Boutique">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Jessica Boutique | Sistema de Gestión de Inventario">
+    <meta property="og:description" content="Sistema profesional de gestión de inventario para boutiques de moda">
+    <meta property="og:type" content="website">
+    
+    <!-- Apple Touch Icon -->
+    <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png">
+    
+    <!-- Manifest para PWA (futuro) -->
+    <!-- <link rel="manifest" href="manifest.json"> -->
+    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
-        body {
+        /* Estilos críticos inline para mejor rendimiento inicial */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+        
+        .loading-logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #ec4899, #db2777);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .loading-text {
             font-family: 'Inter', sans-serif;
-            background-color: #f8f8f8;
+            font-weight: 500;
+            color: #db2777;
+            font-size: 1.1rem;
         }
-        /* Estilo para el botón de filtro seleccionado */
-        .filter-button.selected {
-            @apply bg-pink-600 text-white shadow-md ring-2 ring-pink-400;
-        }
-        /* Ocultar el scroll en las sugerencias por estética */
-        #search-suggestions::-webkit-scrollbar {
-            width: 6px;
-        }
-        #search-suggestions::-webkit-scrollbar-thumb {
-            background: #fbcfe8; /* pink-200 */
-            border-radius: 3px;
+        
+        /* FOUC prevention */
+        .js-loading * {
+            animation-play-state: paused !important;
+            transition: none !important;
         }
     </style>
 </head>
-<body class="min-h-screen">
-
-    <!-- Contenedor Principal -->
-    <div class="container mx-auto p-4 md:p-8">
-
-        <!-- Encabezado y Autenticación -->
-        <header class="bg-pink-600 text-white p-6 rounded-xl shadow-lg mb-8">
-            <h1 class="text-3xl font-extrabold tracking-tight">
-                Gestión de Inventario - Jessica Boutique
-            </h1>
-            <div id="auth-status" class="mt-3 text-sm flex flex-col md:flex-row md:items-center">
-                <span class="font-medium mr-2">Usuario ID:</span>
-                <span id="user-id-display" class="bg-pink-700 p-1 px-2 rounded-md text-xs font-mono truncate">USUARIO_LOCAL_DEMO</span>
-            </div>
-            <div id="loading-indicator" class="mt-2 text-yellow-300 hidden">Cargando datos...</div>
-            <div id="error-message" class="mt-2 text-red-300 hidden"></div>
-            
-            <!-- Advertencia de no persistencia -->
-            <div id="persistence-warning" class="mt-4 p-3 bg-yellow-100 text-yellow-800 rounded-lg text-sm font-medium border border-yellow-300">
-                ⚠️ **MODO DE DEMOSTRACIÓN SIN BASE DE DATOS:** Los datos se guardan solo en la memoria de esta página y **se perderán al recargar o cerrar la pestaña.**
-            </div>
-
-            <!-- Nuevos Botones de Importar/Exportar -->
-            <div class="mt-4 flex flex-col md:flex-row gap-3">
-                <button id="export-data-button" type="button" 
-                        class="bg-blue-700 hover:bg-blue-800 text-white font-bold p-3 rounded-lg transition duration-150 shadow-md flex items-center justify-center">
-                    <!-- Icono de Descarga (Exportar) -->
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                    Exportar Datos
-                </button>
-
-                <label for="import-file-input" class="cursor-pointer bg-purple-700 hover:bg-purple-800 text-white font-bold p-3 rounded-lg transition duration-150 shadow-md flex items-center justify-center">
-                    <!-- Icono de Carga (Importar) -->
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
-                    Importar Datos
-                </label>
-                <input type="file" id="import-file-input" accept=".json" class="hidden">
-            </div>
-            
+<body class="font-inter bg-gradient-to-br from-pink-50 via-white to-rose-50 min-h-screen js-loading">
+    
+    <!-- Pantalla de carga inicial -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loading-logo">
+            <i data-lucide="shopping-bag" class="text-white w-10 h-10"></i>
+        </div>
+        <div class="loading-text">Cargando Jessica Boutique...</div>
+    </div>
+    
+    <!-- Contenedor principal -->
+    <div id="app" class="min-h-screen flex flex-col opacity-0 transition-opacity duration-500">
+        
+        <!-- Header/Navbar -->
+        <header id="header-container" class="sticky top-0 z-50 bg-gradient-navbar backdrop-blur-md border-b border-pink-200/50 shadow-sm">
+            <!-- Contenido cargado dinámicamente -->
         </header>
-
-        <!-- Barra de Búsqueda, Botón de Stock y Filtros -->
-        <div class="bg-white p-6 rounded-xl shadow-lg mb-8">
-            <h2 class="text-2xl font-semibold mb-4 text-gray-800">Búsqueda y Filtros</h2>
-            
-            <!-- Barra de Búsqueda y Botón de Acción -->
-            <div class="flex items-stretch gap-4 mb-4">
-                <div class="relative flex-grow">
-                    <input type="text" id="search-input" placeholder="Buscar por Nombre del producto..."
-                           class="w-full p-3 border border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500 text-lg">
-                    <!-- Contenedor de Sugerencias -->
-                    <div id="search-suggestions" class="absolute z-10 w-full bg-white border border-gray-300 rounded-lg mt-1 shadow-xl max-h-48 overflow-y-auto hidden">
-                        <!-- Sugerencias se cargarán aquí -->
+        
+        <!-- Contenido principal -->
+        <main id="app-container" class="flex-grow container mx-auto px-4 py-6 md:py-8 lg:py-10 max-w-7xl">
+            <!-- Las secciones se cargarán aquí dinámicamente -->
+            <div id="default-content" class="text-center py-20">
+                <div class="w-24 h-24 bg-gradient-to-r from-pink-400 to-rose-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+                    <i data-lucide="shopping-bag" class="text-white w-12 h-12"></i>
+                </div>
+                <h1 class="text-3xl font-bold text-gray-800 mb-3">Bienvenida a Jessica Boutique</h1>
+                <p class="text-gray-600 max-w-md mx-auto mb-8">Sistema de gestión de inventario profesional para tu boutique de moda</p>
+                <div class="animate-pulse-glow">
+                    <div class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-pink-500 to-rose-500 text-white rounded-xl font-semibold">
+                        <i data-lucide="package" class="w-5 h-5"></i>
+                        Cargando inventario...
                     </div>
                 </div>
-                <!-- Botón "Ver Stock" con scroll -->
-                <button id="view-stock-button" type="button" 
-                        class="bg-pink-500 hover:bg-pink-600 text-white font-bold p-3 rounded-lg transition duration-150 shadow-md flex-shrink-0">
-                    Ver Stock ↓
-                </button>
             </div>
-
-            <!-- Filtros por Categoría -->
-            <div class="mb-4 pt-4 border-t border-gray-100">
-                <p class="text-sm font-medium text-gray-700 mb-2">Filtrar por Categoría:</p>
-                <div id="category-filter-container" class="flex flex-wrap gap-2">
-                    <button type="button" data-filter-type="category" data-filter-value="TODOS" class="filter-button selected px-3 py-1 bg-gray-200 text-gray-700 text-sm rounded-full hover:bg-gray-300 transition duration-150">TODOS</button>
-                    <!-- Los botones de categoría se cargarán aquí -->
-                </div>
-            </div>
-
-            <!-- Filtros por Talla -->
-            <div>
-                <p class="text-sm font-medium text-gray-700 mb-2">Filtrar por Talla:</p>
-                <div id="size-filter-container" class="flex flex-wrap gap-2">
-                    <button type="button" data-filter-type="size" data-filter-value="TODOS" class="filter-button selected px-3 py-1 bg-gray-200 text-gray-700 text-sm rounded-full hover:bg-gray-300 transition duration-150">TODOS</button>
-                    <!-- Las tallas fijas se inicializan con JS -->
+        </main>
+        
+        <!-- Footer -->
+        <footer id="footer-container" class="bg-white/80 border-t border-pink-100">
+            <!-- Contenido cargado dinámicamente -->
+        </footer>
+        
+        <!-- Modal global (para mensajes, confirmaciones, etc.) -->
+        <div id="global-modal" class="fixed inset-0 z-[100] hidden">
+            <div class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+            <div class="absolute inset-0 flex items-center justify-center p-4">
+                <div id="modal-content" class="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto animate-slide-up">
+                    <!-- Contenido del modal -->
                 </div>
             </div>
         </div>
-
-        <!-- Sección: Gestión de Categorías -->
-        <div class="bg-white p-6 rounded-xl shadow-lg mb-8">
-            <h2 class="text-2xl font-semibold mb-4 text-gray-800">Gestión de Categorías</h2>
-            <form id="category-form" class="flex flex-col md:flex-row gap-4 mb-4">
-                <input type="text" id="new-category-name" placeholder="Nueva Categoría (Ej: Jeans, Vestidos, etc.)" required
-                       class="flex-grow p-3 border border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500">
-                <button type="submit" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold p-3 rounded-lg transition duration-150 shadow-md md:w-32">
-                    + Añadir
-                </button>
-            </form>
-            <p class="text-sm font-medium text-gray-700 mb-2 mt-4">Categorías Guardadas (Clic en chip para eliminar):</p>
-            <!-- Contenedor de chips de Categoría -->
-            <div id="category-chips-container" class="flex flex-wrap gap-2 pt-2 border-t mt-2">
-                <p id="no-categories-message-display" class="text-gray-500 italic text-sm">Cargando categorías...</p>
+        
+        <!-- Toast/Notificaciones -->
+        <div id="toast-container" class="fixed bottom-4 right-4 z-[90] space-y-3"></div>
+        
+        <!-- Offline indicator -->
+        <div id="offline-indicator" class="fixed top-4 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg hidden z-[80]">
+            <div class="flex items-center gap-2">
+                <i data-lucide="wifi-off" class="w-4 h-4"></i>
+                <span>Sin conexión a internet</span>
             </div>
         </div>
-
-        <!-- Formulario para Agregar Producto (LAYOUT REDISEÑADO) -->
-        <div class="bg-white p-6 rounded-xl shadow-lg mb-8">
-            <h2 class="text-2xl font-semibold mb-4 text-gray-800">Agregar Nuevo Producto</h2>
-            <!-- Usamos un grid de 6 columnas en desktop para la distribución de campos -->
-            <form id="product-form" class="grid grid-cols-1 md:grid-cols-6 gap-4">
-                
-                <!-- Fila 1 -->
-                <input type="text" id="name" placeholder="Nombre (Ej: Vestido Floral)" required
-                       class="col-span-1 md:col-span-3 p-3 border border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500">
-
-                <!-- SELECT de Categoría (Dinámico) -->
-                <select id="category-select" required
-                       class="col-span-1 md:col-span-3 p-3 border border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500 text-gray-700 disabled:bg-gray-100 disabled:text-gray-500">
-                    <option value="" disabled selected>Seleccione Categoría</option>
-                    <!-- Opciones de categoría se llenarán con JS -->
-                </select>
-                
-                <!-- Fila 2 -->
-                <!-- SELECT de Talla (Fijo) -->
-                <select id="size-select" required
-                       class="col-span-1 md:col-span-2 p-3 border border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500 text-gray-700">
-                    <option value="" disabled selected>Seleccione Talla</option>
-                    <!-- Las tallas fijas se inicializarán en JS -->
-                </select>
-
-                <input type="number" id="price" placeholder="Precio (Ej: 49.99)" step="0.01" min="0.01" required
-                       class="col-span-1 md:col-span-2 p-3 border border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500">
-
-                <input type="number" id="stock" placeholder="Stock Inicial" min="0" required
-                       class="col-span-1 md:col-span-1 p-3 border border-gray-300 rounded-lg focus:ring-pink-500 focus:border-pink-500">
-
-                <button type="submit"
-                        class="col-span-1 md:col-span-1 bg-green-500 hover:bg-green-600 text-white font-bold p-3 rounded-lg transition duration-150 shadow-md">
-                    Agregar
-                </button>
-            </form>
-            <p id="product-category-warning" class="text-sm text-red-500 mt-2 hidden">
-                ⚠️ Primero debe agregar al menos una categoría en la sección superior para poder añadir productos.
-            </p>
-        </div>
-
-        <!-- Inventario Actual (Objetivo de scroll) -->
-        <div id="inventory-section" class="bg-white p-6 rounded-xl shadow-lg">
-            <h2 class="text-2xl font-semibold mb-4 text-gray-800">Inventario Actual (<span id="total-products">0</span>)</h2>
-            <div id="inventory-list" class="space-y-4">
-                <!-- Los productos se cargarán aquí -->
-                <p id="no-data-message" class="text-center text-gray-500 py-10 hidden">
-                    ¡Tu inventario está vacío! Agrega tu primer producto arriba.
-                </p>
-            </div>
-        </div>
-
+        
+        <!-- Back to top button -->
+        <button id="back-to-top" class="fixed bottom-6 right-6 bg-gradient-to-r from-pink-500 to-rose-500 text-white p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 opacity-0 transform translate-y-10 z-40">
+            <i data-lucide="chevron-up" class="w-5 h-5"></i>
+        </button>
+        
     </div>
-
-    <!-- Script de Lógica de la Aplicación (In-Memory) -->
-    <script type="module">
-        // Se ha eliminado toda la dependencia de Firebase/Firestore.
-        // La aplicación ahora usa solo arrays de JavaScript en memoria.
-        // ADVERTENCIA: Los datos se perderán al recargar la página si no se usa Exportar/Importar.
-
-        // Tallas actualizadas
-        const availableSizes = ['XS', 'S', 'M', 'L', 'Stándard'];
-
-        let userId = 'USUARIO_LOCAL_DEMO'; 
-        
-        // Datos In-Memory de Ejemplo (IDs simplificados)
-        let currentInventory = [
-            { id: 'p1', name: 'Vestido de Noche Rojo', category: 'Vestidos', size: 'M', price: 89.90, stock: 5, timestamp: Date.now() - 10000 },
-            { id: 'p2', name: 'Jeans Clásicos Azul', category: 'Jeans', size: 'L', price: 65.00, stock: 12, timestamp: Date.now() - 5000 },
-        ]; 
-        
-        let currentCategories = [
-            { id: 'c1', name: 'Vestidos' }, 
-            { id: 'c2', name: 'Jeans' },
-            { id: 'c3', name: 'Blusas' }
-        ]; 
-        
-        // Estado de filtros
-        let selectedCategoryFilter = 'TODOS';
-        let selectedSizeFilter = 'TODOS';
-
-        // Elementos del DOM
-        const inventoryList = document.getElementById('inventory-list');
-        const productForm = document.getElementById('product-form');
-        const categoryForm = document.getElementById('category-form');
-        const userIdDisplay = document.getElementById('user-id-display');
-        const totalProductsSpan = document.getElementById('total-products');
-        const loadingIndicator = document.getElementById('loading-indicator');
-        const errorMessage = document.getElementById('error-message');
-        const noDataMessage = document.getElementById('no-data-message');
-        const searchInput = document.getElementById('search-input');
-        const searchSuggestions = document.getElementById('search-suggestions');
-        const newCategoryInput = document.getElementById('new-category-name');
-        const categoryChipsContainer = document.getElementById('category-chips-container');
-        const categorySelect = document.getElementById('category-select');
-        const sizeSelect = document.getElementById('size-select');
-        const categoryWarning = document.getElementById('product-category-warning');
-        const viewStockButton = document.getElementById('view-stock-button');
-        const inventorySection = document.getElementById('inventory-section');
-        const categoryFilterContainer = document.getElementById('category-filter-container');
-        const sizeFilterContainer = document.getElementById('size-filter-container');
-        const exportDataButton = document.getElementById('export-data-button');
-        const importFileInput = document.getElementById('import-file-input');
-
-
-        // --- UTILS ---
-
-        // Función para manejar el formato de precios
-        const formatPrice = (price) => {
-            return new Intl.NumberFormat('es-PE', { style: 'currency', currency: 'PEN' }).format(price);
-        };
-
-        // Función para mostrar mensajes de error (reemplaza alert)
-        const displayError = (message) => {
-            console.error(message);
-            // Implementación simple de notificación de error/éxito en UI
-            const statusMessage = document.getElementById('error-message');
-            statusMessage.textContent = message;
-            statusMessage.classList.remove('hidden');
-            setTimeout(() => {
-                statusMessage.classList.add('hidden');
-            }, 5000); 
-        };
-
-        // Función para mostrar mensaje de éxito
-        const displaySuccess = (message) => {
-            const statusMessage = document.getElementById('error-message');
-            statusMessage.textContent = message;
-            statusMessage.classList.remove('text-red-300');
-            statusMessage.classList.add('text-green-300');
-            statusMessage.classList.remove('hidden');
-            setTimeout(() => {
-                statusMessage.classList.add('hidden');
-                statusMessage.classList.remove('text-green-300');
-                statusMessage.classList.add('text-red-300'); // Volver al estado de error
-            }, 3000);
-        };
-        
-        // Función para el scroll suave
-        const scrollToInventory = () => {
-             inventorySection.scrollIntoView({ behavior: 'smooth' });
-        };
-
-
-        // Función de inicialización de la Aplicación (In-Memory)
-        async function initApp() {
-            userIdDisplay.textContent = userId;
-            loadingIndicator.classList.add('hidden');
-            
-            renderSizeSelectOptions(); // Renderizar opciones de talla en el formulario
-            renderSizeFilterButtons(); // Renderizar botones de filtro de talla
-            loadCategories(); 
-            loadInventory(); 
-        }
-
-
-        // --- PERSISTENCIA (IMPORTAR/EXPORTAR JSON) ---
-        
-        // 1. Exportar Datos a JSON
-        function exportData() {
-            // Empaquetar el inventario y las categorías en un solo objeto
-            const dataToExport = {
-                inventory: currentInventory,
-                categories: currentCategories,
-                exportTime: new Date().toISOString()
-            };
-            
-            const dataStr = JSON.stringify(dataToExport, null, 2); // Formato legible
-            const blob = new Blob([dataStr], { type: "application/json" });
-            const url = URL.createObjectURL(blob);
-            
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `inventario_jessica_boutique_${new Date().toISOString().slice(0, 10)}.json`;
-            
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
-
-            displaySuccess('Datos exportados con éxito como JSON.');
-        }
-
-        // 2. Importar Datos desde JSON
-        function importData(event) {
-            const file = event.target.files[0];
-            if (!file) {
-                return;
-            }
-
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                try {
-                    const importedData = JSON.parse(e.target.result);
-                    
-                    if (!importedData.inventory || !importedData.categories) {
-                        throw new Error("El archivo JSON no contiene las estructuras 'inventory' y 'categories' requeridas.");
-                    }
-
-                    // Reemplazar los arrays en memoria
-                    currentInventory = importedData.inventory;
-                    currentCategories = importedData.categories;
-                    
-                    // Re-renderizar toda la interfaz con los datos nuevos
-                    loadCategories();
-                    loadInventory();
-                    
-                    displaySuccess('Datos importados correctamente. Inventario actualizado.');
-                } catch (error) {
-                    displayError(`Error al procesar el archivo: ${error.message}`);
-                } finally {
-                    // Resetear el input file para permitir la recarga del mismo archivo
-                    importFileInput.value = '';
-                }
-            };
-            
-            reader.onerror = () => {
-                displayError('Error al leer el archivo.');
-                importFileInput.value = '';
-            };
-
-            reader.readAsText(file);
-        }
-
-
-        // --- CATEGORY CRUD OPERATIONS (In-Memory) ---
-
-        // 1. CREAR Categoría
-        function saveCategory(event) {
-            event.preventDefault();
-
-            const name = newCategoryInput.value.trim();
-
-            if (name.length === 0) return;
-
-            const normalizedName = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
-
-            const exists = currentCategories.some(cat => cat.name === normalizedName);
-            if (exists) {
-                displayError(`La categoría "${normalizedName}" ya existe.`);
-                return;
-            }
-            
-            const newId = Date.now().toString() + Math.random().toString(36).substring(2, 9);
-
-            currentCategories.push({
-                id: newId,
-                name: normalizedName,
-                timestamp: new Date().getTime() 
-            });
-            
-            newCategoryInput.value = '';
-            loadCategories(); 
-            loadInventory(); 
-        }
-
-        // 2. LEER/ESCUCHAR Categorías (In-Memory)
-        function loadCategories() {
-            currentCategories.sort((a, b) => a.name.localeCompare(b.name));
-            renderCategoryManagement();
-            renderCategorySelect(); 
-            renderCategoryFilterButtons(); 
-        }
-
-        // 3. ELIMINAR Categoría
-        function deleteCategory(categoryId) {
-            if (!confirm(`¿Estás seguro de que quieres eliminar esta categoría?`)) {
-                return;
-            }
-
-            // Filtrar y actualizar el array
-            currentCategories = currentCategories.filter(cat => cat.id !== categoryId);
-
-            // También actualizamos cualquier producto que use esta categoría (para limpiar)
-            const deletedCategoryName = currentCategories.find(c => c.id === categoryId)?.name;
-             currentInventory = currentInventory.map(product => {
-                if (product.category === deletedCategoryName) {
-                    return { ...product, category: 'SIN CATEGORÍA' };
-                }
-                return product;
-            });
-
-
-            loadCategories();
-            loadInventory(); 
-            displaySuccess('Categoría eliminada.');
-        }
-
-        // --- INVENTORY CRUD OPERATIONS (In-Memory) ---
-
-        // 1. CREAR Producto
-        function saveProduct(event) {
-            event.preventDefault();
-
-            const categoryName = categorySelect.value;
-            const size = sizeSelect.value;
-            if (!categoryName || !size) {
-                 displayError("Debe seleccionar Categoría y Talla.");
-                 return;
-            } 
-
-            const name = document.getElementById('name').value;
-            const price = parseFloat(document.getElementById('price').value);
-            const stock = parseInt(document.getElementById('stock').value, 10);
-
-            if (isNaN(price) || isNaN(stock) || price <= 0 || stock < 0) {
-                 displayError("Por favor, ingrese valores válidos para Precio y Stock.");
-                 return;
-            }
-
-            const newId = Date.now().toString() + Math.random().toString(36).substring(2, 9);
-            
-            const newProduct = {
-                id: newId,
-                name: name.trim(),
-                category: categoryName, 
-                size: size,
-                price: price,
-                stock: stock,
-                timestamp: new Date().getTime() 
-            };
-
-            currentInventory.push(newProduct);
-            
-            productForm.reset(); 
-            categorySelect.value = ''; 
-            sizeSelect.value = ''; 
-            
-            loadInventory(); 
-            displaySuccess(`Producto "${name}" agregado.`);
-        }
-
-        // 2. LEER/ESCUCHAR Inventario (In-Memory)
-        function loadInventory() {
-            currentInventory.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
-            handleSearch(); 
-        }
-
-
-        // 3. ACTUALIZAR Stock
-        function updateStock(productId, newStock) {
-            if (isNaN(newStock) || newStock < 0) return;
-
-            const productIndex = currentInventory.findIndex(p => p.id === productId);
-
-            if (productIndex !== -1) {
-                currentInventory[productIndex].stock = newStock;
-                currentInventory[productIndex].timestamp = new Date().getTime(); 
-                loadInventory(); 
-            }
-        }
-
-        // 4. ELIMINAR Producto
-        function deleteProduct(productId) {
-            if (!confirm(`¿Estás seguro de que quieres eliminar este producto?`)) {
-                return;
-            }
-
-            currentInventory = currentInventory.filter(p => p.id !== productId);
-            loadInventory(); 
-            displaySuccess('Producto eliminado.');
-        }
-
-        // --- FILTERING AND SEARCH ---
-
-        function handleFilterClick(filterType, value) {
-            // Lógica de toggle de filtros (TODOS o el valor seleccionado)
-            const isCategory = filterType === 'category';
-            const filterState = isCategory ? selectedCategoryFilter : selectedSizeFilter;
-            
-            let newState = value;
-
-            if (value !== 'TODOS' && filterState === value) {
-                newState = 'TODOS';
-            }
-
-            if (isCategory) {
-                selectedCategoryFilter = newState;
-                renderCategoryFilterButtons();
-            } else {
-                selectedSizeFilter = newState;
-                renderSizeFilterButtons();
-            }
-            
-            handleSearch();
-        }
-
-
-        function handleSearch() {
-            const query = searchInput.value.toLowerCase().trim();
-            
-            let filteredProducts = currentInventory.filter(product =>
-                (product.name || '').toLowerCase().includes(query)
-            );
-
-            if (selectedCategoryFilter !== 'TODOS') {
-                filteredProducts = filteredProducts.filter(product =>
-                    product.category === selectedCategoryFilter
-                );
-            }
-
-            if (selectedSizeFilter !== 'TODOS') {
-                filteredProducts = filteredProducts.filter(product =>
-                    product.size === selectedSizeFilter
-                );
-            }
-            
-            renderInventory(filteredProducts);
-
-            if (document.activeElement === searchInput) {
-                showSuggestions(query);
-            }
-        }
-
-        function showSuggestions(query) {
-            const uniqueSuggestions = new Set();
-            const maxSuggestions = 5;
-            
-            const searchFilteredProducts = currentInventory.filter(product =>
-                (product.name || '').toLowerCase().includes(query)
-            );
-
-            searchFilteredProducts.forEach(product => {
-                if (uniqueSuggestions.size < maxSuggestions) {
-                    uniqueSuggestions.add(product.name);
-                }
-            });
-
-            searchSuggestions.innerHTML = '';
-            if (uniqueSuggestions.size > 0 && query.length > 0) {
-                uniqueSuggestions.forEach(suggestion => {
-                    const item = document.createElement('div');
-                    item.className = 'p-2 cursor-pointer hover:bg-pink-100 transition duration-100 border-b border-gray-100 last:border-b-0';
-                    item.textContent = suggestion;
-                    item.addEventListener('mousedown', (e) => {
-                        e.preventDefault(); 
-                        searchInput.value = suggestion;
-                        handleSearch();
-                        searchSuggestions.classList.add('hidden');
-                    });
-                    searchSuggestions.appendChild(item);
-                });
-                searchSuggestions.classList.remove('hidden');
-            } else {
-                searchSuggestions.classList.add('hidden');
-            }
-        }
-
-        // --- UI RENDERING & HELPERS ---
-        
-        // Renderiza las opciones de talla en el SELECT del formulario
-        function renderSizeSelectOptions() {
-            const currentSelectedValue = sizeSelect.value;
-            sizeSelect.innerHTML = '';
-            
-            const defaultOption = document.createElement('option');
-            defaultOption.value = '';
-            defaultOption.textContent = 'Seleccione Talla';
-            defaultOption.disabled = true;
-            sizeSelect.appendChild(defaultOption);
-            
-            availableSizes.forEach(size => {
-                const option = document.createElement('option');
-                option.value = size;
-                option.textContent = size;
-                if (size === currentSelectedValue) {
-                    option.selected = true;
-                }
-                sizeSelect.appendChild(option);
-            });
-            
-            // Re-seleccionar el valor si existía, si no, seleccionar el default
-            if (availableSizes.every(size => size !== currentSelectedValue)) {
-                defaultOption.selected = true;
-            }
-        }
-
-
-        // Renderiza los botones de filtro de Talla
-        function renderSizeFilterButtons() {
-            sizeFilterContainer.innerHTML = '';
-            
-            // Botón TODOS
-            sizeFilterContainer.innerHTML += `<button type="button" data-filter-type="size" data-filter-value="TODOS" class="filter-button px-3 py-1 bg-gray-200 text-gray-700 text-sm rounded-full hover:bg-gray-300 transition duration-150 ${selectedSizeFilter === 'TODOS' ? 'selected' : ''}">TODOS</button>`;
-
-            availableSizes.forEach(size => {
-                const button = document.createElement('button');
-                button.type = 'button';
-                button.textContent = size;
-                button.className = `filter-button px-3 py-1 bg-pink-100 text-pink-700 text-sm rounded-full hover:bg-pink-200 transition duration-150 ${selectedSizeFilter === size ? 'selected' : ''}`;
-                button.setAttribute('data-filter-type', 'size');
-                button.setAttribute('data-filter-value', size);
-                sizeFilterContainer.appendChild(button);
-            });
-            
-            // Añadir event listeners después de renderizar
-            sizeFilterContainer.querySelectorAll('.filter-button').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    handleFilterClick('size', e.target.getAttribute('data-filter-value'));
-                });
-            });
-        }
-        
-        // Renderiza los botones de filtro de Categoría
-        function renderCategoryFilterButtons() {
-            categoryFilterContainer.innerHTML = '';
-            
-            // Botón TODOS
-            categoryFilterContainer.innerHTML += `<button type="button" data-filter-type="category" data-filter-value="TODOS" class="filter-button px-3 py-1 bg-gray-200 text-gray-700 text-sm rounded-full hover:bg-gray-300 transition duration-150 ${selectedCategoryFilter === 'TODOS' ? 'selected' : ''}">TODOS</button>`;
-            
-            currentCategories.forEach(category => {
-                const button = document.createElement('button');
-                button.type = 'button';
-                button.textContent = category.name;
-                button.className = `filter-button px-3 py-1 bg-pink-100 text-pink-700 text-sm rounded-full hover:bg-pink-200 transition duration-150 ${selectedCategoryFilter === category.name ? 'selected' : ''}`;
-                button.setAttribute('data-filter-type', 'category');
-                button.setAttribute('data-filter-value', category.name);
-                categoryFilterContainer.appendChild(button);
-            });
-
-            // Añadir event listeners después de renderizar
-            categoryFilterContainer.querySelectorAll('.filter-button').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    handleFilterClick('category', e.target.getAttribute('data-filter-value'));
-                });
-            });
-        }
-
-
-        // Renderiza el inventario
-        function renderInventory(productsToDisplay) {
-            inventoryList.innerHTML = '';
-            totalProductsSpan.textContent = productsToDisplay.length;
-
-            if (productsToDisplay.length === 0) {
-                noDataMessage.classList.remove('hidden');
-            } else {
-                noDataMessage.classList.add('hidden');
-                productsToDisplay.forEach(product => {
-                    inventoryList.appendChild(createProductCard(product));
-                });
-            }
-        }
-
-        // Renderiza los chips de categoría en la sección de Gestión
-        function renderCategoryManagement() {
-            categoryChipsContainer.innerHTML = '';
-            
-            if (currentCategories.length === 0) {
-                categoryChipsContainer.innerHTML = `<p class="text-gray-500 italic text-sm">Aún no hay categorías definidas.</p>`;
-                categoryWarning.classList.remove('hidden');
-                return;
-            } else {
-                categoryWarning.classList.add('hidden');
-            }
-
-            currentCategories.forEach(category => {
-                const chip = document.createElement('button');
-                chip.type = 'button';
-                chip.className = 'flex items-center text-sm px-3 py-1 bg-pink-100 text-pink-700 rounded-full font-medium hover:bg-red-200 transition duration-150 group';
-                chip.innerHTML = `
-                    <span>${category.name}</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1 text-pink-500 group-hover:text-red-700" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
-                    </svg>
-                `;
-                chip.title = `Clic para eliminar categoría: ${category.name}`;
-                chip.onclick = () => deleteCategory(category.id);
-                categoryChipsContainer.appendChild(chip);
-            });
-        }
-
-        // Renderiza las opciones en el SELECT de Categoría
-        function renderCategorySelect() {
-            const currentSelectedValue = categorySelect.value;
-            categorySelect.innerHTML = '';
-            
-            const defaultOption = document.createElement('option');
-            defaultOption.value = '';
-            defaultOption.textContent = 'Seleccione Categoría';
-            defaultOption.disabled = true;
-            categorySelect.appendChild(defaultOption);
-            
-            if (currentCategories.length === 0) {
-                categorySelect.disabled = true;
-                categoryWarning.classList.remove('hidden');
-            } else {
-                categorySelect.disabled = false;
-                categoryWarning.classList.add('hidden');
+    
+    <!-- JavaScript -->
+    <!-- Utils primero (funciones básicas) -->
+    <script src="js/utils.js"></script>
+    
+    <!-- Componentes dinámicos -->
+    <script>
+        // Función para cargar componentes dinámicamente
+        async function loadComponent(componentId, componentPath) {
+            try {
+                const response = await fetch(componentPath);
+                if (!response.ok) throw new Error('Componente no encontrado');
+                const html = await response.text();
+                document.getElementById(componentId).innerHTML = html;
                 
-                currentCategories.forEach(category => {
-                    const option = document.createElement('option');
-                    option.value = category.name;
-                    option.textContent = category.name;
-                    if (category.name === currentSelectedValue) {
-                        option.selected = true;
+                // Ejecutar scripts dentro del componente
+                const scripts = document.getElementById(componentId).querySelectorAll('script');
+                scripts.forEach(script => {
+                    const newScript = document.createElement('script');
+                    if (script.src) {
+                        newScript.src = script.src;
+                    } else {
+                        newScript.textContent = script.textContent;
                     }
-                    categorySelect.appendChild(option);
+                    document.body.appendChild(newScript);
                 });
-                
-                if (currentCategories.every(cat => cat.name !== currentSelectedValue)) {
-                    defaultOption.selected = true;
+            } catch (error) {
+                console.warn(`Error cargando ${componentPath}:`, error);
+                // Contenido por defecto
+                if (componentId === 'header-container') {
+                    document.getElementById(componentId).innerHTML = `
+                        <div class="container mx-auto px-4 py-4">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-gradient-to-r from-pink-500 to-rose-500 rounded-xl flex items-center justify-center">
+                                        <i data-lucide="shopping-bag" class="text-white w-5 h-5"></i>
+                                    </div>
+                                    <div>
+                                        <h1 class="text-xl font-bold text-gray-800">Jessica Boutique</h1>
+                                        <p class="text-xs text-gray-500">Gestión de Inventario</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
                 }
             }
         }
-
-
-        // Crea la tarjeta (Card) de cada producto en la lista
-        function createProductCard(product) {
-            const card = document.createElement('div');
-            card.className = 'flex flex-col md:flex-row items-start md:items-center justify-between p-4 bg-gray-50 border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition duration-150';
-
-            // Contenido del Producto
-            const content = `
-                <div class="mb-3 md:mb-0 md:w-1/2">
-                    <p class="text-xs text-pink-600 font-medium mb-1 uppercase">${product.category || 'SIN CATEGORÍA'}</p> 
-                    <p class="text-lg font-bold text-gray-800">${product.name}</p>
-                    <p class="text-sm text-gray-600">
-                        <span class="font-semibold">Talla:</span> ${product.size} |
-                        <span class="font-semibold">Precio:</span> ${formatPrice(product.price)}
-                    </p>
-                </div>
-            `;
-            card.innerHTML += content;
-
-            // Controles de Stock y Acciones
-            const actionsContainer = document.createElement('div');
-            actionsContainer.className = 'flex items-center space-x-3 w-full md:w-auto';
-
-            // Controles de Stock
-            const stockControl = document.createElement('div');
-            stockControl.className = 'flex items-center space-x-1';
-            stockControl.innerHTML = `
-                <span class="text-sm font-semibold text-gray-700 mr-2">Stock:</span>
-                <button type="button" data-action="decrement" class="p-1 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition duration-150 text-xl font-bold" title="Reducir Stock">
-                    -
-                </button>
-                <input type="number" value="${product.stock}" min="0" data-stock-id="${product.id}"
-                       class="w-16 text-center border border-gray-300 rounded-lg p-1 text-sm font-medium focus:ring-pink-500 focus:border-pink-500">
-                <button type="button" data-action="increment" class="p-1 bg-green-100 text-green-600 rounded-lg hover:bg-green-200 transition duration-150 text-xl font-bold" title="Aumentar Stock">
-                    +
-                </button>
-            `;
-
-            // Botón de Eliminar
-            const deleteButton = document.createElement('button');
-            deleteButton.type = 'button';
-            deleteButton.className = 'p-2 bg-gray-200 text-gray-600 rounded-lg hover:bg-red-500 hover:text-white transition duration-150 shadow-sm';
-            deleteButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 10-2 0v6a1 1 0 102 0V8z" clip-rule="evenodd" />
-            </svg>`;
-            deleteButton.title = "Eliminar Producto";
-            deleteButton.onclick = () => deleteProduct(product.id);
-
-            actionsContainer.appendChild(stockControl);
-            actionsContainer.appendChild(deleteButton);
-            card.appendChild(actionsContainer);
-
-            // Manejar los eventos de los botones de stock
-            const input = stockControl.querySelector('input[type="number"]');
-            const decrementBtn = stockControl.querySelector('button[data-action="decrement"]');
-            const incrementBtn = stockControl.querySelector('button[data-action="increment"]');
-
-            decrementBtn.addEventListener('click', () => {
-                const currentStock = parseInt(input.value, 10);
-                if (currentStock > 0) {
-                    updateStock(product.id, currentStock - 1);
-                }
+        
+        // Cargar componentes cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Ocultar pantalla de carga y mostrar contenido
+            setTimeout(() => {
+                document.getElementById('loadingScreen').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('loadingScreen').style.display = 'none';
+                    document.getElementById('app').style.opacity = '1';
+                    document.body.classList.remove('js-loading');
+                }, 500);
+            }, 800);
+            
+            // Cargar componentes principales
+            await Promise.all([
+                loadComponent('header-container', 'components/header.html'),
+                loadComponent('footer-container', 'components/footer.html')
+            ]);
+            
+            // Inicializar iconos
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+            
+            // Cargar la sección por defecto (inventario)
+            const hash = window.location.hash.substring(1) || 'inventario';
+            if (typeof window.loadSection === 'function') {
+                await window.loadSection(hash);
+            } else {
+                // Cargar scripts de navegación
+                const navScript = document.createElement('script');
+                navScript.src = 'js/navigation.js';
+                navScript.onload = () => {
+                    if (window.loadSection) window.loadSection(hash);
+                };
+                document.body.appendChild(navScript);
+            }
+            
+            // Cargar el resto de scripts principales
+            const scripts = [
+                'js/app.js',
+                'js/products.js',
+                'js/categories.js',
+                'js/inventory.js',
+                'js/statistics.js',
+                'js/config.js'
+            ];
+            
+            scripts.forEach(src => {
+                const script = document.createElement('script');
+                script.src = src;
+                script.async = true;
+                document.body.appendChild(script);
             });
-
-            incrementBtn.addEventListener('click', () => {
-                const currentStock = parseInt(input.value, 10);
-                updateStock(product.id, currentStock + 1);
-            });
-
-            input.addEventListener('change', (e) => {
-                const newStock = parseInt(e.target.value, 10);
-                updateStock(product.id, newStock);
-            });
-
-            return card;
-        }
-
-
-        // --- INICIALIZACIÓN ---
-        productForm.addEventListener('submit', saveProduct);
-        categoryForm.addEventListener('submit', saveCategory);
-        searchInput.addEventListener('input', handleSearch); 
-        searchInput.addEventListener('focus', handleSearch); 
-        searchInput.addEventListener('blur', () => {
-            setTimeout(() => { searchSuggestions.classList.add('hidden'); }, 200);
+            
+            // Inicializar funcionalidades básicas
+            initializeBasicFeatures();
         });
-        viewStockButton.addEventListener('click', scrollToInventory);
         
-        // Eventos de Importar/Exportar
-        exportDataButton.addEventListener('click', exportData);
-        importFileInput.addEventListener('change', importData);
-
-
-        initApp(); 
-
+        function initializeBasicFeatures() {
+            // Back to top button
+            const backToTopBtn = document.getElementById('back-to-top');
+            if (backToTopBtn) {
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 300) {
+                        backToTopBtn.classList.remove('opacity-0', 'translate-y-10');
+                        backToTopBtn.classList.add('opacity-100', 'translate-y-0');
+                    } else {
+                        backToTopBtn.classList.remove('opacity-100', 'translate-y-0');
+                        backToTopBtn.classList.add('opacity-0', 'translate-y-10');
+                    }
+                });
+                
+                backToTopBtn.addEventListener('click', () => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            }
+            
+            // Detectar conexión a internet
+            window.addEventListener('online', () => {
+                document.getElementById('offline-indicator').classList.add('hidden');
+                showToast('Conexión restablecida', 'success');
+            });
+            
+            window.addEventListener('offline', () => {
+                document.getElementById('offline-indicator').classList.remove('hidden');
+                showToast('Sin conexión a internet', 'warning');
+            });
+            
+            // Función de toast básica
+            window.showToast = function(message, type = 'info') {
+                const toastContainer = document.getElementById('toast-container');
+                const toastId = 'toast-' + Date.now();
+                
+                const colors = {
+                    success: 'bg-green-500',
+                    error: 'bg-red-500',
+                    warning: 'bg-yellow-500',
+                    info: 'bg-blue-500'
+                };
+                
+                const icons = {
+                    success: 'check-circle',
+                    error: 'alert-circle',
+                    warning: 'alert-triangle',
+                    info: 'info'
+                };
+                
+                const toast = document.createElement('div');
+                toast.id = toastId;
+                toast.className = `${colors[type] || colors.info} text-white px-4 py-3 rounded-lg shadow-lg flex items-center gap-3 animate-slide-up`;
+                toast.innerHTML = `
+                    <i data-lucide="${icons[type] || 'info'}" class="w-5 h-5"></i>
+                    <span>${message}</span>
+                    <button onclick="document.getElementById('${toastId}').remove()" class="ml-auto">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                    </button>
+                `;
+                
+                toastContainer.appendChild(toast);
+                
+                // Actualizar iconos
+                lucide.createIcons();
+                
+                // Auto-remover después de 5 segundos
+                setTimeout(() => {
+                    if (document.getElementById(toastId)) {
+                        toast.classList.add('opacity-0', 'transition-opacity', 'duration-300');
+                        setTimeout(() => {
+                            if (document.getElementById(toastId)) {
+                                document.getElementById(toastId).remove();
+                            }
+                        }, 300);
+                    }
+                }, 5000);
+            };
+            
+            // Modal básico
+            window.showModal = function(content) {
+                const modal = document.getElementById('global-modal');
+                const modalContent = document.getElementById('modal-content');
+                
+                modalContent.innerHTML = content;
+                modal.classList.remove('hidden');
+                
+                // Actualizar iconos dentro del modal
+                setTimeout(() => lucide.createIcons(), 100);
+                
+                // Cerrar modal al hacer clic fuera
+                modal.addEventListener('click', function(e) {
+                    if (e.target === modal) {
+                        closeModal();
+                    }
+                });
+                
+                // Cerrar con ESC
+                document.addEventListener('keydown', function escHandler(e) {
+                    if (e.key === 'Escape') {
+                        closeModal();
+                        document.removeEventListener('keydown', escHandler);
+                    }
+                });
+            };
+            
+            window.closeModal = function() {
+                const modal = document.getElementById('global-modal');
+                modal.classList.add('hidden');
+            };
+        }
     </script>
+    
+    <!-- Scripts adicionales que requieren dependencias -->
+    <script>
+        // Verificar si Tailwind está cargado
+        if (typeof tailwind === 'undefined') {
+            console.warn('Tailwind CSS no se cargó correctamente');
+            // Fallback a estilos básicos
+            const style = document.createElement('style');
+            style.textContent = `
+                body { font-family: 'Inter', sans-serif; margin: 0; }
+                .container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        // Verificar si Lucide está cargado
+        if (typeof lucide === 'undefined') {
+            console.warn('Lucide Icons no se cargó correctamente');
+            // Intentar cargar de nuevo
+            const script = document.createElement('script');
+            script.src = 'https://unpkg.com/lucide@latest';
+            script.onload = () => {
+                if (window.lucide) {
+                    lucide.createIcons();
+                }
+            };
+            document.body.appendChild(script);
+        }
+    </script>
+    
+    <!-- Analytics (opcional) -->
+    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXX-Y"></script> -->
+    
 </body>
 </html>
