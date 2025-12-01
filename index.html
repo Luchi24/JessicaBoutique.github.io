@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <!-- Barra de navegación -->
     <div class="navbar">
         <div class="logo">
             <i class="fas fa-store"></i>
@@ -29,22 +28,11 @@
     </div>
 
     <div class="container">
-        <!-- Sección 1: INVENTARIO -->
         <div id="inventario" class="seccion activa">
             <div class="seccion-header">
                 <h2><i class="fas fa-boxes"></i> Inventario de Productos</h2>
-                <div class="acciones">
-                    <button class="btn-accion" onclick="exportarDatos()">
-                        <i class="fas fa-download"></i> Exportar
-                    </button>
-                    <button class="btn-accion" onclick="document.getElementById('importar-file').click()">
-                        <i class="fas fa-upload"></i> Importar
-                    </button>
-                    <input type="file" id="importar-file" accept=".json" style="display: none;" onchange="importarDatos(event)">
-                </div>
             </div>
 
-            <!-- Barra de búsqueda y filtros -->
             <div class="filtros">
                 <div class="busqueda">
                     <i class="fas fa-search"></i>
@@ -69,7 +57,6 @@
                 </select>
             </div>
 
-            <!-- Tabla de productos -->
             <div class="tabla-contenedor">
                 <table id="tabla-productos">
                     <thead>
@@ -83,13 +70,10 @@
                             <th>Acciones</th>
                         </tr>
                     </thead>
-                    <tbody id="lista-productos">
-                        <!-- Los productos se cargarán aquí -->
-                    </tbody>
+                    <tbody id="lista-productos"></tbody>
                 </table>
             </div>
 
-            <!-- Estadísticas -->
             <div class="estadisticas">
                 <div class="estadistica">
                     <h3>Total Productos</h3>
@@ -101,12 +85,11 @@
                 </div>
                 <div class="estadistica">
                     <h3>Valor Total</h3>
-                    <p id="valor-total">$0.00</p>
+                    <p id="valor-total">S/. 0.00</p>
                 </div>
             </div>
         </div>
 
-        <!-- Sección 2: AGREGAR PRODUCTO -->
         <div id="agregar" class="seccion">
             <div class="seccion-header">
                 <h2><i class="fas fa-plus-circle"></i> Agregar Nuevo Producto</h2>
@@ -116,7 +99,7 @@
                 <form id="form-agregar-producto" onsubmit="agregarProducto(event)">
                     <div class="grupo-formulario">
                         <label for="nombre-producto">
-                            <i class="fas fa-tag"></i> Nombre del Producto *
+                            <i class="fas fa-tag"></i> Nombre del Producto
                         </label>
                         <input type="text" id="nombre-producto" required placeholder="Ej: Vestido Floral">
                     </div>
@@ -124,56 +107,49 @@
                     <div class="grupo-doble">
                         <div class="grupo-formulario">
                             <label for="categoria-producto">
-                                <i class="fas fa-folder"></i> Categoría *
+                                <i class="fas fa-folder"></i> Categoría
                             </label>
                             <select id="categoria-producto" required>
                                 <option value="">Seleccionar categoría</option>
-                                <!-- Las categorías se cargarán aquí -->
-                            </select>
-                        </div>
-                        <div class="grupo-formulario">
-                            <label for="talla-producto">
-                                <i class="fas fa-ruler"></i> Talla *
-                            </label>
-                            <select id="talla-producto" required>
-                                <option value="">Seleccionar talla</option>
-                                <option value="XS">XS</option>
-                                <option value="S">S</option>
-                                <option value="M">M</option>
-                                <option value="L">L</option>
-                                <option value="XL">XL</option>
-                                <option value="Única">Única</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="grupo-doble">
-                        <div class="grupo-formulario">
-                            <label for="color-producto">
-                                <i class="fas fa-palette"></i> Color *
-                            </label>
-                            <select id="color-producto" required>
-                                <option value="">Seleccionar color</option>
-                                <!-- Los colores se cargarán aquí -->
                             </select>
                         </div>
                         <div class="grupo-formulario">
                             <label for="precio-producto">
-                                <i class="fas fa-dollar-sign"></i> Precio *
+                                <i class="fas fa-dollar-sign"></i> Precio
                             </label>
                             <input type="number" id="precio-producto" required min="0" step="0.01" placeholder="0.00">
                         </div>
                     </div>
 
                     <div class="grupo-formulario">
-                        <label for="cantidad-producto">
-                            <i class="fas fa-box"></i> Cantidad *
-                        </label>
-                        <input type="number" id="cantidad-producto" required min="0" placeholder="0">
+                        <label><i class="fas fa-layer-group"></i> Combinaciones Talla-Color-Cantidad</label>
+                        <div id="combinaciones-container">
+                            <div class="combinacion-item">
+                                <select class="combinacion-talla" required>
+                                    <option value="">Seleccionar talla</option>
+                                    <option value="XS">XS</option>
+                                    <option value="S">S</option>
+                                    <option value="M">M</option>
+                                    <option value="L">L</option>
+                                    <option value="XL">XL</option>
+                                    <option value="Única">Única</option>
+                                </select>
+                                <select class="combinacion-color" required>
+                                    <option value="">Seleccionar color</option>
+                                </select>
+                                <input type="number" class="combinacion-cantidad" required min="0" placeholder="Cantidad">
+                                <button type="button" class="btn-eliminar-combinacion" onclick="eliminarCombinacion(this)">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-secundario" onclick="agregarCombinacion()">
+                            <i class="fas fa-plus"></i> Agregar Combinación
+                        </button>
                     </div>
 
                     <div class="botones-formulario">
-                        <button type="reset" class="btn-secundario">
+                        <button type="reset" class="btn-secundario" onclick="limpiarFormulario()">
                             <i class="fas fa-times"></i> Limpiar
                         </button>
                         <button type="submit" class="btn-principal">
@@ -182,7 +158,6 @@
                     </div>
                 </form>
 
-                <!-- Vista previa del producto -->
                 <div class="vista-previa">
                     <h3><i class="fas fa-eye"></i> Vista Previa</h3>
                     <div class="producto-preview">
@@ -192,69 +167,50 @@
                         </div>
                         <div class="preview-detalles">
                             <div class="detalle">
-                                <span>Talla:</span>
-                                <span id="preview-talla">-</span>
-                            </div>
-                            <div class="detalle">
-                                <span>Color:</span>
-                                <span id="preview-color">-</span>
-                            </div>
-                            <div class="detalle">
                                 <span>Precio:</span>
-                                <span id="preview-precio">$0.00</span>
+                                <span id="preview-precio">S/. 0.00</span>
                             </div>
-                            <div class="detalle">
-                                <span>Cantidad:</span>
-                                <span id="preview-cantidad">0</span>
-                            </div>
+                            <div id="preview-combinaciones"></div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Sección 3: GESTIÓN -->
         <div id="gestion" class="seccion">
             <div class="seccion-header">
                 <h2><i class="fas fa-cog"></i> Gestión del Sistema</h2>
             </div>
 
             <div class="gestion-contenedor">
-                <!-- Gestión de Colores -->
                 <div class="gestion-item">
                     <h3><i class="fas fa-palette"></i> Gestión de Colores</h3>
                     <p class="descripcion">Agrega y gestiona los colores disponibles para los productos</p>
                     
                     <div class="agregar-item">
-                        <input type="text" id="nuevo-color" placeholder="Nombre del color (Ej: Rojo, Azul, Negro)">
+                        <input type="text" id="nuevo-color" placeholder="Nombre del color">
                         <button class="btn-principal" onclick="agregarColor()">
-                            <i class="fas fa-plus"></i> Agregar Color
+                            <i class="fas fa-plus"></i> Agregar
                         </button>
                     </div>
 
-                    <div class="lista-items" id="lista-colores">
-                        <!-- Los colores se cargarán aquí -->
-                    </div>
+                    <div class="lista-items grid-colores" id="lista-colores"></div>
                 </div>
 
-                <!-- Gestión de Categorías -->
                 <div class="gestion-item">
                     <h3><i class="fas fa-folder"></i> Gestión de Categorías</h3>
                     <p class="descripcion">Crea y organiza las categorías de productos</p>
                     
                     <div class="agregar-item">
-                        <input type="text" id="nueva-categoria" placeholder="Nombre de categoría (Ej: Blusas, Pantalones)">
+                        <input type="text" id="nueva-categoria" placeholder="Nombre de categoría">
                         <button class="btn-principal" onclick="agregarCategoria()">
-                            <i class="fas fa-plus"></i> Agregar Categoría
+                            <i class="fas fa-plus"></i> Agregar
                         </button>
                     </div>
 
-                    <div class="lista-items" id="lista-categorias">
-                        <!-- Las categorías se cargarán aquí -->
-                    </div>
+                    <div class="lista-items grid-categorias" id="lista-categorias"></div>
                 </div>
 
-                <!-- Importar/Exportar -->
                 <div class="gestion-item">
                     <h3><i class="fas fa-database"></i> Respaldo de Datos</h3>
                     <p class="descripcion">Exporta o importa todos los datos del sistema en formato JSON</p>
@@ -270,27 +226,23 @@
                     </div>
 
                     <div class="info-backup">
-                        <p><i class="fas fa-info-circle"></i> Exporta todos los datos (productos, colores, categorías) en un archivo JSON</p>
+                        <p><i class="fas fa-info-circle"></i> Exporta todos los datos en un archivo JSON</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal para editar/eliminar producto -->
     <div id="modal-producto" class="modal">
         <div class="modal-contenido">
             <div class="modal-header">
                 <h3><i class="fas fa-edit"></i> Editar Producto</h3>
                 <button class="btn-cerrar" onclick="cerrarModal()">&times;</button>
             </div>
-            <div class="modal-body">
-                <!-- Contenido del modal se cargará dinámicamente -->
-            </div>
+            <div class="modal-body"></div>
         </div>
     </div>
 
-    <!-- Notificaciones -->
     <div id="notificaciones" class="notificaciones"></div>
 
     <script src="js/main.js"></script>
