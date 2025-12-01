@@ -19,7 +19,7 @@
                 <i class="fas fa-boxes"></i> Inventario
             </button>
             <button class="nav-btn" onclick="mostrarSeccion('agregar')">
-                <i class="fas fa-plus-circle"></i> Agregar Producto
+                <i class="fas fa-plus-circle"></i> Agregar
             </button>
             <button class="nav-btn" onclick="mostrarSeccion('gestion')">
                 <i class="fas fa-cog"></i> Gestión
@@ -28,9 +28,10 @@
     </div>
 
     <div class="container">
+        <!-- Sección INVENTARIO -->
         <div id="inventario" class="seccion activa">
             <div class="seccion-header">
-                <h2><i class="fas fa-boxes"></i> Inventario de Productos</h2>
+                <h2><i class="fas fa-boxes"></i> Productos en Inventario</h2>
             </div>
 
             <div class="filtros">
@@ -52,6 +53,11 @@
                     <option value="L">L</option>
                     <option value="XL">XL</option>
                     <option value="Única">Única</option>
+                </select>
+                <select id="ordenar-por" onchange="ordenarProductos()">
+                    <option value="nombre">Ordenar por</option>
+                    <option value="cantidad">Menor cantidad</option>
+                    <option value="precio">Menor precio</option>
                 </select>
             </div>
 
@@ -89,9 +95,10 @@
             </div>
         </div>
 
+        <!-- Sección AGREGAR PRODUCTO -->
         <div id="agregar" class="seccion">
             <div class="seccion-header">
-                <h2><i class="fas fa-plus-circle"></i> Agregar Nuevo Producto</h2>
+                <h2><i class="fas fa-plus-circle"></i> Registrar Nuevo Producto</h2>
             </div>
 
             <div class="formulario-contenedor">
@@ -116,9 +123,7 @@
                             <label for="marca-producto">
                                 <i class="fas fa-trademark"></i> Marca
                             </label>
-                            <select id="marca-producto" required>
-                                <option value="">Seleccionar marca</option>
-                            </select>
+                            <input type="text" id="marca-producto" required placeholder="Ej: Jessica Boutique">
                         </div>
                     </div>
 
@@ -179,18 +184,19 @@
             </div>
         </div>
 
+        <!-- Sección GESTIÓN -->
         <div id="gestion" class="seccion">
             <div class="seccion-header">
-                <h2><i class="fas fa-cog"></i> Gestión del Sistema</h2>
+                <h2><i class="fas fa-cog"></i> Configuración del Sistema</h2>
             </div>
 
             <div class="gestion-contenedor">
                 <div class="gestion-item">
-                    <h3><i class="fas fa-palette"></i> Gestión de Colores</h3>
-                    <p class="descripcion">Agrega y gestiona los colores disponibles para los productos</p>
+                    <h3><i class="fas fa-palette"></i> Colores Disponibles</h3>
+                    <p>Agrega y gestiona los colores para los productos</p>
                     
                     <div class="agregar-item">
-                        <input type="text" id="nuevo-color" placeholder="Nombre del color">
+                        <input type="text" id="nuevo-color" placeholder="Ej: Rojo, Azul, Negro">
                         <button class="btn-principal" onclick="agregarColor()">
                             <i class="fas fa-plus"></i> Agregar
                         </button>
@@ -200,11 +206,11 @@
                 </div>
 
                 <div class="gestion-item">
-                    <h3><i class="fas fa-folder"></i> Gestión de Categorías</h3>
-                    <p class="descripcion">Crea y organiza las categorías de productos</p>
+                    <h3><i class="fas fa-folder"></i> Categorías de Productos</h3>
+                    <p>Crea y organiza las categorías disponibles</p>
                     
                     <div class="agregar-item">
-                        <input type="text" id="nueva-categoria" placeholder="Nombre de categoría">
+                        <input type="text" id="nueva-categoria" placeholder="Ej: Blusas, Vestidos">
                         <button class="btn-principal" onclick="agregarCategoria()">
                             <i class="fas fa-plus"></i> Agregar
                         </button>
@@ -213,52 +219,61 @@
                     <div class="lista-items grid-items" id="lista-categorias"></div>
                 </div>
 
-                <div class="gestion-item">
-                    <h3><i class="fas fa-trademark"></i> Gestión de Marcas</h3>
-                    <p class="descripcion">Administra las marcas disponibles para los productos</p>
-                    
-                    <div class="agregar-item">
-                        <input type="text" id="nueva-marca" placeholder="Nombre de marca">
-                        <button class="btn-principal" onclick="agregarMarca()">
-                            <i class="fas fa-plus"></i> Agregar
-                        </button>
-                    </div>
-
-                    <div class="lista-items grid-items" id="lista-marcas"></div>
-                </div>
-
                 <div class="gestion-item full-width">
                     <h3><i class="fas fa-database"></i> Respaldo de Datos</h3>
-                    <p class="descripcion">Exporta o importa todos los datos del sistema en formato JSON</p>
+                    <p>Exporta o importa todos los datos del sistema</p>
                     
                     <div class="acciones-backup">
                         <button class="btn-principal" onclick="exportarDatos()">
                             <i class="fas fa-download"></i> Exportar Todo
                         </button>
-                        <button class="btn-secundario" onclick="document.getElementById('importar-backup').click()">
+                        <button class="btn-secundario" onclick="abrirModalImportar()">
                             <i class="fas fa-upload"></i> Importar Backup
                         </button>
-                        <input type="file" id="importar-backup" accept=".json" style="display: none;" onchange="importarBackup(event)">
                     </div>
 
                     <div class="info-backup">
-                        <p><i class="fas fa-info-circle"></i> Exporta todos los datos (productos, colores, categorías, marcas) en un archivo JSON</p>
+                        <p><i class="fas fa-info-circle"></i> Exporta todos los datos (productos, colores, categorías) en un archivo JSON</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="modal-producto" class="modal">
+    <!-- Modal para editar producto -->
+    <div id="modal-editar" class="modal">
         <div class="modal-contenido">
             <div class="modal-header">
                 <h3><i class="fas fa-edit"></i> Editar Producto</h3>
-                <button class="btn-cerrar" onclick="cerrarModal()">&times;</button>
+                <button class="btn-cerrar" onclick="cerrarModal('modal-editar')">&times;</button>
             </div>
-            <div class="modal-body"></div>
+            <div class="modal-body" id="modal-editar-body"></div>
         </div>
     </div>
 
+    <!-- Modal para importar backup -->
+    <div id="modal-importar" class="modal">
+        <div class="modal-contenido">
+            <div class="modal-header">
+                <h3><i class="fas fa-upload"></i> Importar Backup</h3>
+                <button class="btn-cerrar" onclick="cerrarModal('modal-importar')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="grupo-formulario">
+                    <label><i class="fas fa-file-import"></i> Seleccionar archivo JSON</label>
+                    <input type="file" id="importar-backup-file" accept=".json" onchange="importarBackup(event)">
+                    <p class="descripcion-modal">Selecciona un archivo JSON de backup para importar todos los datos.</p>
+                </div>
+                <div class="botones-formulario">
+                    <button type="button" class="btn-secundario" onclick="cerrarModal('modal-importar')">
+                        <i class="fas fa-times"></i> Cancelar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notificaciones -->
     <div id="notificaciones" class="notificaciones"></div>
 
     <script src="js/main.js"></script>
