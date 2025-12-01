@@ -1,11 +1,9 @@
-// Datos iniciales del sistema
 let datos = {
     productos: [],
     colores: ['Rojo', 'Azul', 'Verde', 'Negro', 'Blanco', 'Rosa', 'Morado', 'Amarillo'],
     categorias: ['Blusas', 'Pantalones', 'Vestidos', 'Faldas', 'Accesorios', 'Calzado', 'Bolsos']
 };
 
-// Cargar datos guardados
 function cargarDatos() {
     const guardados = localStorage.getItem('inventario_jessica');
     if (guardados) {
@@ -18,36 +16,28 @@ function cargarDatos() {
     mostrarCategorias();
 }
 
-// Guardar datos
 function guardarDatos() {
     localStorage.setItem('inventario_jessica', JSON.stringify(datos));
 }
 
-// Mostrar secciones
 function mostrarSeccion(seccion) {
-    // Ocultar todas las secciones
     document.querySelectorAll('.seccion').forEach(s => {
         s.classList.remove('activa');
     });
     
-    // Mostrar la sección seleccionada
     document.getElementById(seccion).classList.add('activa');
     
-    // Actualizar botones de navegación
     document.querySelectorAll('.nav-btn').forEach(btn => {
         btn.classList.remove('active');
     });
     event.target.classList.add('active');
     
-    // Actualizar vista previa
     if (seccion === 'agregar') {
         actualizarVistaPrevia();
     }
 }
 
-// Actualizar selectores
 function actualizarSelectores() {
-    // Selector de categorías
     const catSelect = document.getElementById('categoria-producto');
     const catFilter = document.getElementById('filtro-categoria');
     
@@ -59,15 +49,14 @@ function actualizarSelectores() {
         catFilter.innerHTML += `<option value="${categoria}">${categoria}</option>`;
     });
     
-    // Selector de colores
-    const colorSelect = document.getElementById('color-producto');
-    colorSelect.innerHTML = '<option value="">Seleccionar color</option>';
-    datos.colores.forEach(color => {
-        colorSelect.innerHTML += `<option value="${color}">${color}</option>`;
+    document.querySelectorAll('.combinacion-color').forEach(select => {
+        select.innerHTML = '<option value="">Seleccionar color</option>';
+        datos.colores.forEach(color => {
+            select.innerHTML += `<option value="${color}">${color}</option>`;
+        });
     });
 }
 
-// Mostrar productos
 function mostrarProductos() {
     const lista = document.getElementById('lista-productos');
     lista.innerHTML = '';
@@ -83,7 +72,7 @@ function mostrarProductos() {
                 <td>${producto.talla}</td>
                 <td>${producto.color}</td>
                 <td class="${stockClass}">${producto.cantidad}</td>
-                <td>$${producto.precio.toFixed(2)}</td>
+                <td>S/. ${producto.precio.toFixed(2)}</td>
                 <td>
                     <button class="btn-editar" onclick="editarProducto(${index})">
                         <i class="fas fa-edit"></i> Editar
@@ -97,7 +86,6 @@ function mostrarProductos() {
     });
 }
 
-// Filtrar productos
 function filtrarProductos() {
     const busqueda = document.getElementById('buscar-producto').value.toLowerCase();
     const categoria = document.getElementById('filtro-categoria').value;
@@ -125,7 +113,7 @@ function filtrarProductos() {
                 <td>${producto.talla}</td>
                 <td>${producto.color}</td>
                 <td class="${stockClass}">${producto.cantidad}</td>
-                <td>$${producto.precio.toFixed(2)}</td>
+                <td>S/. ${producto.precio.toFixed(2)}</td>
                 <td>
                     <button class="btn-editar" onclick="editarProducto(${datos.productos.indexOf(producto)})">
                         <i class="fas fa-edit"></i> Editar
@@ -139,7 +127,6 @@ function filtrarProductos() {
     });
 }
 
-// Ordenar productos
 function ordenarProductos() {
     const orden = document.getElementById('ordenar-por').value;
     
@@ -154,50 +141,137 @@ function ordenarProductos() {
     mostrarProductos();
 }
 
-// Agregar producto
+function agregarCombinacion() {
+    const container = document.getElementById('combinaciones-container');
+    const combinacion = document.createElement('div');
+    combinacion.className = 'combinacion-item';
+    combinacion.innerHTML = `
+        <select class="combinacion-talla" required>
+            <option value="">Seleccionar talla</option>
+            <option value="XS">XS</option>
+            <option value="S">S</option>
+            <option value="M">M</option>
+            <option value="L">L</option>
+            <option value="XL">XL</option>
+            <option value="Única">Única</option>
+        </select>
+        <select class="combinacion-color" required>
+            <option value="">Seleccionar color</option>
+            ${datos.colores.map(color => `<option value="${color}">${color}</option>`).join('')}
+        </select>
+        <input type="number" class="combinacion-cantidad" required min="0" placeholder="Cantidad">
+        <button type="button" class="btn-eliminar-combinacion" onclick="eliminarCombinacion(this)">
+            <i class="fas fa-times"></i>
+        </button>
+    `;
+    container.appendChild(combinacion);
+}
+
+function eliminarCombinacion(boton) {
+    const combinacion = boton.closest('.combinacion-item');
+    if (combinacion && document.querySelectorAll('.combinacion-item').length > 1) {
+        combinacion.remove();
+        actualizarVistaPrevia();
+    }
+}
+
 function agregarProducto(event) {
     event.preventDefault();
     
-    const producto = {
-        nombre: document.getElementById('nombre-producto').value,
-        categoria: document.getElementById('categoria-producto').value,
-        talla: document.getElementById('talla-producto').value,
-        color: document.getElementById('color-producto').value,
-        precio: parseFloat(document.getElementById('precio-producto').value),
-        cantidad: parseInt(document.getElementById('cantidad-producto').value)
-    };
+    const nombre = document.getElementById('nombre-producto').value;
+    const categoria = document.getElementById('categoria-producto').value;
+    const precio = parseFloat(document.getElementById('precio-producto').value);
     
-    datos.productos.push(producto);
+    const combinaciones = [];
+    document.querySelectorAll('.combinacion-item').forEach(item => {
+        const talla = item.querySelector('.combinacion-talla').value;
+        const color = item.querySelector('.combinacion-color').value;
+        const cantidad = parseInt(item.querySelector('.combinacion-cantidad').value);
+        
+        if (talla && color && cantidad >= 0) {
+            combinaciones.push({ talla, color, cantidad });
+        }
+    });
+    
+    if (combinaciones.length === 0) {
+        mostrarNotificacion('Debe agregar al menos una combinación talla-color', 'error');
+        return;
+    }
+    
+    combinaciones.forEach(combinacion => {
+        const producto = {
+            nombre: nombre,
+            categoria: categoria,
+            talla: combinacion.talla,
+            color: combinacion.color,
+            precio: precio,
+            cantidad: combinacion.cantidad
+        };
+        datos.productos.push(producto);
+    });
+    
     guardarDatos();
     mostrarProductos();
     mostrarEstadisticas();
     
-    // Limpiar formulario
-    document.getElementById('form-agregar-producto').reset();
-    actualizarVistaPrevia();
-    
-    // Mostrar notificación
-    mostrarNotificacion('Producto agregado correctamente', 'exito');
+    limpiarFormulario();
+    mostrarNotificacion('Producto(s) agregado(s) correctamente', 'exito');
 }
 
-// Actualizar vista previa
+function limpiarFormulario() {
+    document.getElementById('form-agregar-producto').reset();
+    const container = document.getElementById('combinaciones-container');
+    container.innerHTML = `
+        <div class="combinacion-item">
+            <select class="combinacion-talla" required>
+                <option value="">Seleccionar talla</option>
+                <option value="XS">XS</option>
+                <option value="S">S</option>
+                <option value="M">M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+                <option value="Única">Única</option>
+            </select>
+            <select class="combinacion-color" required>
+                <option value="">Seleccionar color</option>
+            </select>
+            <input type="number" class="combinacion-cantidad" required min="0" placeholder="Cantidad">
+            <button type="button" class="btn-eliminar-combinacion" onclick="eliminarCombinacion(this)">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    `;
+    actualizarSelectores();
+    actualizarVistaPrevia();
+}
+
 function actualizarVistaPrevia() {
     const nombre = document.getElementById('nombre-producto').value || 'Nombre del Producto';
     const categoria = document.getElementById('categoria-producto').value || 'Categoría';
-    const talla = document.getElementById('talla-producto').value || '-';
-    const color = document.getElementById('color-producto').value || '-';
     const precio = document.getElementById('precio-producto').value || '0.00';
-    const cantidad = document.getElementById('cantidad-producto').value || '0';
     
     document.getElementById('preview-nombre').textContent = nombre;
     document.getElementById('preview-categoria').textContent = categoria;
-    document.getElementById('preview-talla').textContent = talla;
-    document.getElementById('preview-color').textContent = color;
-    document.getElementById('preview-precio').textContent = '$' + parseFloat(precio).toFixed(2);
-    document.getElementById('preview-cantidad').textContent = cantidad;
+    document.getElementById('preview-precio').textContent = 'S/. ' + parseFloat(precio).toFixed(2);
+    
+    const combinacionesPreview = document.getElementById('preview-combinaciones');
+    combinacionesPreview.innerHTML = '';
+    
+    document.querySelectorAll('.combinacion-item').forEach(item => {
+        const talla = item.querySelector('.combinacion-talla').value || '-';
+        const color = item.querySelector('.combinacion-color').value || '-';
+        const cantidad = item.querySelector('.combinacion-cantidad').value || '0';
+        
+        if (talla !== '-' || color !== '-' || cantidad !== '0') {
+            combinacionesPreview.innerHTML += `
+                <div class="combinacion-preview">
+                    Talla: ${talla} | Color: ${color} | Cantidad: ${cantidad}
+                </div>
+            `;
+        }
+    });
 }
 
-// Editar producto
 function editarProducto(index) {
     const producto = datos.productos[index];
     
@@ -213,7 +287,7 @@ function editarProducto(index) {
                     <label>Categoría</label>
                     <select id="edit-categoria" required>
                         ${datos.categorias.map(cat => 
-                            `<option value="${cat}" ${producto.categoria === cat ? 'selected' : ''}>${cat}</option>`
+                            `<option value="${cat}" ${producto.categoria.toLowerCase() === cat.toLowerCase() ? 'selected' : ''}>${cat}</option>`
                         ).join('')}
                     </select>
                 </div>
@@ -235,7 +309,7 @@ function editarProducto(index) {
                     <label>Color</label>
                     <select id="edit-color" required>
                         ${datos.colores.map(color => 
-                            `<option value="${color}" ${producto.color === color ? 'selected' : ''}>${color}</option>`
+                            `<option value="${color}" ${producto.color.toLowerCase() === color.toLowerCase() ? 'selected' : ''}>${color}</option>`
                         ).join('')}
                     </select>
                 </div>
@@ -280,7 +354,6 @@ function guardarEdicion(index, event) {
     mostrarNotificacion('Producto actualizado correctamente', 'exito');
 }
 
-// Eliminar producto
 function eliminarProducto(index) {
     if (confirm('¿Estás seguro de eliminar este producto?')) {
         datos.productos.splice(index, 1);
@@ -291,7 +364,6 @@ function eliminarProducto(index) {
     }
 }
 
-// Mostrar estadísticas
 function mostrarEstadisticas() {
     const total = datos.productos.length;
     const stockBajo = datos.productos.filter(p => p.cantidad < 5).length;
@@ -299,10 +371,9 @@ function mostrarEstadisticas() {
     
     document.getElementById('total-productos').textContent = total;
     document.getElementById('stock-bajo').textContent = stockBajo;
-    document.getElementById('valor-total').textContent = '$' + valorTotal.toFixed(2);
+    document.getElementById('valor-total').textContent = 'S/. ' + valorTotal.toFixed(2);
 }
 
-// Gestión de colores
 function mostrarColores() {
     const lista = document.getElementById('lista-colores');
     lista.innerHTML = '';
@@ -321,21 +392,29 @@ function mostrarColores() {
 
 function agregarColor() {
     const nuevoColor = document.getElementById('nuevo-color').value.trim();
+    const nuevoColorLower = nuevoColor.toLowerCase();
     
-    if (nuevoColor && !datos.colores.includes(nuevoColor)) {
+    if (!nuevoColor) {
+        mostrarNotificacion('Ingrese un nombre de color', 'error');
+        return;
+    }
+    
+    const existe = datos.colores.some(color => color.toLowerCase() === nuevoColorLower);
+    
+    if (!existe) {
         datos.colores.push(nuevoColor);
         guardarDatos();
         mostrarColores();
         actualizarSelectores();
         document.getElementById('nuevo-color').value = '';
         mostrarNotificacion('Color agregado correctamente', 'exito');
-    } else if (datos.colores.includes(nuevoColor)) {
+    } else {
         mostrarNotificacion('Este color ya existe', 'error');
     }
 }
 
 function eliminarColor(index) {
-    if (confirm('¿Eliminar este color? Los productos con este color no se verán afectados.')) {
+    if (confirm('¿Eliminar este color?')) {
         datos.colores.splice(index, 1);
         guardarDatos();
         mostrarColores();
@@ -344,7 +423,6 @@ function eliminarColor(index) {
     }
 }
 
-// Gestión de categorías
 function mostrarCategorias() {
     const lista = document.getElementById('lista-categorias');
     lista.innerHTML = '';
@@ -363,21 +441,29 @@ function mostrarCategorias() {
 
 function agregarCategoria() {
     const nuevaCategoria = document.getElementById('nueva-categoria').value.trim();
+    const nuevaCategoriaLower = nuevaCategoria.toLowerCase();
     
-    if (nuevaCategoria && !datos.categorias.includes(nuevaCategoria)) {
+    if (!nuevaCategoria) {
+        mostrarNotificacion('Ingrese un nombre de categoría', 'error');
+        return;
+    }
+    
+    const existe = datos.categorias.some(cat => cat.toLowerCase() === nuevaCategoriaLower);
+    
+    if (!existe) {
         datos.categorias.push(nuevaCategoria);
         guardarDatos();
         mostrarCategorias();
         actualizarSelectores();
         document.getElementById('nueva-categoria').value = '';
         mostrarNotificacion('Categoría agregada correctamente', 'exito');
-    } else if (datos.categorias.includes(nuevaCategoria)) {
+    } else {
         mostrarNotificacion('Esta categoría ya existe', 'error');
     }
 }
 
 function eliminarCategoria(index) {
-    if (confirm('¿Eliminar esta categoría? Los productos con esta categoría no se verán afectados.')) {
+    if (confirm('¿Eliminar esta categoría?')) {
         datos.categorias.splice(index, 1);
         guardarDatos();
         mostrarCategorias();
@@ -386,7 +472,6 @@ function eliminarCategoria(index) {
     }
 }
 
-// Exportar datos
 function exportarDatos() {
     const dataStr = JSON.stringify(datos, null, 2);
     const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
@@ -401,7 +486,6 @@ function exportarDatos() {
     mostrarNotificacion('Datos exportados correctamente', 'exito');
 }
 
-// Importar datos
 function importarDatos(event) {
     const file = event.target.files[0];
     const reader = new FileReader();
@@ -423,7 +507,6 @@ function importarDatos(event) {
     event.target.value = '';
 }
 
-// Importar backup completo
 function importarBackup(event) {
     const file = event.target.files[0];
     const reader = new FileReader();
@@ -444,12 +527,10 @@ function importarBackup(event) {
     event.target.value = '';
 }
 
-// Modal
 function cerrarModal() {
     document.getElementById('modal-producto').style.display = 'none';
 }
 
-// Notificaciones
 function mostrarNotificacion(mensaje, tipo) {
     const notificaciones = document.getElementById('notificaciones');
     const notificacion = document.createElement('div');
@@ -467,13 +548,14 @@ function mostrarNotificacion(mensaje, tipo) {
     }, 3000);
 }
 
-// Inicializar
 window.onload = function() {
     cargarDatos();
     
-    // Agregar eventos para vista previa en tiempo real
     document.querySelectorAll('#form-agregar-producto input, #form-agregar-producto select').forEach(element => {
         element.addEventListener('input', actualizarVistaPrevia);
         element.addEventListener('change', actualizarVistaPrevia);
     });
+    
+    document.getElementById('combinaciones-container').addEventListener('change', actualizarVistaPrevia);
+    document.getElementById('combinaciones-container').addEventListener('input', actualizarVistaPrevia);
 };
