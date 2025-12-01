@@ -3,28 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jessica Boutique | Sistema de Gestión de Inventario</title>
+    <title>Jessica Boutique | Sistema de Gestión</title>
     
-    <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
     
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- Tailwind CSS CDN (solo para desarrollo) -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     
-    <!-- CSS Personalizado -->
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/components.css">
     <link rel="stylesheet" href="css/responsive.css">
     
-    <!-- Configuración de Tailwind personalizada -->
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -88,28 +82,20 @@
         }
     </script>
     
-    <!-- Preload crítico -->
     <link rel="preload" href="js/utils.js" as="script">
     <link rel="preload" href="components/header.html" as="fetch" crossorigin="anonymous">
     
-    <!-- Meta tags para SEO -->
-    <meta name="description" content="Sistema de gestión de inventario para Jessica Boutique. Controla stock, categorías, productos y estadísticas en tiempo real.">
-    <meta name="keywords" content="inventario, boutique, moda, gestión, stock, productos, Jessica Boutique">
+    <meta name="description" content="Sistema de gestión de inventario para Jessica Boutique">
+    <meta name="keywords" content="inventario, boutique, moda, gestión, stock">
     <meta name="author" content="Jessica Boutique">
     
-    <!-- Open Graph -->
-    <meta property="og:title" content="Jessica Boutique | Sistema de Gestión de Inventario">
-    <meta property="og:description" content="Sistema profesional de gestión de inventario para boutiques de moda">
+    <meta property="og:title" content="Jessica Boutique | Sistema de Gestión">
+    <meta property="og:description" content="Sistema profesional de gestión de inventario">
     <meta property="og:type" content="website">
     
-    <!-- Apple Touch Icon -->
     <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png">
     
-    <!-- Manifest para PWA (futuro) -->
-    <!-- <link rel="manifest" href="manifest.json"> -->
-    
     <style>
-        /* Estilos críticos inline para mejor rendimiento inicial */
         .loading-screen {
             position: fixed;
             top: 0;
@@ -149,7 +135,6 @@
             font-size: 1.1rem;
         }
         
-        /* FOUC prevention */
         .js-loading * {
             animation-play-state: paused !important;
             transition: none !important;
@@ -158,7 +143,6 @@
 </head>
 <body class="font-inter bg-gradient-to-br from-pink-50 via-white to-rose-50 min-h-screen js-loading">
     
-    <!-- Pantalla de carga inicial -->
     <div id="loadingScreen" class="loading-screen">
         <div class="loading-logo">
             <i data-lucide="shopping-bag" class="text-white w-10 h-10"></i>
@@ -166,23 +150,18 @@
         <div class="loading-text">Cargando Jessica Boutique...</div>
     </div>
     
-    <!-- Contenedor principal -->
     <div id="app" class="min-h-screen flex flex-col opacity-0 transition-opacity duration-500">
         
-        <!-- Header/Navbar -->
         <header id="header-container" class="sticky top-0 z-50 bg-gradient-navbar backdrop-blur-md border-b border-pink-200/50 shadow-sm">
-            <!-- Contenido cargado dinámicamente -->
         </header>
         
-        <!-- Contenido principal -->
         <main id="app-container" class="flex-grow container mx-auto px-4 py-6 md:py-8 lg:py-10 max-w-7xl">
-            <!-- Las secciones se cargarán aquí dinámicamente -->
             <div id="default-content" class="text-center py-20">
                 <div class="w-24 h-24 bg-gradient-to-r from-pink-400 to-rose-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
                     <i data-lucide="shopping-bag" class="text-white w-12 h-12"></i>
                 </div>
                 <h1 class="text-3xl font-bold text-gray-800 mb-3">Bienvenida a Jessica Boutique</h1>
-                <p class="text-gray-600 max-w-md mx-auto mb-8">Sistema de gestión de inventario profesional para tu boutique de moda</p>
+                <p class="text-gray-600 max-w-md mx-auto mb-8">Sistema de gestión de inventario profesional</p>
                 <div class="animate-pulse-glow">
                     <div class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-pink-500 to-rose-500 text-white rounded-xl font-semibold">
                         <i data-lucide="package" class="w-5 h-5"></i>
@@ -192,25 +171,19 @@
             </div>
         </main>
         
-        <!-- Footer -->
         <footer id="footer-container" class="bg-white/80 border-t border-pink-100">
-            <!-- Contenido cargado dinámicamente -->
         </footer>
         
-        <!-- Modal global (para mensajes, confirmaciones, etc.) -->
         <div id="global-modal" class="fixed inset-0 z-[100] hidden">
             <div class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
             <div class="absolute inset-0 flex items-center justify-center p-4">
                 <div id="modal-content" class="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto animate-slide-up">
-                    <!-- Contenido del modal -->
                 </div>
             </div>
         </div>
         
-        <!-- Toast/Notificaciones -->
         <div id="toast-container" class="fixed bottom-4 right-4 z-[90] space-y-3"></div>
         
-        <!-- Offline indicator -->
         <div id="offline-indicator" class="fixed top-4 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg hidden z-[80]">
             <div class="flex items-center gap-2">
                 <i data-lucide="wifi-off" class="w-4 h-4"></i>
@@ -218,20 +191,15 @@
             </div>
         </div>
         
-        <!-- Back to top button -->
         <button id="back-to-top" class="fixed bottom-6 right-6 bg-gradient-to-r from-pink-500 to-rose-500 text-white p-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 opacity-0 transform translate-y-10 z-40">
             <i data-lucide="chevron-up" class="w-5 h-5"></i>
         </button>
         
     </div>
     
-    <!-- JavaScript -->
-    <!-- Utils primero (funciones básicas) -->
     <script src="js/utils.js"></script>
     
-    <!-- Componentes dinámicos -->
     <script>
-        // Función para cargar componentes dinámicamente
         async function loadComponent(componentId, componentPath) {
             try {
                 const response = await fetch(componentPath);
@@ -239,7 +207,6 @@
                 const html = await response.text();
                 document.getElementById(componentId).innerHTML = html;
                 
-                // Ejecutar scripts dentro del componente
                 const scripts = document.getElementById(componentId).querySelectorAll('script');
                 scripts.forEach(script => {
                     const newScript = document.createElement('script');
@@ -252,7 +219,6 @@
                 });
             } catch (error) {
                 console.warn(`Error cargando ${componentPath}:`, error);
-                // Contenido por defecto
                 if (componentId === 'header-container') {
                     document.getElementById(componentId).innerHTML = `
                         <div class="container mx-auto px-4 py-4">
@@ -273,9 +239,7 @@
             }
         }
         
-        // Cargar componentes cuando el DOM esté listo
         document.addEventListener('DOMContentLoaded', async () => {
-            // Ocultar pantalla de carga y mostrar contenido
             setTimeout(() => {
                 document.getElementById('loadingScreen').style.opacity = '0';
                 setTimeout(() => {
@@ -285,23 +249,19 @@
                 }, 500);
             }, 800);
             
-            // Cargar componentes principales
             await Promise.all([
                 loadComponent('header-container', 'components/header.html'),
                 loadComponent('footer-container', 'components/footer.html')
             ]);
             
-            // Inicializar iconos
             if (window.lucide) {
                 lucide.createIcons();
             }
             
-            // Cargar la sección por defecto (inventario)
             const hash = window.location.hash.substring(1) || 'inventario';
             if (typeof window.loadSection === 'function') {
                 await window.loadSection(hash);
             } else {
-                // Cargar scripts de navegación
                 const navScript = document.createElement('script');
                 navScript.src = 'js/navigation.js';
                 navScript.onload = () => {
@@ -310,7 +270,6 @@
                 document.body.appendChild(navScript);
             }
             
-            // Cargar el resto de scripts principales
             const scripts = [
                 'js/app.js',
                 'js/products.js',
@@ -327,12 +286,10 @@
                 document.body.appendChild(script);
             });
             
-            // Inicializar funcionalidades básicas
             initializeBasicFeatures();
         });
         
         function initializeBasicFeatures() {
-            // Back to top button
             const backToTopBtn = document.getElementById('back-to-top');
             if (backToTopBtn) {
                 window.addEventListener('scroll', () => {
@@ -350,7 +307,6 @@
                 });
             }
             
-            // Detectar conexión a internet
             window.addEventListener('online', () => {
                 document.getElementById('offline-indicator').classList.add('hidden');
                 showToast('Conexión restablecida', 'success');
@@ -361,7 +317,6 @@
                 showToast('Sin conexión a internet', 'warning');
             });
             
-            // Función de toast básica
             window.showToast = function(message, type = 'info') {
                 const toastContainer = document.getElementById('toast-container');
                 const toastId = 'toast-' + Date.now();
@@ -393,10 +348,8 @@
                 
                 toastContainer.appendChild(toast);
                 
-                // Actualizar iconos
                 lucide.createIcons();
                 
-                // Auto-remover después de 5 segundos
                 setTimeout(() => {
                     if (document.getElementById(toastId)) {
                         toast.classList.add('opacity-0', 'transition-opacity', 'duration-300');
@@ -409,7 +362,6 @@
                 }, 5000);
             };
             
-            // Modal básico
             window.showModal = function(content) {
                 const modal = document.getElementById('global-modal');
                 const modalContent = document.getElementById('modal-content');
@@ -417,17 +369,14 @@
                 modalContent.innerHTML = content;
                 modal.classList.remove('hidden');
                 
-                // Actualizar iconos dentro del modal
                 setTimeout(() => lucide.createIcons(), 100);
                 
-                // Cerrar modal al hacer clic fuera
                 modal.addEventListener('click', function(e) {
                     if (e.target === modal) {
                         closeModal();
                     }
                 });
                 
-                // Cerrar con ESC
                 document.addEventListener('keydown', function escHandler(e) {
                     if (e.key === 'Escape') {
                         closeModal();
@@ -443,12 +392,8 @@
         }
     </script>
     
-    <!-- Scripts adicionales que requieren dependencias -->
     <script>
-        // Verificar si Tailwind está cargado
         if (typeof tailwind === 'undefined') {
-            console.warn('Tailwind CSS no se cargó correctamente');
-            // Fallback a estilos básicos
             const style = document.createElement('style');
             style.textContent = `
                 body { font-family: 'Inter', sans-serif; margin: 0; }
@@ -457,10 +402,7 @@
             document.head.appendChild(style);
         }
         
-        // Verificar si Lucide está cargado
         if (typeof lucide === 'undefined') {
-            console.warn('Lucide Icons no se cargó correctamente');
-            // Intentar cargar de nuevo
             const script = document.createElement('script');
             script.src = 'https://unpkg.com/lucide@latest';
             script.onload = () => {
@@ -471,9 +413,6 @@
             document.body.appendChild(script);
         }
     </script>
-    
-    <!-- Analytics (opcional) -->
-    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXX-Y"></script> -->
     
 </body>
 </html>
