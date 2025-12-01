@@ -1,0 +1,576 @@
+<!-- Sección de Categorías -->
+<div class="space-y-6 md:space-y-8">
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+            <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Categorías</h1>
+            <p class="text-gray-600 mt-1">Organiza tus productos por categorías</p>
+        </div>
+        <button id="new-category-btn" class="btn-primary">
+            <i data-lucide="folder-plus" class="w-4 h-4"></i>
+            Nueva Categoría
+        </button>
+    </div>
+    
+    <!-- Estadísticas de categorías -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+        <div class="stats-card">
+            <div class="flex items-center justify-between w-full mb-3">
+                <div>
+                    <h3 class="text-sm md:text-base font-semibold text-gray-700">Total Categorías</h3>
+                    <p class="text-xs text-gray-500">Activas e inactivas</p>
+                </div>
+                <div class="stats-card-icon bg-pink-100 text-pink-600">
+                    <i data-lucide="layers" class="w-5 h-5"></i>
+                </div>
+            </div>
+            <p class="stats-card-value">14</p>
+        </div>
+        
+        <div class="stats-card">
+            <div class="flex items-center justify-between w-full mb-3">
+                <div>
+                    <h3 class="text-sm md:text-base font-semibold text-gray-700">Categorías Activas</h3>
+                    <p class="text-xs text-gray-500">Con productos</p>
+                </div>
+                <div class="stats-card-icon bg-green-100 text-green-600">
+                    <i data-lucide="check-circle" class="w-5 h-5"></i>
+                </div>
+            </div>
+            <p class="stats-card-value">12</p>
+        </div>
+        
+        <div class="stats-card">
+            <div class="flex items-center justify-between w-full mb-3">
+                <div>
+                    <h3 class="text-sm md:text-base font-semibold text-gray-700">Productos por Categoría</h3>
+                    <p class="text-xs text-gray-500">Promedio</p>
+                </div>
+                <div class="stats-card-icon bg-blue-100 text-blue-600">
+                    <i data-lucide="package" class="w-5 h-5"></i>
+                </div>
+            </div>
+            <p class="stats-card-value">10.5</p>
+        </div>
+        
+        <div class="stats-card">
+            <div class="flex items-center justify-between w-full mb-3">
+                <div>
+                    <h3 class="text-sm md:text-base font-semibold text-gray-700">Categorías Vacías</h3>
+                    <p class="text-xs text-gray-500">Sin productos</p>
+                </div>
+                <div class="stats-card-icon bg-amber-100 text-amber-600">
+                    <i data-lucide="alert-circle" class="w-5 h-5"></i>
+                </div>
+            </div>
+            <p class="stats-card-value">2</p>
+        </div>
+    </div>
+    
+    <!-- Lista de Categorías -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="border-b border-gray-200 bg-gradient-to-r from-pink-50 to-rose-50/50">
+            <div class="flex flex-col md:flex-row md:items-center justify-between p-6">
+                <div>
+                    <h2 class="text-xl font-bold text-gray-800">Todas las Categorías</h2>
+                    <p class="text-sm text-gray-600">Gestiona y organiza tus categorías</p>
+                </div>
+                
+                <div class="flex gap-2 mt-4 md:mt-0">
+                    <div class="relative">
+                        <i data-lucide="search" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4"></i>
+                        <input type="search" placeholder="Buscar categorías..." 
+                               class="pl-10 pr-4 py-2 border border-gray-300 rounded-xl">
+                    </div>
+                    <button class="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50">
+                        <i data-lucide="filter" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Vista de tabla (Desktop) -->
+        <div class="hidden md:block overflow-x-auto">
+            <table class="w-full">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="table-header">
+                            <div class="flex items-center gap-2">
+                                <input type="checkbox" class="rounded border-gray-300 text-pink-600 focus:ring-pink-500">
+                                Categoría
+                            </div>
+                        </th>
+                        <th class="table-header">Productos</th>
+                        <th class="table-header">Subcategorías</th>
+                        <th class="table-header">Stock Total</th>
+                        <th class="table-header">Valor Total</th>
+                        <th class="table-header">Estado</th>
+                        <th class="table-header">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="categories-table-body">
+                    <!-- Categoría: Ropa -->
+                    <tr class="table-row hover:bg-pink-50/50">
+                        <td class="table-cell">
+                            <div class="flex items-center gap-3">
+                                <input type="checkbox" class="rounded border-gray-300 text-pink-600 focus:ring-pink-500">
+                                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center">
+                                    <i data-lucide="shirt" class="text-white w-5 h-5"></i>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-gray-900">Ropa</p>
+                                    <p class="text-xs text-gray-500">Vestidos, blusas, pantalones</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="table-cell">
+                            <span class="font-semibold text-gray-900">24</span>
+                            <span class="text-xs text-gray-500 ml-1">productos</span>
+                        </td>
+                        <td class="table-cell">
+                            <div class="flex flex-wrap gap-1">
+                                <span class="category-tag">Vestidos</span>
+                                <span class="category-tag">Blusas</span>
+                                <span class="category-tag">Pantalones</span>
+                            </div>
+                        </td>
+                        <td class="table-cell">
+                            <span class="font-semibold text-gray-900">142</span>
+                            <span class="text-xs text-gray-500 ml-1">unidades</span>
+                        </td>
+                        <td class="table-cell">
+                            <span class="font-semibold text-gray-900">$2,850</span>
+                        </td>
+                        <td class="table-cell">
+                            <span class="status-badge active">Activa</span>
+                        </td>
+                        <td class="table-cell">
+                            <div class="flex items-center gap-2">
+                                <button class="table-action-btn text-blue-600 hover:bg-blue-50" title="Ver">
+                                    <i data-lucide="eye" class="w-4 h-4"></i>
+                                </button>
+                                <button class="table-action-btn text-pink-600 hover:bg-pink-50" title="Editar">
+                                    <i data-lucide="edit" class="w-4 h-4"></i>
+                                </button>
+                                <button class="table-action-btn text-gray-600 hover:bg-gray-50" title="Archivar">
+                                    <i data-lucide="archive" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    
+                    <!-- Categoría: Accesorios -->
+                    <tr class="table-row hover:bg-pink-50/50">
+                        <td class="table-cell">
+                            <div class="flex items-center gap-3">
+                                <input type="checkbox" class="rounded border-gray-300 text-pink-600 focus:ring-pink-500">
+                                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center">
+                                    <i data-lucide="watch" class="text-white w-5 h-5"></i>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-gray-900">Accesorios</p>
+                                    <p class="text-xs text-gray-500">Relojes, joyería, gafas</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="table-cell">
+                            <span class="font-semibold text-gray-900">18</span>
+                            <span class="text-xs text-gray-500 ml-1">productos</span>
+                        </td>
+                        <td class="table-cell">
+                            <div class="flex flex-wrap gap-1">
+                                <span class="category-tag">Relojes</span>
+                                <span class="category-tag">Joyería</span>
+                            </div>
+                        </td>
+                        <td class="table-cell">
+                            <span class="font-semibold text-gray-900">89</span>
+                            <span class="text-xs text-gray-500 ml-1">unidades</span>
+                        </td>
+                        <td class="table-cell">
+                            <span class="font-semibold text-gray-900">$3,120</span>
+                        </td>
+                        <td class="table-cell">
+                            <span class="status-badge active">Activa</span>
+                        </td>
+                        <td class="table-cell">
+                            <div class="flex items-center gap-2">
+                                <button class="table-action-btn text-blue-600 hover:bg-blue-50">
+                                    <i data-lucide="eye" class="w-4 h-4"></i>
+                                </button>
+                                <button class="table-action-btn text-pink-600 hover:bg-pink-50">
+                                    <i data-lucide="edit" class="w-4 h-4"></i>
+                                </button>
+                                <button class="table-action-btn text-gray-600 hover:bg-gray-50">
+                                    <i data-lucide="archive" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Vista móvil -->
+        <div class="md:hidden space-y-4 p-6">
+            <!-- Card categoría móvil -->
+            <div class="category-card-mobile">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="flex items-start gap-3">
+                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center">
+                            <i data-lucide="shirt" class="text-white w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-gray-900">Ropa</h3>
+                            <p class="text-sm text-gray-600">Vestidos, blusas, pantalones</p>
+                            <div class="flex items-center gap-2 mt-1">
+                                <span class="status-badge active">Activa</span>
+                                <span class="text-xs text-gray-500">24 productos</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="p-2 hover:bg-gray-100 rounded-lg">
+                        <i data-lucide="more-vertical" class="w-5 h-5 text-gray-500"></i>
+                    </button>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <p class="text-xs text-gray-500 mb-1">Subcategorías</p>
+                        <div class="flex flex-wrap gap-1">
+                            <span class="category-tag">Vestidos</span>
+                            <span class="category-tag">Blusas</span>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 mb-1">Stock Total</p>
+                        <p class="font-semibold text-gray-900">142 unidades</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-xs text-gray-500">Valor Total</p>
+                        <p class="text-lg font-bold text-gray-900">$2,850</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg">
+                            <i data-lucide="eye" class="w-4 h-4"></i>
+                        </button>
+                        <button class="p-2 text-pink-600 hover:bg-pink-50 rounded-lg">
+                            <i data-lucide="edit" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sin categorías -->
+        <div id="empty-categories" class="hidden p-12 text-center">
+            <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i data-lucide="folder" class="w-10 h-10 text-gray-400"></i>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-800 mb-2">No hay categorías</h3>
+            <p class="text-gray-600 mb-6">Crea tu primera categoría para organizar tus productos</p>
+            <button class="px-6 py-3 bg-gradient-to-r from-pink-500 to-rose-500 text-white rounded-xl hover:from-pink-600 hover:to-rose-600">
+                <i data-lucide="folder-plus" class="w-5 h-5 inline mr-2"></i>
+                Crear Primera Categoría
+            </button>
+        </div>
+    </div>
+    
+    <!-- Categorías más populares -->
+    <div class="bg-white rounded-2xl p-6 border border-gray-200">
+        <h3 class="text-lg font-semibold text-gray-800 mb-4">Categorías Más Populares</h3>
+        
+        <div class="space-y-4">
+            <!-- Barra de progreso: Ropa -->
+            <div>
+                <div class="flex items-center justify-between mb-1">
+                    <span class="text-sm font-medium text-gray-700">Ropa</span>
+                    <span class="text-sm font-semibold text-pink-600">24 productos</span>
+                </div>
+                <div class="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                    <div class="h-full bg-gradient-to-r from-pink-500 to-rose-500 rounded-full" style="width: 85%"></div>
+                </div>
+            </div>
+            
+            <!-- Barra de progreso: Accesorios -->
+            <div>
+                <div class="flex items-center justify-between mb-1">
+                    <span class="text-sm font-medium text-gray-700">Accesorios</span>
+                    <span class="text-sm font-semibold text-blue-600">18 productos</span>
+                </div>
+                <div class="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                    <div class="h-full bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full" style="width: 65%"></div>
+                </div>
+            </div>
+            
+            <!-- Barra de progreso: Calzado -->
+            <div>
+                <div class="flex items-center justify-between mb-1">
+                    <span class="text-sm font-medium text-gray-700">Calzado</span>
+                    <span class="text-sm font-semibold text-green-600">12 productos</span>
+                </div>
+                <div class="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                    <div class="h-full bg-gradient-to-r from-green-500 to-emerald-500 rounded-full" style="width: 45%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Instrucciones -->
+    <div class="bg-gradient-to-r from-pink-50 to-rose-50 border border-pink-200 rounded-2xl p-6">
+        <div class="flex items-start gap-4">
+            <div class="w-12 h-12 rounded-xl bg-pink-100 flex items-center justify-center flex-shrink-0">
+                <i data-lucide="lightbulb" class="w-6 h-6 text-pink-600"></i>
+            </div>
+            <div>
+                <h3 class="font-semibold text-gray-800 mb-2">Consejos para organizar categorías</h3>
+                <ul class="space-y-2 text-sm text-gray-600">
+                    <li class="flex items-start gap-2">
+                        <i data-lucide="check" class="w-4 h-4 text-pink-500 mt-0.5 flex-shrink-0"></i>
+                        <span>Crea categorías específicas para facilitar la búsqueda de productos</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <i data-lucide="check" class="w-4 h-4 text-pink-500 mt-0.5 flex-shrink-0"></i>
+                        <span>Usa subcategorías para organizar productos similares</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <i data-lucide="check" class="w-4 h-4 text-pink-500 mt-0.5 flex-shrink-0"></i>
+                        <span>Mantén las categorías inactivas archivadas para no saturar la lista</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .category-tag {
+        @apply px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-lg border border-gray-200;
+    }
+    
+    .category-card-mobile {
+        @apply bg-white border border-gray-200 rounded-xl p-4 shadow-sm;
+    }
+</style>
+
+<script>
+    // Script para la sección de categorías
+    class CategoriesSection {
+        constructor() {
+            this.categories = [];
+            this.init();
+        }
+        
+        init() {
+            this.bindEvents();
+            this.loadCategories();
+        }
+        
+        bindEvents() {
+            // Botón nueva categoría
+            const newCategoryBtn = document.getElementById('new-category-btn');
+            if (newCategoryBtn) {
+                newCategoryBtn.addEventListener('click', () => {
+                    this.openCategoryForm();
+                });
+            }
+            
+            // Botones de editar
+            document.addEventListener('click', (e) => {
+                if (e.target.closest('.table-action-btn') || 
+                    e.target.closest('[class*="text-pink-600"]')) {
+                    const row = e.target.closest('tr') || e.target.closest('.category-card-mobile');
+                    if (row) {
+                        const categoryName = row.querySelector('.font-medium, .font-semibold')?.textContent;
+                        if (categoryName) {
+                            this.openCategoryForm(categoryName);
+                        }
+                    }
+                }
+            });
+        }
+        
+        async loadCategories() {
+            // Aquí cargarías las categorías desde la API
+            // Por ahora usamos datos de ejemplo
+            this.categories = [
+                {
+                    id: 1,
+                    name: "Ropa",
+                    description: "Vestidos, blusas, pantalones",
+                    icon: "shirt",
+                    color: "from-pink-500 to-rose-500",
+                    products: 24,
+                    subcategories: ["Vestidos", "Blusas", "Pantalones"],
+                    stock: 142,
+                    value: 2850,
+                    status: "active"
+                },
+                {
+                    id: 2,
+                    name: "Accesorios",
+                    description: "Relojes, joyería, gafas",
+                    icon: "watch",
+                    color: "from-blue-500 to-cyan-500",
+                    products: 18,
+                    subcategories: ["Relojes", "Joyería"],
+                    stock: 89,
+                    value: 3120,
+                    status: "active"
+                }
+            ];
+            
+            this.renderCategories();
+        }
+        
+        renderCategories() {
+            // Aquí renderizarías las categorías en la tabla
+            console.log('Renderizando categorías:', this.categories);
+        }
+        
+        openCategoryForm(categoryName = null) {
+            const isEdit = categoryName !== null;
+            const modalContent = `
+                <div class="p-6 max-w-2xl">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">
+                        ${isEdit ? 'Editar Categoría' : 'Nueva Categoría'}
+                    </h3>
+                    
+                    <form id="category-form" class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    Nombre de la Categoría *
+                                </label>
+                                <input type="text" required 
+                                       value="${isEdit ? categoryName : ''}"
+                                       class="w-full p-3 border border-gray-300 rounded-xl">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    Icono
+                                </label>
+                                <select class="w-full p-3 border border-gray-300 rounded-xl">
+                                    <option value="shirt">👕 Ropa</option>
+                                    <option value="watch">⌚ Accesorios</option>
+                                    <option value="shoe">👟 Calzado</option>
+                                    <option value="shopping-bag">👜 Bolsos</option>
+                                    <option value="sparkles">✨ Joyería</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Descripción
+                            </label>
+                            <textarea rows="3" class="w-full p-3 border border-gray-300 rounded-xl"
+                                      placeholder="Describe esta categoría..."></textarea>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Color de la Categoría
+                            </label>
+                            <div class="flex flex-wrap gap-2">
+                                <div class="color-option-category bg-gradient-to-r from-pink-500 to-rose-500 active"></div>
+                                <div class="color-option-category bg-gradient-to-r from-blue-500 to-cyan-500"></div>
+                                <div class="color-option-category bg-gradient-to-r from-green-500 to-emerald-500"></div>
+                                <div class="color-option-category bg-gradient-to-r from-purple-500 to-pink-500"></div>
+                                <div class="color-option-category bg-gradient-to-r from-amber-500 to-orange-500"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center gap-3 p-4 bg-gray-50 rounded-xl">
+                            <input type="checkbox" id="is-active" checked class="rounded border-gray-300 text-pink-600">
+                            <label for="is-active" class="text-sm text-gray-700">
+                                Categoría activa (visible en el catálogo)
+                            </label>
+                        </div>
+                        
+                        <div class="flex justify-end gap-3 pt-4 border-t border-gray-200">
+                            <button type="button" onclick="closeModal()" 
+                                    class="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-xl">
+                                Cancelar
+                            </button>
+                            <button type="submit" 
+                                    class="px-4 py-2 bg-pink-500 text-white rounded-xl hover:bg-pink-600">
+                                ${isEdit ? 'Actualizar' : 'Crear'} Categoría
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            `;
+            
+            if (typeof window.showModal === 'function') {
+                window.showModal(modalContent);
+                
+                // Configurar el formulario
+                setTimeout(() => {
+                    const form = document.getElementById('category-form');
+                    if (form) {
+                        form.addEventListener('submit', (e) => {
+                            e.preventDefault();
+                            // Aquí iría la lógica para guardar la categoría
+                            if (typeof window.showToast === 'function') {
+                                window.showToast(
+                                    `Categoría ${isEdit ? 'actualizada' : 'creada'} exitosamente`,
+                                    'success'
+                                );
+                            }
+                            closeModal();
+                        });
+                    }
+                    
+                    // Configurar selección de colores
+                    document.querySelectorAll('.color-option-category').forEach(option => {
+                        option.addEventListener('click', () => {
+                            document.querySelectorAll('.color-option-category').forEach(o => {
+                                o.classList.remove('active');
+                            });
+                            option.classList.add('active');
+                        });
+                    });
+                }, 100);
+            }
+        }
+        
+        async saveCategory(categoryData) {
+            // Aquí guardarías la categoría en la API
+            console.log('Guardando categoría:', categoryData);
+            // Simular guardado
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            return { success: true, data: categoryData };
+        }
+        
+        async deleteCategory(categoryId) {
+            // Aquí eliminarías la categoría
+            console.log('Eliminando categoría:', categoryId);
+            // Simular eliminación
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            return { success: true };
+        }
+    }
+    
+    // Inicializar cuando la sección se cargue
+    document.addEventListener('DOMContentLoaded', () => {
+        if (document.querySelector('section#categorias.active') || 
+            window.location.hash === '#categorias') {
+            window.categoriesSection = new CategoriesSection();
+        }
+    });
+</script>
+
+<style>
+    .color-option-category {
+        @apply w-10 h-10 rounded-lg cursor-pointer border-2 border-transparent transition-transform;
+    }
+    
+    .color-option-category.active {
+        @apply border-gray-800 scale-110;
+    }
+</style>
