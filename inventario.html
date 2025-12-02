@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jessica Boutique | Inventario</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/inventario.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navbar (mismo que index) -->
+    <div class="navbar">
+        <div class="logo">
+            <i class="fas fa-store"></i>
+            <h1>Jessica Boutique</h1>
+            <span class="subtitle">Sistema de Gestión</span>
+        </div>
+        <div class="nav-buttons">
+            <a href="index.html" class="nav-btn">
+                <i class="fas fa-home"></i> Inicio
+            </a>
+            <a href="inventario.html" class="nav-btn active">
+                <i class="fas fa-boxes"></i> Inventario
+            </a>
+            <a href="agregar-producto.html" class="nav-btn">
+                <i class="fas fa-plus-circle"></i> Agregar
+            </a>
+            <a href="ventas.html" class="nav-btn">
+                <i class="fas fa-cash-register"></i> Ventas
+            </a>
+            <a href="reportes.html" class="nav-btn">
+                <i class="fas fa-chart-bar"></i> Reportes
+            </a>
+            <a href="gestion.html" class="nav-btn">
+                <i class="fas fa-cog"></i> Gestión
+            </a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="seccion-header">
+            <h2><i class="fas fa-boxes"></i> Inventario de Productos</h2>
+            <button class="btn-principal" onclick="location.href='agregar-producto.html'">
+                <i class="fas fa-plus"></i> Nuevo Producto
+            </button>
+        </div>
+
+        <div class="filtros">
+            <div class="busqueda">
+                <i class="fas fa-search"></i>
+                <input type="text" id="buscar-producto" placeholder="Buscar por nombre..." 
+                       onkeyup="filtrarProductos()">
+            </div>
+            <select id="filtro-categoria" onchange="filtrarProductos()">
+                <option value="">Todas las categorías</option>
+            </select>
+            <select id="filtro-marca" onchange="filtrarProductos()">
+                <option value="">Todas las marcas</option>
+            </select>
+            <select id="filtro-talla" onchange="filtrarProductos()">
+                <option value="">Todas las tallas</option>
+                <option value="XS">XS</option>
+                <option value="S">S</option>
+                <option value="M">M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+                <option value="Única">Única</option>
+            </select>
+            <select id="ordenar-por" onchange="ordenarProductos()">
+                <option value="nombre">Ordenar por</option>
+                <option value="cantidad">Menor cantidad</option>
+                <option value="precio">Menor precio</option>
+                <option value="ganancia">Mayor ganancia</option>
+            </select>
+        </div>
+
+        <div class="tabla-contenedor">
+            <table id="tabla-productos">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Categoría</th>
+                        <th>Marca</th>
+                        <th>Talla</th>
+                        <th>Color</th>
+                        <th>Cantidad</th>
+                        <th>Precio</th>
+                        <th>Ganancia</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="lista-productos">
+                    <!-- Productos se cargarán aquí -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="estadisticas">
+            <div class="estadistica">
+                <h3>Total Productos</h3>
+                <p id="total-productos">0</p>
+            </div>
+            <div class="estadistica">
+                <h3>Stock Bajo (< 5)</h3>
+                <p id="stock-bajo">0</p>
+            </div>
+            <div class="estadistica">
+                <h3>Valor Total</h3>
+                <p id="valor-total">S/. 0.00</p>
+            </div>
+            <div class="estadistica">
+                <h3>Ganancia Total</h3>
+                <p id="ganancia-total">S/. 0.00</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para editar producto -->
+    <div id="modal-editar" class="modal">
+        <div class="modal-contenido">
+            <div class="modal-header">
+                <h3><i class="fas fa-edit"></i> Editar Producto</h3>
+                <button class="btn-cerrar" onclick="cerrarModal('modal-editar')">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-editar-body">
+                <!-- Formulario de edición se cargará aquí -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Notificaciones -->
+    <div id="notificaciones" class="notificaciones"></div>
+
+    <script src="js/main.js"></script>
+    <script src="js/inventario.js"></script>
+</body>
+</html>
