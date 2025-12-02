@@ -1,0 +1,301 @@
+/* Estilos específicos para la sección de inventario */
+
+/* Encabezado de sección */
+.seccion-header {
+    background: var(--blanco);
+    padding: 1.2rem;
+    border-radius: 12px;
+    margin-bottom: 1.2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.seccion-header h2 {
+    color: var(--rosa-principal);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.3rem;
+}
+
+/* Filtros */
+.filtros {
+    background: var(--blanco);
+    padding: 1.2rem;
+    border-radius: 12px;
+    margin-bottom: 1.2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.75rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.busqueda {
+    grid-column: 1 / -1;
+    position: relative;
+}
+
+.busqueda i {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gris-oscuro);
+}
+
+.busqueda input,
+.filtros select {
+    width: 100%;
+    padding: 0.8rem 1rem 0.8rem 2.8rem;
+    border: 1px solid var(--gris-medio);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    transition: all 0.3s;
+    background: var(--gris-claro);
+}
+
+.busqueda input:focus,
+.filtros select:focus {
+    outline: none;
+    border-color: var(--rosa-principal);
+    box-shadow: 0 0 0 2px rgba(233, 30, 99, 0.1);
+}
+
+.filtros select {
+    padding: 0.8rem 1rem;
+    cursor: pointer;
+}
+
+/* Tabla de productos */
+.tabla-contenedor {
+    background: var(--blanco);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin-bottom: 1.2rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+#tabla-productos {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 900px;
+}
+
+#tabla-productos thead {
+    background: linear-gradient(135deg, var(--rosa-principal), var(--morado));
+}
+
+#tabla-productos th {
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    color: var(--blanco);
+    font-size: 0.95rem;
+}
+
+#tabla-productos td {
+    padding: 0.9rem 1rem;
+    border-bottom: 1px solid var(--gris-claro);
+    font-size: 0.9rem;
+}
+
+#tabla-productos tr:hover {
+    background: #f9f9f9;
+}
+
+.badge {
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    border-radius: 16px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    background: var(--rosa-claro);
+    color: var(--rosa-oscuro);
+}
+
+/* Botones de acción */
+.btn-editar,
+.btn-eliminar {
+    padding: 0.4rem 0.8rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    margin: 0.2rem;
+}
+
+.btn-editar {
+    background: var(--azul);
+    color: white;
+}
+
+.btn-editar:hover {
+    background: #1976d2;
+}
+
+.btn-eliminar {
+    background: var(--rojo);
+    color: white;
+}
+
+.btn-eliminar:hover {
+    background: #d32f2f;
+}
+
+.btn-principal {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s;
+    font-size: 0.95rem;
+    background: linear-gradient(135deg, var(--rosa-principal), var(--morado));
+    color: var(--blanco);
+}
+
+.btn-principal:hover {
+    background: linear-gradient(135deg, var(--rosa-oscuro), #8e24aa);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(233, 30, 99, 0.3);
+}
+
+/* Estadísticas */
+.estadisticas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.estadistica {
+    background: var(--blanco);
+    padding: 1.2rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    text-align: center;
+}
+
+.estadistica h3 {
+    color: var(--gris-oscuro);
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.estadistica p {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--rosa-principal);
+}
+
+/* Clases para stock */
+.stock-bajo {
+    color: var(--rojo);
+    font-weight: 600;
+}
+
+.stock-medio {
+    color: var(--amarillo);
+    font-weight: 600;
+}
+
+.stock-alto {
+    color: var(--verde);
+    font-weight: 600;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.modal-contenido {
+    background: var(--blanco);
+    width: 100%;
+    max-width: 500px;
+    border-radius: 12px;
+    overflow: hidden;
+    animation: modalSlide 0.3s ease;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+@keyframes modalSlide {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-header {
+    background: linear-gradient(135deg, var(--rosa-principal), var(--morado));
+    color: var(--blanco);
+    padding: 1.2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+}
+
+.btn-cerrar {
+    background: none;
+    border: none;
+    color: var(--blanco);
+    font-size: 1.8rem;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .filtros {
+        grid-template-columns: 1fr;
+    }
+    
+    .seccion-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .estadisticas {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .estadisticas {
+        grid-template-columns: 1fr;
+    }
+    
+    #tabla-productos td, #tabla-productos th {
+        padding: 0.5rem;
+    }
+}
