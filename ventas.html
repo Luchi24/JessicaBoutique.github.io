@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jessica Boutique | Ventas</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/ventas.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="logo">
+            <i class="fas fa-store"></i>
+            <h1>Jessica Boutique</h1>
+            <span class="subtitle">Sistema de Gestión</span>
+        </div>
+        <div class="nav-buttons">
+            <a href="index.html" class="nav-btn">
+                <i class="fas fa-home"></i> Inicio
+            </a>
+            <a href="inventario.html" class="nav-btn">
+                <i class="fas fa-boxes"></i> Inventario
+            </a>
+            <a href="agregar-producto.html" class="nav-btn">
+                <i class="fas fa-plus-circle"></i> Agregar
+            </a>
+            <a href="ventas.html" class="nav-btn active">
+                <i class="fas fa-cash-register"></i> Ventas
+            </a>
+            <a href="reportes.html" class="nav-btn">
+                <i class="fas fa-chart-bar"></i> Reportes
+            </a>
+            <a href="gestion.html" class="nav-btn">
+                <i class="fas fa-cog"></i> Gestión
+            </a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="seccion-header">
+            <h2><i class="fas fa-cash-register"></i> Registrar Venta</h2>
+            <div class="header-acciones">
+                <span class="venta-id">Venta #<span id="numero-venta">1</span></span>
+                <span class="fecha-actual" id="fecha-actual"></span>
+            </div>
+        </div>
+
+        <div class="ventas-contenedor">
+            <!-- Formulario de venta -->
+            <div class="formulario-venta">
+                <form id="form-registrar-venta" onsubmit="registrarVenta(event)">
+                    <!-- Datos del cliente -->
+                    <div class="grupo-cliente">
+                        <h3><i class="fas fa-user"></i> Datos del Cliente</h3>
+                        <div class="grupo-doble">
+                            <div class="grupo-formulario">
+                                <label for="cliente-nombre">Nombre Completo *</label>
+                                <input type="text" id="cliente-nombre" required 
+                                       placeholder="Nombre del cliente">
+                            </div>
+                            <div class="grupo-formulario">
+                                <label for="cliente-dni">DNI / RUC</label>
+                                <input type="text" id="cliente-dni" 
+                                       placeholder="Número de documento">
+                            </div>
+                        </div>
+                        <div class="grupo-formulario">
+                            <label for="cliente-telefono">Teléfono</label>
+                            <input type="tel" id="cliente-telefono" 
+                                   placeholder="Número de contacto">
+                        </div>
+                    </div>
+
+                    <!-- Boleta/Factura -->
+                    <div class="grupo-boleta">
+                        <h3><i class="fas fa-receipt"></i> Comprobante</h3>
+                        <div class="tipo-comprobante">
+                            <label class="radio-option">
+                                <input type="radio" name="tipo-comprobante" value="boleta" checked>
+                                <span>Boleta</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="tipo-comprobante" value="factura">
+                                <span>Factura</span>
+                            </label>
+                        </div>
+                        
+                        <div class="upload-boleta">
+                            <label for="boleta-imagen" class="btn-secundario">
+                                <i class="fas fa-camera"></i> Capturar/Subir Comprobante
+                            </label>
+                            <input type="file" id="boleta-imagen" accept="image/*" capture="environment" 
+                                   onchange="previsualizarBoleta(event)">
+                            
+                            <div id="preview-boleta" class="preview-boleta" style="display: none;">
+                                <div class="preview-header">
+                                    <span>Vista previa</span>
+                                    <button type="button" class="btn-eliminar" onclick="eliminarBoleta()">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                                <img id="boleta-preview" src="" alt="Vista previa boleta">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Productos -->
+                    <div class="grupo-productos">
+                        <h3><i class="fas fa-shopping-cart"></i> Productos</h3>
+                        <div class="buscar-producto">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="buscar-producto-venta" 
+                                   placeholder="Buscar producto..." 
+                                   onkeyup="buscarProductoVenta()">
+                        </div>
+                        
+                        <div id="lista-productos-venta" class="lista-productos-venta">
+                            <!-- Productos se cargarán aquí -->
+                        </div>
+                        
+                        <div id="carrito-venta" class="carrito-venta">
+                            <h4>Carrito de Compra</h4>
+                            <div id="items-carrito">
+                                <!-- Items del carrito se cargarán aquí -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Resumen -->
+                    <div class="resumen-venta">
+                        <h3><i class="fas fa-calculator"></i> Resumen</h3>
+                        <div class="detalles-resumen">
+                            <div class="detalle">
+                                <span>Subtotal:</span>
+                                <span id="subtotal-venta">S/. 0.00</span>
+                            </div>
+                            <div class="detalle">
+                                <span>IGV (18%):</span>
+                                <span id="igv-venta">S/. 0.00</span>
+                            </div>
+                            <div class="detalle total">
+                                <span>Total a Pagar:</span>
+                                <span id="total-venta">S/. 0.00</span>
+                            </div>
+                            <div class="detalle ganancia">
+                                <span>Ganancia Total:</span>
+                                <span id="ganancia-total">S/. 0.00</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Método de pago -->
+                    <div class="grupo-pago">
+                        <h3><i class="fas fa-credit-card"></i> Método de Pago</h3>
+                        <div class="metodos-pago">
+                            <label class="radio-option">
+                                <input type="radio" name="metodo-pago" value="efectivo" checked>
+                                <span>Efectivo</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="metodo-pago" value="tarjeta">
+                                <span>Tarjeta</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="metodo-pago" value="transferencia">
+                                <span>Transferencia</span>
+                            </label>
+                        </div>
+                        
+                        <div class="grupo-formulario" id="efectivo-grupo">
+                            <label for="monto-recibido">Monto Recibido</label>
+                            <input type="number" id="monto-recibido" min="0" step="0.01" 
+                                   placeholder="S/. 0.00" oninput="calcularVuelto()">
+                        </div>
+                        
+                        <div class="detalle" id="vuelto-grupo" style="display: none;">
+                            <span>Vuelto:</span>
+                            <span id="vuelto">S/. 0.00</span>
+                        </div>
+                    </div>
+
+                    <!-- Botones -->
+                    <div class="botones-venta">
+                        <button type="button" class="btn-secundario" onclick="limpiarVenta()">
+                            <i class="fas fa-times"></i> Cancelar
+                        </button>
+                        <button type="submit" class="btn-principal">
+                            <i class="fas fa-check"></i> Registrar Venta
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Resumen lateral -->
+            <div class="resumen-lateral">
+                <div class="resumen-card">
+                    <h3><i class="fas fa-chart-line"></i> Hoy</h3>
+                    <div class="estadistica-rapida">
+                        <div class="estadistica-item">
+                            <span>Ventas:</span>
+                            <span id="ventas-hoy">0</span>
+                        </div>
+                        <div class="estadistica-item">
+                            <span>Total:</span>
+                            <span id="total-hoy">S/. 0.00</span>
+                        </div>
+                        <div class="estadistica-item">
+                            <span>Ganancia:</span>
+                            <span id="ganancia-hoy">S/. 0.00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="resumen-card">
+                    <h3><i class="fas fa-history"></i> Últimas Ventas</h3>
+                    <div id="ultimas-ventas" class="ultimas-ventas">
+                        <!-- Últimas ventas se cargarán aquí -->
+                    </div>
+                </div>
+
+                <div class="resumen-card">
+                    <h3><i class="fas fa-fire"></i> Productos Populares</h3>
+                    <div id="productos-populares" class="productos-populares">
+                        <!-- Productos populares se cargarán aquí -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal detalle de venta -->
+    <div id="modal-detalle-venta" class="modal">
+        <div class="modal-contenido">
+            <div class="modal-header">
+                <h3><i class="fas fa-receipt"></i> Detalle de Venta</h3>
+                <button class="btn-cerrar" onclick="cerrarModal('modal-detalle-venta')">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-detalle-venta-body">
+                <!-- Detalle se cargará aquí -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal confirmación -->
+    <div id="modal-confirmacion" class="modal">
+        <div class="modal-contenido">
+            <div class="modal-header">
+                <h3><i class="fas fa-question-circle"></i> Confirmación</h3>
+                <button class="btn-cerrar" onclick="cerrarModal('modal-confirmacion')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="mensaje-confirmacion">¿Estás seguro?</p>
+                <div class="botones-confirmacion">
+                    <button class="btn-secundario" onclick="cerrarModal('modal-confirmacion')">
+                        Cancelar
+                    </button>
+                    <button class="btn-principal" id="btn-confirmar-accion">
+                        Confirmar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notificaciones -->
+    <div id="notificaciones" class="notificaciones"></div>
+
+    <script src="js/main.js"></script>
+    <script src="js/ventas.js"></script>
+</body>
+</html>
