@@ -1,115 +1,154 @@
-.notificacion {
-    animation: notificacionEntrada 0.3s ease;
-}
+/* Correcciones específicas para el nuevo diseño */
 
-@keyframes notificacionEntrada {
-    from {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
-}
-
-.btn-cerrar {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0.5rem;
-    font-size: 1.2rem;
-    color: #999;
-}
-
-.btn-cerrar:hover {
-    color: #333;
-}
-
-.modal {
-    align-items: center;
-    justify-content: center;
-    z-index: 2000;
-}
-
-.modal-contenido {
-    animation: modalEntrada 0.3s ease;
-}
-
-@keyframes modalEntrada {
-    from {
-        opacity: 0;
-        transform: scale(0.9);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-input, select {
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    padding: 0.8rem;
-    font-size: 1rem;
-    transition: border 0.3s;
-}
-
-input:focus, select:focus {
-    outline: none;
-    border-color: #e91e63;
-    box-shadow: 0 0 0 2px rgba(233, 30, 99, 0.1);
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-th {
-    text-align: left;
-    font-weight: 600;
-    padding: 1rem;
-    background: #f8f9fa;
-    border-bottom: 2px solid #dee2e6;
-}
-
-td {
-    padding: 1rem;
-    border-bottom: 1px solid #dee2e6;
-}
-
-tr:hover {
-    background: #f8f9fa;
-}
-
-.btn-principal:disabled, button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-.btn-principal:disabled:hover, button:disabled:hover {
-    transform: none;
-    background: #e91e63;
-}
-
+/* Mejoras para el sidebar en móviles */
 @media (max-width: 768px) {
-    .seccion-header {
-        flex-direction: column;
-        gap: 1rem;
-        align-items: stretch;
+    .sidebar:not(:hover) .nav-item {
+        justify-content: center;
+        padding: 0.9rem;
     }
     
-    .seccion-header h2 {
-        margin-bottom: 0.5rem;
+    .sidebar:hover .nav-item {
+        justify-content: flex-start;
+        padding: 0.9rem 1.5rem;
     }
-    
-    .container {
-        margin-top: 8rem;
-    }
-    
-    .modal-contenido {
-        width: 95%;
-        margin: 1rem;
-    }
+}
+
+/* Mejoras para las tablas */
+.table-container {
+    overflow-x: auto;
+}
+
+.table th:first-child,
+.table td:first-child {
+    padding-left: 1.5rem;
+}
+
+.table th:last-child,
+.table td:last-child {
+    padding-right: 1.5rem;
+}
+
+/* Mejoras para los formularios */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    opacity: 1;
+}
+
+/* Mejoras para los select */
+select.form-control {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%236c757d' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 12px;
+    padding-right: 2.5rem;
+}
+
+/* Mejoras para las tarjetas de estadísticas */
+.stat-card .stat-value {
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover .stat-value {
+    transform: scale(1.1);
+}
+
+/* Scrollbar personalizado */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a1a1a1;
+}
+
+/* Animaciones adicionales */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.card, .stat-card, .table-container {
+    animation: fadeIn 0.4s ease-out;
+}
+
+/* Estados de carga */
+.loading {
+    position: relative;
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #e91e63;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Estados de error y éxito */
+.input-error {
+    border-color: #dc3545 !important;
+    background-color: #fff8f8;
+}
+
+.input-success {
+    border-color: #28a745 !important;
+    background-color: #f8fff9;
+}
+
+/* Tooltips básicos */
+[title] {
+    position: relative;
+}
+
+[title]:hover::after {
+    content: attr(title);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #333;
+    color: white;
+    padding: 0.5rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    z-index: 1000;
+    margin-bottom: 5px;
+}
+
+[title]:hover::before {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: #333;
+    z-index: 1000;
+    margin-bottom: -5px;
 }
