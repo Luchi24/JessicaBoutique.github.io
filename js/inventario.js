@@ -1,7 +1,10 @@
 function cargarInventario() {
     mostrarProductos();
-    mostrarEstadisticas();
     actualizarSelectores();
+    actualizarEstadisticas();
+    
+    document.getElementById('buscar-producto').addEventListener('input', filtrarProductos);
+    document.getElementById('filtro-categoria').addEventListener('change', filtrarProductos);
 }
 
 function mostrarProductos() {
@@ -13,13 +16,10 @@ function mostrarProductos() {
     if (datos.productos.length === 0) {
         lista.innerHTML = `
             <tr>
-                <td colspan="9" style="text-align: center; padding: 3rem;">
-                    <i class="fas fa-box-open" style="font-size: 3rem; color: var(--gris-medio); margin-bottom: 1rem;"></i>
-                    <h3 style="color: var(--gris-oscuro); margin-bottom: 0.5rem;">No hay productos</h3>
-                    <p style="color: var(--gris-oscuro);">Agrega productos o importa un backup</p>
-                    <button class="btn-principal" onclick="location.href='agregar-producto.html'" style="margin-top: 1rem;">
-                        <i class="fas fa-plus"></i> Agregar Primer Producto
-                    </button>
+                <td colspan="6" style="padding: 3rem; text-align: center;">
+                    <i class="fas fa-box-open" style="font-size: 3rem; color: #ddd; margin-bottom: 1rem;"></i>
+                    <p style="color: #999;">No hay productos</p>
+                    <a href="agregar-producto.html" class="btn-principal" style="margin-top: 1rem;">Agregar Primer Producto</a>
                 </td>
             </tr>
         `;
@@ -27,197 +27,154 @@ function mostrarProductos() {
     }
     
     datos.productos.forEach((producto, index) => {
-        const stockClass = producto.cantidad < 5 ? 'stock-bajo' : 
-                          producto.cantidad < 20 ? 'stock-medio' : 'stock-alto';
+        const fila = document.createElement('tr');
+        fila.style.borderBottom = '1px solid #eee';
         
-        const precioCompra = producto.precioCompra || 0;
-        const precioVenta = producto.precio || 0;
-        const ganancia = precioVenta - precioCompra;
-        const porcentajeGanancia = precioCompra > 0 ? ((ganancia / precioCompra) * 100).toFixed(1) : 0;
+        const stockColor = producto.cantidad < 3 ? '#ff9800' : '#4caf50';
+        const stockTexto = producto.cantidad < 3 ? 'BAJO' : 'OK';
         
-        lista.innerHTML += `
-            <tr>
-                <td>${producto.nombre || 'Sin nombre'}</td>
-                <td><span class="badge">${producto.categoria || 'Sin categoría'}</span></td>
-                <td>${producto.marca || 'Sin marca'}</td>
-                <td>${producto.talla || 'Sin talla'}</td>
-                <td>${producto.color || 'Sin color'}</td>
-                <td class="${stockClass}">${producto.cantidad || 0}</td>
-                <td>S/. ${precioVenta.toFixed(2)}</td>
-                <td style="color: ${ganancia >= 0 ? 'green' : 'red'}; font-size: 0.85em;">
-                    G: S/. ${ganancia.toFixed(2)} (${porcentajeGanancia}%)
-                </td>
-                <td>
-                    <button class="btn-editar" onclick="editarProducto(${index})">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="btn-eliminar" onclick="eliminarProducto(${index})">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </td>
-            </tr>
+        fila.innerHTML = `
+            <td style="padding: 1rem;">
+                <strong>${producto.nombre}</strong><br>
+                <small style="color: #999;">${producto.marca || ''}</small>
+            </td>
+            <td style="padding: 1rem;">
+                <span class="badge">${producto.categoria}</span>
+            </td>
+            <td style="padding: 1rem;">
+                ${producto.talla || ''} / ${producto.color || ''}
+            </td>
+            <td style="padding: 1rem;">
+                <span style="background: ${stockColor}; color: white; padding: 0.3rem 0.6rem; border-radius: 20px; font-size: 0.85rem;">
+                    ${producto.cantidad} ${stockTexto}
+                </span>
+            </td>
+            <td style="padding: 1rem; font-weight: bold;">
+                S/. ${producto.precio.toFixed(2)}
+            </td>
+            <td style="padding: 1rem;">
+                <button onclick="editarProducto(${index})" style="background: #2196f3; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; margin-right: 0.5rem; cursor: pointer;">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button onclick="eliminarProducto(${index})" style="background: #f44336; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer;">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </td>
         `;
+        
+        lista.appendChild(fila);
     });
-    
-    actualizarSelectores();
 }
 
 function filtrarProductos() {
     const busqueda = document.getElementById('buscar-producto').value.toLowerCase();
     const categoria = document.getElementById('filtro-categoria').value;
-    const marca = document.getElementById('filtro-marca').value;
-    const talla = document.getElementById('filtro-talla').value;
     
-    const lista = document.getElementById('lista-productos');
-    if (!lista) return;
-    
-    lista.innerHTML = '';
-    
-    const productosFiltrados = datos.productos.filter(producto => {
-        const coincideNombre = producto.nombre.toLowerCase().includes(busqueda);
-        const coincideCategoria = !categoria || producto.categoria === categoria;
-        const coincideMarca = !marca || producto.marca === marca;
-        const coincideTalla = !talla || producto.talla === talla;
+    const filas = document.querySelectorAll('#lista-productos tr');
+    filas.forEach(fila => {
+        const nombre = fila.querySelector('td:first-child strong')?.textContent?.toLowerCase() || '';
+        const cat = fila.querySelector('.badge')?.textContent || '';
         
-        return coincideNombre && coincideCategoria && coincideMarca && coincideTalla;
-    });
-    
-    productosFiltrados.forEach((producto, index) => {
-        const stockClass = producto.cantidad < 5 ? 'stock-bajo' : 
-                          producto.cantidad < 20 ? 'stock-medio' : 'stock-alto';
+        const coincideNombre = nombre.includes(busqueda);
+        const coincideCategoria = !categoria || cat === categoria;
         
-        const ganancia = producto.precio - producto.precioCompra;
-        const porcentajeGanancia = ((ganancia / producto.precioCompra) * 100).toFixed(1);
-        
-        lista.innerHTML += `
-            <tr>
-                <td>${producto.nombre}</td>
-                <td><span class="badge">${producto.categoria}</span></td>
-                <td>${producto.marca}</td>
-                <td>${producto.talla}</td>
-                <td>${producto.color}</td>
-                <td class="${stockClass}">${producto.cantidad}</td>
-                <td>S/. ${producto.precio.toFixed(2)}</td>
-                <td style="color: ${ganancia >= 0 ? 'green' : 'red'}; font-size: 0.85em;">
-                    G: S/. ${ganancia.toFixed(2)} (${porcentajeGanancia}%)
-                </td>
-                <td>
-                    <button class="btn-editar" onclick="editarProducto(${datos.productos.indexOf(producto)})">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="btn-eliminar" onclick="eliminarProducto(${datos.productos.indexOf(producto)})">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </td>
-            </tr>
-        `;
+        fila.style.display = coincideNombre && coincideCategoria ? '' : 'none';
     });
 }
 
-function ordenarProductos() {
-    const orden = document.getElementById('ordenar-por').value;
+function actualizarSelectores() {
+    const select = document.getElementById('filtro-categoria');
+    select.innerHTML = '<option value="">Todas las categorías</option>';
     
-    switch(orden) {
-        case 'nombre':
-            datos.productos.sort((a, b) => a.nombre.localeCompare(b.nombre));
-            break;
-        case 'cantidad':
-            datos.productos.sort((a, b) => a.cantidad - b.cantidad);
-            break;
-        case 'precio':
-            datos.productos.sort((a, b) => a.precio - b.precio);
-            break;
-        case 'ganancia':
-            datos.productos.sort((a, b) => 
-                (b.precio - b.precioCompra) - (a.precio - a.precioCompra)
-            );
-            break;
-    }
+    const categoriasUnicas = [...new Set(datos.productos.map(p => p.categoria))];
+    categoriasUnicas.forEach(cat => {
+        select.innerHTML += `<option value="${cat}">${cat}</option>`;
+    });
+}
+
+function actualizarEstadisticas() {
+    const total = datos.productos.length;
+    const bajo = datos.productos.filter(p => p.cantidad < 3).length;
+    const valorTotal = datos.productos.reduce((sum, p) => sum + (p.precio * p.cantidad), 0);
     
-    mostrarProductos();
+    document.getElementById('contador-total').textContent = total;
+    document.getElementById('contador-bajo').textContent = bajo;
+    document.getElementById('valor-total').textContent = `S/. ${valorTotal.toFixed(2)}`;
 }
 
 function editarProducto(index) {
     const producto = datos.productos[index];
     
-    const modalContent = `
-        <form id="form-editar-producto" onsubmit="guardarEdicion(${index}, event)">
-            <div class="grupo-formulario">
-                <label>Nombre del Producto</label>
-                <input type="text" id="edit-nombre" value="${producto.nombre}" required>
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.style.display = 'flex';
+    modal.innerHTML = `
+        <div class="modal-contenido">
+            <div class="modal-header">
+                <h3>Editar Producto</h3>
+                <button class="btn-cerrar" onclick="this.closest('.modal').remove()">&times;</button>
             </div>
-            
-            <div class="grupo-doble">
-                <div class="grupo-formulario">
-                    <label>Categoría</label>
-                    <select id="edit-categoria" required>
-                        ${datos.categorias.map(cat => 
-                            `<option value="${cat}" ${producto.categoria === cat ? 'selected' : ''}>${cat}</option>`
-                        ).join('')}
-                </select>
-                </div>
-                <div class="grupo-formulario">
-                    <label>Marca</label>
-                    <input type="text" id="edit-marca" value="${producto.marca}" required>
+            <div class="modal-body">
+                <div style="display: grid; gap: 1rem;">
+                    <div>
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Nombre</label>
+                        <input type="text" id="edit-nombre" value="${producto.nombre}" 
+                               style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 6px;">
+                    </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Categoría</label>
+                        <select id="edit-categoria" style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 6px;">
+                            ${datos.categorias.map(cat => 
+                                `<option value="${cat}" ${producto.categoria === cat ? 'selected' : ''}>${cat}</option>`
+                            ).join('')}
+                        </select>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div>
+                            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Talla</label>
+                            <input type="text" id="edit-talla" value="${producto.talla || ''}" 
+                                   style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 6px;">
+                        </div>
+                        <div>
+                            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Color</label>
+                            <select id="edit-color" style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 6px;">
+                                ${datos.colores.map(color => 
+                                    `<option value="${color}" ${producto.color === color ? 'selected' : ''}>${color}</option>`
+                                ).join('')}
+                            </select>
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div>
+                            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Precio</label>
+                            <input type="number" id="edit-precio" value="${producto.precio}" 
+                                   style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 6px;">
+                        </div>
+                        <div>
+                            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Cantidad</label>
+                            <input type="number" id="edit-cantidad" value="${producto.cantidad}" 
+                                   style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 6px;">
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                        <button class="btn-secundario" onclick="this.closest('.modal').remove()" style="flex: 1;">Cancelar</button>
+                        <button class="btn-principal" onclick="guardarEdicion(${index}, this)" style="flex: 1;">Guardar</button>
+                    </div>
                 </div>
             </div>
-            
-            <div class="grupo-doble">
-                <div class="grupo-formulario">
-                    <label>Talla</label>
-                    <select id="edit-talla" required>
-                        ${tallasDisponibles.map(talla => 
-                            `<option value="${talla}" ${producto.talla === talla ? 'selected' : ''}>${talla}</option>`
-                        ).join('')}
-                    </select>
-                </div>
-                <div class="grupo-formulario">
-                    <label>Color</label>
-                    <select id="edit-color" required>
-                        ${datos.colores.map(color => 
-                            `<option value="${color}" ${producto.color === color ? 'selected' : ''}>${color}</option>`
-                        ).join('')}
-                    </select>
-                </div>
-            </div>
-            
-            <div class="grupo-doble">
-                <div class="grupo-formulario">
-                    <label>Precio Compra</label>
-                    <input type="number" id="edit-precio-compra" value="${producto.precioCompra || 0}" 
-                           required min="0" step="0.01">
-                </div>
-                <div class="grupo-formulario">
-                    <label>Precio Venta</label>
-                    <input type="number" id="edit-precio-venta" value="${producto.precio}" 
-                           required min="0" step="0.01">
-                </div>
-            </div>
-            
-            <div class="grupo-formulario">
-                <label>Cantidad</label>
-                <input type="number" id="edit-cantidad" value="${producto.cantidad}" required min="0">
-            </div>
-            
-            <div class="botones-formulario">
-                <button type="button" class="btn-secundario" onclick="cerrarModal('modal-editar')">Cancelar</button>
-                <button type="submit" class="btn-principal">Guardar Cambios</button>
-            </div>
-        </form>
+        </div>
     `;
     
-    document.getElementById('modal-editar-body').innerHTML = modalContent;
-    document.getElementById('modal-editar').style.display = 'flex';
+    document.getElementById('modal-editar').appendChild(modal);
 }
 
-function guardarEdicion(index, event) {
-    event.preventDefault();
+async function guardarEdicion(index, btn) {
+    const modal = btn.closest('.modal');
+    const precio = parseFloat(document.getElementById('edit-precio').value);
+    const cantidad = parseInt(document.getElementById('edit-cantidad').value);
     
-    const precioCompra = parseFloat(document.getElementById('edit-precio-compra').value);
-    const precioVenta = parseFloat(document.getElementById('edit-precio-venta').value);
-    
-    if (precioVenta <= precioCompra) {
-        mostrarNotificacion('El precio de venta debe ser mayor al de compra', 'error');
+    if (precio <= 0 || cantidad < 0) {
+        mostrarNotificacion('Precio y cantidad deben ser válidos', 'error');
         return;
     }
     
@@ -225,52 +182,26 @@ function guardarEdicion(index, event) {
         ...datos.productos[index],
         nombre: document.getElementById('edit-nombre').value,
         categoria: document.getElementById('edit-categoria').value,
-        marca: document.getElementById('edit-marca').value,
         talla: document.getElementById('edit-talla').value,
         color: document.getElementById('edit-color').value,
-        precioCompra: precioCompra,
-        precio: precioVenta,
-        cantidad: parseInt(document.getElementById('edit-cantidad').value)
+        precio: precio,
+        cantidad: cantidad
     };
     
     guardarDatos();
     mostrarProductos();
-    mostrarEstadisticas();
-    cerrarModal('modal-editar');
-    mostrarNotificacion('Producto actualizado correctamente', 'exito');
+    actualizarEstadisticas();
+    modal.remove();
+    mostrarNotificacion('Producto actualizado', 'exito');
 }
 
-function eliminarProducto(index) {
-    mostrarConfirmacion(
-        '¿Estás seguro de eliminar este producto?',
-        { peligroso: true }
-    ).then(resultado => {
-        if (resultado) {
-            datos.productos.splice(index, 1);
-            guardarDatos();
-            mostrarProductos();
-            mostrarEstadisticas();
-            mostrarNotificacion('Producto eliminado correctamente', 'exito');
-        }
-    });
-}
-
-function mostrarEstadisticas() {
-    const totalProductos = document.getElementById('total-productos');
-    const stockBajo = document.getElementById('stock-bajo');
-    const valorTotal = document.getElementById('valor-total');
-    const gananciaTotal = document.getElementById('ganancia-total');
+async function eliminarProducto(index) {
+    const confirmado = await mostrarConfirmacion('¿Eliminar este producto?');
+    if (!confirmado) return;
     
-    if (!totalProductos || !stockBajo || !valorTotal || !gananciaTotal) return;
-    
-    const total = datos.productos.length;
-    const bajo = datos.productos.filter(p => p.cantidad < 5).length;
-    const valorInventario = datos.productos.reduce((sum, p) => sum + (p.precioCompra * p.cantidad), 0);
-    const gananciaPotencial = datos.productos.reduce((sum, p) => 
-        sum + ((p.precio - p.precioCompra) * p.cantidad), 0);
-    
-    totalProductos.textContent = total;
-    stockBajo.textContent = bajo;
-    valorTotal.textContent = 'S/. ' + valorInventario.toFixed(2);
-    gananciaTotal.textContent = 'S/. ' + gananciaPotencial.toFixed(2);
+    datos.productos.splice(index, 1);
+    guardarDatos();
+    mostrarProductos();
+    actualizarEstadisticas();
+    mostrarNotificacion('Producto eliminado', 'exito');
 }
