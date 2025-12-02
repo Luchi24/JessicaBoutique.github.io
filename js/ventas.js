@@ -1,8 +1,6 @@
-// Variables globales para ventas
 let carrito = [];
 let boletaImagen = null;
 
-// Inicializar página de ventas
 function inicializarVentas() {
     cargarProductosVenta();
     actualizarFechaActual();
@@ -12,7 +10,6 @@ function inicializarVentas() {
 }
 
 function inicializarEventos() {
-    // Cambiar método de pago
     document.querySelectorAll('input[name="metodo-pago"]').forEach(radio => {
         radio.addEventListener('change', function() {
             const efectivoGrupo = document.getElementById('efectivo-grupo');
@@ -49,7 +46,6 @@ function actualizarNumeroVenta() {
     }
 }
 
-// Cargar productos para venta
 function cargarProductosVenta() {
     const listaProductos = document.getElementById('lista-productos-venta');
     if (!listaProductos) return;
@@ -58,7 +54,7 @@ function cargarProductosVenta() {
     
     datos.productos.forEach((producto, index) => {
         const stockClass = producto.cantidad < 5 ? 'bajo' : 'normal';
-        const precioVenta = producto.precio || producto.precioVenta || 0;
+        const precioVenta = producto.precio;
         
         const item = document.createElement('div');
         item.className = 'producto-item-venta';
@@ -85,7 +81,6 @@ function cargarProductosVenta() {
     });
 }
 
-// Buscar producto en venta
 function buscarProductoVenta() {
     const busqueda = document.getElementById('buscar-producto-venta').value.toLowerCase();
     const items = document.querySelectorAll('.producto-item-venta');
@@ -103,11 +98,10 @@ function buscarProductoVenta() {
     });
 }
 
-// Carrito de compras
 function agregarAlCarrito(indexProducto) {
     const producto = datos.productos[indexProducto];
+    const precioVenta = producto.precio;
     
-    // Verificar si ya está en el carrito
     const itemExistente = carrito.find(item => 
         item.productoIndex === indexProducto && 
         item.talla === producto.talla && 
@@ -130,7 +124,7 @@ function agregarAlCarrito(indexProducto) {
                 talla: producto.talla,
                 color: producto.color,
                 precioCompra: producto.precioCompra || 0,
-                precioVenta: producto.precio || producto.precioVenta || 0,
+                precioVenta: precioVenta,
                 cantidad: 1,
                 stockDisponible: producto.cantidad
             });
@@ -214,7 +208,6 @@ function eliminarDelCarrito(index) {
     calcularTotales();
 }
 
-// Cálculos de totales
 function calcularTotales() {
     const subtotal = carrito.reduce((sum, item) => sum + (item.precioVenta * item.cantidad), 0);
     const igv = subtotal * datos.config.tasaIGV;
@@ -222,7 +215,6 @@ function calcularTotales() {
     const ganancia = carrito.reduce((sum, item) => 
         sum + ((item.precioVenta - item.precioCompra) * item.cantidad), 0);
     
-    // Actualizar elementos del DOM
     const subtotalElement = document.getElementById('subtotal-venta');
     const igvElement = document.getElementById('igv-venta');
     const totalElement = document.getElementById('total-venta');
@@ -233,7 +225,6 @@ function calcularTotales() {
     if (totalElement) totalElement.textContent = `S/. ${total.toFixed(2)}`;
     if (gananciaElement) gananciaElement.textContent = `S/. ${ganancia.toFixed(2)}`;
     
-    // Calcular vuelto si es efectivo
     calcularVuelto();
 }
 
@@ -253,7 +244,6 @@ function calcularVuelto() {
     }
 }
 
-// Gestión de boleta
 function previsualizarBoleta(event) {
     const file = event.target.files[0];
     if (!file) return;
@@ -288,11 +278,9 @@ function eliminarBoleta() {
     if (fileInput) fileInput.value = '';
 }
 
-// Registrar venta
 function registrarVenta(event) {
     event.preventDefault();
     
-    // Validaciones
     if (carrito.length === 0) {
         mostrarNotificacion('Agrega productos al carrito', 'error');
         return;
@@ -310,14 +298,12 @@ function registrarVenta(event) {
         return;
     }
     
-    // Verificar stock antes de proceder
     const sinStock = carrito.some(item => item.cantidad > item.stockDisponible);
     if (sinStock) {
         mostrarNotificacion('Algunos productos no tienen suficiente stock', 'error');
         return;
     }
     
-    // Crear objeto de venta
     const nuevaVenta = {
         id: ++datos.config.ultimoIdVenta,
         fecha: new Date().toISOString(),
@@ -347,10 +333,8 @@ function registrarVenta(event) {
         estado: 'completada'
     };
     
-    // Calcular IGV
     nuevaVenta.igv = nuevaVenta.subtotal * datos.config.tasaIGV;
     
-    // Actualizar stock de productos
     nuevaVenta.items.forEach(itemVenta => {
         const producto = datos.productos[itemVenta.productoIndex];
         producto.cantidad -= itemVenta.cantidad;
@@ -360,14 +344,11 @@ function registrarVenta(event) {
         }
     });
     
-    // Guardar venta
     datos.ventas.push(nuevaVenta);
     guardarDatos();
     
-    // Mostrar comprobante
     mostrarComprobante(nuevaVenta);
     
-    // Limpiar venta
     limpiarVenta();
     
     mostrarNotificacion('Venta registrada exitosamente', 'exito');
@@ -442,51 +423,41 @@ function mostrarComprobante(venta) {
         </div>
     `;
     
-    // Abrir modal
     document.getElementById('modal-detalle-venta').style.display = 'flex';
 }
 
 function imprimirComprobante(idVenta) {
-    // Aquí iría la lógica para imprimir el comprobante
-    // Por ahora solo cerramos el modal
     cerrarModal('modal-detalle-venta');
     mostrarNotificacion('Función de impresión en desarrollo', 'info');
 }
 
-// Limpiar venta
 function limpiarVenta() {
-    // Confirmar si hay productos en el carrito
     if (carrito.length > 0) {
         mostrarConfirmacion(
             '¿Cancelar venta?',
-            'Se perderán todos los productos del carrito',
-            function() {
+            'Se perderán todos los productos del carrito'
+        ).then(resultado => {
+            if (resultado) {
                 carrito = [];
                 boletaImagen = null;
                 
-                // Limpiar formulario
                 const form = document.getElementById('form-registrar-venta');
                 if (form) form.reset();
                 
-                // Limpiar vista previa boleta
                 const preview = document.getElementById('preview-boleta');
                 if (preview) preview.style.display = 'none';
                 
-                // Actualizar carrito y totales
                 actualizarCarrito();
                 calcularTotales();
                 actualizarNumeroVenta();
                 
-                // Mostrar notificación
                 mostrarNotificacion('Venta cancelada', 'info');
             }
-        );
+        });
     }
 }
 
-// Actualizar resumen lateral
 function actualizarResumenLateral() {
-    // Ventas de hoy
     const hoy = new Date().toLocaleDateString('es-PE');
     const ventasHoy = datos.ventas.filter(v => 
         new Date(v.fecha).toLocaleDateString('es-PE') === hoy
@@ -506,7 +477,6 @@ function actualizarResumenLateral() {
         gananciaHoyElement.textContent = `S/. ${gananciaHoy.toFixed(2)}`;
     }
     
-    // Últimas ventas
     const ultimasVentasElement = document.getElementById('ultimas-ventas');
     if (ultimasVentasElement) {
         const ultimas = datos.ventas.slice(-5).reverse();
@@ -531,10 +501,8 @@ function actualizarResumenLateral() {
         });
     }
     
-    // Productos populares (simplificado)
     const productosPopularesElement = document.getElementById('productos-populares');
     if (productosPopularesElement) {
-        // Contar ventas por producto
         const conteoProductos = {};
         datos.ventas.forEach(venta => {
             venta.items.forEach(item => {
@@ -543,7 +511,6 @@ function actualizarResumenLateral() {
             });
         });
         
-        // Ordenar y tomar top 3
         const topProductos = Object.entries(conteoProductos)
             .sort((a, b) => b[1] - a[1])
             .slice(0, 3);
@@ -563,27 +530,6 @@ function actualizarResumenLateral() {
     }
 }
 
-// Funciones auxiliares
-function mostrarConfirmacion(titulo, mensaje, callback) {
-    const modal = document.getElementById('modal-confirmacion');
-    const tituloElement = document.querySelector('#modal-confirmacion h3');
-    const mensajeElement = document.getElementById('mensaje-confirmacion');
-    const btnConfirmar = document.getElementById('btn-confirmar-accion');
-    
-    if (modal && tituloElement && mensajeElement && btnConfirmar) {
-        tituloElement.innerHTML = `<i class="fas fa-question-circle"></i> ${titulo}`;
-        mensajeElement.textContent = mensaje;
-        
-        // Configurar evento del botón
-        btnConfirmar.onclick = function() {
-            callback();
-            cerrarModal('modal-confirmacion');
-        };
-        
-        modal.style.display = 'flex';
-    }
-}
-
 function cerrarModal(modalId) {
     const modal = document.getElementById(modalId);
     if (modal) {
@@ -591,7 +537,6 @@ function cerrarModal(modalId) {
     }
 }
 
-// Inicializar cuando se carga la página
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', inicializarVentas);
 } else {
