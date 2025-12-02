@@ -6,6 +6,7 @@
     <title>Jessica Boutique | Inicio</title>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="navbar">
@@ -18,61 +19,90 @@
             <a href="inventario.html" class="nav-btn"><i class="fas fa-boxes"></i> Inventario</a>
             <a href="agregar-producto.html" class="nav-btn"><i class="fas fa-plus"></i> Agregar</a>
             <a href="ventas.html" class="nav-btn"><i class="fas fa-shopping-cart"></i> Ventas</a>
+            <a href="reportes.html" class="nav-btn"><i class="fas fa-chart-line"></i> Reportes</a>
+            <a href="gestion.html" class="nav-btn"><i class="fas fa-cog"></i> Configuración</a>
         </div>
     </div>
 
     <div class="container">
         <div class="seccion-header">
-            <h2><i class="fas fa-home"></i> Panel Principal</h2>
+            <h2><i class="fas fa-home"></i> Panel de Control</h2>
+            <span id="fecha-actual" style="color: #666; font-size: 0.9rem;"></span>
         </div>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
-            <div style="background: white; padding: 1.5rem; border-radius: 10px;">
-                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
-                    <div style="width: 50px; height: 50px; background: #fce4ec; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
-                        <i class="fas fa-boxes" style="color: #e91e63; font-size: 1.5rem;"></i>
-                    </div>
-                    <div>
-                        <h3 style="color: #333; margin-bottom: 0.3rem;">Inventario</h3>
-                        <p id="total-productos" style="color: #e91e63; font-size: 1.8rem; font-weight: bold;">0</p>
-                    </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+            <div style="background: white; padding: 1.5rem; border-radius: 10px; text-align: center; transition: transform 0.3s;">
+                <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #fce4ec, #e91e63); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                    <i class="fas fa-boxes" style="color: white; font-size: 1.8rem;"></i>
                 </div>
-                <a href="inventario.html" class="btn-secundario" style="width: 100%; justify-content: center;">Ver Inventario</a>
+                <h3 style="color: #333; margin-bottom: 0.5rem; font-size: 0.9rem;">Total Productos</h3>
+                <p id="total-productos" style="font-size: 2rem; font-weight: bold; color: #e91e63;">0</p>
             </div>
 
-            <div style="background: white; padding: 1.5rem; border-radius: 10px;">
-                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
-                    <div style="width: 50px; height: 50px; background: #e8f5e9; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
-                        <i class="fas fa-shopping-cart" style="color: #4caf50; font-size: 1.5rem;"></i>
-                    </div>
-                    <div>
-                        <h3 style="color: #333; margin-bottom: 0.3rem;">Ventas Hoy</h3>
-                        <p id="ventas-hoy" style="color: #4caf50; font-size: 1.8rem; font-weight: bold;">0</p>
-                    </div>
+            <div style="background: white; padding: 1.5rem; border-radius: 10px; text-align: center; transition: transform 0.3s;">
+                <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #e8f5e9, #4caf50); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                    <i class="fas fa-shopping-cart" style="color: white; font-size: 1.8rem;"></i>
                 </div>
-                <a href="ventas.html" class="btn-principal" style="width: 100%; justify-content: center;">Nueva Venta</a>
+                <h3 style="color: #333; margin-bottom: 0.5rem; font-size: 0.9rem;">Ventas Hoy</h3>
+                <p id="ventas-hoy" style="font-size: 2rem; font-weight: bold; color: #4caf50;">0</p>
+                <small id="monto-hoy" style="color: #666;">S/. 0.00</small>
             </div>
 
-            <div style="background: white; padding: 1.5rem; border-radius: 10px;">
-                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
-                    <div style="width: 50px; height: 50px; background: #fff3e0; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
-                        <i class="fas fa-exclamation-triangle" style="color: #ff9800; font-size: 1.5rem;"></i>
-                    </div>
-                    <div>
-                        <h3 style="color: #333; margin-bottom: 0.3rem;">Stock Bajo</h3>
-                        <p id="stock-bajo" style="color: #ff9800; font-size: 1.8rem; font-weight: bold;">0</p>
-                    </div>
+            <div style="background: white; padding: 1.5rem; border-radius: 10px; text-align: center; transition: transform 0.3s;">
+                <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #fff3e0, #ff9800); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                    <i class="fas fa-exclamation-triangle" style="color: white; font-size: 1.8rem;"></i>
                 </div>
-                <a href="inventario.html" class="btn-secundario" style="width: 100%; justify-content: center;">Revisar</a>
+                <h3 style="color: #333; margin-bottom: 0.5rem; font-size: 0.9rem;">Stock Bajo</h3>
+                <p id="stock-bajo" style="font-size: 2rem; font-weight: bold; color: #ff9800;">0</p>
+                <small style="color: #666;">(<span id="alerta-stock">3</span> unidades)</small>
+            </div>
+
+            <div style="background: white; padding: 1.5rem; border-radius: 10px; text-align: center; transition: transform 0.3s;">
+                <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #e3f2fd, #2196f3); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                    <i class="fas fa-money-bill-wave" style="color: white; font-size: 1.8rem;"></i>
+                </div>
+                <h3 style="color: #333; margin-bottom: 0.5rem; font-size: 0.9rem;">Ganancias Hoy</h3>
+                <p id="ganancias-hoy" style="font-size: 2rem; font-weight: bold; color: #2196f3;">S/. 0</p>
             </div>
         </div>
 
-        <div style="margin-top: 2rem; background: white; padding: 1.5rem; border-radius: 10px;">
+        <div style="display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+            <div style="background: white; padding: 1.5rem; border-radius: 10px;">
+                <h3 style="color: #e91e63; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-chart-line"></i> Ventas de Hoy
+                </h3>
+                <div style="position: relative; height: 200px;">
+                    <canvas id="grafico-hoy"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+            <div style="background: white; padding: 1.5rem; border-radius: 10px;">
+                <h3 style="color: #e91e63; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-fire"></i> Productos Más Vendidos
+                </h3>
+                <div id="top-productos" style="display: grid; gap: 0.8rem;">
+                    <!-- Productos populares se cargarán aquí -->
+                </div>
+            </div>
+
+            <div style="background: white; padding: 1.5rem; border-radius: 10px;">
+                <h3 style="color: #e91e63; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-exclamation-circle"></i> Alertas
+                </h3>
+                <div id="alertas-container" style="display: grid; gap: 0.8rem;">
+                    <!-- Alertas se cargarán aquí -->
+                </div>
+            </div>
+        </div>
+
+        <div style="background: white; padding: 1.5rem; border-radius: 10px;">
             <h3 style="color: #e91e63; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                <i class="fas fa-fire"></i> Productos Más Vendidos
+                <i class="fas fa-history"></i> Actividad Reciente
             </h3>
-            <div id="top-productos" style="display: grid; gap: 0.8rem;">
-                <!-- Productos populares se cargarán aquí -->
+            <div id="actividad-reciente" style="display: grid; gap: 0.8rem;">
+                <!-- Actividad reciente se cargará aquí -->
             </div>
         </div>
     </div>
