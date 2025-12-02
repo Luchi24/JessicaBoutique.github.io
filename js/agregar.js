@@ -1,7 +1,11 @@
+let tallasDisponiblesGlobal = ['XS', 'S', 'M', 'L', 'XL', 'Única'];
+let tallasPantalones = ['28', '30', '32', '34', '36', '38', '40'];
+
 function inicializarAgregar() {
     actualizarSelectoresAgregar();
     actualizarVistaPrevia();
     inicializarEventosAgregar();
+    configurarTallasPorCategoria();
 }
 
 function inicializarEventosAgregar() {
@@ -14,12 +18,47 @@ function inicializarEventosAgregar() {
         });
     }
     
-    const btnAgregarCombinacion = document.querySelector('.btn-secundario[onclick*="agregarCombinacion"]');
+    const catSelect = document.getElementById('categoria-producto');
+    if (catSelect) {
+        catSelect.addEventListener('change', configurarTallasPorCategoria);
+    }
+    
+    const btnAgregarCombinacion = document.querySelector('.btn-agregar-combinacion');
     if (btnAgregarCombinacion) {
         btnAgregarCombinacion.onclick = agregarCombinacion;
     }
     
     actualizarSelectoresCombinaciones();
+}
+
+function configurarTallasPorCategoria() {
+    const categoriaSelect = document.getElementById('categoria-producto');
+    const tallasSelects = document.querySelectorAll('.combinacion-talla');
+    
+    if (!categoriaSelect || tallasSelects.length === 0) return;
+    
+    const categoria = categoriaSelect.value;
+    
+    tallasSelects.forEach(select => {
+        const currentValue = select.value;
+        select.innerHTML = '<option value="">Seleccionar talla</option>';
+        
+        let tallasDisponibles = [];
+        
+        if (categoria === 'Pantalones') {
+            tallasDisponibles = tallasPantalones;
+        } else {
+            tallasDisponibles = tallasDisponiblesGlobal;
+        }
+        
+        tallasDisponibles.forEach(talla => {
+            select.innerHTML += `<option value="${talla}">${talla}</option>`;
+        });
+        
+        if (currentValue && tallasDisponibles.includes(currentValue)) {
+            select.value = currentValue;
+        }
+    });
 }
 
 function actualizarSelectoresAgregar() {
@@ -41,6 +80,8 @@ function actualizarSelectoresCombinaciones() {
             });
         }
     });
+    
+    configurarTallasPorCategoria();
 }
 
 function agregarCombinacion() {
@@ -52,11 +93,9 @@ function agregarCombinacion() {
     combinacion.innerHTML = `
         <select class="combinacion-talla" required>
             <option value="">Seleccionar talla</option>
-            ${tallasDisponibles.map(talla => `<option value="${talla}">${talla}</option>`).join('')}
         </select>
         <select class="combinacion-color" required>
             <option value="">Seleccionar color</option>
-            ${datos.colores.map(color => `<option value="${color}">${color}</option>`).join('')}
         </select>
         <input type="number" class="combinacion-cantidad" required min="0" placeholder="Cantidad">
         <button type="button" class="btn-eliminar-combinacion">
@@ -67,8 +106,18 @@ function agregarCombinacion() {
     container.appendChild(combinacion);
     
     const nuevosSelect = combinacion.querySelector('.combinacion-color');
+    const nuevoTallaSelect = combinacion.querySelector('.combinacion-talla');
     const nuevosInputs = combinacion.querySelectorAll('input, select');
     const btnEliminar = combinacion.querySelector('.btn-eliminar-combinacion');
+    
+    if (nuevosSelect) {
+        nuevosSelect.innerHTML = '<option value="">Seleccionar color</option>';
+        datos.colores.forEach(color => {
+            nuevosSelect.innerHTML += `<option value="${color}">${color}</option>`;
+        });
+    }
+    
+    configurarTallasPorCategoria();
     
     nuevosInputs.forEach(input => {
         input.addEventListener('input', actualizarVistaPrevia);
@@ -81,7 +130,6 @@ function agregarCombinacion() {
         };
     }
     
-    actualizarSelectoresCombinaciones();
     actualizarVistaPrevia();
 }
 
@@ -137,18 +185,19 @@ function agregarProducto(event) {
             color: combinacion.color,
             precioCompra: precioCompra,
             precio: precioVenta,
-            cantidad: combinacion.cantidad
+            cantidad: combinacion.cantidad,
+            fechaCreacion: new Date().toISOString()
         };
         datos.productos.push(producto);
     });
     
     guardarDatos();
     
+    mostrarNotificacion('Producto(s) agregado(s) correctamente', 'exito');
+    
     setTimeout(() => {
         window.location.href = 'inventario.html';
     }, 1500);
-    
-    mostrarNotificacion('Producto(s) agregado(s) correctamente', 'exito');
 }
 
 function actualizarVistaPrevia() {
@@ -171,7 +220,7 @@ function actualizarVistaPrevia() {
     const precioVenta = parseFloat(document.getElementById('precio-venta').value) || 0;
     
     const ganancia = precioVenta - precioCompra;
-    const porcentajeGanancia = precioCompra > 0 ? ((ganancia / precioCompra) * 100).toFixed(1) : 0;
+    const porcentajeGanancia = precioCompra > 0 ? ((ganancia / producto.precioCompra) * 100).toFixed(1) : 0;
     
     previewNombre.textContent = nombre;
     previewCategoria.textContent = categoria;
@@ -193,7 +242,9 @@ function actualizarVistaPrevia() {
             totalCantidad += cantidad;
             previewCombinaciones.innerHTML += `
                 <div class="combinacion-preview">
-                    Talla: ${talla} | Color: ${color} | Cantidad: ${cantidad}
+                    <span>Talla: ${talla}</span>
+                    <span>Color: ${color}</span>
+                    <span>Cantidad: ${cantidad}</span>
                 </div>
             `;
         }
@@ -201,8 +252,8 @@ function actualizarVistaPrevia() {
     
     if (totalCantidad > 0) {
         previewCombinaciones.innerHTML += `
-            <div class="combinacion-preview total" style="border-left-color: var(--verde); font-weight: bold;">
-                Total unidades: ${totalCantidad}
+            <div class="combinacion-preview total">
+                <strong>Total unidades: ${totalCantidad}</strong>
             </div>
         `;
     }
@@ -219,11 +270,9 @@ function limpiarFormulario() {
                 <div class="combinacion-item">
                     <select class="combinacion-talla" required>
                         <option value="">Seleccionar talla</option>
-                        ${tallasDisponibles.map(talla => `<option value="${talla}">${talla}</option>`).join('')}
                     </select>
                     <select class="combinacion-color" required>
                         <option value="">Seleccionar color</option>
-                        ${datos.colores.map(color => `<option value="${color}">${color}</option>`).join('')}
                     </select>
                     <input type="number" class="combinacion-cantidad" required min="0" placeholder="Cantidad">
                     <button type="button" class="btn-eliminar-combinacion">
@@ -233,6 +282,8 @@ function limpiarFormulario() {
             `;
         }
         
+        configurarTallasPorCategoria();
+        actualizarSelectoresCombinaciones();
         actualizarVistaPrevia();
     }
 }
