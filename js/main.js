@@ -2,10 +2,11 @@ let datos = {
     productos: [],
     colores: ['Rojo', 'Azul', 'Negro', 'Blanco', 'Rosa'],
     categorias: ['Blusas', 'Pantalones', 'Vestidos', 'Faldas'],
+    tallasDisponibles: ['XS', 'S', 'M', 'L', 'XL', 'Stándard'], // <-- Agregar esta línea
     ventas: [],
     config: { 
         tasaIGV: 0.18,
-        alertaStock: 3  // <-- Agregar esta línea
+        alertaStock: 3
     }
 };
 
