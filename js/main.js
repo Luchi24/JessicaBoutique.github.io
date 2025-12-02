@@ -3,7 +3,10 @@ let datos = {
     colores: ['Rojo', 'Azul', 'Negro', 'Blanco', 'Rosa'],
     categorias: ['Blusas', 'Pantalones', 'Vestidos', 'Faldas'],
     ventas: [],
-    config: { tasaIGV: 0.18 }
+    config: { 
+        tasaIGV: 0.18,
+        alertaStock: 3  // <-- Agregar esta línea
+    }
 };
 
 function cargarDatos() {
@@ -73,11 +76,14 @@ function mostrarConfirmacion(mensaje) {
     });
 }
 
+// En la función inicializarPagina, agregar:
 function inicializarPagina() {
     const pagina = window.location.pathname.split('/').pop();
     if (pagina === 'inventario.html' && window.cargarInventario) cargarInventario();
     if (pagina === 'agregar-producto.html' && window.inicializarAgregar) inicializarAgregar();
     if (pagina === 'ventas.html' && window.inicializarVentas) inicializarVentas();
+    if (pagina === 'gestion.html' && window.inicializarGestion) inicializarGestion();
+    if (pagina === 'reportes.html' && window.inicializarReportes) inicializarReportes(); // <-- Agregar esta línea
     if (pagina === 'index.html' && window.inicializarDashboard) inicializarDashboard();
 }
 
