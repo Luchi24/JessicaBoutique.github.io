@@ -1,8 +1,64 @@
-// Funciones específicas para la página de inventario
-
 function cargarInventario() {
     mostrarProductos();
     mostrarEstadisticas();
+    actualizarSelectores();
+}
+
+function mostrarProductos() {
+    const lista = document.getElementById('lista-productos');
+    if (!lista) return;
+    
+    lista.innerHTML = '';
+    
+    if (datos.productos.length === 0) {
+        lista.innerHTML = `
+            <tr>
+                <td colspan="9" style="text-align: center; padding: 3rem;">
+                    <i class="fas fa-box-open" style="font-size: 3rem; color: var(--gris-medio); margin-bottom: 1rem;"></i>
+                    <h3 style="color: var(--gris-oscuro); margin-bottom: 0.5rem;">No hay productos</h3>
+                    <p style="color: var(--gris-oscuro);">Agrega productos o importa un backup</p>
+                    <button class="btn-principal" onclick="location.href='agregar-producto.html'" style="margin-top: 1rem;">
+                        <i class="fas fa-plus"></i> Agregar Primer Producto
+                    </button>
+                </td>
+            </tr>
+        `;
+        return;
+    }
+    
+    datos.productos.forEach((producto, index) => {
+        const stockClass = producto.cantidad < 5 ? 'stock-bajo' : 
+                          producto.cantidad < 20 ? 'stock-medio' : 'stock-alto';
+        
+        const precioCompra = producto.precioCompra || 0;
+        const precioVenta = producto.precio || 0;
+        const ganancia = precioVenta - precioCompra;
+        const porcentajeGanancia = precioCompra > 0 ? ((ganancia / precioCompra) * 100).toFixed(1) : 0;
+        
+        lista.innerHTML += `
+            <tr>
+                <td>${producto.nombre || 'Sin nombre'}</td>
+                <td><span class="badge">${producto.categoria || 'Sin categoría'}</span></td>
+                <td>${producto.marca || 'Sin marca'}</td>
+                <td>${producto.talla || 'Sin talla'}</td>
+                <td>${producto.color || 'Sin color'}</td>
+                <td class="${stockClass}">${producto.cantidad || 0}</td>
+                <td>S/. ${precioVenta.toFixed(2)}</td>
+                <td style="color: ${ganancia >= 0 ? 'green' : 'red'}; font-size: 0.85em;">
+                    G: S/. ${ganancia.toFixed(2)} (${porcentajeGanancia}%)
+                </td>
+                <td>
+                    <button class="btn-editar" onclick="editarProducto(${index})">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn-eliminar" onclick="eliminarProducto(${index})">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        `;
+    });
+    
     actualizarSelectores();
 }
 
@@ -46,10 +102,10 @@ function filtrarProductos() {
                     G: S/. ${ganancia.toFixed(2)} (${porcentajeGanancia}%)
                 </td>
                 <td>
-                    <button class="btn-editar" onclick="editarProducto(${index})">
+                    <button class="btn-editar" onclick="editarProducto(${datos.productos.indexOf(producto)})">
                         <i class="fas fa-edit"></i>
                     </button>
-                    <button class="btn-eliminar" onclick="eliminarProducto(${index})">
+                    <button class="btn-eliminar" onclick="eliminarProducto(${datos.productos.indexOf(producto)})">
                         <i class="fas fa-trash"></i>
                     </button>
                 </td>
@@ -98,7 +154,7 @@ function editarProducto(index) {
                         ${datos.categorias.map(cat => 
                             `<option value="${cat}" ${producto.categoria === cat ? 'selected' : ''}>${cat}</option>`
                         ).join('')}
-                    </select>
+                </select>
                 </div>
                 <div class="grupo-formulario">
                     <label>Marca</label>
@@ -185,13 +241,18 @@ function guardarEdicion(index, event) {
 }
 
 function eliminarProducto(index) {
-    if (confirm('¿Estás seguro de eliminar este producto?')) {
-        datos.productos.splice(index, 1);
-        guardarDatos();
-        mostrarProductos();
-        mostrarEstadisticas();
-        mostrarNotificacion('Producto eliminado correctamente', 'exito');
-    }
+    mostrarConfirmacion(
+        '¿Estás seguro de eliminar este producto?',
+        { peligroso: true }
+    ).then(resultado => {
+        if (resultado) {
+            datos.productos.splice(index, 1);
+            guardarDatos();
+            mostrarProductos();
+            mostrarEstadisticas();
+            mostrarNotificacion('Producto eliminado correctamente', 'exito');
+        }
+    });
 }
 
 function mostrarEstadisticas() {
