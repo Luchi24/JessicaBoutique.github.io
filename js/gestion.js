@@ -1,16 +1,51 @@
-// Variables globales para gestión
 let tallasDisponibles = ['XS', 'S', 'M', 'L', 'XL', 'Única'];
 
-// Inicializar página de gestión
 function inicializarGestion() {
     cargarColores();
     cargarCategorias();
     cargarTallas();
     cargarConfiguracion();
     actualizarInformacionSistema();
+    inicializarEventosGestion();
+    rediseñarBackupSeccion();
 }
 
-// Gestión de colores
+function inicializarEventosGestion() {
+    const radiosTema = document.querySelectorAll('input[name="tema"]');
+    radiosTema.forEach(radio => {
+        radio.addEventListener('change', function() {
+            aplicarTema(this.value);
+        });
+    });
+    
+    const temaGuardado = localStorage.getItem('tema_jessica') || 'claro';
+    const radioActual = document.querySelector(`input[name="tema"][value="${temaGuardado}"]`);
+    if (radioActual) {
+        radioActual.checked = true;
+    }
+    aplicarTema(temaGuardado);
+}
+
+function aplicarTema(tema) {
+    document.body.setAttribute('data-tema', tema);
+    localStorage.setItem('tema_jessica', tema);
+    
+    const root = document.documentElement;
+    if (tema === 'oscuro') {
+        root.style.setProperty('--blanco', '#1a1a1a');
+        root.style.setProperty('--gris-claro', '#2d2d2d');
+        root.style.setProperty('--gris-medio', '#404040');
+        root.style.setProperty('--gris-oscuro', '#b3b3b3');
+        root.style.setProperty('color', '#e6e6e6');
+    } else {
+        root.style.setProperty('--blanco', '#ffffff');
+        root.style.setProperty('--gris-claro', '#fafafa');
+        root.style.setProperty('--gris-medio', '#eeeeee');
+        root.style.setProperty('--gris-oscuro', '#757575');
+        root.style.setProperty('color', '#424242');
+    }
+}
+
 function cargarColores() {
     const listaColores = document.getElementById('lista-colores');
     if (!listaColores) return;
@@ -18,8 +53,7 @@ function cargarColores() {
     listaColores.innerHTML = '';
     
     datos.colores.forEach((color, index) => {
-        // Determinar color para preview basado en nombre
-        let colorHex = '#757575'; // Gris por defecto
+        let colorHex = '#757575';
         
         const coloresMap = {
             'rojo': '#f44336',
@@ -77,7 +111,6 @@ function agregarColor() {
         return;
     }
     
-    // Verificar si ya existe (case insensitive)
     const colorLower = nuevoColor.toLowerCase();
     const existe = datos.colores.some(color => color.toLowerCase() === colorLower);
     
@@ -99,7 +132,6 @@ function editarColor(index) {
     const nuevoNombre = prompt('Editar nombre del color:', colorActual);
     
     if (nuevoNombre && nuevoNombre.trim() !== '' && nuevoNombre !== colorActual) {
-        // Verificar si el nuevo nombre ya existe
         const nuevoLower = nuevoNombre.trim().toLowerCase();
         const existe = datos.colores.some((color, i) => 
             i !== index && color.toLowerCase() === nuevoLower
@@ -120,7 +152,6 @@ function editarColor(index) {
 function eliminarColor(index) {
     const color = datos.colores[index];
     
-    // Verificar si el color está en uso
     const enUso = datos.productos.some(producto => 
         producto.color.toLowerCase() === color.toLowerCase()
     );
@@ -130,15 +161,19 @@ function eliminarColor(index) {
         return;
     }
     
-    if (confirm(`¿Eliminar el color "${color}"?`)) {
-        datos.colores.splice(index, 1);
-        guardarDatos();
-        cargarColores();
-        mostrarNotificacion('Color eliminado', 'exito');
-    }
+    mostrarConfirmacion(
+        `¿Eliminar el color "${color}"?`,
+        { peligroso: true }
+    ).then(resultado => {
+        if (resultado) {
+            datos.colores.splice(index, 1);
+            guardarDatos();
+            cargarColores();
+            mostrarNotificacion('Color eliminado', 'exito');
+        }
+    });
 }
 
-// Gestión de categorías
 function cargarCategorias() {
     const listaCategorias = document.getElementById('lista-categorias');
     if (!listaCategorias) return;
@@ -176,7 +211,6 @@ function agregarCategoria() {
         return;
     }
     
-    // Verificar si ya existe
     const categoriaLower = nuevaCategoria.toLowerCase();
     const existe = datos.categorias.some(cat => cat.toLowerCase() === categoriaLower);
     
@@ -198,7 +232,6 @@ function editarCategoria(index) {
     const nuevoNombre = prompt('Editar nombre de la categoría:', categoriaActual);
     
     if (nuevoNombre && nuevoNombre.trim() !== '' && nuevoNombre !== categoriaActual) {
-        // Verificar si el nuevo nombre ya existe
         const nuevoLower = nuevoNombre.trim().toLowerCase();
         const existe = datos.categorias.some((cat, i) => 
             i !== index && cat.toLowerCase() === nuevoLower
@@ -209,7 +242,6 @@ function editarCategoria(index) {
             return;
         }
         
-        // Actualizar productos que usan esta categoría
         datos.productos.forEach(producto => {
             if (producto.categoria === categoriaActual) {
                 producto.categoria = nuevoNombre.trim();
@@ -226,7 +258,6 @@ function editarCategoria(index) {
 function eliminarCategoria(index) {
     const categoria = datos.categorias[index];
     
-    // Verificar si la categoría está en uso
     const enUso = datos.productos.some(producto => producto.categoria === categoria);
     
     if (enUso) {
@@ -234,15 +265,19 @@ function eliminarCategoria(index) {
         return;
     }
     
-    if (confirm(`¿Eliminar la categoría "${categoria}"?`)) {
-        datos.categorias.splice(index, 1);
-        guardarDatos();
-        cargarCategorias();
-        mostrarNotificacion('Categoría eliminada', 'exito');
-    }
+    mostrarConfirmacion(
+        `¿Eliminar la categoría "${categoria}"?`,
+        { peligroso: true }
+    ).then(resultado => {
+        if (resultado) {
+            datos.categorias.splice(index, 1);
+            guardarDatos();
+            cargarCategorias();
+            mostrarNotificacion('Categoría eliminada', 'exito');
+        }
+    });
 }
 
-// Gestión de tallas
 function cargarTallas() {
     const listaTallas = document.getElementById('lista-tallas');
     if (!listaTallas) return;
@@ -280,7 +315,6 @@ function agregarTalla() {
         return;
     }
     
-    // Verificar si ya existe
     const existe = tallasDisponibles.some(talla => talla === nuevaTalla);
     
     if (existe) {
@@ -303,7 +337,6 @@ function editarTalla(index) {
     if (nuevoNombre && nuevoNombre.trim().toUpperCase() !== '' && nuevoNombre.toUpperCase() !== tallaActual) {
         const nuevaTalla = nuevoNombre.trim().toUpperCase();
         
-        // Verificar si el nuevo nombre ya existe
         const existe = tallasDisponibles.some((talla, i) => 
             i !== index && talla === nuevaTalla
         );
@@ -313,7 +346,6 @@ function editarTalla(index) {
             return;
         }
         
-        // Actualizar productos que usan esta talla
         datos.productos.forEach(producto => {
             if (producto.talla === tallaActual) {
                 producto.talla = nuevaTalla;
@@ -323,7 +355,7 @@ function editarTalla(index) {
         tallasDisponibles[index] = nuevaTalla;
         guardarTallas();
         cargarTallas();
-        guardarDatos(); // Guardar cambios en productos
+        guardarDatos();
         mostrarNotificacion('Talla actualizada', 'exito');
     }
 }
@@ -331,7 +363,6 @@ function editarTalla(index) {
 function eliminarTalla(index) {
     const talla = tallasDisponibles[index];
     
-    // Verificar si la talla está en uso
     const enUso = datos.productos.some(producto => producto.talla === talla);
     
     if (enUso) {
@@ -339,39 +370,39 @@ function eliminarTalla(index) {
         return;
     }
     
-    if (confirm(`¿Eliminar la talla "${talla}"?`)) {
-        tallasDisponibles.splice(index, 1);
-        guardarTallas();
-        cargarTallas();
-        mostrarNotificacion('Talla eliminada', 'exito');
-    }
+    mostrarConfirmacion(
+        `¿Eliminar la talla "${talla}"?`,
+        { peligroso: true }
+    ).then(resultado => {
+        if (resultado) {
+            tallasDisponibles.splice(index, 1);
+            guardarTallas();
+            cargarTallas();
+            mostrarNotificacion('Talla eliminada', 'exito');
+        }
+    });
 }
 
 function guardarTallas() {
     localStorage.setItem('tallas_jessica', JSON.stringify(tallasDisponibles));
 }
 
-// Configuración general
 function cargarConfiguracion() {
-    // Cargar tallas desde localStorage
     const tallasGuardadas = localStorage.getItem('tallas_jessica');
     if (tallasGuardadas) {
         tallasDisponibles = JSON.parse(tallasGuardadas);
     }
     
-    // Cargar tasa IGV
     const tasaIGVGuardada = localStorage.getItem('tasa_igv_jessica');
     if (tasaIGVGuardada) {
         datos.config.tasaIGV = parseFloat(tasaIGVGuardada) / 100;
     }
     
-    // Cargar alerta stock
     const alertaStockGuardada = localStorage.getItem('alerta_stock_jessica');
     if (alertaStockGuardada) {
         datos.config.alertaStock = parseInt(alertaStockGuardada);
     }
     
-    // Cargar tema
     const temaGuardado = localStorage.getItem('tema_jessica');
     if (temaGuardado) {
         document.body.setAttribute('data-tema', temaGuardado);
@@ -381,7 +412,6 @@ function cargarConfiguracion() {
         }
     }
     
-    // Actualizar inputs
     const tasaIGVInput = document.getElementById('tasa-igv');
     const alertaStockInput = document.getElementById('alertas-stock');
     
@@ -395,7 +425,6 @@ function cargarConfiguracion() {
 }
 
 function actualizarConfiguracion() {
-    // Actualizar tasa IGV
     const tasaIGVInput = document.getElementById('tasa-igv');
     if (tasaIGVInput) {
         const tasa = parseFloat(tasaIGVInput.value) / 100;
@@ -403,7 +432,6 @@ function actualizarConfiguracion() {
         localStorage.setItem('tasa_igv_jessica', (tasa * 100).toFixed(1));
     }
     
-    // Actualizar alerta stock
     const alertaStockInput = document.getElementById('alertas-stock');
     if (alertaStockInput) {
         const alerta = parseInt(alertaStockInput.value);
@@ -411,7 +439,6 @@ function actualizarConfiguracion() {
         localStorage.setItem('alerta_stock_jessica', alerta);
     }
     
-    // Actualizar tema
     const temaSeleccionado = document.querySelector('input[name="tema"]:checked');
     if (temaSeleccionado) {
         document.body.setAttribute('data-tema', temaSeleccionado.value);
@@ -421,39 +448,20 @@ function actualizarConfiguracion() {
     mostrarNotificacion('Configuración actualizada', 'exito');
 }
 
-// Backup de datos
 function exportarDatosCompleto() {
     const datosExportar = {
-        ...datos,
-        tallasDisponibles: tallasDisponibles,
-        fechaExportacion: new Date().toISOString(),
-        version: '2.0'
-    };
-    
-    exportarJSON(datosExportar, 'backup-completo-jessica-boutique');
-}
-
-function exportarSoloVentas() {
-    const datosVentas = {
-        ventas: datos.ventas,
-        fechaExportacion: new Date().toISOString(),
-        tipo: 'ventas'
-    };
-    
-    exportarJSON(datosVentas, 'ventas-jessica-boutique');
-}
-
-function exportarSoloInventario() {
-    const datosInventario = {
         productos: datos.productos,
         colores: datos.colores,
         categorias: datos.categorias,
+        ventas: datos.ventas,
         tallasDisponibles: tallasDisponibles,
+        config: datos.config,
         fechaExportacion: new Date().toISOString(),
-        tipo: 'inventario'
+        version: '2.0',
+        sistema: 'Jessica Boutique'
     };
     
-    exportarJSON(datosInventario, 'inventario-jessica-boutique');
+    exportarJSON(datosExportar, 'backup-completo-jessica-boutique');
 }
 
 function exportarJSON(datosExportar, nombreArchivo) {
@@ -479,66 +487,124 @@ function importarBackup(event) {
         return;
     }
     
-    mostrarConfirmacionPeligro(
-        'Importar Backup',
-        '¿Estás seguro de importar este backup? Se sobreescribirán los datos actuales.',
-        function() {
+    mostrarConfirmacion(
+        '¿Importar backup?',
+        'Se sobreescribirán TODOS los datos actuales (productos, ventas, categorías, colores, configuraciones).',
+        {
+            peligroso: true,
+            textoConfirmar: 'Importar Todo'
+        }
+    ).then(resultado => {
+        if (resultado) {
             const reader = new FileReader();
             
             reader.onload = function(e) {
                 try {
                     const importedData = JSON.parse(e.target.result);
                     
-                    if (!importedData) {
-                        mostrarNotificacion('Archivo JSON inválido', 'error');
+                    if (!importedData.productos || !importedData.ventas) {
+                        mostrarNotificacion('Archivo de backup inválido', 'error');
                         return;
                     }
                     
-                    // Importar según el tipo de backup
-                    if (importedData.ventas && importedData.productos) {
-                        // Backup completo
-                        datos.productos = importedData.productos || [];
-                        datos.colores = importedData.colores || datos.colores;
-                        datos.categorias = importedData.categorias || datos.categorias;
-                        datos.ventas = importedData.ventas || [];
-                        tallasDisponibles = importedData.tallasDisponibles || tallasDisponibles;
-                    } else if (importedData.ventas) {
-                        // Solo ventas
-                        datos.ventas = importedData.ventas || [];
-                    } else if (importedData.productos) {
-                        // Solo inventario
-                        datos.productos = importedData.productos || [];
-                        datos.colores = importedData.colores || datos.colores;
-                        datos.categorias = importedData.categorias || datos.categorias;
-                        tallasDisponibles = importedData.tallasDisponibles || tallasDisponibles;
+                    datos.productos = importedData.productos || [];
+                    datos.colores = importedData.colores || datos.colores;
+                    datos.categorias = importedData.categorias || datos.categorias;
+                    datos.ventas = importedData.ventas || [];
+                    datos.config = importedData.config || datos.config;
+                    
+                    if (importedData.tallasDisponibles) {
+                        tallasDisponibles = importedData.tallasDisponibles;
                     }
                     
                     guardarDatos();
                     guardarTallas();
                     
-                    // Recargar vistas
                     cargarColores();
                     cargarCategorias();
                     cargarTallas();
                     actualizarInformacionSistema();
                     
-                    mostrarNotificacion('Backup importado correctamente', 'exito');
+                    mostrarNotificacion('Backup importado correctamente. Todos los datos han sido restaurados.', 'exito');
+                    
+                    event.target.value = '';
+                    
                 } catch (error) {
-                    console.error('Error importing backup:', error);
                     mostrarNotificacion('Error al importar el backup', 'error');
                 }
             };
             
             reader.readAsText(file);
         }
+    });
+}
+
+function rediseñarBackupSeccion() {
+    const backupCard = document.querySelector('.backup-card');
+    if (backupCard) {
+        backupCard.innerHTML = `
+            <h4><i class="fas fa-database"></i> Respaldo de Datos</h4>
+            <p>Exporta o importa TODOS los datos del sistema</p>
+            
+            <div class="acciones-backup-simple">
+                <button class="btn-principal" onclick="exportarDatosCompleto()">
+                    <i class="fas fa-download"></i> Exportar Todo
+                </button>
+                <div class="importar-container">
+                    <input type="file" id="importar-backup-file-real" 
+                           accept=".json" style="display: none;">
+                    <button class="btn-secundario" onclick="document.getElementById('importar-backup-file-real').click()">
+                        <i class="fas fa-upload"></i> Importar Backup
+                    </button>
+                </div>
+                <button class="btn-secundario peligro" onclick="mostrarOpcionesLimpiar()">
+                    <i class="fas fa-trash-alt"></i> Limpiar Datos
+                </button>
+            </div>
+            
+            <div class="info-backup-simple">
+                <p><i class="fas fa-info-circle"></i> Exporta todos los datos (productos, ventas, categorías, colores) en un archivo JSON</p>
+            </div>
+        `;
+        
+        const inputFile = document.getElementById('importar-backup-file-real');
+        if (inputFile) {
+            inputFile.addEventListener('change', importarBackup);
+        }
+    }
+}
+
+function mostrarOpcionesLimpiar() {
+    mostrarConfirmacion(
+        '¿Qué deseas hacer?',
+        {
+            titulo: 'Opciones de limpieza',
+            textoCancelar: 'Cancelar',
+            customButtons: [
+                {
+                    text: 'Limpiar Ventas Antiguas',
+                    class: 'btn-secundario',
+                    action: limpiarVentasAntiguas
+                },
+                {
+                    text: 'Restablecer Todo',
+                    class: 'btn-principal peligro',
+                    action: restablecerSistema
+                }
+            ]
+        }
     );
 }
 
 function limpiarVentasAntiguas() {
-    mostrarConfirmacionPeligro(
-        'Limpiar Ventas Antiguas',
+    mostrarConfirmacion(
         '¿Eliminar ventas de hace más de 1 año? Esta acción no se puede deshacer.',
-        function() {
+        {
+            peligroso: true,
+            textoConfirmar: 'Eliminar Ventas Antiguas'
+        }
+    ).then(resultado => {
+        if (resultado) {
             const unAnioAtras = new Date();
             unAnioAtras.setFullYear(unAnioAtras.getFullYear() - 1);
             
@@ -554,21 +620,23 @@ function limpiarVentasAntiguas() {
             
             mostrarNotificacion(`Se eliminaron ${eliminadas} ventas antiguas`, 'exito');
         }
-    );
+    });
 }
 
 function restablecerSistema() {
-    mostrarConfirmacionPeligro(
-        'Restablecer Sistema',
+    mostrarConfirmacion(
         '¿Estás seguro de restablecer el sistema? Se eliminarán todos los datos excepto configuraciones. Esta acción no se puede deshacer.',
-        function() {
-            // Mantener solo configuraciones básicas
+        {
+            peligroso: true,
+            textoConfirmar: 'Restablecer Todo'
+        }
+    ).then(resultado => {
+        if (resultado) {
             const configGuardada = {
                 tasaIGV: datos.config.tasaIGV,
                 alertaStock: datos.config.alertaStock || 5
             };
             
-            // Restablecer datos
             datos.productos = [];
             datos.ventas = [];
             datos.config.ultimoIdVenta = 0;
@@ -576,7 +644,6 @@ function restablecerSistema() {
             
             guardarDatos();
             
-            // Recargar vistas
             cargarColores();
             cargarCategorias();
             cargarTallas();
@@ -584,31 +651,26 @@ function restablecerSistema() {
             
             mostrarNotificacion('Sistema restablecido correctamente', 'exito');
         }
-    );
+    });
 }
 
-// Información del sistema
 function actualizarInformacionSistema() {
-    // Total productos
     const totalProductosElement = document.getElementById('info-total-productos');
     if (totalProductosElement) {
         totalProductosElement.textContent = datos.productos.length;
     }
     
-    // Total ventas
     const totalVentasElement = document.getElementById('info-total-ventas');
     if (totalVentasElement) {
         totalVentasElement.textContent = datos.ventas.length;
     }
     
-    // Total clientes únicos
     const totalClientesElement = document.getElementById('info-total-clientes');
     if (totalClientesElement) {
         const clientesUnicos = new Set(datos.ventas.map(v => v.cliente.nombre)).size;
         totalClientesElement.textContent = clientesUnicos;
     }
     
-    // Última actividad
     const ultimaActividadElement = document.getElementById('info-ultima-actividad');
     if (ultimaActividadElement) {
         if (datos.ventas.length > 0) {
@@ -623,7 +685,6 @@ function actualizarInformacionSistema() {
         }
     }
     
-    // Tamaño de datos
     const tamanoDatosElement = document.getElementById('info-tamano-datos');
     if (tamanoDatosElement) {
         const datosString = JSON.stringify(datos);
@@ -631,39 +692,4 @@ function actualizarInformacionSistema() {
         const tamañoKB = (tamañoBytes / 1024).toFixed(2);
         tamanoDatosElement.textContent = `${tamañoKB} KB`;
     }
-}
-
-// Funciones auxiliares
-function mostrarConfirmacionPeligro(titulo, mensaje, callback) {
-    const modal = document.getElementById('modal-peligro');
-    const tituloElement = document.querySelector('#modal-peligro h3');
-    const mensajeElement = document.getElementById('mensaje-peligro');
-    const btnConfirmar = document.getElementById('btn-confirmar-peligro');
-    
-    if (modal && tituloElement && mensajeElement && btnConfirmar) {
-        tituloElement.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${titulo}`;
-        mensajeElement.textContent = mensaje;
-        
-        // Configurar evento del botón
-        btnConfirmar.onclick = function() {
-            callback();
-            cerrarModal('modal-peligro');
-        };
-        
-        modal.style.display = 'flex';
-    }
-}
-
-function cerrarModal(modalId) {
-    const modal = document.getElementById(modalId);
-    if (modal) {
-        modal.style.display = 'none';
-    }
-}
-
-// Inicializar cuando se carga la página
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', inicializarGestion);
-} else {
-    inicializarGestion();
 }
