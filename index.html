@@ -3,110 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jessica Boutique | Sistema de Gestión</title>
+    <title>Jessica Boutique | Inicio</title>
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/correcciones.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <!-- Navbar -->
     <div class="navbar">
         <div class="logo">
             <i class="fas fa-store"></i>
             <h1>Jessica Boutique</h1>
-            <span class="subtitle">Sistema de Gestión</span>
         </div>
         <div class="nav-buttons">
-            <a href="inventario.html" class="nav-btn">
-                <i class="fas fa-boxes"></i> Inventario
-            </a>
-            <a href="agregar-producto.html" class="nav-btn">
-                <i class="fas fa-plus-circle"></i> Agregar
-            </a>
-            <a href="ventas.html" class="nav-btn">
-                <i class="fas fa-cash-register"></i> Ventas
-            </a>
-            <a href="reportes.html" class="nav-btn">
-                <i class="fas fa-chart-bar"></i> Reportes
-            </a>
-            <a href="gestion.html" class="nav-btn">
-                <i class="fas fa-cog"></i> Gestión
-            </a>
+            <a href="index.html" class="nav-btn active"><i class="fas fa-home"></i> Inicio</a>
+            <a href="inventario.html" class="nav-btn"><i class="fas fa-boxes"></i> Inventario</a>
+            <a href="agregar-producto.html" class="nav-btn"><i class="fas fa-plus"></i> Agregar</a>
+            <a href="ventas.html" class="nav-btn"><i class="fas fa-shopping-cart"></i> Ventas</a>
         </div>
     </div>
 
-    <!-- Contenido principal -->
-    <div class="container home-container">
-        <div class="dashboard">
-            <div class="dashboard-header">
-                <h2><i class="fas fa-home"></i> Panel de Control</h2>
-                <p>Bienvenido al sistema de gestión de Jessica Boutique</p>
+    <div class="container">
+        <div class="seccion-header">
+            <h2><i class="fas fa-home"></i> Panel Principal</h2>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+            <div style="background: white; padding: 1.5rem; border-radius: 10px;">
+                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                    <div style="width: 50px; height: 50px; background: #fce4ec; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-boxes" style="color: #e91e63; font-size: 1.5rem;"></i>
+                    </div>
+                    <div>
+                        <h3 style="color: #333; margin-bottom: 0.3rem;">Inventario</h3>
+                        <p id="total-productos" style="color: #e91e63; font-size: 1.8rem; font-weight: bold;">0</p>
+                    </div>
+                </div>
+                <a href="inventario.html" class="btn-secundario" style="width: 100%; justify-content: center;">Ver Inventario</a>
             </div>
 
-            <div class="dashboard-cards">
-                <div class="dashboard-card" onclick="location.href='inventario.html'">
-                    <div class="card-icon">
-                        <i class="fas fa-boxes"></i>
+            <div style="background: white; padding: 1.5rem; border-radius: 10px;">
+                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                    <div style="width: 50px; height: 50px; background: #e8f5e9; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-shopping-cart" style="color: #4caf50; font-size: 1.5rem;"></i>
                     </div>
-                    <h3>Inventario</h3>
-                    <p id="dashboard-total-productos">Cargando...</p>
-                    <span class="card-link">Ver inventario <i class="fas fa-arrow-right"></i></span>
-                </div>
-
-                <div class="dashboard-card" onclick="location.href='ventas.html'">
-                    <div class="card-icon">
-                        <i class="fas fa-cash-register"></i>
+                    <div>
+                        <h3 style="color: #333; margin-bottom: 0.3rem;">Ventas Hoy</h3>
+                        <p id="ventas-hoy" style="color: #4caf50; font-size: 1.8rem; font-weight: bold;">0</p>
                     </div>
-                    <h3>Ventas Hoy</h3>
-                    <p id="dashboard-ventas-hoy">Cargando...</p>
-                    <span class="card-link">Registrar venta <i class="fas fa-arrow-right"></i></span>
                 </div>
-
-                <div class="dashboard-card" onclick="location.href='reportes.html'">
-                    <div class="card-icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <h3>Ganancias</h3>
-                    <p id="dashboard-ganancias">Cargando...</p>
-                    <span class="card-link">Ver reportes <i class="fas fa-arrow-right"></i></span>
-                </div>
-
-                <div class="dashboard-card" onclick="location.href='agregar-producto.html'">
-                    <div class="card-icon">
-                        <i class="fas fa-plus-circle"></i>
-                    </div>
-                    <h3>Agregar Producto</h3>
-                    <p>Registrar nuevo producto</p>
-                    <span class="card-link">Ir a agregar <i class="fas fa-arrow-right"></i></span>
-                </div>
+                <a href="ventas.html" class="btn-principal" style="width: 100%; justify-content: center;">Nueva Venta</a>
             </div>
 
-            <div class="dashboard-alerts">
-                <h3><i class="fas fa-exclamation-triangle"></i> Alertas</h3>
-                <div id="alertas-container">
-                    <!-- Alertas se cargarán aquí -->
+            <div style="background: white; padding: 1.5rem; border-radius: 10px;">
+                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                    <div style="width: 50px; height: 50px; background: #fff3e0; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-exclamation-triangle" style="color: #ff9800; font-size: 1.5rem;"></i>
+                    </div>
+                    <div>
+                        <h3 style="color: #333; margin-bottom: 0.3rem;">Stock Bajo</h3>
+                        <p id="stock-bajo" style="color: #ff9800; font-size: 1.8rem; font-weight: bold;">0</p>
+                    </div>
                 </div>
+                <a href="inventario.html" class="btn-secundario" style="width: 100%; justify-content: center;">Revisar</a>
             </div>
+        </div>
 
-            <div class="dashboard-stats">
-                <div class="stat-item">
-                    <h4>Productos con stock bajo</h4>
-                    <p id="stat-stock-bajo">0</p>
-                </div>
-                <div class="stat-item">
-                    <h4>Productos más vendidos</h4>
-                    <p id="stat-top-producto">-</p>
-                </div>
-                <div class="stat-item">
-                    <h4>Mejor categoría</h4>
-                    <p id="stat-top-categoria">-</p>
-                </div>
+        <div style="margin-top: 2rem; background: white; padding: 1.5rem; border-radius: 10px;">
+            <h3 style="color: #e91e63; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fas fa-fire"></i> Productos Más Vendidos
+            </h3>
+            <div id="top-productos" style="display: grid; gap: 0.8rem;">
+                <!-- Productos populares se cargarán aquí -->
             </div>
         </div>
     </div>
 
-    <!-- Notificaciones -->
-    <div id="notificaciones" class="notificaciones"></div>
+    <div id="notificaciones"></div>
 
     <script src="js/main.js"></script>
     <script src="js/dashboard.js"></script>
