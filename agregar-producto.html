@@ -5,164 +5,132 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jessica Boutique | Agregar Producto</title>
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/agregar.css">
-    <link rel="stylesheet" href="css/correcciones.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <!-- Navbar -->
     <div class="navbar">
         <div class="logo">
             <i class="fas fa-store"></i>
             <h1>Jessica Boutique</h1>
-            <span class="subtitle">Sistema de Gestión</span>
         </div>
         <div class="nav-buttons">
-            <a href="index.html" class="nav-btn">
-                <i class="fas fa-home"></i> Inicio
-            </a>
-            <a href="inventario.html" class="nav-btn">
-                <i class="fas fa-boxes"></i> Inventario
-            </a>
-            <a href="agregar-producto.html" class="nav-btn active">
-                <i class="fas fa-plus-circle"></i> Agregar
-            </a>
-            <a href="ventas.html" class="nav-btn">
-                <i class="fas fa-cash-register"></i> Ventas
-            </a>
-            <a href="reportes.html" class="nav-btn">
-                <i class="fas fa-chart-bar"></i> Reportes
-            </a>
-            <a href="gestion.html" class="nav-btn">
-                <i class="fas fa-cog"></i> Gestión
-            </a>
+            <a href="index.html" class="nav-btn"><i class="fas fa-home"></i> Inicio</a>
+            <a href="inventario.html" class="nav-btn"><i class="fas fa-boxes"></i> Inventario</a>
+            <a href="agregar-producto.html" class="nav-btn active"><i class="fas fa-plus"></i> Agregar</a>
+            <a href="ventas.html" class="nav-btn"><i class="fas fa-shopping-cart"></i> Ventas</a>
         </div>
     </div>
 
     <div class="container">
         <div class="seccion-header">
-            <h2><i class="fas fa-plus-circle"></i> Registrar Nuevo Producto</h2>
-            <button class="btn-secundario" onclick="location.href='inventario.html'">
-                <i class="fas fa-arrow-left"></i> Volver al Inventario
-            </button>
+            <h2><i class="fas fa-plus"></i> Nuevo Producto</h2>
+            <a href="inventario.html" class="btn-secundario">
+                <i class="fas fa-arrow-left"></i> Volver
+            </a>
         </div>
 
-        <div class="formulario-contenedor">
-            <form id="form-agregar-producto" onsubmit="agregarProducto(event)">
-                <div class="grupo-formulario">
-                    <label for="nombre-producto">
-                        <i class="fas fa-tag"></i> Nombre del Producto
-                    </label>
-                    <input type="text" id="nombre-producto" required placeholder="Ej: Vestido Floral" 
-                           oninput="actualizarVistaPrevia()">
-                </div>
+        <div style="display: grid; grid-template-columns: 1fr; gap: 1.5rem;">
+            <div style="background: white; padding: 1.5rem; border-radius: 10px;">
+                <form id="form-agregar" onsubmit="agregarProducto(event)">
+                    <div style="display: grid; gap: 1.5rem;">
+                        <div>
+                            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Nombre del Producto</label>
+                            <input type="text" id="nombre" required placeholder="Ej: Vestido Floral" 
+                                   style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 6px;">
+                        </div>
 
-                <div class="grupo-doble">
-                    <div class="grupo-formulario">
-                        <label for="categoria-producto">
-                            <i class="fas fa-folder"></i> Categoría
-                        </label>
-                        <select id="categoria-producto" required onchange="actualizarVistaPrevia()">
-                            <option value="">Seleccionar categoría</option>
-                        </select>
-                    </div>
-                    <div class="grupo-formulario">
-                        <label for="marca-producto">
-                            <i class="fas fa-trademark"></i> Marca
-                        </label>
-                        <input type="text" id="marca-producto" required placeholder="Ej: Jessica Boutique" 
-                               oninput="actualizarVistaPrevia()">
-                    </div>
-                </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div>
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Categoría</label>
+                                <select id="categoria" required 
+                                        style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 6px;">
+                                    <option value="">Seleccionar</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Marca</label>
+                                <input type="text" id="marca" required placeholder="Jessica Boutique" 
+                                       style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 6px;">
+                            </div>
+                        </div>
 
-                <div class="grupo-doble">
-                    <div class="grupo-formulario">
-                        <label for="precio-compra">
-                            <i class="fas fa-shopping-cart"></i> Precio de Compra
-                        </label>
-                        <input type="number" id="precio-compra" required min="0" step="0.01" 
-                               placeholder="S/. 0.00" oninput="actualizarVistaPrevia()">
-                    </div>
-                    <div class="grupo-formulario">
-                        <label for="precio-venta">
-                            <i class="fas fa-tag"></i> Precio de Venta
-                        </label>
-                        <input type="number" id="precio-venta" required min="0" step="0.01" 
-                               placeholder="S/. 0.00" oninput="actualizarVistaPrevia()">
-                    </div>
-                </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div>
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Talla</label>
+                                <select id="talla" style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 6px;">
+                                    <option value="">Única</option>
+                                    <option value="XS">XS</option>
+                                    <option value="S">S</option>
+                                    <option value="M">M</option>
+                                    <option value="L">L</option>
+                                    <option value="XL">XL</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Color</label>
+                                <select id="color" required 
+                                        style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 6px;">
+                                    <option value="">Seleccionar</option>
+                                </select>
+                            </div>
+                        </div>
 
-                <div class="grupo-formulario">
-                    <label><i class="fas fa-layer-group"></i> Combinaciones Talla-Color-Cantidad</label>
-                    <div id="combinaciones-container">
-                        <div class="combinacion-item">
-                            <select class="combinacion-talla" required onchange="actualizarVistaPrevia()">
-                                <option value="">Seleccionar talla</option>
-                                <option value="XS">XS</option>
-                                <option value="S">S</option>
-                                <option value="M">M</option>
-                                <option value="L">L</option>
-                                <option value="XL">XL</option>
-                                <option value="Única">Única</option>
-                            </select>
-                            <select class="combinacion-color" required onchange="actualizarVistaPrevia()">
-                                <option value="">Seleccionar color</option>
-                            </select>
-                            <input type="number" class="combinacion-cantidad" required min="0" 
-                                   placeholder="Cantidad" oninput="actualizarVistaPrevia()">
-                            <button type="button" class="btn-eliminar-combinacion" onclick="eliminarCombinacion(this)">
-                                <i class="fas fa-times"></i>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div>
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Precio</label>
+                                <input type="number" id="precio" required min="0" step="0.01" placeholder="S/. 0.00" 
+                                       style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 6px;">
+                            </div>
+                            <div>
+                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Cantidad</label>
+                                <input type="number" id="cantidad" required min="0" placeholder="0" 
+                                       style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 6px;">
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                            <button type="reset" class="btn-secundario" style="flex: 1;">Limpiar</button>
+                            <button type="submit" class="btn-principal" style="flex: 1;">
+                                <i class="fas fa-save"></i> Guardar Producto
                             </button>
                         </div>
                     </div>
-                    <button type="button" class="btn-secundario" onclick="agregarCombinacion()">
-                        <i class="fas fa-plus"></i> Agregar Combinación
-                    </button>
-                </div>
+                </form>
+            </div>
 
-                <div class="botones-formulario">
-                    <button type="reset" class="btn-secundario" onclick="limpiarFormulario()">
-                        <i class="fas fa-times"></i> Limpiar
-                    </button>
-                    <button type="submit" class="btn-principal">
-                        <i class="fas fa-save"></i> Guardar Producto
-                    </button>
-                </div>
-            </form>
-
-            <div class="vista-previa">
-                <h3><i class="fas fa-eye"></i> Vista Previa</h3>
-                <div class="producto-preview">
-                    <div class="preview-header">
-                        <span id="preview-nombre">Nombre del Producto</span>
+            <div style="background: white; padding: 1.5rem; border-radius: 10px;">
+                <h3 style="color: #e91e63; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-eye"></i> Vista Previa
+                </h3>
+                <div style="background: #fafafa; padding: 1.5rem; border-radius: 8px;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+                        <h4 id="preview-nombre" style="color: #333;">Nombre del Producto</h4>
                         <span id="preview-categoria" class="badge">Categoría</span>
                     </div>
-                    <div class="preview-detalles">
-                        <div class="detalle">
-                            <span>Marca:</span>
-                            <span id="preview-marca">-</span>
+                    <div style="display: grid; gap: 0.8rem;">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: #999;">Marca:</span>
+                            <span id="preview-marca" style="font-weight: 600;">-</span>
                         </div>
-                        <div class="detalle">
-                            <span>Precio Compra:</span>
-                            <span id="preview-precio-compra">S/. 0.00</span>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: #999;">Talla/Color:</span>
+                            <span id="preview-detalles" style="font-weight: 600;">-</span>
                         </div>
-                        <div class="detalle">
-                            <span>Precio Venta:</span>
-                            <span id="preview-precio-venta">S/. 0.00</span>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: #999;">Precio:</span>
+                            <span id="preview-precio" style="font-weight: bold; color: #e91e63;">S/. 0.00</span>
                         </div>
-                        <div class="detalle">
-                            <span>Ganancia por unidad:</span>
-                            <span id="preview-ganancia">S/. 0.00 (0%)</span>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span style="color: #999;">Cantidad:</span>
+                            <span id="preview-cantidad" style="font-weight: 600;">0</span>
                         </div>
-                        <div id="preview-combinaciones"></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Notificaciones -->
-    <div id="notificaciones" class="notificaciones"></div>
+    <div id="notificaciones"></div>
 
     <script src="js/main.js"></script>
     <script src="js/agregar.js"></script>
