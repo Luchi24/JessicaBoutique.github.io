@@ -3,343 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jessica Boutique | Inventario y Ventas</title>
+    <title>Jessica Boutique | Sistema de Gestión</title>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+    <!-- Navbar -->
     <div class="navbar">
         <div class="logo">
             <i class="fas fa-store"></i>
             <h1>Jessica Boutique</h1>
-            <span class="subtitle">Sistema de Inventario y Ventas</span>
+            <span class="subtitle">Sistema de Gestión</span>
         </div>
         <div class="nav-buttons">
-            <button class="nav-btn active" onclick="mostrarSeccion('inventario')">
+            <a href="inventario.html" class="nav-btn">
                 <i class="fas fa-boxes"></i> Inventario
-            </button>
-            <button class="nav-btn" onclick="mostrarSeccion('agregar')">
+            </a>
+            <a href="agregar-producto.html" class="nav-btn">
                 <i class="fas fa-plus-circle"></i> Agregar
-            </button>
-            <button class="nav-btn" onclick="mostrarSeccion('ventas')">
+            </a>
+            <a href="ventas.html" class="nav-btn">
                 <i class="fas fa-cash-register"></i> Ventas
-            </button>
-            <button class="nav-btn" onclick="mostrarSeccion('reportes')">
+            </a>
+            <a href="reportes.html" class="nav-btn">
                 <i class="fas fa-chart-bar"></i> Reportes
-            </button>
-            <button class="nav-btn" onclick="mostrarSeccion('gestion')">
+            </a>
+            <a href="gestion.html" class="nav-btn">
                 <i class="fas fa-cog"></i> Gestión
-            </button>
+            </a>
         </div>
     </div>
 
-    <div class="container">
-        <!-- Sección INVENTARIO -->
-        <div id="inventario" class="seccion activa">
-            <!-- ... (mantener contenido actual) ... -->
-        </div>
-
-        <!-- Sección AGREGAR PRODUCTO -->
-        <div id="agregar" class="seccion">
-            <div class="seccion-header">
-                <h2><i class="fas fa-plus-circle"></i> Registrar Nuevo Producto</h2>
+    <!-- Contenido principal -->
+    <div class="container home-container">
+        <div class="dashboard">
+            <div class="dashboard-header">
+                <h2><i class="fas fa-home"></i> Panel de Control</h2>
+                <p>Bienvenido al sistema de gestión de Jessica Boutique</p>
             </div>
 
-            <div class="formulario-contenedor">
-                <form id="form-agregar-producto" onsubmit="agregarProducto(event)">
-                    <div class="grupo-formulario">
-                        <label for="nombre-producto">
-                            <i class="fas fa-tag"></i> Nombre del Producto
-                        </label>
-                        <input type="text" id="nombre-producto" required placeholder="Ej: Vestido Floral">
+            <div class="dashboard-cards">
+                <div class="dashboard-card" onclick="location.href='inventario.html'">
+                    <div class="card-icon">
+                        <i class="fas fa-boxes"></i>
                     </div>
-
-                    <div class="grupo-doble">
-                        <div class="grupo-formulario">
-                            <label for="categoria-producto">
-                                <i class="fas fa-folder"></i> Categoría
-                            </label>
-                            <select id="categoria-producto" required>
-                                <option value="">Seleccionar categoría</option>
-                            </select>
-                        </div>
-                        <div class="grupo-formulario">
-                            <label for="marca-producto">
-                                <i class="fas fa-trademark"></i> Marca
-                            </label>
-                            <input type="text" id="marca-producto" required placeholder="Ej: Jessica Boutique">
-                        </div>
-                    </div>
-
-                    <div class="grupo-doble">
-                        <div class="grupo-formulario">
-                            <label for="precio-compra">
-                                <i class="fas fa-shopping-cart"></i> Precio de Compra
-                            </label>
-                            <input type="number" id="precio-compra" required min="0" step="0.01" placeholder="S/. 0.00">
-                        </div>
-                        <div class="grupo-formulario">
-                            <label for="precio-venta">
-                                <i class="fas fa-tag"></i> Precio de Venta
-                            </label>
-                            <input type="number" id="precio-venta" required min="0" step="0.01" placeholder="S/. 0.00">
-                        </div>
-                    </div>
-
-                    <div class="grupo-formulario">
-                        <label><i class="fas fa-layer-group"></i> Combinaciones Talla-Color-Cantidad</label>
-                        <div id="combinaciones-container">
-                            <div class="combinacion-item">
-                                <select class="combinacion-talla" required>
-                                    <option value="">Seleccionar talla</option>
-                                    <option value="XS">XS</option>
-                                    <option value="S">S</option>
-                                    <option value="M">M</option>
-                                    <option value="L">L</option>
-                                    <option value="XL">XL</option>
-                                    <option value="Única">Única</option>
-                                </select>
-                                <select class="combinacion-color" required>
-                                    <option value="">Seleccionar color</option>
-                                </select>
-                                <input type="number" class="combinacion-cantidad" required min="0" placeholder="Cantidad">
-                                <button type="button" class="btn-eliminar-combinacion" onclick="eliminarCombinacion(this)">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <button type="button" class="btn-secundario" onclick="agregarCombinacion()">
-                            <i class="fas fa-plus"></i> Agregar Combinación
-                        </button>
-                    </div>
-
-                    <div class="botones-formulario">
-                        <button type="reset" class="btn-secundario" onclick="limpiarFormulario()">
-                            <i class="fas fa-times"></i> Limpiar
-                        </button>
-                        <button type="submit" class="btn-principal">
-                            <i class="fas fa-save"></i> Guardar Producto
-                        </button>
-                    </div>
-                </form>
-
-                <div class="vista-previa">
-                    <h3><i class="fas fa-eye"></i> Vista Previa</h3>
-                    <div class="producto-preview">
-                        <div class="preview-header">
-                            <span id="preview-nombre">Nombre del Producto</span>
-                            <span id="preview-categoria" class="badge">Categoría</span>
-                        </div>
-                        <div class="preview-detalles">
-                            <div class="detalle">
-                                <span>Marca:</span>
-                                <span id="preview-marca">-</span>
-                            </div>
-                            <div class="detalle">
-                                <span>Precio Compra:</span>
-                                <span id="preview-precio-compra">S/. 0.00</span>
-                            </div>
-                            <div class="detalle">
-                                <span>Precio Venta:</span>
-                                <span id="preview-precio-venta">S/. 0.00</span>
-                            </div>
-                            <div class="detalle">
-                                <span>Ganancia:</span>
-                                <span id="preview-ganancia">S/. 0.00</span>
-                            </div>
-                            <div id="preview-combinaciones"></div>
-                        </div>
-                    </div>
+                    <h3>Inventario</h3>
+                    <p id="dashboard-total-productos">Cargando...</p>
+                    <span class="card-link">Ver inventario <i class="fas fa-arrow-right"></i></span>
                 </div>
-            </div>
-        </div>
 
-        <!-- Sección VENTAS -->
-        <div id="ventas" class="seccion">
-            <div class="seccion-header">
-                <h2><i class="fas fa-cash-register"></i> Registrar Venta</h2>
-            </div>
-
-            <div class="formulario-contenedor">
-                <form id="form-registrar-venta" onsubmit="registrarVenta(event)">
-                    <div class="grupo-formulario">
-                        <label for="cliente-nombre">
-                            <i class="fas fa-user"></i> Cliente
-                        </label>
-                        <div class="grupo-doble">
-                            <input type="text" id="cliente-nombre" placeholder="Nombre del cliente" required>
-                            <input type="text" id="cliente-dni" placeholder="DNI (opcional)">
-                        </div>
+                <div class="dashboard-card" onclick="location.href='ventas.html'">
+                    <div class="card-icon">
+                        <i class="fas fa-cash-register"></i>
                     </div>
-
-                    <div class="grupo-formulario">
-                        <label><i class="fas fa-camera"></i> Boleta/Factura</label>
-                        <div class="upload-boleta">
-                            <input type="file" id="boleta-imagen" accept="image/*" capture="environment" 
-                                   onchange="previsualizarBoleta(event)">
-                            <label for="boleta-imagen" class="btn-secundario">
-                                <i class="fas fa-camera"></i> Capturar o Subir Imagen
-                            </label>
-                            <div id="preview-boleta" class="preview-boleta" style="display: none;">
-                                <img id="boleta-preview" src="" alt="Vista previa boleta">
-                                <button type="button" class="btn-eliminar" onclick="eliminarBoleta()">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="grupo-formulario">
-                        <label><i class="fas fa-shopping-cart"></i> Productos de la Venta</label>
-                        <div id="carrito-venta">
-                            <div class="producto-carrito">
-                                <div class="grupo-doble">
-                                    <select class="producto-seleccion" onchange="cargarProductoVenta(this)">
-                                        <option value="">Seleccionar producto</option>
-                                    </select>
-                                    <input type="number" class="cantidad-venta" min="1" value="1" 
-                                           placeholder="Cantidad" onchange="calcularTotalItem(this)">
-                                </div>
-                                <div class="detalles-producto">
-                                    <span class="stock-disponible">Stock: 0</span>
-                                    <span class="precio-unitario">Precio: S/. 0.00</span>
-                                    <span class="subtotal-item">Subtotal: S/. 0.00</span>
-                                    <button type="button" class="btn-eliminar" onclick="eliminarItemCarrito(this)">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <button type="button" class="btn-secundario" onclick="agregarItemCarrito()">
-                            <i class="fas fa-plus"></i> Agregar Producto
-                        </button>
-                    </div>
-
-                    <div class="resumen-venta">
-                        <div class="detalle-venta">
-                            <span>Subtotal:</span>
-                            <span id="subtotal-venta">S/. 0.00</span>
-                        </div>
-                        <div class="detalle-venta">
-                            <span>Total Ganancia:</span>
-                            <span id="ganancia-total">S/. 0.00</span>
-                        </div>
-                        <div class="detalle-venta total">
-                            <span>Total a Pagar:</span>
-                            <span id="total-venta">S/. 0.00</span>
-                        </div>
-                    </div>
-
-                    <div class="botones-formulario">
-                        <button type="reset" class="btn-secundario" onclick="limpiarFormularioVenta()">
-                            <i class="fas fa-times"></i> Cancelar
-                        </button>
-                        <button type="submit" class="btn-principal">
-                            <i class="fas fa-check"></i> Registrar Venta
-                        </button>
-                    </div>
-                </form>
-
-                <div class="vista-previa-venta">
-                    <h3><i class="fas fa-receipt"></i> Resumen de Venta</h3>
-                    <div class="detalle-resumen">
-                        <p><strong>Venta #:</strong> <span id="venta-id">Nueva venta</span></p>
-                        <p><strong>Fecha:</strong> <span id="fecha-venta">--/--/----</span></p>
-                        <p><strong>Cliente:</strong> <span id="resumen-cliente">-</span></p>
-                        <p><strong>Productos:</strong> <span id="resumen-productos">0</span></p>
-                        <p><strong>Total:</strong> <span id="resumen-total">S/. 0.00</span></p>
-                    </div>
+                    <h3>Ventas Hoy</h3>
+                    <p id="dashboard-ventas-hoy">Cargando...</p>
+                    <span class="card-link">Registrar venta <i class="fas fa-arrow-right"></i></span>
                 </div>
-            </div>
-        </div>
 
-        <!-- Sección REPORTES -->
-        <div id="reportes" class="seccion">
-            <div class="seccion-header">
-                <h2><i class="fas fa-chart-bar"></i> Reportes y Estadísticas</h2>
-                <div class="filtros-reportes">
-                    <select id="filtro-periodo" onchange="actualizarReportes()">
-                        <option value="hoy">Hoy</option>
-                        <option value="semana">Esta semana</option>
-                        <option value="mes" selected>Este mes</option>
-                        <option value="personalizado">Personalizado</option>
-                    </select>
-                    <div id="fechas-personalizadas" style="display: none;">
-                        <input type="date" id="fecha-desde">
-                        <input type="date" id="fecha-hasta">
+                <div class="dashboard-card" onclick="location.href='reportes.html'">
+                    <div class="card-icon">
+                        <i class="fas fa-chart-line"></i>
                     </div>
+                    <h3>Ganancias</h3>
+                    <p id="dashboard-ganancias">Cargando...</p>
+                    <span class="card-link">Ver reportes <i class="fas fa-arrow-right"></i></span>
+                </div>
+
+                <div class="dashboard-card" onclick="location.href='agregar-producto.html'">
+                    <div class="card-icon">
+                        <i class="fas fa-plus-circle"></i>
+                    </div>
+                    <h3>Agregar Producto</h3>
+                    <p>Registrar nuevo producto</p>
+                    <span class="card-link">Ir a agregar <i class="fas fa-arrow-right"></i></span>
                 </div>
             </div>
 
-            <div class="resumen-cards">
-                <div class="resumen-card">
-                    <h3><i class="fas fa-money-bill-wave"></i> Ventas Totales</h3>
-                    <p class="monto" id="ventas-totales">S/. 0.00</p>
-                    <p class="subtitulo" id="ventas-cantidad">0 ventas</p>
-                </div>
-                <div class="resumen-card">
-                    <h3><i class="fas fa-chart-line"></i> Ganancia Total</h3>
-                    <p class="monto" id="ganancia-reporte">S/. 0.00</p>
-                    <p class="subtitulo" id="ganancia-porcentaje">0% margen</p>
-                </div>
-                <div class="resumen-card">
-                    <h3><i class="fas fa-shopping-bag"></i> Productos Vendidos</h3>
-                    <p class="monto" id="productos-vendidos">0</p>
-                    <p class="subtitulo">unidades</p>
-                </div>
-                <div class="resumen-card">
-                    <h3><i class="fas fa-users"></i> Clientes Atendidos</h3>
-                    <p class="monto" id="clientes-atendidos">0</p>
-                    <p class="subtitulo">clientes</p>
+            <div class="dashboard-alerts">
+                <h3><i class="fas fa-exclamation-triangle"></i> Alertas</h3>
+                <div id="alertas-container">
+                    <!-- Alertas se cargarán aquí -->
                 </div>
             </div>
 
-            <div class="tabla-contenedor">
-                <h3><i class="fas fa-history"></i> Historial de Ventas</h3>
-                <table id="tabla-ventas">
-                    <thead>
-                        <tr>
-                            <th>ID Venta</th>
-                            <th>Fecha</th>
-                            <th>Cliente</th>
-                            <th>Productos</th>
-                            <th>Cantidad</th>
-                            <th>Total</th>
-                            <th>Ganancia</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody id="lista-ventas"></tbody>
-                </table>
-            </div>
-
-            <div class="estadisticas-avanzadas">
-                <div class="grafico-container">
-                    <h3><i class="fas fa-chart-pie"></i> Ventas por Categoría</h3>
-                    <canvas id="grafico-categorias"></canvas>
+            <div class="dashboard-stats">
+                <div class="stat-item">
+                    <h4>Productos con stock bajo</h4>
+                    <p id="stat-stock-bajo">0</p>
                 </div>
-                <div class="grafico-container">
-                    <h3><i class="fas fa-chart-line"></i> Tendencia de Ventas</h3>
-                    <canvas id="grafico-tendencia"></canvas>
+                <div class="stat-item">
+                    <h4>Productos más vendidos</h4>
+                    <p id="stat-top-producto">-</p>
                 </div>
-            </div>
-        </div>
-
-        <!-- Sección GESTIÓN -->
-        <div id="gestion" class="seccion">
-            <!-- ... (mantener contenido actual) ... -->
-        </div>
-    </div>
-
-    <!-- Modal para ver detalle de venta -->
-    <div id="modal-detalle-venta" class="modal">
-        <div class="modal-contenido">
-            <div class="modal-header">
-                <h3><i class="fas fa-receipt"></i> Detalle de Venta</h3>
-                <button class="btn-cerrar" onclick="cerrarModal('modal-detalle-venta')">&times;</button>
-            </div>
-            <div class="modal-body" id="modal-detalle-venta-body">
-                <!-- Contenido dinámico -->
+                <div class="stat-item">
+                    <h4>Mejor categoría</h4>
+                    <p id="stat-top-categoria">-</p>
+                </div>
             </div>
         </div>
     </div>
@@ -348,5 +108,6 @@
     <div id="notificaciones" class="notificaciones"></div>
 
     <script src="js/main.js"></script>
+    <script src="js/dashboard.js"></script>
 </body>
 </html>
