@@ -8,131 +8,156 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="navbar">
-        <div class="logo">
-            <i class="fas fa-store"></i>
-            <h1>Jessica Boutique</h1>
-        </div>
-        <div class="nav-buttons">
-            <a href="index.html" class="nav-btn"><i class="fas fa-home"></i> Inicio</a>
-            <a href="inventario.html" class="nav-btn"><i class="fas fa-boxes"></i> Inventario</a>
-            <a href="agregar-producto.html" class="nav-btn active"><i class="fas fa-plus"></i> Agregar</a>
-            <a href="ventas.html" class="nav-btn"><i class="fas fa-shopping-cart"></i> Ventas</a>
-        </div>
-    </div>
-
-    <div class="container">
-        <div class="seccion-header">
-            <h2><i class="fas fa-plus"></i> Nuevo Producto</h2>
-            <a href="inventario.html" class="btn-secundario">
+    <!-- El sidebar se insertará automáticamente -->
+    
+    <div class="content-header">
+        <h2><i class="fas fa-plus-circle"></i> Nuevo Producto</h2>
+        <div class="header-actions">
+            <a href="inventario.html" class="btn btn-secondary">
                 <i class="fas fa-arrow-left"></i> Volver
             </a>
         </div>
+    </div>
 
-        <div style="display: grid; grid-template-columns: 1fr; gap: 1.5rem;">
-            <div style="background: white; padding: 1.5rem; border-radius: 10px;">
-                <form id="form-agregar" onsubmit="agregarProducto(event)">
-                    <div style="display: grid; gap: 1.5rem;">
-                        <div>
-                            <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Nombre del Producto</label>
-                            <input type="text" id="nombre" required placeholder="Ej: Vestido Floral" 
-                                   style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 6px;">
-                        </div>
-
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                            <div>
-                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Categoría</label>
-                                <select id="categoria" required 
-                                        style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 6px;">
-                                    <option value="">Seleccionar</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Marca</label>
-                                <input type="text" id="marca" required placeholder="Jessica Boutique" 
-                                       style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 6px;">
-                            </div>
-                        </div>
-
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                            <div>
-                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Talla</label>
-                                <select id="talla" style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 6px;">
-                                    <option value="">Única</option>
-                                    <option value="XS">XS</option>
-                                    <option value="S">S</option>
-                                    <option value="M">M</option>
-                                    <option value="L">L</option>
-                                    <option value="XL">XL</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Color</label>
-                                <select id="color" required 
-                                        style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 6px;">
-                                    <option value="">Seleccionar</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                            <div>
-                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Precio</label>
-                                <input type="number" id="precio" required min="0" step="0.01" placeholder="S/. 0.00" 
-                                       style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 6px;">
-                            </div>
-                            <div>
-                                <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Cantidad</label>
-                                <input type="number" id="cantidad" required min="0" placeholder="0" 
-                                       style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 6px;">
-                            </div>
-                        </div>
-
-                        <div style="display: flex; gap: 1rem; margin-top: 1rem;">
-                            <button type="reset" class="btn-secundario" style="flex: 1;">Limpiar</button>
-                            <button type="submit" class="btn-principal" style="flex: 1;">
-                                <i class="fas fa-save"></i> Guardar Producto
-                            </button>
-                        </div>
-                    </div>
-                </form>
+    <div class="grid grid-2">
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="fas fa-edit"></i> Información del Producto</h3>
             </div>
+            <form id="form-agregar" onsubmit="agregarProducto(event)">
+                <div class="form-group">
+                    <label class="form-label">Nombre del Producto *</label>
+                    <input type="text" id="nombre" required placeholder="Ej: Vestido Floral" class="form-control" oninput="actualizarVistaPrevia()">
+                </div>
 
-            <div style="background: white; padding: 1.5rem; border-radius: 10px;">
-                <h3 style="color: #e91e63; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                    <i class="fas fa-eye"></i> Vista Previa
-                </h3>
-                <div style="background: #fafafa; padding: 1.5rem; border-radius: 8px;">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
-                        <h4 id="preview-nombre" style="color: #333;">Nombre del Producto</h4>
-                        <span id="preview-categoria" class="badge">Categoría</span>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Categoría *</label>
+                        <select id="categoria" required class="form-control" onchange="actualizarVistaPrevia()">
+                            <option value="">Seleccionar categoría</option>
+                        </select>
                     </div>
+                    <div class="form-group">
+                        <label class="form-label">Marca *</label>
+                        <input type="text" id="marca" required placeholder="Ej: Jessica Boutique" class="form-control" oninput="actualizarVistaPrevia()">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Precio de Compra *</label>
+                        <input type="number" id="precio-compra" required min="0" step="0.01" placeholder="S/. 0.00" class="form-control" oninput="actualizarVistaPrevia()">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Precio de Venta *</label>
+                        <input type="number" id="precio-venta" required min="0" step="0.01" placeholder="S/. 0.00" class="form-control" oninput="actualizarVistaPrevia()">
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top: 1rem; background: #f8f9fa;">
+                    <div class="card-header">
+                        <h3><i class="fas fa-layer-group"></i> Combinaciones Talla-Color-Cantidad</h3>
+                        <button type="button" class="btn btn-sm btn-primary" onclick="agregarCombinacion()">
+                            <i class="fas fa-plus"></i> Agregar
+                        </button>
+                    </div>
+                    <div id="combinaciones-container" style="display: grid; gap: 1rem; padding: 1rem;">
+                        <!-- Las combinaciones se agregarán aquí -->
+                        <div class="combinacion-item">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Talla</label>
+                                    <select class="combinacion-talla form-control" required onchange="actualizarVistaPrevia()">
+                                        <option value="">Seleccionar talla</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Color</label>
+                                    <select class="combinacion-color form-control" required onchange="actualizarVistaPrevia()">
+                                        <option value="">Seleccionar color</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Cantidad</label>
+                                    <input type="number" class="combinacion-cantidad form-control" required min="0" placeholder="0" oninput="actualizarVistaPrevia()">
+                                </div>
+                                <div class="form-group" style="display: flex; align-items: flex-end;">
+                                    <button type="button" class="btn btn-secondary btn-icon" onclick="eliminarCombinacion(this)" style="background: #dc3545; color: white;">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="padding: 0 1rem 1rem; text-align: center;">
+                        <small style="color: #666;">Agrega diferentes combinaciones de talla-color para el mismo producto</small>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <button type="reset" class="btn btn-secondary" style="flex: 1;" onclick="limpiarFormulario()">
+                        <i class="fas fa-times"></i> Limpiar
+                    </button>
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">
+                        <i class="fas fa-save"></i> Guardar Producto
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="fas fa-eye"></i> Vista Previa</h3>
+            </div>
+            <div style="padding: 1.5rem;">
+                <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+                        <div>
+                            <h4 id="preview-nombre" style="color: #333; margin-bottom: 0.5rem;">Nombre del Producto</h4>
+                            <span id="preview-categoria" class="badge badge-primary">Categoría</span>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 0.9rem; color: #666;">Marca:</div>
+                            <div id="preview-marca" style="font-weight: 600;">-</div>
+                        </div>
+                    </div>
+                    
                     <div style="display: grid; gap: 0.8rem;">
-                        <div style="display: flex; justify-content: space-between;">
-                            <span style="color: #999;">Marca:</span>
-                            <span id="preview-marca" style="font-weight: 600;">-</span>
+                        <div style="display: flex; justify-content: space-between; background: white; padding: 0.8rem; border-radius: 6px;">
+                            <span style="color: #666;">Precio Compra:</span>
+                            <span id="preview-precio-compra" style="font-weight: 600; color: #2196f3;">S/. 0.00</span>
                         </div>
-                        <div style="display: flex; justify-content: space-between;">
-                            <span style="color: #999;">Talla/Color:</span>
-                            <span id="preview-detalles" style="font-weight: 600;">-</span>
+                        <div style="display: flex; justify-content: space-between; background: white; padding: 0.8rem; border-radius: 6px;">
+                            <span style="color: #666;">Precio Venta:</span>
+                            <span id="preview-precio-venta" style="font-weight: 600; color: #e91e63;">S/. 0.00</span>
                         </div>
-                        <div style="display: flex; justify-content: space-between;">
-                            <span style="color: #999;">Precio:</span>
-                            <span id="preview-precio" style="font-weight: bold; color: #e91e63;">S/. 0.00</span>
+                        <div style="display: flex; justify-content: space-between; background: white; padding: 0.8rem; border-radius: 6px;">
+                            <span style="color: #666;">Ganancia por unidad:</span>
+                            <span id="preview-ganancia" style="font-weight: 600; color: #28a745;">S/. 0.00 (0%)</span>
                         </div>
-                        <div style="display: flex; justify-content: space-between;">
-                            <span style="color: #999;">Cantidad:</span>
-                            <span id="preview-cantidad" style="font-weight: 600;">0</span>
-                        </div>
+                    </div>
+                </div>
+
+                <h4 style="color: #333; margin-bottom: 1rem;">Combinaciones Agregadas</h4>
+                <div id="preview-combinaciones" style="max-height: 300px; overflow-y: auto;">
+                    <div style="text-align: center; padding: 2rem; color: #999;">
+                        <i class="fas fa-layer-group" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                        <p>Agrega combinaciones de talla-color-cantidad</p>
+                    </div>
+                </div>
+
+                <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #eee;">
+                    <div style="display: flex; justify-content: space-between; font-weight: 600; font-size: 1.1rem;">
+                        <span>Total Unidades:</span>
+                        <span id="preview-total-unidades" style="color: #e91e63;">0</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="notificaciones"></div>
-
     <script src="js/main.js"></script>
+    <script src="js/header.js"></script>
     <script src="js/agregar.js"></script>
 </body>
 </html>
