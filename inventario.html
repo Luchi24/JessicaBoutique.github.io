@@ -5,90 +5,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jessica Boutique | Inventario</title>
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/inventario.css">
-    <link rel="stylesheet" href="css/correcciones.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <!-- Navbar (mismo que index) -->
     <div class="navbar">
         <div class="logo">
             <i class="fas fa-store"></i>
             <h1>Jessica Boutique</h1>
-            <span class="subtitle">Sistema de Gestión</span>
         </div>
         <div class="nav-buttons">
-            <a href="index.html" class="nav-btn">
-                <i class="fas fa-home"></i> Inicio
-            </a>
-            <a href="inventario.html" class="nav-btn active">
-                <i class="fas fa-boxes"></i> Inventario
-            </a>
-            <a href="agregar-producto.html" class="nav-btn">
-                <i class="fas fa-plus-circle"></i> Agregar
-            </a>
-            <a href="ventas.html" class="nav-btn">
-                <i class="fas fa-cash-register"></i> Ventas
-            </a>
-            <a href="reportes.html" class="nav-btn">
-                <i class="fas fa-chart-bar"></i> Reportes
-            </a>
-            <a href="gestion.html" class="nav-btn">
-                <i class="fas fa-cog"></i> Gestión
-            </a>
+            <a href="index.html" class="nav-btn"><i class="fas fa-home"></i> Inicio</a>
+            <a href="inventario.html" class="nav-btn active"><i class="fas fa-boxes"></i> Inventario</a>
+            <a href="agregar-producto.html" class="nav-btn"><i class="fas fa-plus"></i> Agregar</a>
+            <a href="ventas.html" class="nav-btn"><i class="fas fa-shopping-cart"></i> Ventas</a>
         </div>
     </div>
 
     <div class="container">
         <div class="seccion-header">
-            <h2><i class="fas fa-boxes"></i> Inventario de Productos</h2>
-            <button class="btn-principal" onclick="location.href='agregar-producto.html'">
+            <h2><i class="fas fa-boxes"></i> Inventario</h2>
+            <a href="agregar-producto.html" class="btn-principal">
                 <i class="fas fa-plus"></i> Nuevo Producto
-            </button>
+            </a>
         </div>
 
-        <div class="filtros">
-            <div class="busqueda">
-                <i class="fas fa-search"></i>
-                <input type="text" id="buscar-producto" placeholder="Buscar por nombre..." 
-                       onkeyup="filtrarProductos()">
+        <div style="margin-bottom: 1.5rem; display: flex; gap: 1rem;">
+            <div style="flex: 1; position: relative;">
+                <i class="fas fa-search" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #999;"></i>
+                <input type="text" id="buscar-producto" placeholder="Buscar productos..." 
+                       style="width: 100%; padding: 0.8rem 1rem 0.8rem 2.5rem; border: 1px solid #ddd; border-radius: 8px;">
             </div>
-            <select id="filtro-categoria" onchange="filtrarProductos()">
+            <select id="filtro-categoria" style="padding: 0.8rem; border: 1px solid #ddd; border-radius: 8px;">
                 <option value="">Todas las categorías</option>
             </select>
-            <select id="filtro-marca" onchange="filtrarProductos()">
-                <option value="">Todas las marcas</option>
-            </select>
-            <select id="filtro-talla" onchange="filtrarProductos()">
-                <option value="">Todas las tallas</option>
-                <option value="XS">XS</option>
-                <option value="S">S</option>
-                <option value="M">M</option>
-                <option value="L">L</option>
-                <option value="XL">XL</option>
-                <option value="Única">Única</option>
-            </select>
-            <select id="ordenar-por" onchange="ordenarProductos()">
-                <option value="nombre">Ordenar por</option>
-                <option value="cantidad">Menor cantidad</option>
-                <option value="precio">Menor precio</option>
-                <option value="ganancia">Mayor ganancia</option>
-            </select>
         </div>
 
-        <div class="tabla-contenedor">
-            <table id="tabla-productos">
+        <div style="background: white; border-radius: 10px; overflow: hidden;">
+            <table style="width: 100%; border-collapse: collapse;">
                 <thead>
-                    <tr>
-                        <th>Producto</th>
-                        <th>Categoría</th>
-                        <th>Marca</th>
-                        <th>Talla</th>
-                        <th>Color</th>
-                        <th>Cantidad</th>
-                        <th>Precio</th>
-                        <th>Ganancia</th>
-                        <th>Acciones</th>
+                    <tr style="background: #e91e63; color: white;">
+                        <th style="padding: 1rem; text-align: left;">Producto</th>
+                        <th style="padding: 1rem; text-align: left;">Categoría</th>
+                        <th style="padding: 1rem; text-align: left;">Talla/Color</th>
+                        <th style="padding: 1rem; text-align: left;">Stock</th>
+                        <th style="padding: 1rem; text-align: left;">Precio</th>
+                        <th style="padding: 1rem; text-align: left;">Acciones</th>
                     </tr>
                 </thead>
                 <tbody id="lista-productos">
@@ -97,41 +58,24 @@
             </table>
         </div>
 
-        <div class="estadisticas">
-            <div class="estadistica">
-                <h3>Total Productos</h3>
-                <p id="total-productos">0</p>
+        <div style="margin-top: 1.5rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+            <div style="background: white; padding: 1rem; border-radius: 8px; text-align: center;">
+                <p style="color: #999; margin-bottom: 0.5rem;">Total Productos</p>
+                <p style="font-size: 1.5rem; font-weight: bold; color: #e91e63;" id="contador-total">0</p>
             </div>
-            <div class="estadistica">
-                <h3>Stock Bajo (< 5)</h3>
-                <p id="stock-bajo">0</p>
+            <div style="background: white; padding: 1rem; border-radius: 8px; text-align: center;">
+                <p style="color: #999; margin-bottom: 0.5rem;">Stock Bajo</p>
+                <p style="font-size: 1.5rem; font-weight: bold; color: #ff9800;" id="contador-bajo">0</p>
             </div>
-            <div class="estadistica">
-                <h3>Valor Total</h3>
-                <p id="valor-total">S/. 0.00</p>
-            </div>
-            <div class="estadistica">
-                <h3>Ganancia Total</h3>
-                <p id="ganancia-total">S/. 0.00</p>
+            <div style="background: white; padding: 1rem; border-radius: 8px; text-align: center;">
+                <p style="color: #999; margin-bottom: 0.5rem;">Valor Total</p>
+                <p style="font-size: 1.5rem; font-weight: bold; color: #4caf50;" id="valor-total">S/. 0</p>
             </div>
         </div>
     </div>
 
-    <!-- Modal para editar producto -->
-    <div id="modal-editar" class="modal">
-        <div class="modal-contenido">
-            <div class="modal-header">
-                <h3><i class="fas fa-edit"></i> Editar Producto</h3>
-                <button class="btn-cerrar" onclick="cerrarModal('modal-editar')">&times;</button>
-            </div>
-            <div class="modal-body" id="modal-editar-body">
-                <!-- Formulario de edición se cargará aquí -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Notificaciones -->
-    <div id="notificaciones" class="notificaciones"></div>
+    <div id="modal-editar"></div>
+    <div id="notificaciones"></div>
 
     <script src="js/main.js"></script>
     <script src="js/inventario.js"></script>
