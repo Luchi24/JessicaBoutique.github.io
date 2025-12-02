@@ -1,5 +1,3 @@
-// Funciones específicas para la página de agregar producto
-
 function inicializarAgregar() {
     actualizarSelectoresAgregar();
     actualizarVistaPrevia();
@@ -7,7 +5,6 @@ function inicializarAgregar() {
 }
 
 function inicializarEventosAgregar() {
-    // Agregar eventos a todos los inputs del formulario
     const form = document.getElementById('form-agregar-producto');
     if (form) {
         const inputs = form.querySelectorAll('input, select');
@@ -17,7 +14,11 @@ function inicializarEventosAgregar() {
         });
     }
     
-    // Inicializar primera combinación
+    const btnAgregarCombinacion = document.querySelector('.btn-secundario[onclick*="agregarCombinacion"]');
+    if (btnAgregarCombinacion) {
+        btnAgregarCombinacion.onclick = agregarCombinacion;
+    }
+    
     actualizarSelectoresCombinaciones();
 }
 
@@ -49,22 +50,39 @@ function agregarCombinacion() {
     const combinacion = document.createElement('div');
     combinacion.className = 'combinacion-item';
     combinacion.innerHTML = `
-        <select class="combinacion-talla" required onchange="actualizarVistaPrevia()">
+        <select class="combinacion-talla" required>
             <option value="">Seleccionar talla</option>
             ${tallasDisponibles.map(talla => `<option value="${talla}">${talla}</option>`).join('')}
         </select>
-        <select class="combinacion-color" required onchange="actualizarVistaPrevia()">
+        <select class="combinacion-color" required>
             <option value="">Seleccionar color</option>
             ${datos.colores.map(color => `<option value="${color}">${color}</option>`).join('')}
         </select>
-        <input type="number" class="combinacion-cantidad" required min="0" 
-               placeholder="Cantidad" oninput="actualizarVistaPrevia()">
-        <button type="button" class="btn-eliminar-combinacion" onclick="eliminarCombinacion(this)">
+        <input type="number" class="combinacion-cantidad" required min="0" placeholder="Cantidad">
+        <button type="button" class="btn-eliminar-combinacion">
             <i class="fas fa-times"></i>
         </button>
     `;
     
     container.appendChild(combinacion);
+    
+    const nuevosSelect = combinacion.querySelector('.combinacion-color');
+    const nuevosInputs = combinacion.querySelectorAll('input, select');
+    const btnEliminar = combinacion.querySelector('.btn-eliminar-combinacion');
+    
+    nuevosInputs.forEach(input => {
+        input.addEventListener('input', actualizarVistaPrevia);
+        input.addEventListener('change', actualizarVistaPrevia);
+    });
+    
+    if (btnEliminar) {
+        btnEliminar.onclick = function() {
+            eliminarCombinacion(this);
+        };
+    }
+    
+    actualizarSelectoresCombinaciones();
+    actualizarVistaPrevia();
 }
 
 function eliminarCombinacion(boton) {
@@ -84,7 +102,6 @@ function agregarProducto(event) {
     const precioCompra = parseFloat(document.getElementById('precio-compra').value);
     const precioVenta = parseFloat(document.getElementById('precio-venta').value);
     
-    // Validaciones
     if (precioVenta <= precioCompra) {
         mostrarNotificacion('El precio de venta debe ser mayor al de compra', 'error');
         return;
@@ -111,7 +128,6 @@ function agregarProducto(event) {
         return;
     }
     
-    // Agregar cada combinación como producto separado
     combinaciones.forEach(combinacion => {
         const producto = {
             nombre: nombre,
@@ -128,7 +144,6 @@ function agregarProducto(event) {
     
     guardarDatos();
     
-    // Redirigir al inventario
     setTimeout(() => {
         window.location.href = 'inventario.html';
     }, 1500);
@@ -149,18 +164,15 @@ function actualizarVistaPrevia() {
         !previewPrecioCompra || !previewPrecioVenta || !previewGanancia || 
         !previewCombinaciones) return;
     
-    // Obtener valores del formulario
     const nombre = document.getElementById('nombre-producto').value || 'Nombre del Producto';
     const categoria = document.getElementById('categoria-producto').value || 'Categoría';
     const marca = document.getElementById('marca-producto').value || 'Marca';
     const precioCompra = parseFloat(document.getElementById('precio-compra').value) || 0;
     const precioVenta = parseFloat(document.getElementById('precio-venta').value) || 0;
     
-    // Calcular ganancia
     const ganancia = precioVenta - precioCompra;
     const porcentajeGanancia = precioCompra > 0 ? ((ganancia / precioCompra) * 100).toFixed(1) : 0;
     
-    // Actualizar elementos
     previewNombre.textContent = nombre;
     previewCategoria.textContent = categoria;
     previewMarca.textContent = marca;
@@ -169,7 +181,6 @@ function actualizarVistaPrevia() {
     previewGanancia.textContent = `S/. ${ganancia.toFixed(2)} (${porcentajeGanancia}%)`;
     previewGanancia.style.color = ganancia >= 0 ? 'var(--verde)' : 'var(--rojo)';
     
-    // Actualizar combinaciones
     previewCombinaciones.innerHTML = '';
     let totalCantidad = 0;
     
@@ -188,7 +199,6 @@ function actualizarVistaPrevia() {
         }
     });
     
-    // Mostrar total si hay combinaciones
     if (totalCantidad > 0) {
         previewCombinaciones.innerHTML += `
             <div class="combinacion-preview total" style="border-left-color: var(--verde); font-weight: bold;">
@@ -203,22 +213,20 @@ function limpiarFormulario() {
     if (form) {
         form.reset();
         
-        // Reiniciar combinaciones
         const container = document.getElementById('combinaciones-container');
         if (container) {
             container.innerHTML = `
                 <div class="combinacion-item">
-                    <select class="combinacion-talla" required onchange="actualizarVistaPrevia()">
+                    <select class="combinacion-talla" required>
                         <option value="">Seleccionar talla</option>
                         ${tallasDisponibles.map(talla => `<option value="${talla}">${talla}</option>`).join('')}
                     </select>
-                    <select class="combinacion-color" required onchange="actualizarVistaPrevia()">
+                    <select class="combinacion-color" required>
                         <option value="">Seleccionar color</option>
                         ${datos.colores.map(color => `<option value="${color}">${color}</option>`).join('')}
                     </select>
-                    <input type="number" class="combinacion-cantidad" required min="0" 
-                           placeholder="Cantidad" oninput="actualizarVistaPrevia()">
-                    <button type="button" class="btn-eliminar-combinacion" onclick="eliminarCombinacion(this)">
+                    <input type="number" class="combinacion-cantidad" required min="0" placeholder="Cantidad">
+                    <button type="button" class="btn-eliminar-combinacion">
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
