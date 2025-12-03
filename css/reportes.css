@@ -1,0 +1,271 @@
+/* Estilos específicos para Reportes */
+
+/* Filtros de reportes */
+.filtros-reportes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    align-items: end;
+}
+
+/* Métricas principales */
+.metricas-principales {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.card-metrica {
+    text-align: center;
+    padding: 1.5rem;
+}
+
+.metrica-icono {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    font-size: 1.5rem;
+}
+
+.metrica-icono.ventas {
+    background-color: rgba(156, 39, 176, 0.1);
+    color: var(--color-morado);
+}
+
+.metrica-icono.ganancias {
+    background-color: rgba(76, 175, 80, 0.1);
+    color: var(--color-exito);
+}
+
+.metrica-icono.clientes {
+    background-color: rgba(33, 150, 243, 0.1);
+    color: var(--color-info);
+}
+
+.metrica-icono.productos {
+    background-color: rgba(255, 152, 0, 0.1);
+    color: var(--color-advertencia);
+}
+
+.metrica-valor {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0.5rem 0;
+    color: var(--color-negro);
+}
+
+.metrica-tendencia {
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+}
+
+.metrica-tendencia .fa-arrow-up {
+    color: var(--color-exito);
+}
+
+.metrica-tendencia .fa-arrow-down {
+    color: var(--color-peligro);
+}
+
+/* Gráficas */
+.graficas-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.grafica-placeholder {
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.02);
+    border-radius: var(--radio-borde-sm);
+    border: 1px dashed var(--color-gris);
+}
+
+.grafica-mensaje {
+    text-align: center;
+    color: var(--color-gris-oscuro);
+}
+
+.grafica-mensaje i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: var(--color-lila);
+}
+
+/* Tablas de reportes */
+.tablas-reportes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.tendencia-producto {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.tendencia-producto .fa-arrow-up {
+    color: var(--color-exito);
+}
+
+.tendencia-producto .fa-arrow-down {
+    color: var(--color-peligro);
+}
+
+.tendencia-producto .fa-minus {
+    color: var(--color-gris-oscuro);
+}
+
+.clasificacion-cliente {
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.clasificacion-vip {
+    background-color: rgba(255, 193, 7, 0.1);
+    color: #ffc107;
+}
+
+.clasificacion-frecuente {
+    background-color: rgba(33, 150, 243, 0.1);
+    color: var(--color-info);
+}
+
+.clasificacion-nuevo {
+    background-color: rgba(40, 167, 69, 0.1);
+    color: var(--color-exito);
+}
+
+/* Reporte detallado */
+.acciones-reporte {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.encabezado-reporte {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid var(--color-gris-claro);
+}
+
+.encabezado-reporte h2 {
+    color: var(--color-morado);
+    margin-bottom: 0.5rem;
+}
+
+.seccion-reporte {
+    margin-bottom: 2rem;
+}
+
+.seccion-reporte:last-child {
+    margin-bottom: 0;
+}
+
+.resumen-ejecutivo {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.resumen-item {
+    background-color: rgba(0, 0, 0, 0.02);
+    padding: 1rem;
+    border-radius: var(--radio-borde-sm);
+}
+
+.resumen-item span:first-child {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--color-gris-oscuro);
+    margin-bottom: 0.3rem;
+}
+
+.resumen-item span:last-child {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--color-negro);
+}
+
+.table-reporte th {
+    background-color: var(--color-lila);
+    color: white;
+}
+
+.analisis-recomendaciones {
+    background-color: rgba(33, 150, 243, 0.05);
+    border: 1px solid rgba(33, 150, 243, 0.2);
+    border-radius: var(--radio-borde-sm);
+    padding: 1.5rem;
+}
+
+.analisis-recomendaciones h4 {
+    color: var(--color-info);
+    margin-bottom: 1rem;
+}
+
+/* Responsive para reportes */
+@media (max-width: 1024px) {
+    .graficas-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .tablas-reportes {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .filtros-reportes {
+        grid-template-columns: 1fr;
+    }
+    
+    .metricas-principales {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .graficas-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .grafica-placeholder {
+        height: 250px;
+    }
+}
+
+@media (max-width: 576px) {
+    .metricas-principales {
+        grid-template-columns: 1fr;
+    }
+    
+    .resumen-ejecutivo {
+        grid-template-columns: 1fr;
+    }
+    
+    .acciones-reporte {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .acciones-reporte .btn {
+        width: 100%;
+    }
+}
