@@ -5,12 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jessica Boutique - Inventario</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="css/estilos.css">
-    <link rel="stylesheet" href="css/componentes.css">
-    <link rel="stylesheet" href="css/tablas-formularios.css">
-    <link rel="stylesheet" href="css/responsive.css">
+    
+    <!-- CSS Comunes -->
+    <link rel="stylesheet" href="css/comunes/base.css">
+    <link rel="stylesheet" href="css/comunes/navegacion.css">
+    <link rel="stylesheet" href="css/comunes/componentes.css">
+    <link rel="stylesheet" href="css/comunes/responsive.css">
+    
+    <!-- CSS Específico -->
+    <link rel="stylesheet" href="css/inventario.css">
 </head>
 <body>
+    <!-- Navegación -->
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-brand">
@@ -31,6 +37,7 @@
         </div>
     </nav>
 
+    <!-- Contenido Principal -->
     <main class="container">
         <div class="page-header">
             <h2><i class="fas fa-boxes"></i> Inventario de Productos</h2>
@@ -38,46 +45,51 @@
         </div>
 
         <!-- Filtros y Búsqueda -->
-        <div class="filters-container">
-            <div class="form-group">
-                <label>Buscar Producto</label>
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" id="buscarProducto" placeholder="Nombre, código o marca..." class="form-control">
+        <div class="card card-filtros">
+            <div class="filtros-grid">
+                <div class="filtro-item">
+                    <label for="buscarProducto" class="filtro-label">
+                        <i class="fas fa-search"></i> Buscar
+                    </label>
+                    <input type="text" id="buscarProducto" class="form-control" placeholder="Nombre, código o marca...">
                 </div>
-            </div>
-            
-            <div class="form-group">
-                <label for="filtroCategoria">Categoría</label>
-                <select id="filtroCategoria" class="form-control">
-                    <option value="todas">Todas las categorías</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label for="filtroEstado">Estado</label>
-                <select id="filtroEstado" class="form-control">
-                    <option value="todos">Todos</option>
-                    <option value="instock">En Stock</option>
-                    <option value="lowstock">Stock Bajo</option>
-                    <option value="outofstock">Agotados</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label for="ordenarPor">Ordenar por</label>
-                <select id="ordenarPor" class="form-control">
-                    <option value="nombre">Nombre</option>
-                    <option value="stock">Stock</option>
-                    <option value="precio">Precio</option>
-                    <option value="reciente">Más Recientes</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <button id="aplicarFiltros" class="btn btn-primary btn-block">
-                    <i class="fas fa-filter"></i> Aplicar Filtros
-                </button>
+                
+                <div class="filtro-item">
+                    <label for="filtroCategoria" class="filtro-label">Categoría</label>
+                    <select id="filtroCategoria" class="form-control">
+                        <option value="todas">Todas las categorías</option>
+                        <!-- Categorías dinámicas -->
+                    </select>
+                </div>
+                
+                <div class="filtro-item">
+                    <label for="filtroEstado" class="filtro-label">Estado</label>
+                    <select id="filtroEstado" class="form-control">
+                        <option value="todos">Todos</option>
+                        <option value="instock">En Stock</option>
+                        <option value="lowstock">Stock Bajo</option>
+                        <option value="outofstock">Agotados</option>
+                    </select>
+                </div>
+                
+                <div class="filtro-item">
+                    <label for="ordenarPor" class="filtro-label">Ordenar por</label>
+                    <select id="ordenarPor" class="form-control">
+                        <option value="nombre">Nombre A-Z</option>
+                        <option value="stock">Stock (Mayor a menor)</option>
+                        <option value="precio">Precio (Mayor a menor)</option>
+                        <option value="reciente">Más Recientes</option>
+                    </select>
+                </div>
+                
+                <div class="filtro-item">
+                    <button id="aplicarFiltros" class="btn btn-primary btn-filtro">
+                        <i class="fas fa-filter"></i> Aplicar Filtros
+                    </button>
+                    <button id="limpiarFiltros" class="btn btn-secondary btn-filtro">
+                        <i class="fas fa-redo"></i> Limpiar
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -85,13 +97,18 @@
         <div class="card">
             <div class="card-header">
                 <h3>Productos en Inventario</h3>
-                <a href="agregar-producto.html" class="btn btn-primary">
-                    <i class="fas fa-plus"></i> Nuevo Producto
-                </a>
+                <div>
+                    <a href="agregar-producto.html" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Nuevo Producto
+                    </a>
+                    <button id="exportarInventario" class="btn btn-success">
+                        <i class="fas fa-file-export"></i> Exportar
+                    </button>
+                </div>
             </div>
             
-            <div class="table-responsive">
-                <table class="table" id="tablaInventario">
+            <div class="table-container">
+                <table class="table table-inventario">
                     <thead>
                         <tr>
                             <th>Código</th>
@@ -100,326 +117,77 @@
                             <th>Talla</th>
                             <th>Color</th>
                             <th>Stock</th>
-                            <th>Precio Compra</th>
                             <th>Precio Venta</th>
                             <th>Estado</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <!-- Datos dinámicos -->
+                    <tbody id="tablaProductos">
+                        <!-- Productos dinámicos -->
                     </tbody>
                 </table>
             </div>
             
             <!-- Paginación -->
-            <div class="pagination" id="paginacion">
+            <div class="paginacion" id="paginacion">
                 <!-- Paginación dinámica -->
             </div>
         </div>
 
         <!-- Resumen del Inventario -->
-        <div class="inventory-summary">
-            <div class="card summary-card">
-                <h3>Productos Totales</h3>
-                <div class="summary-value" id="resumenTotal">0</div>
+        <div class="resumen-inventario">
+            <div class="card card-resumen">
+                <h3><i class="fas fa-cubes"></i> Productos Totales</h3>
+                <div class="resumen-valor" id="resumenTotal">0</div>
                 <p>en inventario</p>
             </div>
             
-            <div class="card summary-card">
-                <h3>Valor Total</h3>
-                <div class="summary-value" id="resumenValor">S/. 0.00</div>
+            <div class="card card-resumen">
+                <h3><i class="fas fa-money-bill-wave"></i> Valor Total</h3>
+                <div class="resumen-valor" id="resumenValor">S/. 0.00</div>
                 <p>valor del inventario</p>
             </div>
             
-            <div class="card summary-card">
-                <h3>Por Agotarse</h3>
-                <div class="summary-value" id="resumenBajo">0</div>
+            <div class="card card-resumen">
+                <h3><i class="fas fa-exclamation-triangle"></i> Por Agotarse</h3>
+                <div class="resumen-valor" id="resumenBajo">0</div>
                 <p>productos con stock bajo</p>
             </div>
             
-            <div class="card summary-card">
-                <h3>Agotados</h3>
-                <div class="summary-value" id="resumenAgotados">0</div>
+            <div class="card card-resumen">
+                <h3><i class="fas fa-times-circle"></i> Agotados</h3>
+                <div class="resumen-valor" id="resumenAgotados">0</div>
                 <p>productos sin stock</p>
             </div>
         </div>
     </main>
 
-    <!-- Modal de Confirmación -->
+    <!-- Modal de Confirmación Eliminación -->
     <div id="modalEliminar" class="modal">
-        <div class="modal-content">
+        <div class="modal-contenido">
             <div class="modal-header">
-                <h3>Confirmar Eliminación</h3>
-                <button class="btn btn-sm" onclick="cerrarModal('modalEliminar')">
-                    <i class="fas fa-times"></i>
-                </button>
+                <h3><i class="fas fa-exclamation-triangle"></i> Confirmar Eliminación</h3>
+                <button class="btn-cerrar-modal">&times;</button>
             </div>
             <div class="modal-body">
                 <p>¿Estás seguro de que quieres eliminar este producto? Esta acción no se puede deshacer.</p>
+                <div class="info-producto-eliminar">
+                    <p><strong>Producto:</strong> <span id="nombreProductoEliminar"></span></p>
+                    <p><strong>Código:</strong> <span id="codigoProductoEliminar"></span></p>
+                </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="cerrarModal('modalEliminar')">Cancelar</button>
+                <button class="btn btn-secondary" id="cancelarEliminar">Cancelar</button>
                 <button class="btn btn-danger" id="confirmarEliminar">Eliminar</button>
             </div>
         </div>
     </div>
 
-    <script src="js/datos.js"></script>
-    <script src="js/sistema.js"></script>
-    <script>
-        // Variables globales para inventario
-        let productosFiltrados = [];
-        let productoAEliminar = null;
-        const productosPorPagina = 10;
-        let paginaActual = 1;
-        
-        // Inicializar inventario
-        document.addEventListener('DOMContentLoaded', function() {
-            cargarFiltros();
-            cargarProductos();
-            actualizarResumen();
-            configurarEventos();
-            // Actualizar enlace activo en el menú
-            actualizarEnlaceActivo();
-        });
-
-        function actualizarEnlaceActivo() {
-        // Remover active de todos los enlaces
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.classList.remove('active');
-        });
-        // Agregar active al enlace actual
-        const currentLink = document.querySelector('a[href="inventario.html"]');
-        if (currentLink) {
-            currentLink.classList.add('active');
-        }
-    }
-        
-        function cargarFiltros() {
-            const config = SistemaDatos.obtenerConfiguracion();
-            const selectCategoria = document.getElementById('filtroCategoria');
-            
-            // Limpiar opciones
-            selectCategoria.innerHTML = '<option value="todas">Todas las categorías</option>';
-            
-            // Agregar categorías
-            config.categorias.forEach(categoria => {
-                const option = document.createElement('option');
-                option.value = categoria;
-                option.textContent = categoria;
-                selectCategoria.appendChild(option);
-            });
-        }
-        
-        function cargarProductos(filtros = {}) {
-            productosFiltrados = SistemaDatos.filtrarProductos(filtros);
-            paginaActual = 1;
-            renderizarTabla();
-            renderizarPaginacion();
-        }
-        
-        function renderizarTabla() {
-            const tbody = document.getElementById('tablaInventario').querySelector('tbody');
-            tbody.innerHTML = '';
-            
-            // Calcular índices para paginación
-            const inicio = (paginaActual - 1) * productosPorPagina;
-            const fin = inicio + productosPorPagina;
-            const productosPagina = productosFiltrados.slice(inicio, fin);
-            
-            if (productosPagina.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="10" class="text-center">No se encontraron productos</td>
-                    </tr>
-                `;
-                return;
-            }
-            
-            productosPagina.forEach(producto => {
-                let estadoClass = '';
-                let estadoText = '';
-                
-                switch(producto.estado) {
-                    case 'instock':
-                        estadoClass = 'status-instock';
-                        estadoText = 'En Stock';
-                        break;
-                    case 'lowstock':
-                        estadoClass = 'status-lowstock';
-                        estadoText = 'Stock Bajo';
-                        break;
-                    case 'outofstock':
-                        estadoClass = 'status-outofstock';
-                        estadoText = 'Agotado';
-                        break;
-                }
-                
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${producto.codigo || 'N/A'}</td>
-                    <td>${producto.nombre}</td>
-                    <td>${producto.categoria}</td>
-                    <td>${producto.talla}</td>
-                    <td>${producto.color}</td>
-                    <td>${producto.stock}</td>
-                    <td>S/. ${producto.precioCompra.toFixed(2)}</td>
-                    <td>S/. ${producto.precioVenta.toFixed(2)}</td>
-                    <td><span class="status ${estadoClass}">${estadoText}</span></td>
-                    <td>
-                        <div class="action-buttons">
-                            <a href="agregar-producto.html?id=${producto.id}" class="btn btn-warning btn-sm">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            <button class="btn btn-danger btn-sm btn-eliminar" data-id="${producto.id}">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
-            
-            // Agregar eventos a botones de eliminar
-            document.querySelectorAll('.btn-eliminar').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const id = parseInt(this.getAttribute('data-id'));
-                    mostrarModalEliminar(id);
-                });
-            });
-        }
-        
-        function renderizarPaginacion() {
-            const paginacion = document.getElementById('paginacion');
-            paginacion.innerHTML = '';
-            
-            const totalPaginas = Math.ceil(productosFiltrados.length / productosPorPagina);
-            
-            if (totalPaginas <= 1) return;
-            
-            // Botón anterior
-            const btnAnterior = document.createElement('button');
-            btnAnterior.className = 'page-link';
-            btnAnterior.innerHTML = '<i class="fas fa-chevron-left"></i>';
-            btnAnterior.disabled = paginaActual === 1;
-            btnAnterior.addEventListener('click', () => {
-                if (paginaActual > 1) {
-                    paginaActual--;
-                    renderizarTabla();
-                }
-            });
-            paginacion.appendChild(btnAnterior);
-            
-            // Números de página
-            for (let i = 1; i <= totalPaginas; i++) {
-                const btnPagina = document.createElement('button');
-                btnPagina.className = `page-link ${i === paginaActual ? 'active' : ''}`;
-                btnPagina.textContent = i;
-                btnPagina.addEventListener('click', () => {
-                    paginaActual = i;
-                    renderizarTabla();
-                });
-                paginacion.appendChild(btnPagina);
-            }
-            
-            // Botón siguiente
-            const btnSiguiente = document.createElement('button');
-            btnSiguiente.className = 'page-link';
-            btnSiguiente.innerHTML = '<i class="fas fa-chevron-right"></i>';
-            btnSiguiente.disabled = paginaActual === totalPaginas;
-            btnSiguiente.addEventListener('click', () => {
-                if (paginaActual < totalPaginas) {
-                    paginaActual++;
-                    renderizarTabla();
-                }
-            });
-            paginacion.appendChild(btnSiguiente);
-        }
-        
-        function actualizarResumen() {
-            const stats = SistemaDatos.obtenerEstadisticas();
-            
-            document.getElementById('resumenTotal').textContent = stats.totalProductos;
-            document.getElementById('resumenValor').textContent = `S/. ${stats.valorInventario.toFixed(2)}`;
-            document.getElementById('resumenBajo').textContent = stats.stockBajo;
-            document.getElementById('resumenAgotados').textContent = stats.agotados;
-        }
-        
-        function configurarEventos() {
-            // Aplicar filtros
-            document.getElementById('aplicarFiltros').addEventListener('click', function() {
-                const filtros = {
-                    categoria: document.getElementById('filtroCategoria').value,
-                    estado: document.getElementById('filtroEstado').value,
-                    busqueda: document.getElementById('buscarProducto').value,
-                    ordenarPor: document.getElementById('ordenarPor').value
-                };
-                cargarProductos(filtros);
-            });
-            
-            // Buscar con Enter
-            document.getElementById('buscarProducto').addEventListener('keyup', function(e) {
-                if (e.key === 'Enter') {
-                    document.getElementById('aplicarFiltros').click();
-                }
-            });
-        }
-        
-        function mostrarModalEliminar(id) {
-            productoAEliminar = id;
-            document.getElementById('modalEliminar').style.display = 'flex';
-        }
-        
-        function cerrarModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-        }
-        
-        // Configurar eliminación
-        document.getElementById('confirmarEliminar').addEventListener('click', function() {
-            if (productoAEliminar) {
-                eliminarProducto(productoAEliminar);
-            }
-        });
-        
-        function eliminarProducto(id) {
-            const productos = SistemaDatos.obtenerProductos();
-            const index = productos.findIndex(p => p.id === id);
-            
-            if (index !== -1) {
-                productos.splice(index, 1);
-                SistemaDatos.guardarProductos(productos);
-                
-                Sistema.mostrarMensaje('success', 'Producto eliminado correctamente');
-                cerrarModal('modalEliminar');
-                
-                // Recargar datos
-                cargarProductos();
-                actualizarResumen();
-            }
-        }
-        function aplicarFiltrosInventario() {
-            const filtros = {
-                categoria: document.getElementById('filtroCategoria')?.value || 'todas',
-                estado: document.getElementById('filtroEstado')?.value || 'todos',
-                busqueda: document.getElementById('buscarProducto')?.value || '',
-                ordenarPor: document.getElementById('ordenarPor')?.value || 'nombre'
-            };
-            
-            if (typeof cargarProductos === 'function') {
-                cargarProductos(filtros);
-            }
-        }
-        
-        // Cerrar modal al hacer clic fuera
-        document.querySelectorAll('.modal').forEach(modal => {
-            modal.addEventListener('click', function(e) {
-                if (e.target === this) {
-                    this.style.display = 'none';
-                }
-            });
-        });
-    </script>
-    <script src="js/main.js"></script>
+    <!-- JavaScript Comunes -->
+    <script src="js/comunes/datos.js"></script>
+    <script src="js/comunes/eventos.js"></script>
+    
+    <!-- JavaScript Específico -->
+    <script src="js/inventario.js"></script>
 </body>
 </html>
