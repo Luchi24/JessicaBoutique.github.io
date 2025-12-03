@@ -5,13 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jessica Boutique - Panel de Control</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="css/estilos.css">
-    <link rel="stylesheet" href="css/componentes.css">
-    <link rel="stylesheet" href="css/tablas-formularios.css">
-    <link rel="stylesheet" href="css/responsive.css">
+    
+    <!-- CSS Comunes -->
+    <link rel="stylesheet" href="css/comunes/base.css">
+    <link rel="stylesheet" href="css/comunes/navegacion.css">
+    <link rel="stylesheet" href="css/comunes/componentes.css">
+    <link rel="stylesheet" href="css/comunes/responsive.css">
+    
+    <!-- CSS Específico -->
+    <link rel="stylesheet" href="css/index.css">
 </head>
 <body>
-    <!-- Barra de Navegación -->
+    <!-- Navegación -->
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-brand">
@@ -41,59 +46,51 @@
 
         <!-- Tarjetas de Resumen -->
         <div class="dashboard-cards">
-            <div class="card summary-card">
-                <div class="card-header">
-                    <h3>Productos en Stock</h3>
-                    <div class="card-icon stock">
-                        <i class="fas fa-box-open"></i>
-                    </div>
+            <div class="card card-resumen">
+                <div class="card-icon-bg stock">
+                    <i class="fas fa-box-open"></i>
                 </div>
+                <h3>Productos en Stock</h3>
                 <div class="card-value" id="totalProductos">0</div>
-                <div class="card-footer">Total de productos disponibles</div>
+                <p class="card-desc">Total de productos disponibles</p>
             </div>
 
-            <div class="card summary-card">
-                <div class="card-header">
-                    <h3>Ventas del Día</h3>
-                    <div class="card-icon sales">
-                        <i class="fas fa-money-bill-wave"></i>
-                    </div>
+            <div class="card card-resumen">
+                <div class="card-icon-bg ventas">
+                    <i class="fas fa-money-bill-wave"></i>
                 </div>
+                <h3>Ventas del Día</h3>
                 <div class="card-value" id="ventasDia">S/. 0.00</div>
-                <div class="card-footer">Ventas totales de hoy</div>
+                <p class="card-desc">Ventas totales de hoy</p>
             </div>
 
-            <div class="card summary-card">
-                <div class="card-header">
-                    <h3>Stock Bajo</h3>
-                    <div class="card-icon warning">
-                        <i class="fas fa-exclamation-triangle"></i>
-                    </div>
+            <div class="card card-resumen">
+                <div class="card-icon-bg alerta">
+                    <i class="fas fa-exclamation-triangle"></i>
                 </div>
+                <h3>Stock Bajo</h3>
                 <div class="card-value" id="stockBajo">0</div>
-                <div class="card-footer" id="recomendacionStock">Sin productos por agotarse</div>
+                <p class="card-desc" id="recomendacionStock">Sin productos por agotarse</p>
             </div>
 
-            <div class="card summary-card">
-                <div class="card-header">
-                    <h3>Producto Top</h3>
-                    <div class="card-icon trend">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
+            <div class="card card-resumen">
+                <div class="card-icon-bg tendencia">
+                    <i class="fas fa-chart-line"></i>
                 </div>
+                <h3>Producto Top</h3>
                 <div class="card-value" id="productoTendencia">-</div>
-                <div class="card-footer" id="ventasProductoTendencia">Sin datos suficientes</div>
+                <p class="card-desc" id="ventasProductoTendencia">Sin datos suficientes</p>
             </div>
         </div>
 
         <!-- Últimas Ventas -->
         <div class="card">
             <div class="card-header">
-                <h3>Últimas Ventas</h3>
+                <h3><i class="fas fa-history"></i> Últimas Ventas</h3>
                 <a href="ventas.html" class="btn btn-secondary">Ver Todas</a>
             </div>
-            <div class="table-responsive">
-                <table class="table" id="tablaUltimasVentas">
+            <div class="table-container">
+                <table class="table">
                     <thead>
                         <tr>
                             <th>Cliente</th>
@@ -102,7 +99,7 @@
                             <th>Fecha</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="ultimasVentas">
                         <!-- Datos dinámicos -->
                     </tbody>
                 </table>
@@ -112,11 +109,11 @@
         <!-- Productos con Stock Bajo -->
         <div class="card">
             <div class="card-header">
-                <h3>Productos por Agotarse</h3>
+                <h3><i class="fas fa-exclamation-circle"></i> Productos por Agotarse</h3>
                 <a href="inventario.html?filtro=bajo" class="btn btn-warning">Ver Todos</a>
             </div>
-            <div class="table-responsive">
-                <table class="table" id="tablaStockBajo">
+            <div class="table-container">
+                <table class="table">
                     <thead>
                         <tr>
                             <th>Producto</th>
@@ -126,7 +123,7 @@
                             <th>Acción</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="productosStockBajo">
                         <!-- Datos dinámicos -->
                     </tbody>
                 </table>
@@ -134,106 +131,11 @@
         </div>
     </main>
 
-    <!-- Scripts -->
-    <script src="js/datos.js"></script>
-    <script src="js/sistema.js"></script>
-    <script src="js/productos.js"></script>
-    <script>
-        // Función para actualizar el dashboard
-        function actualizarDashboard() {
-            const stats = SistemaDatos.obtenerEstadisticas();
-            
-            // Actualizar tarjetas
-            document.getElementById('totalProductos').textContent = stats.totalProductos;
-            document.getElementById('ventasDia').textContent = stats.ventasHoy.toFixed(2);
-            document.getElementById('stockBajo').textContent = stats.stockBajo;
-            document.getElementById('productoTendencia').textContent = stats.productoMasVendido || '-';
-            document.getElementById('ventasProductoTendencia').textContent = 
-                stats.ventasProductoTop ? `${stats.ventasProductoTop} vendidos` : 'Sin datos suficientes';
-            
-            // Actualizar recomendación de stock
-            const productosBajoStock = SistemaDatos.obtenerProductos().filter(p => p.estado === 'lowstock');
-            if (productosBajoStock.length > 0) {
-                const nombres = productosBajoStock.slice(0, 3).map(p => p.nombre).join(', ');
-                document.getElementById('recomendacionStock').textContent = 
-                    `Reponer: ${nombres}${productosBajoStock.length > 3 ? '...' : ''}`;
-            }
-            
-            // Actualizar tabla de últimas ventas
-            actualizarTablaUltimasVentas();
-            
-            // Actualizar tabla de stock bajo
-            actualizarTablaStockBajo();
-        }
-        
-        function actualizarTablaUltimasVentas() {
-            const ventas = SistemaDatos.obtenerVentas();
-            const tbody = document.getElementById('tablaUltimasVentas').querySelector('tbody');
-            tbody.innerHTML = '';
-            
-            const ultimasVentas = ventas.slice(-5).reverse();
-            
-            ultimasVentas.forEach(venta => {
-                const cliente = SistemaDatos.obtenerClientes().find(c => c.id === venta.clienteId);
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${cliente?.nombre || 'Cliente no encontrado'}</td>
-                    <td>${venta.productos.length} productos</td>
-                    <td>S/. ${venta.total.toFixed(2)}</td>
-                    <td>${venta.fecha}</td>
-                `;
-                tbody.appendChild(row);
-            });
-            
-            if (ultimasVentas.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="4" class="text-center">No hay ventas registradas</td>
-                    </tr>
-                `;
-            }
-        }
-        
-        function actualizarTablaStockBajo() {
-            const productos = SistemaDatos.obtenerProductos();
-            const tbody = document.getElementById('tablaStockBajo').querySelector('tbody');
-            tbody.innerHTML = '';
-            
-            const productosBajo = productos.filter(p => p.estado === 'lowstock');
-            
-            productosBajo.forEach(producto => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${producto.nombre}</td>
-                    <td>${producto.categoria}</td>
-                    <td>${producto.stock}</td>
-                    <td>${producto.stockMinimo}</td>
-                    <td>
-                        <a href="agregar-producto.html?id=${producto.id}" class="btn btn-warning btn-sm">
-                            <i class="fas fa-edit"></i> Reponer
-                        </a>
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
-            
-            if (productosBajo.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="5" class="text-center">No hay productos con stock bajo</td>
-                    </tr>
-                `;
-            }
-        }
-        
-        // Inicializar dashboard
-        document.addEventListener('DOMContentLoaded', function() {
-            actualizarDashboard();
-            
-            // Actualizar cada 30 segundos
-            setInterval(actualizarDashboard, 30000);
-        });
-    </script>
-    <script src="js/main.js"></script>
+    <!-- JavaScript Comunes -->
+    <script src="js/comunes/datos.js"></script>
+    <script src="js/comunes/eventos.js"></script>
+    
+    <!-- JavaScript Específico -->
+    <script src="js/index.js"></script>
 </body>
 </html>
