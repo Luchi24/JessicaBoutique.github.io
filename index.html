@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jessica Boutique - Inventario</title>
+    <title>Jessica Boutique - Panel de Control</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/estilos.css">
     <link rel="stylesheet" href="css/componentes.css">
@@ -22,8 +22,8 @@
                 <i class="fas fa-bars"></i>
             </button>
             <ul class="nav-menu" id="navMenu">
-                <li><a href="index.html" class="nav-link"><i class="fas fa-tachometer-alt"></i> Panel</a></li>
-                <li><a href="inventario.html" class="nav-link active"><i class="fas fa-boxes"></i> Inventario</a></li>
+                <li><a href="index.html" class="nav-link active"><i class="fas fa-tachometer-alt"></i> Panel</a></li>
+                <li><a href="inventario.html" class="nav-link"><i class="fas fa-boxes"></i> Inventario</a></li>
                 <li><a href="agregar-producto.html" class="nav-link"><i class="fas fa-plus-circle"></i> Agregar</a></li>
                 <li><a href="ventas.html" class="nav-link"><i class="fas fa-shopping-cart"></i> Ventas</a></li>
                 <li><a href="reportes.html" class="nav-link"><i class="fas fa-chart-bar"></i> Reportes</a></li>
@@ -35,133 +35,101 @@
     <!-- Contenido Principal -->
     <main class="container">
         <div class="page-header">
-            <h2><i class="fas fa-boxes"></i> Gestión de Inventario</h2>
-            <p>Administra todos los productos de la boutique</p>
+            <h2><i class="fas fa-tachometer-alt"></i> Panel de Control</h2>
+            <p>Resumen general del sistema</p>
         </div>
 
-        <!-- Filtros y Búsqueda -->
-        <div class="filters-container card">
-            <div class="search-box">
-                <i class="fas fa-search"></i>
-                <input type="text" id="input-busqueda" placeholder="Buscar productos..." class="form-control">
-            </div>
-            
-            <div class="form-group">
-                <label for="filtro-categoria">Categoría</label>
-                <select id="filtro-categoria" class="form-control">
-                    <option value="todas">Todas las categorías</option>
-                    <!-- Las categorías se cargarán dinámicamente -->
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label for="filtro-estado">Estado</label>
-                <select id="filtro-estado" class="form-control">
-                    <option value="todos">Todos los estados</option>
-                    <option value="instock">En Stock</option>
-                    <option value="lowstock">Stock Bajo</option>
-                    <option value="outofstock">Agotado</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label for="filtro-orden">Ordenar por</label>
-                <select id="filtro-orden" class="form-control">
-                    <option value="reciente">Más recientes</option>
-                    <option value="nombre">Nombre (A-Z)</option>
-                    <option value="precio">Precio (Mayor a menor)</option>
-                    <option value="stock">Stock (Mayor a menor)</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <button id="btn-aplicar-filtros" class="btn btn-primary">
-                    <i class="fas fa-filter"></i> Aplicar Filtros
-                </button>
-                <button id="btn-limpiar-filtros" class="btn btn-secondary">
-                    <i class="fas fa-times"></i> Limpiar
-                </button>
-            </div>
-        </div>
-
-        <!-- Resumen del Inventario -->
+        <!-- Tarjetas de Resumen -->
         <div class="dashboard-cards">
             <div class="card summary-card">
                 <div class="card-header">
-                    <h3>Productos Totales</h3>
+                    <h3>Productos en Stock</h3>
                     <div class="card-icon stock">
-                        <i class="fas fa-box"></i>
+                        <i class="fas fa-box-open"></i>
                     </div>
                 </div>
-                <div class="card-value" id="total-productos">0</div>
-                <div class="card-footer">en inventario</div>
+                <div class="card-value" id="totalProductos">0</div>
+                <div class="card-footer">Total de productos disponibles</div>
             </div>
-            
+
             <div class="card summary-card">
                 <div class="card-header">
-                    <h3>Valor del Inventario</h3>
+                    <h3>Ventas del Día</h3>
                     <div class="card-icon sales">
                         <i class="fas fa-money-bill-wave"></i>
                     </div>
                 </div>
-                <div class="card-value" id="valor-inventario">S/. 0.00</div>
-                <div class="card-footer">valor total</div>
+                <div class="card-value" id="ventasDia">S/. 0.00</div>
+                <div class="card-footer">Ventas totales de hoy</div>
             </div>
-            
+
             <div class="card summary-card">
                 <div class="card-header">
-                    <h3>Productos con Stock Bajo</h3>
+                    <h3>Stock Bajo</h3>
                     <div class="card-icon warning">
                         <i class="fas fa-exclamation-triangle"></i>
                     </div>
                 </div>
-                <div class="card-value" id="productos-bajo-stock">0</div>
-                <div class="card-footer">necesitan reposición</div>
+                <div class="card-value" id="stockBajo">0</div>
+                <div class="card-footer" id="recomendacionStock">Sin productos por agotarse</div>
             </div>
-            
+
             <div class="card summary-card">
                 <div class="card-header">
-                    <h3>Productos Agotados</h3>
-                    <div class="card-icon danger">
-                        <i class="fas fa-times-circle"></i>
+                    <h3>Producto Top</h3>
+                    <div class="card-icon trend">
+                        <i class="fas fa-chart-line"></i>
                     </div>
                 </div>
-                <div class="card-value" id="productos-agotados">0</div>
-                <div class="card-footer">sin stock disponible</div>
+                <div class="card-value" id="productoTendencia">-</div>
+                <div class="card-footer" id="ventasProductoTendencia">Sin datos suficientes</div>
             </div>
         </div>
 
-        <!-- Tabla de Productos -->
+        <!-- Últimas Ventas -->
         <div class="card">
             <div class="card-header">
-                <h3>Productos en Inventario</h3>
-                <a href="agregar-producto.html" class="btn btn-success">
-                    <i class="fas fa-plus"></i> Nuevo Producto
-                </a>
+                <h3>Últimas Ventas</h3>
+                <a href="ventas.html" class="btn btn-secondary">Ver Todas</a>
             </div>
             <div class="table-responsive">
-                <table class="table">
+                <table class="table" id="tablaUltimasVentas">
                     <thead>
                         <tr>
-                            <th>Nombre</th>
-                            <th>Categoría</th>
-                            <th>Talla</th>
-                            <th>Color</th>
-                            <th>Stock</th>
-                            <th>Precio Venta</th>
-                            <th>Estado</th>
-                            <th>Acciones</th>
+                            <th>Cliente</th>
+                            <th>Productos</th>
+                            <th>Total</th>
+                            <th>Fecha</th>
                         </tr>
                     </thead>
-                    <tbody id="inventario-table-body">
-                        <!-- Los productos se cargarán dinámicamente -->
+                    <tbody>
+                        <!-- Datos dinámicos -->
                     </tbody>
                 </table>
             </div>
-            
-            <!-- Paginación -->
-            <div class="pagination" id="pagination">
-                <!-- La paginación se generará dinámicamente -->
+        </div>
+
+        <!-- Productos con Stock Bajo -->
+        <div class="card">
+            <div class="card-header">
+                <h3>Productos por Agotarse</h3>
+                <a href="inventario.html?filtro=bajo" class="btn btn-warning">Ver Todos</a>
+            </div>
+            <div class="table-responsive">
+                <table class="table" id="tablaStockBajo">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Categoría</th>
+                            <th>Stock Actual</th>
+                            <th>Alerta en</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Datos dinámicos -->
+                    </tbody>
+                </table>
             </div>
         </div>
     </main>
@@ -169,6 +137,101 @@
     <!-- Scripts -->
     <script src="js/datos.js"></script>
     <script src="js/sistema.js"></script>
-    <script src="js/productos.js"></script>
+    <script>
+        // Función para actualizar el dashboard
+        function actualizarDashboard() {
+            const stats = SistemaDatos.obtenerEstadisticas();
+            
+            // Actualizar tarjetas
+            document.getElementById('totalProductos').textContent = stats.totalProductos;
+            document.getElementById('ventasDia').textContent = stats.ventasHoy.toFixed(2);
+            document.getElementById('stockBajo').textContent = stats.stockBajo;
+            document.getElementById('productoTendencia').textContent = stats.productoMasVendido || '-';
+            document.getElementById('ventasProductoTendencia').textContent = 
+                stats.ventasProductoTop ? `${stats.ventasProductoTop} vendidos` : 'Sin datos suficientes';
+            
+            // Actualizar recomendación de stock
+            const productosBajoStock = SistemaDatos.obtenerProductos().filter(p => p.estado === 'lowstock');
+            if (productosBajoStock.length > 0) {
+                const nombres = productosBajoStock.slice(0, 3).map(p => p.nombre).join(', ');
+                document.getElementById('recomendacionStock').textContent = 
+                    `Reponer: ${nombres}${productosBajoStock.length > 3 ? '...' : ''}`;
+            }
+            
+            // Actualizar tabla de últimas ventas
+            actualizarTablaUltimasVentas();
+            
+            // Actualizar tabla de stock bajo
+            actualizarTablaStockBajo();
+        }
+        
+        function actualizarTablaUltimasVentas() {
+            const ventas = SistemaDatos.obtenerVentas();
+            const tbody = document.getElementById('tablaUltimasVentas').querySelector('tbody');
+            tbody.innerHTML = '';
+            
+            const ultimasVentas = ventas.slice(-5).reverse();
+            
+            ultimasVentas.forEach(venta => {
+                const cliente = SistemaDatos.obtenerClientes().find(c => c.id === venta.clienteId);
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${cliente?.nombre || 'Cliente no encontrado'}</td>
+                    <td>${venta.productos.length} productos</td>
+                    <td>S/. ${venta.total.toFixed(2)}</td>
+                    <td>${venta.fecha}</td>
+                `;
+                tbody.appendChild(row);
+            });
+            
+            if (ultimasVentas.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="4" class="text-center">No hay ventas registradas</td>
+                    </tr>
+                `;
+            }
+        }
+        
+        function actualizarTablaStockBajo() {
+            const productos = SistemaDatos.obtenerProductos();
+            const tbody = document.getElementById('tablaStockBajo').querySelector('tbody');
+            tbody.innerHTML = '';
+            
+            const productosBajo = productos.filter(p => p.estado === 'lowstock');
+            
+            productosBajo.forEach(producto => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${producto.nombre}</td>
+                    <td>${producto.categoria}</td>
+                    <td>${producto.stock}</td>
+                    <td>${producto.stockMinimo}</td>
+                    <td>
+                        <a href="agregar-producto.html?id=${producto.id}" class="btn btn-warning btn-sm">
+                            <i class="fas fa-edit"></i> Reponer
+                        </a>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+            
+            if (productosBajo.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="text-center">No hay productos con stock bajo</td>
+                    </tr>
+                `;
+            }
+        }
+        
+        // Inicializar dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            actualizarDashboard();
+            
+            // Actualizar cada 30 segundos
+            setInterval(actualizarDashboard, 30000);
+        });
+    </script>
 </body>
 </html>
