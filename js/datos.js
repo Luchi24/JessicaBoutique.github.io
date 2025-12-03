@@ -396,3 +396,10 @@ const SistemaDatos = (function() {
         restablecerDatosEjemplo
     };
 })();
+// Al final de datos.js, asegúrate de que se inicialice
+SistemaDatos.inicializar = function() {
+    inicializar(); // Llama a la función interna de inicialización
+};
+
+// Inicializar automáticamente
+inicializar();
