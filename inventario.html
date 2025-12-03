@@ -180,7 +180,21 @@
             cargarProductos();
             actualizarResumen();
             configurarEventos();
+            // Actualizar enlace activo en el menú
+            actualizarEnlaceActivo();
         });
+
+        function actualizarEnlaceActivo() {
+        // Remover active de todos los enlaces
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.classList.remove('active');
+        });
+        // Agregar active al enlace actual
+        const currentLink = document.querySelector('a[href="inventario.html"]');
+        if (currentLink) {
+            currentLink.classList.add('active');
+        }
+    }
         
         function cargarFiltros() {
             const config = SistemaDatos.obtenerConfiguracion();
@@ -384,6 +398,18 @@
                 actualizarResumen();
             }
         }
+        function aplicarFiltrosInventario() {
+            const filtros = {
+                categoria: document.getElementById('filtroCategoria')?.value || 'todas',
+                estado: document.getElementById('filtroEstado')?.value || 'todos',
+                busqueda: document.getElementById('buscarProducto')?.value || '',
+                ordenarPor: document.getElementById('ordenarPor')?.value || 'nombre'
+            };
+            
+            if (typeof cargarProductos === 'function') {
+                cargarProductos(filtros);
+            }
+        }
         
         // Cerrar modal al hacer clic fuera
         document.querySelectorAll('.modal').forEach(modal => {
@@ -394,5 +420,6 @@
             });
         });
     </script>
+    <script src="js/main.js"></script>
 </body>
 </html>
