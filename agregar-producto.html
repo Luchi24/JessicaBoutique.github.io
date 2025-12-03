@@ -5,12 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jessica Boutique - Agregar Producto</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="css/estilos.css">
-    <link rel="stylesheet" href="css/componentes.css">
-    <link rel="stylesheet" href="css/tablas-formularios.css">
-    <link rel="stylesheet" href="css/responsive.css">
+    
+    <!-- CSS Comunes -->
+    <link rel="stylesheet" href="css/comunes/base.css">
+    <link rel="stylesheet" href="css/comunes/navegacion.css">
+    <link rel="stylesheet" href="css/comunes/componentes.css">
+    <link rel="stylesheet" href="css/comunes/responsive.css">
+    
+    <!-- CSS Específico -->
+    <link rel="stylesheet" href="css/agregar-producto.css">
 </head>
 <body>
+    <!-- Navegación -->
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-brand">
@@ -31,126 +37,122 @@
         </div>
     </nav>
 
+    <!-- Contenido Principal -->
     <main class="container">
         <div class="page-header">
             <h2><i class="fas fa-plus-circle"></i> <span id="tituloPagina">Agregar Nuevo Producto</span></h2>
             <p id="subtituloPagina">Completa el formulario para agregar un nuevo producto al inventario</p>
         </div>
 
-        <div class="form-container">
-            <form id="formProducto">
+        <!-- Formulario de Producto -->
+        <div class="card">
+            <form id="formProducto" class="form-producto">
                 <!-- Información Básica -->
-                <div class="card">
-                    <div class="card-header">
-                        <h3>Información Básica</h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="nombre" class="form-label">Nombre del Producto *</label>
-                                <input type="text" id="nombre" class="form-control" required>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="codigo" class="form-label">Código del Producto</label>
-                                <input type="text" id="codigo" class="form-control" placeholder="Opcional, se genera automático">
-                            </div>
+                <div class="seccion-formulario">
+                    <h3><i class="fas fa-info-circle"></i> Información Básica</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="nombre" class="form-label required">Nombre del Producto</label>
+                            <input type="text" id="nombre" class="form-control" required>
+                            <div class="form-helper">Ej: Vestido Lila Elegante</div>
                         </div>
                         
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="categoria" class="form-label">Categoría *</label>
-                                <select id="categoria" class="form-control" required>
-                                    <option value="">Seleccionar categoría</option>
-                                </select>
+                        <div class="form-group">
+                            <label for="codigo" class="form-label">Código del Producto</label>
+                            <div class="input-group">
+                                <input type="text" id="codigo" class="form-control" placeholder="Se generará automáticamente">
+                                <button type="button" id="generarCodigo" class="btn btn-secondary">
+                                    <i class="fas fa-sync"></i> Generar
+                                </button>
                             </div>
-                            
-                            <div class="form-group">
-                                <label for="marca" class="form-label">Marca</label>
-                                <input type="text" id="marca" class="form-control">
-                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="categoria" class="form-label required">Categoría</label>
+                            <select id="categoria" class="form-control" required>
+                                <option value="">Seleccionar categoría</option>
+                                <!-- Categorías dinámicas -->
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="marca" class="form-label">Marca</label>
+                            <input type="text" id="marca" class="form-control" placeholder="Opcional">
                         </div>
                     </div>
                 </div>
 
                 <!-- Especificaciones -->
-                <div class="card">
-                    <div class="card-header">
-                        <h3>Especificaciones</h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="talla" class="form-label">Talla *</label>
-                                <select id="talla" class="form-control" required>
-                                    <option value="">Seleccionar talla</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="color" class="form-label">Color *</label>
-                                <select id="color" class="form-control" required>
-                                    <option value="">Seleccionar color</option>
-                                </select>
-                            </div>
+                <div class="seccion-formulario">
+                    <h3><i class="fas fa-ruler"></i> Especificaciones</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="talla" class="form-label required">Talla</label>
+                            <select id="talla" class="form-control" required>
+                                <option value="">Seleccionar talla</option>
+                                <!-- Tallas dinámicas -->
+                            </select>
                         </div>
                         
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="precioCompra" class="form-label">Precio de Compra (S/.) *</label>
-                                <input type="number" id="precioCompra" class="form-control" step="0.01" min="0" required>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="precioVenta" class="form-label">Precio de Venta (S/.) *</label>
-                                <input type="number" id="precioVenta" class="form-control" step="0.01" min="0" required>
-                            </div>
+                        <div class="form-group">
+                            <label for="color" class="form-label required">Color</label>
+                            <select id="color" class="form-control" required>
+                                <option value="">Seleccionar color</option>
+                                <!-- Colores dinámicos -->
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="precioCompra" class="form-label required">Precio de Compra (S/.)</label>
+                            <input type="number" id="precioCompra" class="form-control" step="0.01" min="0" required>
+                            <div class="form-helper">Precio al que compras el producto</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="precioVenta" class="form-label required">Precio de Venta (S/.)</label>
+                            <input type="number" id="precioVenta" class="form-control" step="0.01" min="0" required>
+                            <div class="form-helper">Precio al que vendes el producto</div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Stock y Alerta -->
-                <div class="card">
-                    <div class="card-header">
-                        <h3>Control de Stock</h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="stock" class="form-label">Stock Inicial *</label>
-                                <input type="number" id="stock" class="form-control" min="0" required>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="stockMinimo" class="form-label">Alerta de Stock Bajo *</label>
-                                <input type="number" id="stockMinimo" class="form-control" min="1" value="5" required>
-                                <small class="form-text">Se activará una alerta cuando el stock llegue a esta cantidad</small>
-                            </div>
+                <div class="seccion-formulario">
+                    <h3><i class="fas fa-box"></i> Control de Stock</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="stock" class="form-label required">Stock Inicial</label>
+                            <input type="number" id="stock" class="form-control" min="0" required>
+                            <div class="form-helper">Cantidad inicial en inventario</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="stockMinimo" class="form-label required">Alerta de Stock Bajo</label>
+                            <input type="number" id="stockMinimo" class="form-control" min="1" value="5" required>
+                            <div class="form-helper">Se activará una alerta cuando el stock llegue a esta cantidad</div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Combinaciones (Opcional) -->
-                <div class="card">
-                    <div class="card-header">
-                        <h3>Combinaciones (Opcional)</h3>
+                <div class="seccion-formulario">
+                    <h3><i class="fas fa-layer-group"></i> Combinaciones (Opcional)</h3>
+                    <div class="info-combinaciones">
+                        <p><i class="fas fa-info-circle"></i> Si el producto viene en diferentes tallas y colores, puedes agregarlas aquí para simplificar la gestión.</p>
                     </div>
-                    <div class="card-body">
-                        <p class="mb-3">Si el producto viene en diferentes tallas y colores, puedes agregarlas aquí para simplificar la gestión.</p>
-                        
-                        <div id="combinacionesContainer">
-                            <!-- Las combinaciones se agregarán aquí -->
-                        </div>
-                        
-                        <div class="form-group text-center mt-3">
-                            <button type="button" id="agregarCombinacion" class="btn btn-secondary">
-                                <i class="fas fa-plus"></i> Agregar Combinación
-                            </button>
-                        </div>
-                        
-                        <div class="alert alert-info mt-3">
-                            <i class="fas fa-info-circle"></i> Si no necesitas combinaciones, simplemente completa el formulario principal.
-                        </div>
+                    
+                    <div id="combinacionesContainer">
+                        <!-- Combinaciones dinámicas -->
+                    </div>
+                    
+                    <div class="form-actions-center">
+                        <button type="button" id="agregarCombinacion" class="btn btn-secondary">
+                            <i class="fas fa-plus"></i> Agregar Combinación
+                        </button>
                     </div>
                 </div>
 
@@ -169,377 +171,11 @@
         </div>
     </main>
 
-    <script src="js/datos.js"></script>
-    <script src="js/sistema.js"></script>
-    <script>
-        // Variables
-        let productoId = null;
-        let combinaciones = [];
-        let combinacionCount = 0;
-        
-        // Inicializar
-        document.addEventListener('DOMContentLoaded', function() {
-            cargarSelectores();
-            verificarEdicion();
-            configurarEventos();
-        });
-        
-        function cargarSelectores() {
-            const config = SistemaDatos.obtenerConfiguracion();
-            
-            // Cargar categorías
-            const selectCategoria = document.getElementById('categoria');
-            selectCategoria.innerHTML = '<option value="">Seleccionar categoría</option>';
-            config.categorias.forEach(categoria => {
-                const option = document.createElement('option');
-                option.value = categoria;
-                option.textContent = categoria;
-                selectCategoria.appendChild(option);
-            });
-            
-            // Cargar colores
-            const selectColor = document.getElementById('color');
-            selectColor.innerHTML = '<option value="">Seleccionar color</option>';
-            config.colores.forEach(color => {
-                const option = document.createElement('option');
-                option.value = color;
-                option.textContent = color;
-                selectColor.appendChild(option);
-            });
-            
-            // Cargar tallas (se actualiza según categoría)
-            actualizarSelectTallas();
-            
-            // Evento para actualizar tallas según categoría
-            selectCategoria.addEventListener('change', actualizarSelectTallas);
-        }
-        
-        function actualizarSelectTallas() {
-            const categoria = document.getElementById('categoria').value;
-            const selectTalla = document.getElementById('talla');
-            const config = SistemaDatos.obtenerConfiguracion();
-            
-            selectTalla.innerHTML = '<option value="">Seleccionar talla</option>';
-            
-            // Determinar qué conjunto de tallas usar
-            const tallas = categoria === 'Pantalones' ? config.tallasPantalon : config.tallas;
-            
-            tallas.forEach(talla => {
-                const option = document.createElement('option');
-                option.value = talla;
-                option.textContent = talla;
-                selectTalla.appendChild(option);
-            });
-        }
-        
-        function verificarEdicion() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const idParam = urlParams.get('id');
-            
-            if (idParam) {
-                productoId = parseInt(idParam);
-                cargarProductoParaEdicion(productoId);
-            }
-        }
-        
-        function cargarProductoParaEdicion(id) {
-            const producto = SistemaDatos.buscarProducto(id);
-            
-            if (!producto) {
-                Sistema.mostrarMensaje('error', 'Producto no encontrado');
-                window.location.href = 'inventario.html';
-                return;
-            }
-            
-            // Actualizar título
-            document.getElementById('tituloPagina').textContent = 'Editar Producto';
-            document.getElementById('subtituloPagina').textContent = 'Modifica la información del producto';
-            
-            // Llenar formulario
-            document.getElementById('productoId').value = producto.id;
-            document.getElementById('nombre').value = producto.nombre;
-            document.getElementById('codigo').value = producto.codigo || '';
-            document.getElementById('categoria').value = producto.categoria;
-            document.getElementById('marca').value = producto.marca || '';
-            document.getElementById('color').value = producto.color;
-            document.getElementById('precioCompra').value = producto.precioCompra;
-            document.getElementById('precioVenta').value = producto.precioVenta;
-            document.getElementById('stock').value = producto.stock;
-            document.getElementById('stockMinimo').value = producto.stockMinimo;
-            
-            // Actualizar select de tallas y seleccionar valor
-            actualizarSelectTallas();
-            setTimeout(() => {
-                document.getElementById('talla').value = producto.talla;
-            }, 100);
-            
-            // Cargar combinaciones si existen
-            if (producto.combinaciones && producto.combinaciones.length > 0) {
-                combinaciones = [...producto.combinaciones];
-                renderizarCombinaciones();
-            }
-        }
-        
-        function configurarEventos() {
-            // Agregar combinación
-            document.getElementById('agregarCombinacion').addEventListener('click', agregarCombinacion);
-            
-            // Cancelar
-            document.getElementById('btnCancelar').addEventListener('click', function() {
-                if (confirm('¿Estás seguro de que quieres cancelar? Los cambios no guardados se perderán.')) {
-                    window.location.href = 'inventario.html';
-                }
-            });
-            
-            // Enviar formulario
-            document.getElementById('formProducto').addEventListener('submit', guardarProducto);
-            
-            // Auto-generar código si está vacío
-            document.getElementById('nombre').addEventListener('blur', function() {
-                const codigoInput = document.getElementById('codigo');
-                if (!codigoInput.value.trim()) {
-                    generarCodigoProducto();
-                }
-            });
-        }
-        
-        function generarCodigoProducto() {
-            const nombre = document.getElementById('nombre').value;
-            const categoria = document.getElementById('categoria').value;
-            
-            if (nombre && categoria) {
-                const iniciales = categoria.substring(0, 3).toUpperCase();
-                const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-                const codigo = `${iniciales}${random}`;
-                document.getElementById('codigo').value = codigo;
-            }
-        }
-        
-        function agregarCombinacion() {
-            const categoria = document.getElementById('categoria').value;
-            const config = SistemaDatos.obtenerConfiguracion();
-            
-            if (!categoria) {
-                Sistema.mostrarMensaje('error', 'Primero selecciona una categoría');
-                return;
-            }
-            
-            combinacionCount++;
-            
-            const combinacionDiv = document.createElement('div');
-            combinacionDiv.className = 'combination-item';
-            combinacionDiv.dataset.id = combinacionCount;
-            
-            combinacionDiv.innerHTML = `
-                <div class="form-group">
-                    <label>Talla</label>
-                    <select class="form-control combinacion-talla" required>
-                        <option value="">Seleccionar</option>
-                        ${(categoria === 'Pantalones' ? config.tallasPantalon : config.tallas)
-                            .map(talla => `<option value="${talla}">${talla}</option>`).join('')}
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label>Color</label>
-                    <select class="form-control combinacion-color" required>
-                        <option value="">Seleccionar</option>
-                        ${config.colores.map(color => `<option value="${color}">${color}</option>`).join('')}
-                    </select>
-                </div>
-                
-                <div class="form-group">
-                    <label>Cantidad</label>
-                    <input type="number" class="form-control combinacion-cantidad" min="1" value="1" required>
-                </div>
-                
-                <div class="form-group" style="display: flex; align-items: flex-end;">
-                    <button type="button" class="btn btn-danger btn-sm eliminar-combinacion">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-            `;
-            
-            document.getElementById('combinacionesContainer').appendChild(combinacionDiv);
-            
-            // Agregar evento al botón de eliminar
-            combinacionDiv.querySelector('.eliminar-combinacion').addEventListener('click', function() {
-                eliminarCombinacion(combinacionCount);
-            });
-        }
-        
-        function eliminarCombinacion(id) {
-            const elemento = document.querySelector(`.combination-item[data-id="${id}"]`);
-            if (elemento) {
-                elemento.remove();
-                combinaciones = combinaciones.filter(c => c.temporalId !== id);
-            }
-        }
-        
-        function renderizarCombinaciones() {
-            const container = document.getElementById('combinacionesContainer');
-            container.innerHTML = '';
-            
-            combinaciones.forEach((combinacion, index) => {
-                const categoria = document.getElementById('categoria').value;
-                const config = SistemaDatos.obtenerConfiguracion();
-                
-                const combinacionDiv = document.createElement('div');
-                combinacionDiv.className = 'combination-item';
-                combinacionDiv.dataset.id = index + 1;
-                
-                combinacionDiv.innerHTML = `
-                    <div class="form-group">
-                        <label>Talla</label>
-                        <select class="form-control combinacion-talla" required>
-                            <option value="">Seleccionar</option>
-                            ${(categoria === 'Pantalones' ? config.tallasPantalon : config.tallas)
-                                .map(talla => `<option value="${talla}" ${talla === combinacion.talla ? 'selected' : ''}>${talla}</option>`).join('')}
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Color</label>
-                        <select class="form-control combinacion-color" required>
-                            <option value="">Seleccionar</option>
-                            ${config.colores.map(color => `<option value="${color}" ${color === combinacion.color ? 'selected' : ''}>${color}</option>`).join('')}
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Cantidad</label>
-                        <input type="number" class="form-control combinacion-cantidad" min="1" value="${combinacion.cantidad || 1}" required>
-                    </div>
-                    
-                    <div class="form-group" style="display: flex; align-items: flex-end;">
-                        <button type="button" class="btn btn-danger btn-sm eliminar-combinacion">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                `;
-                
-                container.appendChild(combinacionDiv);
-                
-                // Agregar evento al botón de eliminar
-                combinacionDiv.querySelector('.eliminar-combinacion').addEventListener('click', function() {
-                    combinaciones.splice(index, 1);
-                    renderizarCombinaciones();
-                });
-            });
-        }
-        
-        function obtenerCombinacionesDelFormulario() {
-            const combinacionesArray = [];
-            const elementos = document.querySelectorAll('.combination-item');
-            
-            elementos.forEach(elemento => {
-                const talla = elemento.querySelector('.combinacion-talla').value;
-                const color = elemento.querySelector('.combinacion-color').value;
-                const cantidad = parseInt(elemento.querySelector('.combinacion-cantidad').value);
-                
-                if (talla && color && cantidad > 0) {
-                    combinacionesArray.push({
-                        talla,
-                        color,
-                        cantidad,
-                        temporalId: parseInt(elemento.dataset.id)
-                    });
-                }
-            });
-            
-            return combinacionesArray;
-        }
-        
-        function guardarProducto(e) {
-            e.preventDefault();
-            
-            // Validar formulario
-            if (!validarFormulario()) {
-                return;
-            }
-            
-            // Obtener datos del formulario
-            const producto = {
-                nombre: document.getElementById('nombre').value.trim(),
-                codigo: document.getElementById('codigo').value.trim(),
-                categoria: document.getElementById('categoria').value,
-                marca: document.getElementById('marca').value.trim(),
-                talla: document.getElementById('talla').value,
-                color: document.getElementById('color').value,
-                precioCompra: parseFloat(document.getElementById('precioCompra').value),
-                precioVenta: parseFloat(document.getElementById('precioVenta').value),
-                stock: parseInt(document.getElementById('stock').value),
-                stockMinimo: parseInt(document.getElementById('stockMinimo').value),
-                fechaCreacion: new Date().toISOString().split('T')[0],
-                combinaciones: obtenerCombinacionesDelFormulario()
-            };
-            
-            // Validar precios
-            if (producto.precioVenta <= producto.precioCompra) {
-                Sistema.mostrarMensaje('error', 'El precio de venta debe ser mayor al precio de compra');
-                return;
-            }
-            
-            // Obtener productos actuales
-            let productos = SistemaDatos.obtenerProductos();
-            
-            if (productoId) {
-                // Editar producto existente
-                const index = productos.findIndex(p => p.id === productoId);
-                if (index !== -1) {
-                    producto.id = productoId;
-                    producto.estado = SistemaDatos.actualizarEstadoProducto(producto).estado;
-                    productos[index] = producto;
-                    Sistema.mostrarMensaje('success', 'Producto actualizado correctamente');
-                }
-            } else {
-                // Nuevo producto
-                producto.id = SistemaDatos.generarId('producto');
-                producto.estado = SistemaDatos.actualizarEstadoProducto(producto).estado;
-                productos.push(producto);
-                Sistema.mostrarMensaje('success', 'Producto agregado correctamente');
-            }
-            
-            // Guardar productos
-            SistemaDatos.guardarProductos(productos);
-            
-            // Redirigir al inventario después de 1 segundo
-            setTimeout(() => {
-                window.location.href = 'inventario.html';
-            }, 1000);
-        }
-        
-        function validarFormulario() {
-            const requiredFields = [
-                'nombre', 'categoria', 'talla', 'color', 
-                'precioCompra', 'precioVenta', 'stock', 'stockMinimo'
-            ];
-            
-            for (const fieldId of requiredFields) {
-                const field = document.getElementById(fieldId);
-                if (!field.value.trim()) {
-                    Sistema.mostrarMensaje('error', `El campo ${field.previousElementSibling.textContent} es requerido`);
-                    field.focus();
-                    return false;
-                }
-            }
-            
-            // Validar combinaciones si existen
-            const combinacionesElements = document.querySelectorAll('.combination-item');
-            for (const element of combinacionesElements) {
-                const talla = element.querySelector('.combinacion-talla').value;
-                const color = element.querySelector('.combinacion-color').value;
-                const cantidad = element.querySelector('.combinacion-cantidad').value;
-                
-                if (!talla || !color || !cantidad || cantidad <= 0) {
-                    Sistema.mostrarMensaje('error', 'Todas las combinaciones deben tener talla, color y cantidad válida');
-                    return false;
-                }
-            }
-            
-            return true;
-        }
-    </script>
-    <script src="js/main.js"></script>
+    <!-- JavaScript Comunes -->
+    <script src="js/comunes/datos.js"></script>
+    <script src="js/comunes/eventos.js"></script>
+    
+    <!-- JavaScript Específico -->
+    <script src="js/agregar-producto.js"></script>
 </body>
 </html>
