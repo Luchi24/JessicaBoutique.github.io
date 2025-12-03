@@ -1,0 +1,88 @@
+/* Variables y reset */
+:root {
+    /* Colores principales */
+    --color-rosa: #ff66b2;
+    --color-morado: #9c27b0;
+    --color-lila: #c8a2c8;
+    --color-blanco: #ffffff;
+    --color-negro: #222222;
+    --color-gris-claro: #f9f9f9;
+    --color-gris: #e0e0e0;
+    --color-gris-oscuro: #555555;
+    
+    /* Colores de estado */
+    --color-exito: #4caf50;
+    --color-advertencia: #ff9800;
+    --color-peligro: #f44336;
+    --color-info: #2196f3;
+    
+    /* Espaciados */
+    --espacio-xs: 0.5rem;
+    --espacio-sm: 1rem;
+    --espacio-md: 1.5rem;
+    --espacio-lg: 2rem;
+    --espacio-xl: 3rem;
+    
+    /* Bordes */
+    --radio-borde: 10px;
+    --radio-borde-sm: 5px;
+    
+    /* Sombras */
+    --sombra-suave: 0 2px 10px rgba(0, 0, 0, 0.1);
+    --sombra-fuerte: 0 4px 20px rgba(0, 0, 0, 0.15);
+    
+    /* Transiciones */
+    --transicion-rapida: 0.2s ease;
+    --transicion-media: 0.3s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--color-gris-claro);
+    color: var(--color-negro);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: var(--espacio-md);
+}
+
+/* Utilidades */
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.text-left { text-align: left; }
+
+.mt-1 { margin-top: var(--espacio-sm); }
+.mt-2 { margin-top: var(--espacio-md); }
+.mt-3 { margin-top: var(--espacio-lg); }
+.mt-4 { margin-top: var(--espacio-xl); }
+
+.mb-1 { margin-bottom: var(--espacio-sm); }
+.mb-2 { margin-bottom: var(--espacio-md); }
+.mb-3 { margin-bottom: var(--espacio-lg); }
+.mb-4 { margin-bottom: var(--espacio-xl); }
+
+.p-1 { padding: var(--espacio-sm); }
+.p-2 { padding: var(--espacio-md); }
+.p-3 { padding: var(--espacio-lg); }
+.p-4 { padding: var(--espacio-xl); }
+
+.d-none { display: none; }
+.d-block { display: block; }
+.d-flex { display: flex; }
+.d-grid { display: grid; }
+
+/* Modo oscuro */
+body.modo-oscuro {
+    background-color: #121212;
+    color: #e0e0e0;
+}
