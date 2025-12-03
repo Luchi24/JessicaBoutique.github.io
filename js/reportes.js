@@ -1,499 +1,611 @@
-// Reportes y estadísticas para Jessica Boutique
+// Módulo de Reportes y Estadísticas
 const Reportes = (function() {
-    // Variables globales del módulo
-    let filtrosReporte = {
-        periodo: 'mes',
-        fechaInicio: '',
-        fechaFin: ''
+    // Tipos de períodos
+    const PERIODOS = {
+        HOY: 'hoy',
+        SEMANA: 'semana',
+        MES: 'mes',
+        ANIO: 'anio',
+        PERSONALIZADO: 'personalizado'
     };
 
-    // Inicializar módulo
-    function inicializar() {
-        if (document.getElementById('reportes-container')) {
-            configurarFiltrosReportes();
-            cargarReportes();
-            configurarGraficos();
-        }
-    }
-
-    // Configurar filtros de reportes
-    function configurarFiltrosReportes() {
-        // Filtro por período
-        document.getElementById('filtro-periodo')?.addEventListener('change', function() {
-            filtrosReporte.periodo = this.value;
-            
-            // Mostrar/ocultar fechas personalizadas
-            const fechasPersonalizadas = document.getElementById('fechas-personalizadas');
-            if (fechasPersonalizadas) {
-                fechasPersonalizadas.style.display = 
-                    this.value === 'personalizado' ? 'block' : 'none';
-            }
-            
-            cargarReportes();
-        });
-        
-        // Fechas personalizadas
-        document.getElementById('fecha-inicio')?.addEventListener('change', function() {
-            filtrosReporte.fechaInicio = this.value;
-            if (filtrosReporte.fechaInicio && filtrosReporte.fechaFin) {
-                cargarReportes();
-            }
-        });
-        
-        document.getElementById('fecha-fin')?.addEventListener('change', function() {
-            filtrosReporte.fechaFin = this.value;
-            if (filtrosReporte.fechaInicio && filtrosReporte.fechaFin) {
-                cargarReportes();
-            }
-        });
-        
-        // Botón de aplicar
-        document.getElementById('btn-aplicar-filtros')?.addEventListener('click', cargarReportes);
-    }
-
-    // Cargar reportes
-    function cargarReportes() {
-        const estadisticas = calcularEstadisticas();
-        
-        // Actualizar tarjetas de resumen
-        actualizarTarjetasResumen(estadisticas);
-        
-        // Actualizar tabla de productos más vendidos
-        actualizarTablaProductosVendidos(estadisticas.productosVendidos);
-        
-        // Actualizar tabla de ventas
-        actualizarTablaVentas(estadisticas.ventasFiltradas);
-        
-        // Actualizar gráficos
-        actualizarGraficos(estadisticas);
-    }
-
-    // Calcular estadísticas según filtros
-    function calcularEstadisticas() {
+    // Obtener ventas por período
+    function obtenerVentasPorPeriodo(periodo, fechaInicio = null, fechaFin = null) {
         const ventas = SistemaDatos.obtenerVentas();
+        const hoy = new Date();
+        
+        let ventasFiltradas = [...ventas];
+        
+        switch(periodo) {
+            case PERIODOS.HOY:
+                const hoyStr = hoy.toISOString().split('T')[0];
+                ventasFiltradas = ventasFiltradas.filter(v => v.fecha === hoyStr);
+                break;
+                
+            case PERIODOS.SEMANA:
+                const inicioSemana = new Date(hoy);
+                inicioSemana.setDate(hoy.getDate() - hoy.getDay()); // Domingo de esta semana
+                ventasFiltradas = ventasFiltradas.filter(v => {
+                    const fechaVenta = new Date(v.fecha);
+                    return fechaVenta >= inicioSemana && fechaVenta <= hoy;
+                });
+                break;
+                
+            case PERIODOS.MES:
+                const inicioMes = new Date(hoy.getFullYear(), hoy.getMonth(), 1);
+                ventasFiltradas = ventasFiltradas.filter(v => {
+                    const fechaVenta = new Date(v.fecha);
+                    return fechaVenta >= inicioMes && fechaVenta <= hoy;
+                });
+                break;
+                
+            case PERIODOS.ANIO:
+                const inicioAnio = new Date(hoy.getFullYear(), 0, 1);
+                ventasFiltradas = ventasFiltradas.filter(v => {
+                    const fechaVenta = new Date(v.fecha);
+                    return fechaVenta >= inicioAnio && fechaVenta <= hoy;
+                });
+                break;
+                
+            case PERIODOS.PERSONALIZADO:
+                if (fechaInicio && fechaFin) {
+                    const inicio = new Date(fechaInicio);
+                    const fin = new Date(fechaFin);
+                    ventasFiltradas = ventasFiltradas.filter(v => {
+                        const fechaVenta = new Date(v.fecha);
+                        return fechaVenta >= inicio && fechaVenta <= fin;
+                    });
+                }
+                break;
+        }
+        
+        return ventasFiltradas;
+    }
+
+    // Calcular total de ventas
+    function calcularTotalVentas(ventas) {
+        return ventas.reduce((total, venta) => total + venta.total, 0);
+    }
+
+    // Calcular ganancias
+    function calcularGanancias(ventas) {
         const productos = SistemaDatos.obtenerProductos();
+        let ganancias = 0;
         
-        // Filtrar ventas por período
-        let ventasFiltradas = filtrarVentasPorPeriodo(ventas);
-        
-        // Calcular totales
-        const totalVentas = ventasFiltradas.reduce((sum, v) => sum + v.total, 0);
-        const totalComisiones = ventasFiltradas.reduce((sum, v) => sum + v.comision, 0);
-        const totalGanancias = totalVentas - totalComisiones;
-        
-        // Calcular productos más vendidos
-        const productosVendidos = {};
-        ventasFiltradas.forEach(venta => {
+        ventas.forEach(venta => {
             venta.productos.forEach(item => {
-                if (!productosVendidos[item.productoId]) {
-                    productosVendidos[item.productoId] = {
+                const producto = productos.find(p => p.id === item.productoId);
+                if (producto) {
+                    const gananciaProducto = (item.precio - producto.precioCompra) * item.cantidad;
+                    ganancias += gananciaProducto;
+                }
+            });
+        });
+        
+        return ganancias;
+    }
+
+    // Obtener cliente estrella
+    function obtenerClienteEstrella(ventas) {
+        const clientes = SistemaDatos.obtenerClientes();
+        const comprasPorCliente = {};
+        
+        ventas.forEach(venta => {
+            if (!comprasPorCliente[venta.clienteId]) {
+                comprasPorCliente[venta.clienteId] = {
+                    cantidad: 0,
+                    total: 0
+                };
+            }
+            comprasPorCliente[venta.clienteId].cantidad++;
+            comprasPorCliente[venta.clienteId].total += venta.total;
+        });
+        
+        let clienteEstrellaId = null;
+        let maxCompras = 0;
+        let maxTotal = 0;
+        
+        Object.entries(comprasPorCliente).forEach(([clienteId, datos]) => {
+            if (datos.cantidad > maxCompras || 
+                (datos.cantidad === maxCompras && datos.total > maxTotal)) {
+                maxCompras = datos.cantidad;
+                maxTotal = datos.total;
+                clienteEstrellaId = parseInt(clienteId);
+            }
+        });
+        
+        if (clienteEstrellaId) {
+            const cliente = clientes.find(c => c.id === clienteEstrellaId);
+            return {
+                cliente,
+                compras: maxCompras,
+                totalGastado: maxTotal
+            };
+        }
+        
+        return null;
+    }
+
+    // Obtener productos más vendidos
+    function obtenerProductosMasVendidos(ventas, limite = 5) {
+        const productos = SistemaDatos.obtenerProductos();
+        const ventasPorProducto = {};
+        
+        // Contar ventas por producto
+        ventas.forEach(venta => {
+            venta.productos.forEach(item => {
+                if (!ventasPorProducto[item.productoId]) {
+                    ventasPorProducto[item.productoId] = {
                         cantidad: 0,
                         total: 0
                     };
                 }
-                productosVendidos[item.productoId].cantidad += item.cantidad;
-                productosVendidos[item.productoId].total += item.cantidad * item.precio;
+                ventasPorProducto[item.productoId].cantidad += item.cantidad;
+                ventasPorProducto[item.productoId].total += item.precio * item.cantidad;
             });
         });
         
-        // Ordenar productos por cantidad vendida
-        const productosOrdenados = Object.entries(productosVendidos)
-            .map(([productoId, datos]) => ({
-                producto: SistemaDatos.buscarProducto(parseInt(productoId)),
-                cantidad: datos.cantidad,
-                total: datos.total
-            }))
-            .filter(p => p.producto)
-            .sort((a, b) => b.cantidad - a.cantidad);
-        
-        // Calcular ventas por día/mes
-        const ventasPorPeriodo = {};
-        ventasFiltradas.forEach(venta => {
-            const periodo = obtenerPeriodoClave(venta.fecha);
-            if (!ventasPorPeriodo[periodo]) {
-                ventasPorPeriodo[periodo] = 0;
-            }
-            ventasPorPeriodo[periodo] += venta.total;
+        // Convertir a array y ordenar
+        const productosArray = Object.entries(ventasPorProducto).map(([productoId, datos]) => {
+            const producto = productos.find(p => p.id === parseInt(productoId));
+            return {
+                producto,
+                cantidadVendida: datos.cantidad,
+                totalVentas: datos.total
+            };
         });
         
-        // Calcular método de pago más usado
-        const metodosPago = {};
-        ventasFiltradas.forEach(venta => {
-            if (!metodosPago[venta.metodoPago]) {
-                metodosPago[venta.metodoPago] = 0;
+        // Filtrar productos no encontrados y ordenar
+        return productosArray
+            .filter(item => item.producto)
+            .sort((a, b) => b.cantidadVendida - a.cantidadVendida)
+            .slice(0, limite);
+    }
+
+    // Obtener productos menos vendidos
+    function obtenerProductosMenosVendidos(ventas, limite = 5) {
+        const productos = SistemaDatos.obtenerProductos();
+        const ventasPorProducto = {};
+        
+        // Contar ventas por producto
+        ventas.forEach(venta => {
+            venta.productos.forEach(item => {
+                if (!ventasPorProducto[item.productoId]) {
+                    ventasPorProducto[item.productoId] = {
+                        cantidad: 0,
+                        total: 0
+                    };
+                }
+                ventasPorProducto[item.productoId].cantidad += item.cantidad;
+                ventasPorProducto[item.productoId].total += item.precio * item.cantidad;
+            });
+        });
+        
+        // Incluir productos que no se han vendido
+        productos.forEach(producto => {
+            if (!ventasPorProducto[producto.id]) {
+                ventasPorProducto[producto.id] = {
+                    cantidad: 0,
+                    total: 0
+                };
             }
-            metodosPago[venta.metodoPago]++;
+        });
+        
+        // Convertir a array y ordenar
+        const productosArray = Object.entries(ventasPorProducto).map(([productoId, datos]) => {
+            const producto = productos.find(p => p.id === parseInt(productoId));
+            return {
+                producto,
+                cantidadVendida: datos.cantidad,
+                totalVentas: datos.total
+            };
+        });
+        
+        // Filtrar productos no encontrados y ordenar
+        return productosArray
+            .filter(item => item.producto)
+            .sort((a, b) => a.cantidadVendida - b.cantidadVendida)
+            .slice(0, limite);
+    }
+
+    // Obtener tendencia de ventas por día
+    function obtenerTendenciaVentas(ventas, dias = 7) {
+        const hoy = new Date();
+        const tendencia = [];
+        
+        for (let i = dias - 1; i >= 0; i--) {
+            const fecha = new Date(hoy);
+            fecha.setDate(hoy.getDate() - i);
+            const fechaStr = fecha.toISOString().split('T')[0];
+            
+            const ventasDia = ventas.filter(v => v.fecha === fechaStr);
+            const totalDia = calcularTotalVentas(ventasDia);
+            
+            tendencia.push({
+                fecha: fechaStr,
+                ventas: ventasDia.length,
+                total: totalDia,
+                dia: fecha.toLocaleDateString('es-PE', { weekday: 'short' })
+            });
+        }
+        
+        return tendencia;
+    }
+
+    // Obtener ventas por método de pago
+    function obtenerVentasPorMetodoPago(ventas) {
+        const metodos = {};
+        
+        ventas.forEach(venta => {
+            if (!metodos[venta.metodoPago]) {
+                metodos[venta.metodoPago] = {
+                    cantidad: 0,
+                    total: 0
+                };
+            }
+            metodos[venta.metodoPago].cantidad++;
+            metodos[venta.metodoPago].total += venta.total;
+        });
+        
+        return Object.entries(metodos).map(([metodo, datos]) => ({
+            metodo,
+            cantidad: datos.cantidad,
+            total: datos.total
+        }));
+    }
+
+    // Obtener ventas por categoría
+    function obtenerVentasPorCategoria(ventas) {
+        const productos = SistemaDatos.obtenerProductos();
+        const ventasPorCategoria = {};
+        
+        ventas.forEach(venta => {
+            venta.productos.forEach(item => {
+                const producto = productos.find(p => p.id === item.productoId);
+                if (producto) {
+                    if (!ventasPorCategoria[producto.categoria]) {
+                        ventasPorCategoria[producto.categoria] = {
+                            cantidad: 0,
+                            total: 0
+                        };
+                    }
+                    ventasPorCategoria[producto.categoria].cantidad += item.cantidad;
+                    ventasPorCategoria[producto.categoria].total += item.precio * item.cantidad;
+                }
+            });
+        });
+        
+        return Object.entries(ventasPorCategoria).map(([categoria, datos]) => ({
+            categoria,
+            cantidad: datos.cantidad,
+            total: datos.total
+        }));
+    }
+
+    // Generar reporte completo
+    function generarReporteCompleto(periodo, fechaInicio = null, fechaFin = null) {
+        const ventas = obtenerVentasPorPeriodo(periodo, fechaInicio, fechaFin);
+        const totalVentas = calcularTotalVentas(ventas);
+        const ganancias = calcularGanancias(ventas);
+        const clienteEstrella = obtenerClienteEstrella(ventas);
+        const productosMasVendidos = obtenerProductosMasVendidos(ventas);
+        const productosMenosVendidos = obtenerProductosMenosVendidos(ventas);
+        const tendencia = obtenerTendenciaVentas(ventas);
+        const ventasPorMetodo = obtenerVentasPorMetodoPago(ventas);
+        const ventasPorCategoria = obtenerVentasPorCategoria(ventas);
+        
+        return {
+            periodo,
+            fechaInicio,
+            fechaFin,
+            totalVentas,
+            ganancias,
+            totalTransacciones: ventas.length,
+            clienteEstrella,
+            productosMasVendidos,
+            productosMenosVendidos,
+            tendencia,
+            ventasPorMetodo,
+            ventasPorCategoria,
+            ventas: ventas
+        };
+    }
+
+    // Generar reporte de inventario
+    function generarReporteInventario() {
+        const productos = SistemaDatos.obtenerProductos();
+        const ventas = SistemaDatos.obtenerVentas();
+        
+        // Productos con mejor rotación
+        const rotacionProductos = productos.map(producto => {
+            const ventasProducto = ventas.flatMap(v => 
+                v.productos.filter(p => p.productoId === producto.id)
+            );
+            
+            const cantidadVendida = ventasProducto.reduce((sum, p) => sum + p.cantidad, 0);
+            const rotacion = producto.stock > 0 ? cantidadVendida / producto.stock : 0;
+            
+            return {
+                producto,
+                cantidadVendida,
+                rotacion,
+                diasInventario: producto.stock > 0 ? 
+                    (producto.stock / (cantidadVendida / 30)).toFixed(1) : '∞' // Promedio mensual
+            };
+        });
+        
+        // Productos que necesitan reposición
+        const productosReponer = productos.filter(p => p.estado === 'lowstock');
+        
+        // Valor del inventario por categoría
+        const valorPorCategoria = {};
+        productos.forEach(producto => {
+            if (!valorPorCategoria[producto.categoria]) {
+                valorPorCategoria[producto.categoria] = 0;
+            }
+            valorPorCategoria[producto.categoria] += producto.precioCompra * producto.stock;
         });
         
         return {
-            totalVentas,
-            totalComisiones,
-            totalGanancias,
-            cantidadVentas: ventasFiltradas.length,
-            productosVendidos: productosOrdenados,
-            ventasFiltradas,
-            ventasPorPeriodo,
-            metodosPago
+            totalProductos: productos.length,
+            valorTotalInventario: productos.reduce((sum, p) => sum + (p.precioCompra * p.stock), 0),
+            productosBajoStock: productos.filter(p => p.estado === 'lowstock').length,
+            productosAgotados: productos.filter(p => p.estado === 'outofstock').length,
+            productosReponer,
+            rotacionProductos: rotacionProductos.sort((a, b) => b.rotacion - a.rotacion).slice(0, 10),
+            valorPorCategoria,
+            productosPorCategoria: contarProductosPorCategoria(productos)
         };
     }
 
-    // Filtrar ventas por período
-    function filtrarVentasPorPeriodo(ventas) {
+    // Contar productos por categoría
+    function contarProductosPorCategoria(productos) {
+        const conteo = {};
+        productos.forEach(producto => {
+            conteo[producto.categoria] = (conteo[producto.categoria] || 0) + 1;
+        });
+        return conteo;
+    }
+
+    // Generar reporte de clientes
+    function generarReporteClientes() {
+        const clientes = SistemaDatos.obtenerClientes();
+        const ventas = SistemaDatos.obtenerVentas();
+        
+        const clientesConEstadisticas = clientes.map(cliente => {
+            const comprasCliente = ventas.filter(v => v.clienteId === cliente.id);
+            const totalGastado = comprasCliente.reduce((sum, v) => sum + v.total, 0);
+            const promedioCompra = comprasCliente.length > 0 ? 
+                totalGastado / comprasCliente.length : 0;
+            
+            // Calcular frecuencia (días entre compras)
+            let frecuencia = 'Nueva';
+            if (comprasCliente.length >= 2) {
+                const fechas = comprasCliente.map(v => new Date(v.fecha)).sort((a, b) => a - b);
+                const diasEntreCompras = [];
+                
+                for (let i = 1; i < fechas.length; i++) {
+                    const diferencia = (fechas[i] - fechas[i-1]) / (1000 * 60 * 60 * 24);
+                    diasEntreCompras.push(diferencia);
+                }
+                
+                const promedioDias = diasEntreCompras.reduce((a, b) => a + b, 0) / diasEntreCompras.length;
+                frecuencia = `${promedioDias.toFixed(0)} días`;
+            }
+            
+            return {
+                ...cliente,
+                compras: comprasCliente.length,
+                totalGastado,
+                promedioCompra,
+                frecuencia,
+                ultimaCompra: comprasCliente.length > 0 ? 
+                    comprasCliente[comprasCliente.length - 1].fecha : 'Nunca'
+            };
+        });
+        
+        // Segmentar clientes
+        const segmentos = {
+            vip: [], // > 1000 soles gastados
+            frecuentes: [], // > 5 compras
+            nuevos: [], // 1-2 compras
+            inactivos: [] // Última compra > 30 días
+        };
+        
         const hoy = new Date();
+        const hace30Dias = new Date(hoy);
+        hace30Dias.setDate(hoy.getDate() - 30);
         
-        switch(filtrosReporte.periodo) {
-            case 'hoy':
-                const hoyStr = hoy.toISOString().split('T')[0];
-                return ventas.filter(v => v.fecha === hoyStr);
-                
-            case 'semana':
-                const hace7Dias = new Date(hoy);
-                hace7Dias.setDate(hoy.getDate() - 7);
-                return ventas.filter(v => {
-                    const fechaVenta = new Date(v.fecha);
-                    return fechaVenta >= hace7Dias && fechaVenta <= hoy;
-                });
-                
-            case 'mes':
-                const hace30Dias = new Date(hoy);
-                hace30Dias.setDate(hoy.getDate() - 30);
-                return ventas.filter(v => {
-                    const fechaVenta = new Date(v.fecha);
-                    return fechaVenta >= hace30Dias && fechaVenta <= hoy;
-                });
-                
-            case 'personalizado':
-                if (filtrosReporte.fechaInicio && filtrosReporte.fechaFin) {
-                    return ventas.filter(v => {
-                        return v.fecha >= filtrosReporte.fechaInicio && 
-                               v.fecha <= filtrosReporte.fechaFin;
-                    });
-                }
-                return ventas;
-                
-            default:
-                return ventas;
-        }
-    }
-
-    // Obtener clave de período para agrupación
-    function obtenerPeriodoClave(fechaStr) {
-        const fecha = new Date(fechaStr);
-        
-        switch(filtrosReporte.periodo) {
-            case 'hoy':
-                return fecha.toLocaleTimeString('es-PE', { hour: '2-digit' });
-            case 'semana':
-                return fecha.toLocaleDateString('es-PE', { weekday: 'short' });
-            case 'mes':
-            case 'personalizado':
-                return fecha.toLocaleDateString('es-PE', { month: 'short', day: 'numeric' });
-            default:
-                return fecha.toLocaleDateString('es-PE');
-        }
-    }
-
-    // Actualizar tarjetas de resumen
-    function actualizarTarjetasResumen(estadisticas) {
-        const elementos = {
-            'total-ventas-reporte': Sistema.formatearMoneda(estadisticas.totalVentas),
-            'total-ganancias': Sistema.formatearMoneda(estadisticas.totalGanancias),
-            'cantidad-ventas': estadisticas.cantidadVentas,
-            'total-comisiones': Sistema.formatearMoneda(estadisticas.totalComisiones)
-        };
-        
-        Object.entries(elementos).forEach(([id, valor]) => {
-            const elemento = document.getElementById(id);
-            if (elemento) elemento.textContent = valor;
-        });
-    }
-
-    // Actualizar tabla de productos más vendidos
-    function actualizarTablaProductosVendidos(productosVendidos) {
-        const tbody = document.getElementById('productos-vendidos-body');
-        if (!tbody) return;
-        
-        tbody.innerHTML = '';
-        
-        if (productosVendidos.length === 0) {
-            tbody.innerHTML = `
-                <tr>
-                    <td colspan="4" class="text-center">
-                        No hay datos de ventas en este período
-                    </td>
-                </tr>
-            `;
-            return;
-        }
-        
-        // Mostrar solo los top 10
-        productosVendidos.slice(0, 10).forEach((item, index) => {
-            const fila = document.createElement('tr');
-            fila.innerHTML = `
-                <td>${index + 1}</td>
-                <td>${item.producto.nombre}</td>
-                <td>${item.cantidad}</td>
-                <td>${Sistema.formatearMoneda(item.total)}</td>
-            `;
-            tbody.appendChild(fila);
-        });
-    }
-
-    // Actualizar tabla de ventas
-    function actualizarTablaVentas(ventas) {
-        const tbody = document.getElementById('ventas-reporte-body');
-        if (!tbody) return;
-        
-        tbody.innerHTML = '';
-        
-        if (ventas.length === 0) {
-            tbody.innerHTML = `
-                <tr>
-                    <td colspan="5" class="text-center">
-                        No hay ventas en este período
-                    </td>
-                </tr>
-            `;
-            return;
-        }
-        
-        // Ordenar por fecha más reciente
-        ventas.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
-        
-        ventas.forEach(venta => {
-            const cliente = SistemaDatos.obtenerClientes().find(c => c.id === venta.clienteId);
-            const fila = document.createElement('tr');
-            fila.innerHTML = `
-                <td>${Sistema.formatearFecha(venta.fecha)} ${venta.hora}</td>
-                <td>${cliente?.nombre || 'Cliente'}</td>
-                <td>${venta.productos.length}</td>
-                <td>${obtenerTextoMetodoPago(venta.metodoPago)}</td>
-                <td>${Sistema.formatearMoneda(venta.total)}</td>
-            `;
-            tbody.appendChild(fila);
-        });
-    }
-
-    // Obtener texto del método de pago
-    function obtenerTextoMetodoPago(metodo) {
-        const metodos = {
-            'efectivo': 'Efectivo',
-            'tarjeta': 'Tarjeta',
-            'transferencia': 'Transferencia'
-        };
-        return metodos[metodo] || metodo;
-    }
-
-    // Configurar gráficos (usando Chart.js si está disponible)
-    function configurarGraficos() {
-        // Verificar si Chart.js está disponible
-        if (typeof Chart === 'undefined') {
-            console.warn('Chart.js no está cargado. Los gráficos no se mostrarán.');
-            return;
-        }
-        
-        // Inicializar gráficos
-        inicializarGraficoVentas();
-        inicializarGraficoMetodosPago();
-        inicializarGraficoProductosTop();
-    }
-
-    // Inicializar gráfico de ventas por período
-    function inicializarGraficoVentas() {
-        const canvas = document.getElementById('grafico-ventas');
-        if (!canvas) return;
-        
-        const ctx = canvas.getContext('2d');
-        
-        // Datos iniciales
-        const data = {
-            labels: [],
-            datasets: [{
-                label: 'Ventas (S/.)',
-                data: [],
-                backgroundColor: 'rgba(156, 39, 176, 0.2)',
-                borderColor: 'rgba(156, 39, 176, 1)',
-                borderWidth: 2,
-                tension: 0.4
-            }]
-        };
-        
-        const config = {
-            type: 'line',
-            data: data,
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                    },
-                    title: {
-                        display: true,
-                        text: 'Ventas por Período'
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            callback: function(value) {
-                                return 'S/. ' + value;
-                            }
-                        }
-                    }
-                }
+        clientesConEstadisticas.forEach(cliente => {
+            if (cliente.totalGastado > 1000) {
+                segmentos.vip.push(cliente);
+            } else if (cliente.compras > 5) {
+                segmentos.frecuentes.push(cliente);
+            } else if (cliente.compras <= 2) {
+                segmentos.nuevos.push(cliente);
             }
-        };
-        
-        window.graficoVentas = new Chart(ctx, config);
-    }
-
-    // Inicializar gráfico de métodos de pago
-    function inicializarGraficoMetodosPago() {
-        const canvas = document.getElementById('grafico-metodos-pago');
-        if (!canvas) return;
-        
-        const ctx = canvas.getContext('2d');
-        
-        const data = {
-            labels: ['Efectivo', 'Tarjeta', 'Transferencia'],
-            datasets: [{
-                data: [0, 0, 0],
-                backgroundColor: [
-                    'rgba(76, 175, 80, 0.7)',
-                    'rgba(33, 150, 243, 0.7)',
-                    'rgba(255, 152, 0, 0.7)'
-                ],
-                borderColor: [
-                    'rgba(76, 175, 80, 1)',
-                    'rgba(33, 150, 243, 1)',
-                    'rgba(255, 152, 0, 1)'
-                ],
-                borderWidth: 1
-            }]
-        };
-        
-        const config = {
-            type: 'doughnut',
-            data: data,
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                    },
-                    title: {
-                        display: true,
-                        text: 'Métodos de Pago'
-                    }
-                }
-            }
-        };
-        
-        window.graficoMetodosPago = new Chart(ctx, config);
-    }
-
-    // Inicializar gráfico de productos top
-    function inicializarGraficoProductosTop() {
-        const canvas = document.getElementById('grafico-productos-top');
-        if (!canvas) return;
-        
-        const ctx = canvas.getContext('2d');
-        
-        const data = {
-            labels: [],
-            datasets: [{
-                label: 'Unidades Vendidas',
-                data: [],
-                backgroundColor: 'rgba(255, 102, 178, 0.5)',
-                borderColor: 'rgba(255, 102, 178, 1)',
-                borderWidth: 1
-            }]
-        };
-        
-        const config = {
-            type: 'bar',
-            data: data,
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                    },
-                    title: {
-                        display: true,
-                        text: 'Productos Más Vendidos'
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            stepSize: 1
-                        }
-                    }
-                }
-            }
-        };
-        
-        window.graficoProductosTop = new Chart(ctx, config);
-    }
-
-    // Actualizar gráficos con nuevos datos
-    function actualizarGraficos(estadisticas) {
-        // Actualizar gráfico de ventas
-        if (window.graficoVentas) {
-            const periodos = Object.keys(estadisticas.ventasPorPeriodo).sort();
-            const ventas = periodos.map(p => estadisticas.ventasPorPeriodo[p]);
             
-            window.graficoVentas.data.labels = periodos;
-            window.graficoVentas.data.datasets[0].data = ventas;
-            window.graficoVentas.update();
+            if (cliente.ultimaCompra !== 'Nunca') {
+                const ultimaCompraDate = new Date(cliente.ultimaCompra);
+                if (ultimaCompraDate < hace30Dias) {
+                    segmentos.inactivos.push(cliente);
+                }
+            }
+        });
+        
+        return {
+            totalClientes: clientes.length,
+            clientesActivos: clientesConEstadisticas.filter(c => c.compras > 0).length,
+            valorPromedioCompra: clientesConEstadisticas.length > 0 ?
+                clientesConEstadisticas.reduce((sum, c) => sum + c.promedioCompra, 0) / 
+                clientesConEstadisticas.filter(c => c.compras > 0).length : 0,
+            segmentos,
+            topClientes: clientesConEstadisticas
+                .sort((a, b) => b.totalGastado - a.totalGastado)
+                .slice(0, 10)
+        };
+    }
+
+    // Exportar reporte a JSON
+    function exportarReporte(reporte, nombre = 'reporte') {
+        const fecha = new Date().toISOString().split('T')[0];
+        const datosStr = JSON.stringify(reporte, null, 2);
+        const blob = new Blob([datosStr], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${nombre}-${fecha}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        return true;
+    }
+
+    // Generar resumen ejecutivo
+    function generarResumenEjecutivo() {
+        const ventasHoy = obtenerVentasPorPeriodo(PERIODOS.HOY);
+        const ventasMes = obtenerVentasPorPeriodo(PERIODOS.MES);
+        const reporteInventario = generarReporteInventario();
+        const reporteClientes = generarReporteClientes();
+        
+        const ventasHoyTotal = calcularTotalVentas(ventasHoy);
+        const ventasMesTotal = calcularTotalVentas(ventasMes);
+        
+        // Calcular crecimiento vs mes anterior
+        const ventasMesAnterior = obtenerVentasPorPeriodo('mes-anterior');
+        const ventasMesAnteriorTotal = calcularTotalVentas(ventasMesAnterior);
+        const crecimiento = ventasMesAnteriorTotal > 0 ? 
+            ((ventasMesTotal - ventasMesAnteriorTotal) / ventasMesAnteriorTotal * 100).toFixed(1) : 100;
+        
+        // Obtener métricas clave
+        const clienteEstrella = obtenerClienteEstrella(ventasMes);
+        const productosTop = obtenerProductosMasVendidos(ventasMes, 1);
+        
+        return {
+            fecha: new Date().toISOString().split('T')[0],
+            ventasHoy: {
+                total: ventasHoyTotal,
+                transacciones: ventasHoy.length
+            },
+            ventasMes: {
+                total: ventasMesTotal,
+                transacciones: ventasMes.length,
+                crecimiento: parseFloat(crecimiento)
+            },
+            inventario: {
+                totalProductos: reporteInventario.totalProductos,
+                valorTotal: reporteInventario.valorTotalInventario,
+                productosBajoStock: reporteInventario.productosBajoStock,
+                productosAgotados: reporteInventario.productosAgotados
+            },
+            clientes: {
+                total: reporteClientes.totalClientes,
+                activos: reporteClientes.clientesActivos,
+                clienteEstrella: clienteEstrella?.cliente?.nombre || 'Sin datos',
+                valorPromedioCompra: reporteClientes.valorPromedioCompra
+            },
+            productoTop: productosTop[0]?.producto?.nombre || 'Sin datos',
+            alertas: generarAlertas()
+        };
+    }
+
+    // Generar alertas del sistema
+    function generarAlertas() {
+        const productos = SistemaDatos.obtenerProductos();
+        const ventas = SistemaDatos.obtenerVentas();
+        const alertas = [];
+        
+        // Alertas de stock bajo
+        const productosBajoStock = productos.filter(p => p.estado === 'lowstock');
+        if (productosBajoStock.length > 0) {
+            alertas.push({
+                tipo: 'stock',
+                severidad: 'alta',
+                mensaje: `${productosBajoStock.length} productos con stock bajo`,
+                detalles: productosBajoStock.slice(0, 3).map(p => p.nombre).join(', ')
+            });
         }
         
-        // Actualizar gráfico de métodos de pago
-        if (window.graficoMetodosPago) {
-            window.graficoMetodosPago.data.datasets[0].data = [
-                estadisticas.metodosPago.efectivo || 0,
-                estadisticas.metodosPago.tarjeta || 0,
-                estadisticas.metodosPago.transferencia || 0
-            ];
-            window.graficoMetodosPago.update();
+        // Alertas de productos agotados
+        const productosAgotados = productos.filter(p => p.estado === 'outofstock');
+        if (productosAgotados.length > 0) {
+            alertas.push({
+                tipo: 'agotado',
+                severidad: 'critica',
+                mensaje: `${productosAgotados.length} productos agotados`,
+                detalles: productosAgotados.slice(0, 3).map(p => p.nombre).join(', ')
+            });
         }
         
-        // Actualizar gráfico de productos top
-        if (window.graficoProductosTop) {
-            const top5 = estadisticas.productosVendidos.slice(0, 5);
+        // Alertas de ventas bajas (últimos 7 días vs anteriores)
+        const ventasUltimaSemana = obtenerVentasPorPeriodo(PERIODOS.SEMANA);
+        const ventasSemanaAnterior = obtenerVentasPorPeriodo('semana-anterior');
+        
+        const ventasUltimaSemanaTotal = calcularTotalVentas(ventasUltimaSemana);
+        const ventasSemanaAnteriorTotal = calcularTotalVentas(ventasSemanaAnterior);
+        
+        if (ventasSemanaAnteriorTotal > 0 && ventasUltimaSemanaTotal < ventasSemanaAnteriorTotal * 0.7) {
+            const caida = ((ventasSemanaAnteriorTotal - ventasUltimaSemanaTotal) / ventasSemanaAnteriorTotal * 100).toFixed(1);
+            alertas.push({
+                tipo: 'ventas',
+                severidad: 'media',
+                mensaje: `Caída del ${caida}% en ventas esta semana`,
+                detalles: `Ventas semana anterior: S/. ${ventasSemanaAnteriorTotal.toFixed(2)}, esta semana: S/. ${ventasUltimaSemanaTotal.toFixed(2)}`
+            });
+        }
+        
+        return alertas;
+    }
+
+    // Obtener ventas por semana anterior (función auxiliar)
+    function obtenerVentasPorPeriodo(periodo) {
+        // Esta función ya está definida arriba, pero necesitamos manejar 'semana-anterior' y 'mes-anterior'
+        if (periodo === 'semana-anterior') {
+            const hoy = new Date();
+            const inicioSemanaAnterior = new Date(hoy);
+            inicioSemanaAnterior.setDate(hoy.getDate() - hoy.getDay() - 7); // Domingo semana anterior
+            const finSemanaAnterior = new Date(inicioSemanaAnterior);
+            finSemanaAnterior.setDate(inicioSemanaAnterior.getDate() + 6);
             
-            window.graficoProductosTop.data.labels = top5.map(p => 
-                p.producto.nombre.length > 15 ? 
-                p.producto.nombre.substring(0, 15) + '...' : 
-                p.producto.nombre
-            );
-            window.graficoProductosTop.data.datasets[0].data = top5.map(p => p.cantidad);
-            window.graficoProductosTop.update();
+            return obtenerVentasPorPeriodo(PERIODOS.PERSONALIZADO, 
+                inicioSemanaAnterior.toISOString().split('T')[0],
+                finSemanaAnterior.toISOString().split('T')[0]);
         }
+        
+        if (periodo === 'mes-anterior') {
+            const hoy = new Date();
+            const inicioMesAnterior = new Date(hoy.getFullYear(), hoy.getMonth() - 1, 1);
+            const finMesAnterior = new Date(hoy.getFullYear(), hoy.getMonth(), 0);
+            
+            return obtenerVentasPorPeriodo(PERIODOS.PERSONALIZADO,
+                inicioMesAnterior.toISOString().split('T')[0],
+                finMesAnterior.toISOString().split('T')[0]);
+        }
+        
+        // Si no es un período especial, usar la función original
+        return obtenerVentasPorPeriodo(periodo);
     }
-
-    // Exportar reporte a PDF (usando jsPDF si está disponible)
-    function exportarReportePDF() {
-        Sistema.mostrarMensaje('info', 'Esta función requiere la librería jsPDF');
-        // Implementación real requeriría jsPDF
-    }
-
-    // Exportar reporte a Excel (usando SheetJS si está disponible)
-    function exportarReporteExcel() {
-        Sistema.mostrarMensaje('info', 'Esta función requiere la librería SheetJS');
-        // Implementación real requeriría SheetJS
-    }
-
-    // Inicializar cuando el DOM esté listo
-    document.addEventListener('DOMContentLoaded', inicializar);
 
     // API pública
     return {
-        cargarReportes,
-        exportarReportePDF,
-        exportarReporteExcel
+        PERIODOS,
+        obtenerVentasPorPeriodo,
+        calcularTotalVentas,
+        calcularGanancias,
+        obtenerClienteEstrella,
+        obtenerProductosMasVendidos,
+        obtenerProductosMenosVendidos,
+        obtenerTendenciaVentas,
+        obtenerVentasPorMetodoPago,
+        obtenerVentasPorCategoria,
+        generarReporteCompleto,
+        generarReporteInventario,
+        generarReporteClientes,
+        exportarReporte,
+        generarResumenEjecutivo,
+        generarAlertas
     };
 })();
