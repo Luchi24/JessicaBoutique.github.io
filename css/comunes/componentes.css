@@ -1,120 +1,186 @@
-/* Tarjetas */
-.card {
-    background-color: var(--color-blanco);
-    border-radius: var(--radio-borde);
-    padding: var(--espacio-md);
-    box-shadow: var(--sombra-suave);
-    margin-bottom: var(--espacio-md);
-    transition: var(--transicion-media);
-}
+/* Agregar estas clases al archivo componentes.css existente */
 
-.card:hover {
-    box-shadow: var(--sombra-fuerte);
-}
-
-.card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: var(--espacio-md);
-}
-
-.card-title {
-    font-size: 1.3rem;
-    font-weight: 600;
+/* Botones adicionales */
+.btn-outline-primary {
+    background-color: transparent;
+    border: 2px solid var(--color-morado);
     color: var(--color-morado);
 }
 
-.card-body {
-    padding: var(--espacio-sm) 0;
-}
-
-/* Botones */
-.btn {
-    padding: 0.6rem 1.2rem;
-    border: none;
-    border-radius: var(--radio-borde-sm);
-    cursor: pointer;
-    font-weight: 600;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    transition: var(--transicion-rapida);
-    font-size: 0.95rem;
-}
-
-.btn:hover {
-    transform: translateY(-2px);
-}
-
-.btn-primary {
+.btn-outline-primary:hover {
     background-color: var(--color-morado);
     color: var(--color-blanco);
 }
 
-.btn-secondary {
+.btn-outline-secondary {
+    background-color: transparent;
+    border: 2px solid var(--color-lila);
+    color: var(--color-lila);
+}
+
+.btn-outline-secondary:hover {
     background-color: var(--color-lila);
     color: var(--color-blanco);
 }
 
-.btn-success {
+/* Badges */
+.badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.badge-primary {
+    background-color: var(--color-morado);
+    color: var(--color-blanco);
+}
+
+.badge-secondary {
+    background-color: var(--color-lila);
+    color: var(--color-blanco);
+}
+
+.badge-success {
     background-color: var(--color-exito);
     color: var(--color-blanco);
 }
 
-.btn-warning {
+.badge-warning {
     background-color: var(--color-advertencia);
     color: var(--color-blanco);
 }
 
-.btn-danger {
+.badge-danger {
     background-color: var(--color-peligro);
     color: var(--color-blanco);
 }
 
-.btn-sm {
-    padding: 0.4rem 0.8rem;
-    font-size: 0.85rem;
+/* Alertas */
+.alert {
+    padding: var(--espacio-sm);
+    border-radius: var(--radio-borde-sm);
+    margin-bottom: var(--espacio-sm);
+    border-left: 4px solid;
 }
 
-/* Formularios básicos */
-.form-group {
+.alert-success {
+    background-color: rgba(76, 175, 80, 0.1);
+    border-left-color: var(--color-exito);
+    color: var(--color-exito);
+}
+
+.alert-warning {
+    background-color: rgba(255, 152, 0, 0.1);
+    border-left-color: var(--color-advertencia);
+    color: var(--color-advertencia);
+}
+
+.alert-danger {
+    background-color: rgba(244, 67, 54, 0.1);
+    border-left-color: var(--color-peligro);
+    color: var(--color-peligro);
+}
+
+.alert-info {
+    background-color: rgba(33, 150, 243, 0.1);
+    border-left-color: var(--color-info);
+    color: var(--color-info);
+}
+
+/* Input groups */
+.input-group {
+    display: flex;
+}
+
+.input-group .form-control {
+    flex: 1;
+}
+
+.input-group .btn {
+    border-radius: 0 var(--radio-borde-sm) var(--radio-borde-sm) 0;
+}
+
+.input-group-text {
+    padding: 0.8rem;
+    background-color: var(--color-gris-claro);
+    border: 1px solid var(--color-gris);
+    display: flex;
+    align-items: center;
+}
+
+/* Cards adicionales */
+.card-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--color-morado);
+    margin-bottom: var(--espacio-sm);
+}
+
+.card-subtitle {
+    font-size: 0.9rem;
+    color: var(--color-gris-oscuro);
     margin-bottom: var(--espacio-md);
 }
 
-.form-label {
-    display: block;
-    margin-bottom: var(--espacio-xs);
-    font-weight: 600;
+/* Tablas adicionales */
+.table-hover tbody tr:hover {
+    background-color: rgba(200, 162, 200, 0.05);
 }
 
-.form-control {
-    width: 100%;
-    padding: 0.8rem;
-    border: 1px solid var(--color-gris);
-    border-radius: var(--radio-borde-sm);
-    font-size: 1rem;
+.table-striped tbody tr:nth-child(odd) {
+    background-color: rgba(0, 0, 0, 0.02);
 }
 
-/* Tablas básicas */
-.table {
-    width: 100%;
-    border-collapse: collapse;
+/* Form controls adicionales */
+.form-control-sm {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.875rem;
 }
 
-.table th,
-.table td {
-    padding: 0.8rem;
-    text-align: left;
-    border-bottom: 1px solid var(--color-gris);
+.form-control-lg {
+    padding: 1rem;
+    font-size: 1.1rem;
 }
 
-.table th {
-    background-color: var(--color-lila);
-    color: var(--color-blanco);
-    font-weight: 600;
-}
+/* Utilidades adicionales */
+.w-100 { width: 100%; }
+.h-100 { height: 100%; }
 
-.table-responsive {
-    overflow-x: auto;
-}
+.shadow-sm { box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+.shadow { box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+.shadow-lg { box-shadow: 0 10px 15px rgba(0,0,0,0.1); }
+
+.rounded { border-radius: var(--radio-borde-sm); }
+.rounded-circle { border-radius: 50%; }
+
+.text-muted { color: var(--color-gris-oscuro); }
+.text-primary { color: var(--color-morado); }
+.text-success { color: var(--color-exito); }
+.text-warning { color: var(--color-advertencia); }
+.text-danger { color: var(--color-peligro); }
+
+.bg-primary { background-color: var(--color-morado); }
+.bg-secondary { background-color: var(--color-lila); }
+.bg-success { background-color: var(--color-exito); }
+.bg-warning { background-color: var(--color-advertencia); }
+.bg-danger { background-color: var(--color-peligro); }
+
+/* Flex utilities */
+.flex-column { flex-direction: column; }
+.flex-row { flex-direction: row; }
+.flex-wrap { flex-wrap: wrap; }
+.flex-nowrap { flex-wrap: nowrap; }
+
+.justify-content-start { justify-content: flex-start; }
+.justify-content-center { justify-content: center; }
+.justify-content-end { justify-content: flex-end; }
+.justify-content-between { justify-content: space-between; }
+.justify-content-around { justify-content: space-around; }
+
+.align-items-start { align-items: flex-start; }
+.align-items-center { align-items: center; }
+.align-items-end { align-items: flex-end; }
+.align-items-stretch { align-items: stretch; }
