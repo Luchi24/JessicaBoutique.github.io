@@ -5,12 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jessica Boutique - Reportes</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="css/estilos.css">
-    <link rel="stylesheet" href="css/componentes.css">
-    <link rel="stylesheet" href="css/tablas-formularios.css">
-    <link rel="stylesheet" href="css/responsive.css">
+    
+    <!-- CSS Comunes -->
+    <link rel="stylesheet" href="css/comunes/base.css">
+    <link rel="stylesheet" href="css/comunes/navegacion.css">
+    <link rel="stylesheet" href="css/comunes/componentes.css">
+    <link rel="stylesheet" href="css/comunes/responsive.css">
+    
+    <!-- CSS Específico -->
+    <link rel="stylesheet" href="css/reportes.css">
 </head>
 <body>
+    <!-- Navegación -->
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-brand">
@@ -31,575 +37,270 @@
         </div>
     </nav>
 
+    <!-- Contenido Principal -->
     <main class="container">
         <div class="page-header">
             <h2><i class="fas fa-chart-bar"></i> Reportes y Estadísticas</h2>
-            <p>Análisis y reportes de ventas, productos y clientes</p>
+            <p>Analiza el desempeño de tu negocio</p>
         </div>
 
-        <!-- Filtros -->
-        <div class="filters-container">
-            <div class="form-group">
-                <label for="periodoReporte">Período</label>
-                <select id="periodoReporte" class="form-control">
-                    <option value="hoy">Hoy</option>
-                    <option value="ayer">Ayer</option>
-                    <option value="semana">Esta semana</option>
-                    <option value="mes">Este mes</option>
-                    <option value="trimestre">Este trimestre</option>
-                    <option value="anio">Este año</option>
-                    <option value="personalizado">Personalizado</option>
-                </select>
-            </div>
-            
-            <div class="form-group" id="fechaDesdeContainer" style="display: none;">
-                <label for="fechaDesde">Desde</label>
-                <input type="date" id="fechaDesde" class="form-control">
-            </div>
-            
-            <div class="form-group" id="fechaHastaContainer" style="display: none;">
-                <label for="fechaHasta">Hasta</label>
-                <input type="date" id="fechaHasta" class="form-control">
-            </div>
-            
-            <div class="form-group">
-                <label for="tipoReporte">Tipo de Reporte</label>
-                <select id="tipoReporte" class="form-control">
-                    <option value="ventas">Ventas</option>
-                    <option value="productos">Productos</option>
-                    <option value="clientes">Clientes</option>
-                    <option value="inventario">Inventario</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <button id="btnGenerarReporte" class="btn btn-primary btn-block">
-                    <i class="fas fa-chart-line"></i> Generar Reporte
-                </button>
-            </div>
-        </div>
-
-        <!-- Tarjetas de Resumen -->
-        <div class="dashboard-cards">
-            <div class="card summary-card">
-                <div class="card-header">
-                    <h3>Ventas Totales</h3>
-                    <div class="card-icon sales">
-                        <i class="fas fa-money-bill-wave"></i>
-                    </div>
+        <!-- Filtros de Reportes -->
+        <div class="card card-filtros">
+            <div class="filtros-reportes">
+                <div class="filtro-item">
+                    <label for="periodoReporte" class="filtro-label">Período</label>
+                    <select id="periodoReporte" class="form-control">
+                        <option value="hoy">Hoy</option>
+                        <option value="semana">Esta Semana</option>
+                        <option value="mes">Este Mes</option>
+                        <option value="anio">Este Año</option>
+                        <option value="personalizado">Personalizado</option>
+                    </select>
                 </div>
-                <div class="card-value" id="reporteVentasTotal">S/. 0.00</div>
-                <div class="card-footer" id="reporteVentasPeriodo">Periodo seleccionado</div>
-            </div>
-
-            <div class="card summary-card">
-                <div class="card-header">
-                    <h3>Productos Vendidos</h3>
-                    <div class="card-icon stock">
-                        <i class="fas fa-box"></i>
-                    </div>
+                
+                <div class="filtro-item" id="fechaInicioContainer" style="display: none;">
+                    <label for="fechaInicio" class="filtro-label">Fecha Inicio</label>
+                    <input type="date" id="fechaInicio" class="form-control">
                 </div>
-                <div class="card-value" id="reporteProductosVendidos">0</div>
-                <div class="card-footer">Unidades vendidas</div>
-            </div>
-
-            <div class="card summary-card">
-                <div class="card-header">
-                    <h3>Clientes Atendidos</h3>
-                    <div class="card-icon trend">
-                        <i class="fas fa-users"></i>
-                    </div>
+                
+                <div class="filtro-item" id="fechaFinContainer" style="display: none;">
+                    <label for="fechaFin" class="filtro-label">Fecha Fin</label>
+                    <input type="date" id="fechaFin" class="form-control">
                 </div>
-                <div class="card-value" id="reporteClientesAtendidos">0</div>
-                <div class="card-footer">Clientes únicos</div>
-            </div>
-
-            <div class="card summary-card">
-                <div class="card-header">
-                    <h3>Ticket Promedio</h3>
-                    <div class="card-icon sales">
-                        <i class="fas fa-receipt"></i>
-                    </div>
+                
+                <div class="filtro-item">
+                    <label for="tipoReporte" class="filtro-label">Tipo de Reporte</label>
+                    <select id="tipoReporte" class="form-control">
+                        <option value="ventas">Ventas</option>
+                        <option value="productos">Productos</option>
+                        <option value="clientes">Clientes</option>
+                        <option value="inventario">Inventario</option>
+                    </select>
                 </div>
-                <div class="card-value" id="reporteTicketPromedio">S/. 0.00</div>
-                <div class="card-footer">Promedio por venta</div>
-            </div>
-        </div>
-
-        <!-- Gráficos y Tablas -->
-        <div class="card">
-            <div class="card-header">
-                <h3>Gráfico de Ventas</h3>
-                <div class="btn-group">
-                    <button class="btn btn-secondary btn-sm" id="btnExportarGrafico">
-                        <i class="fas fa-download"></i> Exportar
+                
+                <div class="filtro-item">
+                    <button id="generarReporte" class="btn btn-primary">
+                        <i class="fas fa-chart-line"></i> Generar Reporte
+                    </button>
+                    <button id="exportarReporte" class="btn btn-success">
+                        <i class="fas fa-file-export"></i> Exportar
                     </button>
                 </div>
             </div>
-            <div class="card-body">
-                <div class="chart-container" style="height: 400px;">
-                    <canvas id="graficoVentas"></canvas>
+        </div>
+
+        <!-- Métricas Principales -->
+        <div class="metricas-principales">
+            <div class="card card-metrica">
+                <div class="metrica-icono ventas">
+                    <i class="fas fa-money-bill-wave"></i>
+                </div>
+                <h3>Ventas Totales</h3>
+                <div class="metrica-valor" id="metricasVentas">S/. 0.00</div>
+                <div class="metrica-tendencia" id="tendenciaVentas">
+                    <i class="fas fa-arrow-up"></i> 0%
+                </div>
+            </div>
+            
+            <div class="card card-metrica">
+                <div class="metrica-icono ganancias">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3>Ganancias</h3>
+                <div class="metrica-valor" id="metricasGanancias">S/. 0.00</div>
+                <div class="metrica-tendencia" id="tendenciaGanancias">
+                    <i class="fas fa-arrow-up"></i> 0%
+                </div>
+            </div>
+            
+            <div class="card card-metrica">
+                <div class="metrica-icono clientes">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3>Clientes Activos</h3>
+                <div class="metrica-valor" id="metricasClientes">0</div>
+                <div class="metrica-tendencia" id="tendenciaClientes">
+                    <i class="fas fa-arrow-up"></i> 0%
+                </div>
+            </div>
+            
+            <div class="card card-metrica">
+                <div class="metrica-icono productos">
+                    <i class="fas fa-box"></i>
+                </div>
+                <h3>Productos Vendidos</h3>
+                <div class="metrica-valor" id="metricasProductosVendidos">0</div>
+                <div class="metrica-tendencia" id="tendenciaProductos">
+                    <i class="fas fa-arrow-up"></i> 0%
                 </div>
             </div>
         </div>
 
-        <!-- Tabla de Ventas -->
-        <div class="card">
-            <div class="card-header">
-                <h3>Detalle de Ventas</h3>
+        <!-- Gráficas -->
+        <div class="graficas-container">
+            <div class="card">
+                <div class="card-header">
+                    <h3><i class="fas fa-chart-area"></i> Ventas por Día</h3>
+                    <select id="graficoVentasPeriodo" class="form-control-sm">
+                        <option value="7">Últimos 7 días</option>
+                        <option value="30">Últimos 30 días</option>
+                        <option value="90">Últimos 90 días</option>
+                    </select>
+                </div>
+                <div class="card-body">
+                    <div class="grafica-placeholder" id="graficaVentas">
+                        <div class="grafica-mensaje">
+                            <i class="fas fa-chart-bar"></i>
+                            <p>Selecciona un período para ver las ventas</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table" id="tablaDetalleVentas">
-                        <thead>
-                            <tr>
-                                <th>Fecha</th>
-                                <th>Cliente</th>
-                                <th>Productos</th>
-                                <th>Cantidad</th>
-                                <th>Total</th>
-                                <th>Método Pago</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Los datos se cargarán aquí -->
-                        </tbody>
-                    </table>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3><i class="fas fa-chart-pie"></i> Ventas por Categoría</h3>
+                </div>
+                <div class="card-body">
+                    <div class="grafica-placeholder" id="graficaCategorias">
+                        <div class="grafica-mensaje">
+                            <i class="fas fa-chart-pie"></i>
+                            <p>Genera un reporte para ver la distribución</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Productos Más Vendidos -->
-        <div class="card">
-            <div class="card-header">
-                <h3>Productos Más Vendidos</h3>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table" id="tablaProductosTop">
+        <!-- Tablas de Reportes -->
+        <div class="tablas-reportes">
+            <!-- Productos Más Vendidos -->
+            <div class="card">
+                <div class="card-header">
+                    <h3><i class="fas fa-star"></i> Productos Más Vendidos</h3>
+                </div>
+                <div class="table-container">
+                    <table class="table">
                         <thead>
                             <tr>
                                 <th>Producto</th>
                                 <th>Categoría</th>
                                 <th>Unidades Vendidas</th>
                                 <th>Total Ventas</th>
-                                <th>% del Total</th>
+                                <th>Tendencia</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <!-- Los datos se cargarán aquí -->
+                        <tbody id="tablaProductosTop">
+                            <!-- Productos dinámicos -->
                         </tbody>
                     </table>
                 </div>
             </div>
-        </div>
 
-        <!-- Clientes Top -->
-        <div class="card">
-            <div class="card-header">
-                <h3>Clientes Más Frecuentes</h3>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table" id="tablaClientesTop">
+            <!-- Clientes Top -->
+            <div class="card">
+                <div class="card-header">
+                    <h3><i class="fas fa-crown"></i> Clientes Top</h3>
+                </div>
+                <div class="table-container">
+                    <table class="table">
                         <thead>
                             <tr>
                                 <th>Cliente</th>
                                 <th>Compras</th>
                                 <th>Total Gastado</th>
-                                <th>Ticket Promedio</th>
                                 <th>Última Compra</th>
+                                <th>Clasificación</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <!-- Los datos se cargarán aquí -->
+                        <tbody id="tablaClientesTop">
+                            <!-- Clientes dinámicos -->
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
+
+        <!-- Reporte Detallado -->
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="fas fa-file-alt"></i> Reporte Detallado</h3>
+                <div class="acciones-reporte">
+                    <button id="imprimirReporte" class="btn btn-secondary">
+                        <i class="fas fa-print"></i> Imprimir
+                    </button>
+                    <button id="descargarReporte" class="btn btn-success">
+                        <i class="fas fa-download"></i> Descargar PDF
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="reporte-detallado" id="reporteDetallado">
+                    <div class="encabezado-reporte">
+                        <h2>Reporte de Ventas</h2>
+                        <p id="periodoReporteTexto">Período: No seleccionado</p>
+                        <p id="fechaGeneracion">Generado el: --/--/----</p>
+                    </div>
+                    
+                    <div class="seccion-reporte">
+                        <h3>Resumen Ejecutivo</h3>
+                        <div class="resumen-ejecutivo">
+                            <div class="resumen-item">
+                                <span>Total Ventas:</span>
+                                <span id="resumenTotalVentas">S/. 0.00</span>
+                            </div>
+                            <div class="resumen-item">
+                                <span>Total Ganancias:</span>
+                                <span id="resumenTotalGanancias">S/. 0.00</span>
+                            </div>
+                            <div class="resumen-item">
+                                <span>Transacciones:</span>
+                                <span id="resumenTransacciones">0</span>
+                            </div>
+                            <div class="resumen-item">
+                                <span>Clientes Atendidos:</span>
+                                <span id="resumenClientes">0</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="seccion-reporte">
+                        <h3>Detalle de Ventas</h3>
+                        <div class="table-container">
+                            <table class="table table-reporte">
+                                <thead>
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Cliente</th>
+                                        <th>Productos</th>
+                                        <th>Cantidad</th>
+                                        <th>Total</th>
+                                        <th>Método Pago</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="detalleVentasReporte">
+                                    <!-- Ventas detalladas -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="seccion-reporte">
+                        <h3>Análisis y Recomendaciones</h3>
+                        <div class="analisis-recomendaciones" id="analisisRecomendaciones">
+                            <p>Genera un reporte para ver análisis y recomendaciones personalizadas.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="js/datos.js"></script>
-    <script src="js/sistema.js"></script>
+    <!-- JavaScript Comunes -->
+    <script src="js/comunes/datos.js"></script>
+    <script src="js/comunes/eventos.js"></script>
+    
+    <!-- JavaScript Específico -->
     <script src="js/reportes.js"></script>
-    <script>
-        // Variables globales
-        let graficoVentas = null;
-        let datosReporte = {};
-        
-        // Inicializar
-        document.addEventListener('DOMContentLoaded', function() {
-            configurarEventos();
-            generarReporte();
-        });
-        
-        function configurarEventos() {
-            // Cambiar período
-            document.getElementById('periodoReporte').addEventListener('change', function() {
-                const esPersonalizado = this.value === 'personalizado';
-                document.getElementById('fechaDesdeContainer').style.display = esPersonalizado ? 'block' : 'none';
-                document.getElementById('fechaHastaContainer').style.display = esPersonalizado ? 'block' : 'none';
-            });
-            
-            // Generar reporte
-            document.getElementById('btnGenerarReporte').addEventListener('click', generarReporte);
-            
-            // Exportar gráfico
-            document.getElementById('btnExportarGrafico').addEventListener('click', exportarGrafico);
-        }
-        
-        function obtenerRangoFechas() {
-            const periodo = document.getElementById('periodoReporte').value;
-            const hoy = new Date();
-            let fechaInicio, fechaFin;
-            
-            switch(periodo) {
-                case 'hoy':
-                    fechaInicio = new Date(hoy);
-                    fechaFin = new Date(hoy);
-                    break;
-                    
-                case 'ayer':
-                    fechaInicio = new Date(hoy);
-                    fechaInicio.setDate(hoy.getDate() - 1);
-                    fechaFin = new Date(fechaInicio);
-                    break;
-                    
-                case 'semana':
-                    fechaInicio = new Date(hoy);
-                    fechaInicio.setDate(hoy.getDate() - hoy.getDay());
-                    fechaFin = new Date(hoy);
-                    break;
-                    
-                case 'mes':
-                    fechaInicio = new Date(hoy.getFullYear(), hoy.getMonth(), 1);
-                    fechaFin = new Date(hoy.getFullYear(), hoy.getMonth() + 1, 0);
-                    break;
-                    
-                case 'trimestre':
-                    const trimestre = Math.floor(hoy.getMonth() / 3);
-                    fechaInicio = new Date(hoy.getFullYear(), trimestre * 3, 1);
-                    fechaFin = new Date(hoy.getFullYear(), trimestre * 3 + 3, 0);
-                    break;
-                    
-                case 'anio':
-                    fechaInicio = new Date(hoy.getFullYear(), 0, 1);
-                    fechaFin = new Date(hoy.getFullYear(), 11, 31);
-                    break;
-                    
-                case 'personalizado':
-                    fechaInicio = new Date(document.getElementById('fechaDesde').value);
-                    fechaFin = new Date(document.getElementById('fechaHasta').value);
-                    break;
-                    
-                default:
-                    fechaInicio = new Date(hoy);
-                    fechaFin = new Date(hoy);
-            }
-            
-            return { fechaInicio, fechaFin };
-        }
-        
-        function generarReporte() {
-            const rango = obtenerRangoFechas();
-            const tipoReporte = document.getElementById('tipoReporte').value;
-            
-            // Obtener datos del período
-            const ventas = SistemaDatos.obtenerVentas();
-            const ventasFiltradas = ventas.filter(venta => {
-                const fechaVenta = new Date(venta.fecha);
-                return fechaVenta >= rango.fechaInicio && fechaVenta <= rango.fechaFin;
-            });
-            
-            // Calcular estadísticas
-            datosReporte = calcularEstadisticas(ventasFiltradas);
-            
-            // Actualizar tarjetas
-            actualizarTarjetasResumen(datosReporte);
-            
-            // Actualizar gráfico
-            actualizarGrafico(datosReporte);
-            
-            // Actualizar tablas
-            actualizarTablas(datosReporte, ventasFiltradas);
-        }
-        
-        function calcularEstadisticas(ventas) {
-            if (ventas.length === 0) {
-                return {
-                    totalVentas: 0,
-                    totalProductosVendidos: 0,
-                    clientesUnicos: 0,
-                    ticketPromedio: 0,
-                    productosTop: [],
-                    clientesTop: []
-                };
-            }
-            
-            // Calcular totales
-            const totalVentas = ventas.reduce((sum, venta) => sum + venta.total, 0);
-            const totalProductosVendidos = ventas.reduce((sum, venta) => 
-                sum + venta.productos.reduce((sumProd, prod) => sumProd + prod.cantidad, 0), 0);
-            
-            // Clientes únicos
-            const clientesIds = [...new Set(ventas.map(venta => venta.clienteId))];
-            
-            // Ticket promedio
-            const ticketPromedio = totalVentas / ventas.length;
-            
-            // Productos más vendidos
-            const productosVendidos = {};
-            ventas.forEach(venta => {
-                venta.productos.forEach(item => {
-                    if (!productosVendidos[item.productoId]) {
-                        productosVendidos[item.productoId] = {
-                            cantidad: 0,
-                            total: 0
-                        };
-                    }
-                    productosVendidos[item.productoId].cantidad += item.cantidad;
-                    productosVendidos[item.productoId].total += item.cantidad * item.precio;
-                });
-            });
-            
-            const productosTop = Object.entries(productosVendidos)
-                .map(([productoId, datos]) => {
-                    const producto = SistemaDatos.buscarProducto(parseInt(productoId));
-                    return {
-                        producto: producto ? producto.nombre : 'Producto no encontrado',
-                        categoria: producto ? producto.categoria : 'N/A',
-                        cantidad: datos.cantidad,
-                        total: datos.total,
-                        porcentaje: (datos.total / totalVentas) * 100
-                    };
-                })
-                .sort((a, b) => b.cantidad - a.cantidad)
-                .slice(0, 10);
-            
-            // Clientes top
-            const clientesGastos = {};
-            ventas.forEach(venta => {
-                if (!clientesGastos[venta.clienteId]) {
-                    clientesGastos[venta.clienteId] = {
-                        compras: 0,
-                        totalGastado: 0
-                    };
-                }
-                clientesGastos[venta.clienteId].compras++;
-                clientesGastos[venta.clienteId].totalGastado += venta.total;
-            });
-            
-            const clientesTop = Object.entries(clientesGastos)
-                .map(([clienteId, datos]) => {
-                    const cliente = SistemaDatos.obtenerClientes().find(c => c.id === parseInt(clienteId));
-                    return {
-                        cliente: cliente ? cliente.nombre : 'Cliente no encontrado',
-                        compras: datos.compras,
-                        totalGastado: datos.totalGastado,
-                        ticketPromedio: datos.totalGastado / datos.compras,
-                        ultimaCompra: ventas
-                            .filter(v => v.clienteId === parseInt(clienteId))
-                            .sort((a, b) => new Date(b.fecha) - new Date(a.fecha))[0]?.fecha || 'N/A'
-                    };
-                })
-                .sort((a, b) => b.totalGastado - a.totalGastado)
-                .slice(0, 10);
-            
-            return {
-                totalVentas,
-                totalProductosVendidos,
-                clientesUnicos: clientesIds.length,
-                ticketPromedio,
-                productosTop,
-                clientesTop,
-                ventas: ventas
-            };
-        }
-        
-        function actualizarTarjetasResumen(datos) {
-            document.getElementById('reporteVentasTotal').textContent = `S/. ${datos.totalVentas.toFixed(2)}`;
-            document.getElementById('reporteProductosVendidos').textContent = datos.totalProductosVendidos;
-            document.getElementById('reporteClientesAtendidos').textContent = datos.clientesUnicos;
-            document.getElementById('reporteTicketPromedio').textContent = `S/. ${datos.ticketPromedio.toFixed(2)}`;
-            
-            // Actualizar período en el footer
-            const periodoSelect = document.getElementById('periodoReporte');
-            const periodoText = periodoSelect.options[periodoSelect.selectedIndex].text;
-            document.getElementById('reporteVentasPeriodo').textContent = periodoText;
-        }
-        
-        function actualizarGrafico(datos) {
-            const ctx = document.getElementById('graficoVentas').getContext('2d');
-            
-            // Destruir gráfico anterior si existe
-            if (graficoVentas) {
-                graficoVentas.destroy();
-            }
-            
-            // Preparar datos para el gráfico
-            const ventasPorDia = {};
-            datos.ventas.forEach(venta => {
-                const fecha = venta.fecha;
-                if (!ventasPorDia[fecha]) {
-                    ventasPorDia[fecha] = 0;
-                }
-                ventasPorDia[fecha] += venta.total;
-            });
-            
-            const labels = Object.keys(ventasPorDia).sort();
-            const valores = labels.map(fecha => ventasPorDia[fecha]);
-            
-            // Crear nuevo gráfico
-            graficoVentas = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Ventas (S/.)',
-                        data: valores,
-                        borderColor: '#9c27b0',
-                        backgroundColor: 'rgba(156, 39, 176, 0.1)',
-                        borderWidth: 2,
-                        fill: true,
-                        tension: 0.4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: true,
-                            position: 'top'
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return `Ventas: S/. ${context.parsed.y.toFixed(2)}`;
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                callback: function(value) {
-                                    return 'S/. ' + value;
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-        }
-        
-        function actualizarTablas(datos, ventasFiltradas) {
-            // Tabla de detalle de ventas
-            const tbodyVentas = document.getElementById('tablaDetalleVentas').querySelector('tbody');
-            tbodyVentas.innerHTML = '';
-            
-            ventasFiltradas.slice(0, 20).forEach(venta => {
-                const cliente = SistemaDatos.obtenerClientes().find(c => c.id === venta.clienteId);
-                const productosCount = venta.productos.length;
-                const cantidadTotal = venta.productos.reduce((sum, prod) => sum + prod.cantidad, 0);
-                
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${venta.fecha}</td>
-                    <td>${cliente ? cliente.nombre : 'Cliente no encontrado'}</td>
-                    <td>${productosCount} productos</td>
-                    <td>${cantidadTotal}</td>
-                    <td>S/. ${venta.total.toFixed(2)}</td>
-                    <td>${venta.metodoPago}</td>
-                `;
-                tbodyVentas.appendChild(row);
-            });
-            
-            if (ventasFiltradas.length === 0) {
-                tbodyVentas.innerHTML = `
-                    <tr>
-                        <td colspan="6" class="text-center">No hay ventas en el período seleccionado</td>
-                    </tr>
-                `;
-            }
-            
-            // Tabla de productos top
-            const tbodyProductos = document.getElementById('tablaProductosTop').querySelector('tbody');
-            tbodyProductos.innerHTML = '';
-            
-            datos.productosTop.forEach(producto => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${producto.producto}</td>
-                    <td>${producto.categoria}</td>
-                    <td>${producto.cantidad}</td>
-                    <td>S/. ${producto.total.toFixed(2)}</td>
-                    <td>${producto.porcentaje.toFixed(1)}%</td>
-                `;
-                tbodyProductos.appendChild(row);
-            });
-            
-            if (datos.productosTop.length === 0) {
-                tbodyProductos.innerHTML = `
-                    <tr>
-                        <td colspan="5" class="text-center">No hay datos de productos</td>
-                    </tr>
-                `;
-            }
-            
-            // Tabla de clientes top
-            const tbodyClientes = document.getElementById('tablaClientesTop').querySelector('tbody');
-            tbodyClientes.innerHTML = '';
-            
-            datos.clientesTop.forEach(cliente => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${cliente.cliente}</td>
-                    <td>${cliente.compras}</td>
-                    <td>S/. ${cliente.totalGastado.toFixed(2)}</td>
-                    <td>S/. ${cliente.ticketPromedio.toFixed(2)}</td>
-                    <td>${cliente.ultimaCompra}</td>
-                `;
-                tbodyClientes.appendChild(row);
-            });
-            
-            if (datos.clientesTop.length === 0) {
-                tbodyClientes.innerHTML = `
-                    <tr>
-                        <td colspan="5" class="text-center">No hay datos de clientes</td>
-                    </tr>
-                `;
-            }
-        }
-        
-        function exportarGrafico() {
-            if (graficoVentas) {
-                const link = document.createElement('a');
-                link.download = `grafico-ventas-${new Date().toISOString().split('T')[0]}.png`;
-                link.href = graficoVentas.toBase64Image();
-                link.click();
-            }
-        }
-        function aplicarFiltrosReportes() {
-            const periodo = document.getElementById('stats-period')?.value || 'day';
-            
-            if (typeof actualizarReportes === 'function') {
-                actualizarReportes(periodo);
-            }
-        }
-        
-        // Inicializar fechas personalizadas con valores por defecto
-        const hoy = new Date().toISOString().split('T')[0];
-        const inicioMes = new Date();
-        inicioMes.setDate(1);
-        const inicioMesStr = inicioMes.toISOString().split('T')[0];
-        
-        document.getElementById('fechaDesde').value = inicioMesStr;
-        document.getElementById('fechaHasta').value = hoy;
-    </script>
-    <script src="js/main.js"></script>
 </body>
 </html>
