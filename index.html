@@ -3,19 +3,189 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InventarioPro | Panel de Control</title>
+    <title>Jessica Boutique | Panel de Control</title>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/dashboard.css">
     <link rel="stylesheet" href="css/inventario.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <a href="index.html" class="header-logo">
+                <i class="fas fa-crown"></i>
+                <h1>Jessica Boutique</h1>
+            </a>
+            
+            <div class="header-stats">
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h4>Ventas Hoy</h4>
+                        <p id="headerTodaySales">S/ 0.00</p>
+                    </div>
+                </div>
+                
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h4>Stock Bajo</h4>
+                        <p id="headerLowStock">0</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="header-right">
+            <div class="header-actions">
+                <!-- Search -->
+                <button class="action-btn" id="searchBtn" title="Buscar">
+                    <i class="fas fa-search"></i>
+                </button>
+                
+                <!-- Notifications -->
+                <div class="dropdown">
+                    <button class="action-btn" id="notificationBtn" title="Notificaciones">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge" id="notificationBadge">3</span>
+                    </button>
+                    
+                    <div class="dropdown-content" id="notificationDropdown">
+                        <div class="dropdown-header">
+                            <h3>Notificaciones</h3>
+                        </div>
+                        <div class="notification-list" id="notificationList">
+                            <!-- Las notificaciones se cargarán aquí -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- User Menu -->
+                <div class="dropdown">
+                    <button class="action-btn" id="userMenuBtn" title="Menú de usuario">
+                        <i class="fas fa-user-circle"></i>
+                    </button>
+                    
+                    <div class="dropdown-content" id="userDropdown">
+                        <div class="user-info-header">
+                            <div class="user-avatar-large" id="headerUserAvatar">
+                                <i class="fas fa-user-circle"></i>
+                            </div>
+                            <div class="user-details-header">
+                                <h4 id="headerUserName">Jessica</h4>
+                                <p id="headerUserRole">Dueña</p>
+                            </div>
+                        </div>
+                        
+                        <div class="user-menu-actions">
+                            <a href="#" class="user-menu-item" id="profileBtn">
+                                <i class="fas fa-user"></i>
+                                <span>Mi Perfil</span>
+                            </a>
+                            <a href="gestion.html" class="user-menu-item">
+                                <i class="fas fa-cog"></i>
+                                <span>Configuración</span>
+                            </a>
+                            <div class="user-menu-item" id="logoutBtn">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span>Cerrar Sesión</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Search Box -->
+        <div class="search-box" id="searchBox">
+            <div class="search-input-container">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Buscar productos, ventas, clientes...">
+                <button class="close-search" id="closeSearch">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="search-results" id="searchResults"></div>
+        </div>
+    </header>
+    
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+    
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <h3>Jessica Boutique</h3>
+            <button class="mobile-menu-close" id="mobileMenuClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="mobile-nav">
+            <a href="index.html" class="mobile-nav-link active">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Panel de Control</span>
+            </a>
+            <a href="inventario.html" class="mobile-nav-link">
+                <i class="fas fa-box"></i>
+                <span>Inventario</span>
+            </a>
+            <a href="agregar-producto.html" class="mobile-nav-link">
+                <i class="fas fa-plus-circle"></i>
+                <span>Agregar Producto</span>
+            </a>
+            <a href="ventas.html" class="mobile-nav-link">
+                <i class="fas fa-cash-register"></i>
+                <span>Ventas</span>
+            </a>
+            <a href="reportes.html" class="mobile-nav-link">
+                <i class="fas fa-chart-bar"></i>
+                <span>Reportes</span>
+            </a>
+            <a href="gestion.html" class="mobile-nav-link">
+                <i class="fas fa-cog"></i>
+                <span>Configuración</span>
+            </a>
+            
+            <div class="mobile-user-info">
+                <div class="user-avatar-large">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="user-details-header">
+                    <h4>Jessica</h4>
+                    <p>Dueña</p>
+                </div>
+            </div>
+            
+            <div class="mobile-menu-actions">
+                <a href="#" class="user-menu-item" id="mobileProfileBtn">
+                    <i class="fas fa-user"></i>
+                    <span>Mi Perfil</span>
+                </a>
+                <div class="user-menu-item" id="mobileLogoutBtn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Cerrar Sesión</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <div class="container">
         <!-- Sidebar/Navegación -->
         <nav class="sidebar" id="sidebar">
             <div class="logo">
-                <h1><i class="fas fa-boxes"></i> <span>InventarioPro</span></h1>
+                <h1><i class="fas fa-crown"></i> <span>Jessica Boutique</span></h1>
                 <button class="menu-toggle" id="menuToggle">
                     <i class="fas fa-bars"></i>
                 </button>
@@ -65,8 +235,8 @@
                     <i class="fas fa-user-circle"></i>
                 </div>
                 <div class="user-details">
-                    <span class="username">Administrador</span>
-                    <span class="user-role">Dueño</span>
+                    <span class="username">Jessica</span>
+                    <span class="user-role">Dueña</span>
                 </div>
             </div>
         </nav>
@@ -75,13 +245,13 @@
         <main class="main-content">
             <div class="section-header">
                 <h2><i class="fas fa-tachometer-alt"></i> Panel de Control</h2>
-                <p>Resumen general del sistema y estado actual</p>
+                <p>Bienvenida Jessica, aquí está el resumen de tu boutique</p>
             </div>
             
             <div class="dashboard-cards">
                 <div class="card stat-card">
-                    <div class="card-icon" style="background-color: #4e73df;">
-                        <i class="fas fa-boxes"></i>
+                    <div class="card-icon" style="background-color: #e75480;">
+                        <i class="fas fa-tshirt"></i>
                     </div>
                     <div class="card-content">
                         <h3>Productos en Stock</h3>
@@ -91,7 +261,7 @@
                 </div>
                 
                 <div class="card stat-card">
-                    <div class="card-icon" style="background-color: #1cc88a;">
+                    <div class="card-icon" style="background-color: #d4af37;">
                         <i class="fas fa-dollar-sign"></i>
                     </div>
                     <div class="card-content">
@@ -102,7 +272,7 @@
                 </div>
                 
                 <div class="card stat-card">
-                    <div class="card-icon" style="background-color: #36b9cc;">
+                    <div class="card-icon" style="background-color: #9c27b0;">
                         <i class="fas fa-shopping-cart"></i>
                     </div>
                     <div class="card-content">
@@ -113,7 +283,7 @@
                 </div>
                 
                 <div class="card stat-card">
-                    <div class="card-icon" style="background-color: #f6c23e;">
+                    <div class="card-icon" style="background-color: #5d9cec;">
                         <i class="fas fa-exclamation-triangle"></i>
                     </div>
                     <div class="card-content">
@@ -124,10 +294,37 @@
                 </div>
             </div>
             
+            <!-- Quick Stats Row -->
+            <div class="quick-stats">
+                <div class="quick-stat">
+                    <div class="number" id="uniqueProducts">0</div>
+                    <div class="label">Productos Únicos</div>
+                </div>
+                <div class="quick-stat">
+                    <div class="number" id="avgPrice">S/ 0.00</div>
+                    <div class="label">Precio Promedio</div>
+                </div>
+                <div class="quick-stat">
+                    <div class="number" id="todaySalesCount">0</div>
+                    <div class="label">Ventas Hoy</div>
+                </div>
+                <div class="quick-stat">
+                    <div class="number" id="uniqueClients">0</div>
+                    <div class="label">Clientes Únicos</div>
+                </div>
+            </div>
+            
             <div class="dashboard-charts">
                 <div class="card">
                     <div class="card-header">
                         <h3>Ventas de la Semana</h3>
+                        <div class="chart-actions">
+                            <select class="chart-period">
+                                <option value="week">Esta Semana</option>
+                                <option value="month">Este Mes</option>
+                                <option value="year">Este Año</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="card-body">
                         <canvas id="weeklySalesChart"></canvas>
@@ -140,31 +337,112 @@
                     </div>
                     <div class="card-body">
                         <div class="top-products" id="topProductsList">
-                            <p class="empty-state">No hay datos de ventas aún</p>
+                            <div class="empty-state">
+                                <i class="fas fa-box-open"></i>
+                                <p>No hay datos de ventas aún</p>
+                                <small>Realiza tu primera venta para ver estadísticas</small>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
             
+            <!-- Seasonal Highlights -->
+            <div class="seasonal-highlights" id="seasonalHighlights">
+                <!-- Se cargará dinámicamente -->
+            </div>
+            
             <div class="recent-activity card">
                 <div class="card-header">
                     <h3>Actividad Reciente</h3>
+                    <a href="reportes.html" class="btn btn-outline btn-sm">
+                        <i class="fas fa-history"></i> Ver Todo
+                    </a>
                 </div>
                 <div class="card-body">
                     <div class="activity-list" id="recentActivity">
                         <div class="activity-item">
-                            <i class="fas fa-plus-circle activity-icon" style="color: #1cc88a;"></i>
+                            <div class="activity-icon sale">
+                                <i class="fas fa-cash-register"></i>
+                            </div>
                             <div class="activity-details">
-                                <p>Producto "Camiseta Básica" agregado al inventario</p>
-                                <span class="activity-time">Hace 2 horas</span>
+                                <p>Venta registrada por S/ 150.00 para María García</p>
+                                <span class="activity-time">
+                                    <i class="far fa-clock"></i> Hace 5 minutos
+                                </span>
                             </div>
                         </div>
                         <div class="activity-item">
-                            <i class="fas fa-cash-register activity-icon" style="color: #4e73df;"></i>
-                            <div class="activity-details">
-                                <p>Venta registrada por S/ 150.00</p>
-                                <span class="activity-time">Hace 5 horas</span>
+                            <div class="activity-icon product">
+                                <i class="fas fa-box"></i>
                             </div>
+                            <div class="activity-details">
+                                <p>Producto "Vestido Floral" agregado al inventario</p>
+                                <span class="activity-time">
+                                    <i class="far fa-clock"></i> Hace 2 horas
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>Acciones Rápidas</h3>
+                </div>
+                <div class="card-body">
+                    <div class="quick-actions-grid">
+                        <a href="agregar-producto.html" class="quick-action-card">
+                            <div class="action-icon" style="background-color: #e75480;">
+                                <i class="fas fa-plus-circle"></i>
+                            </div>
+                            <h4>Agregar Producto</h4>
+                            <p>Registra nuevos productos en el inventario</p>
+                        </a>
+                        
+                        <a href="ventas.html" class="quick-action-card">
+                            <div class="action-icon" style="background-color: #d4af37;">
+                                <i class="fas fa-cash-register"></i>
+                            </div>
+                            <h4>Nueva Venta</h4>
+                            <p>Registra una nueva venta en la caja</p>
+                        </a>
+                        
+                        <a href="inventario.html" class="quick-action-card">
+                            <div class="action-icon" style="background-color: #9c27b0;">
+                                <i class="fas fa-box"></i>
+                            </div>
+                            <h4>Ver Inventario</h4>
+                            <p>Revisa el stock completo de productos</p>
+                        </a>
+                        
+                        <a href="reportes.html" class="quick-action-card">
+                            <div class="action-icon" style="background-color: #5d9cec;">
+                                <i class="fas fa-chart-bar"></i>
+                            </div>
+                            <h4>Ver Reportes</h4>
+                            <p>Analiza las métricas del negocio</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Low Stock Alert -->
+            <div class="card alert-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-exclamation-triangle"></i> Productos con Stock Bajo</h3>
+                    <a href="inventario.html?filter=low" class="btn btn-outline btn-sm">
+                        <i class="fas fa-box"></i> Ver Todos
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div class="low-stock-list" id="dashboardLowStock">
+                        <div class="empty-state">
+                            <i class="fas fa-check-circle"></i>
+                            <p>¡Excelente! No hay productos con stock bajo</p>
+                            <small>Todos los productos tienen stock suficiente</small>
                         </div>
                     </div>
                 </div>
@@ -195,5 +473,274 @@
     <script src="js/main.js"></script>
     <script src="js/header.js"></script>
     <script src="js/dashboard.js"></script>
+    
+    <script>
+        // Inicializar el dashboard cuando la página esté lista
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cargar datos del dashboard
+            if (typeof loadDashboard === 'function') {
+                loadDashboard();
+            }
+            
+            // Actualizar estadísticas del header
+            if (typeof updateHeaderStats === 'function') {
+                updateHeaderStats();
+                // Actualizar cada minuto
+                setInterval(updateHeaderStats, 60000);
+            }
+            
+            // Cargar productos con stock bajo para el dashboard
+            loadDashboardLowStock();
+        });
+        
+        function loadDashboardLowStock() {
+            const container = document.getElementById('dashboardLowStock');
+            if (!container) return;
+            
+            const lowStockProducts = appState.products.filter(p => 
+                p.quantity <= (p.minStock || 5)
+            ).slice(0, 5);
+            
+            if (lowStockProducts.length === 0) {
+                return; // Ya está mostrando el estado vacío
+            }
+            
+            container.innerHTML = lowStockProducts.map(product => `
+                <div class="low-stock-item">
+                    <div class="product-info">
+                        <h5>${product.name}</h5>
+                        <p>${product.category} • ${product.size || 'Única'} • ${appState.colors.find(c => c.hex === product.color)?.name || 'Sin color'}</p>
+                    </div>
+                    <div class="stock-info">
+                        <span class="stock-badge ${product.quantity === 0 ? 'critical' : 'low'}">
+                            ${product.quantity === 0 ? 'Agotado' : product.quantity + ' unidades'}
+                        </span>
+                        <button class="btn btn-sm btn-outline" onclick="reorderProduct('${product.id}')">
+                            <i class="fas fa-sync-alt"></i> Reponer
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function reorderProduct(productId) {
+            const product = appState.products.find(p => p.id === productId);
+            if (!product) return;
+            
+            showModal(
+                'Reponer Stock',
+                `¿Reponer stock de "${product.name}"?`,
+                () => {
+                    // En una implementación real, aquí iría la lógica para reordenar
+                    showNotification(`Pedido de reposición enviado para "${product.name}"`, 'success');
+                }
+            );
+        }
+        
+        // Estilos adicionales para el dashboard
+        const style = document.createElement('style');
+        style.textContent = `
+            .quick-stats {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 1.5rem;
+                margin-bottom: 2rem;
+            }
+            
+            .quick-stat {
+                background: white;
+                padding: 1.5rem;
+                border-radius: var(--border-radius);
+                text-align: center;
+                border: 1px solid var(--gray-200);
+                transition: all 0.3s ease;
+            }
+            
+            .quick-stat:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            }
+            
+            .quick-stat .number {
+                font-size: 2rem;
+                font-weight: 700;
+                color: var(--primary);
+                margin-bottom: 0.5rem;
+                font-family: var(--font-heading);
+            }
+            
+            .quick-stat .label {
+                font-size: 0.9rem;
+                color: var(--gray-600);
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+            
+            .seasonal-highlights {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 1.5rem;
+                margin-bottom: 2rem;
+            }
+            
+            .seasonal-card {
+                background: linear-gradient(135deg, var(--primary-light) 0%, #f8a8c6 100%);
+                border-radius: var(--border-radius);
+                padding: 2rem;
+                color: white;
+                position: relative;
+                overflow: hidden;
+            }
+            
+            .seasonal-card.gold {
+                background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-dark) 100%);
+            }
+            
+            .seasonal-card h4 {
+                font-size: 1.25rem;
+                margin-bottom: 0.75rem;
+                font-family: var(--font-heading);
+            }
+            
+            .seasonal-card p {
+                opacity: 0.9;
+                margin-bottom: 1.5rem;
+            }
+            
+            .seasonal-card .icon {
+                position: absolute;
+                right: 1.5rem;
+                bottom: 1.5rem;
+                font-size: 3rem;
+                opacity: 0.2;
+            }
+            
+            .quick-actions-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 1.5rem;
+            }
+            
+            .quick-action-card {
+                background: white;
+                border: 1px solid var(--gray-200);
+                border-radius: var(--border-radius);
+                padding: 1.5rem;
+                text-align: center;
+                text-decoration: none;
+                color: var(--boutique-charcoal);
+                transition: all 0.3s ease;
+                display: block;
+            }
+            
+            .quick-action-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+                border-color: var(--primary);
+            }
+            
+            .quick-action-card .action-icon {
+                width: 4rem;
+                height: 4rem;
+                border-radius: 12px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 0 auto 1rem;
+                color: white;
+                font-size: 1.75rem;
+            }
+            
+            .quick-action-card h4 {
+                font-size: 1.1rem;
+                margin-bottom: 0.5rem;
+                color: var(--primary);
+            }
+            
+            .quick-action-card p {
+                font-size: 0.9rem;
+                color: var(--gray-600);
+                margin: 0;
+            }
+            
+            .alert-card {
+                border-left: 4px solid var(--warning);
+            }
+            
+            .low-stock-list {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .low-stock-item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 1rem;
+                background-color: var(--gray-100);
+                border-radius: 8px;
+                border: 1px solid var(--gray-200);
+            }
+            
+            .low-stock-item .product-info h5 {
+                margin: 0 0 0.25rem 0;
+                color: var(--boutique-charcoal);
+            }
+            
+            .low-stock-item .product-info p {
+                margin: 0;
+                font-size: 0.9rem;
+                color: var(--gray-600);
+            }
+            
+            .stock-badge {
+                padding: 0.25rem 0.75rem;
+                border-radius: 20px;
+                font-size: 0.85rem;
+                font-weight: 600;
+                margin-right: 1rem;
+            }
+            
+            .stock-badge.critical {
+                background-color: rgba(244, 67, 54, 0.1);
+                color: #f44336;
+            }
+            
+            .stock-badge.low {
+                background-color: rgba(255, 152, 0, 0.1);
+                color: #FF9800;
+            }
+            
+            .btn-sm {
+                padding: 0.5rem 1rem;
+                font-size: 0.875rem;
+            }
+            
+            @media (max-width: 768px) {
+                .quick-stats {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+                
+                .quick-action-card {
+                    padding: 1rem;
+                }
+                
+                .low-stock-item {
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: 1rem;
+                }
+                
+                .low-stock-item .stock-info {
+                    width: 100%;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
 </body>
 </html>
