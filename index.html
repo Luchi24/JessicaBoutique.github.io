@@ -3,112 +3,172 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jessica Boutique | Sistema de Gestión</title>
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/correcciones.css">
+    <title>Jessica Boutique - Inventario</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/estilos.css">
+    <link rel="stylesheet" href="css/componentes.css">
+    <link rel="stylesheet" href="css/tablas-formularios.css">
+    <link rel="stylesheet" href="css/responsive.css">
 </head>
 <body>
-    <!-- Navbar -->
-    <div class="navbar">
-        <div class="logo">
-            <i class="fas fa-store"></i>
-            <h1>Jessica Boutique</h1>
-            <span class="subtitle">Sistema de Gestión</span>
+    <!-- Barra de Navegación -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-store"></i>
+                <h1>Jessica Boutique</h1>
+            </div>
+            <button class="nav-toggle" id="navToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="nav-link"><i class="fas fa-tachometer-alt"></i> Panel</a></li>
+                <li><a href="inventario.html" class="nav-link active"><i class="fas fa-boxes"></i> Inventario</a></li>
+                <li><a href="agregar-producto.html" class="nav-link"><i class="fas fa-plus-circle"></i> Agregar</a></li>
+                <li><a href="ventas.html" class="nav-link"><i class="fas fa-shopping-cart"></i> Ventas</a></li>
+                <li><a href="reportes.html" class="nav-link"><i class="fas fa-chart-bar"></i> Reportes</a></li>
+                <li><a href="gestion.html" class="nav-link"><i class="fas fa-cog"></i> Gestión</a></li>
+            </ul>
         </div>
-        <div class="nav-buttons">
-            <a href="inventario.html" class="nav-btn">
-                <i class="fas fa-boxes"></i> Inventario
-            </a>
-            <a href="agregar-producto.html" class="nav-btn">
-                <i class="fas fa-plus-circle"></i> Agregar
-            </a>
-            <a href="ventas.html" class="nav-btn">
-                <i class="fas fa-cash-register"></i> Ventas
-            </a>
-            <a href="reportes.html" class="nav-btn">
-                <i class="fas fa-chart-bar"></i> Reportes
-            </a>
-            <a href="gestion.html" class="nav-btn">
-                <i class="fas fa-cog"></i> Gestión
-            </a>
+    </nav>
+
+    <!-- Contenido Principal -->
+    <main class="container">
+        <div class="page-header">
+            <h2><i class="fas fa-boxes"></i> Gestión de Inventario</h2>
+            <p>Administra todos los productos de la boutique</p>
         </div>
-    </div>
 
-    <!-- Contenido principal -->
-    <div class="container home-container">
-        <div class="dashboard">
-            <div class="dashboard-header">
-                <h2><i class="fas fa-home"></i> Panel de Control</h2>
-                <p>Bienvenido al sistema de gestión de Jessica Boutique</p>
+        <!-- Filtros y Búsqueda -->
+        <div class="filters-container card">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="input-busqueda" placeholder="Buscar productos..." class="form-control">
             </div>
-
-            <div class="dashboard-cards">
-                <div class="dashboard-card" onclick="location.href='inventario.html'">
-                    <div class="card-icon">
-                        <i class="fas fa-boxes"></i>
-                    </div>
-                    <h3>Inventario</h3>
-                    <p id="dashboard-total-productos">Cargando...</p>
-                    <span class="card-link">Ver inventario <i class="fas fa-arrow-right"></i></span>
-                </div>
-
-                <div class="dashboard-card" onclick="location.href='ventas.html'">
-                    <div class="card-icon">
-                        <i class="fas fa-cash-register"></i>
-                    </div>
-                    <h3>Ventas Hoy</h3>
-                    <p id="dashboard-ventas-hoy">Cargando...</p>
-                    <span class="card-link">Registrar venta <i class="fas fa-arrow-right"></i></span>
-                </div>
-
-                <div class="dashboard-card" onclick="location.href='reportes.html'">
-                    <div class="card-icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <h3>Ganancias</h3>
-                    <p id="dashboard-ganancias">Cargando...</p>
-                    <span class="card-link">Ver reportes <i class="fas fa-arrow-right"></i></span>
-                </div>
-
-                <div class="dashboard-card" onclick="location.href='agregar-producto.html'">
-                    <div class="card-icon">
-                        <i class="fas fa-plus-circle"></i>
-                    </div>
-                    <h3>Agregar Producto</h3>
-                    <p>Registrar nuevo producto</p>
-                    <span class="card-link">Ir a agregar <i class="fas fa-arrow-right"></i></span>
-                </div>
+            
+            <div class="form-group">
+                <label for="filtro-categoria">Categoría</label>
+                <select id="filtro-categoria" class="form-control">
+                    <option value="todas">Todas las categorías</option>
+                    <!-- Las categorías se cargarán dinámicamente -->
+                </select>
             </div>
-
-            <div class="dashboard-alerts">
-                <h3><i class="fas fa-exclamation-triangle"></i> Alertas</h3>
-                <div id="alertas-container">
-                    <!-- Alertas se cargarán aquí -->
-                </div>
+            
+            <div class="form-group">
+                <label for="filtro-estado">Estado</label>
+                <select id="filtro-estado" class="form-control">
+                    <option value="todos">Todos los estados</option>
+                    <option value="instock">En Stock</option>
+                    <option value="lowstock">Stock Bajo</option>
+                    <option value="outofstock">Agotado</option>
+                </select>
             </div>
-
-            <div class="dashboard-stats">
-                <div class="stat-item">
-                    <h4>Productos con stock bajo</h4>
-                    <p id="stat-stock-bajo">0</p>
-                </div>
-                <div class="stat-item">
-                    <h4>Productos más vendidos</h4>
-                    <p id="stat-top-producto">-</p>
-                </div>
-                <div class="stat-item">
-                    <h4>Mejor categoría</h4>
-                    <p id="stat-top-categoria">-</p>
-                </div>
+            
+            <div class="form-group">
+                <label for="filtro-orden">Ordenar por</label>
+                <select id="filtro-orden" class="form-control">
+                    <option value="reciente">Más recientes</option>
+                    <option value="nombre">Nombre (A-Z)</option>
+                    <option value="precio">Precio (Mayor a menor)</option>
+                    <option value="stock">Stock (Mayor a menor)</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <button id="btn-aplicar-filtros" class="btn btn-primary">
+                    <i class="fas fa-filter"></i> Aplicar Filtros
+                </button>
+                <button id="btn-limpiar-filtros" class="btn btn-secondary">
+                    <i class="fas fa-times"></i> Limpiar
+                </button>
             </div>
         </div>
-    </div>
 
-    <!-- Notificaciones -->
-    <div id="notificaciones" class="notificaciones"></div>
+        <!-- Resumen del Inventario -->
+        <div class="dashboard-cards">
+            <div class="card summary-card">
+                <div class="card-header">
+                    <h3>Productos Totales</h3>
+                    <div class="card-icon stock">
+                        <i class="fas fa-box"></i>
+                    </div>
+                </div>
+                <div class="card-value" id="total-productos">0</div>
+                <div class="card-footer">en inventario</div>
+            </div>
+            
+            <div class="card summary-card">
+                <div class="card-header">
+                    <h3>Valor del Inventario</h3>
+                    <div class="card-icon sales">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                </div>
+                <div class="card-value" id="valor-inventario">S/. 0.00</div>
+                <div class="card-footer">valor total</div>
+            </div>
+            
+            <div class="card summary-card">
+                <div class="card-header">
+                    <h3>Productos con Stock Bajo</h3>
+                    <div class="card-icon warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                </div>
+                <div class="card-value" id="productos-bajo-stock">0</div>
+                <div class="card-footer">necesitan reposición</div>
+            </div>
+            
+            <div class="card summary-card">
+                <div class="card-header">
+                    <h3>Productos Agotados</h3>
+                    <div class="card-icon danger">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                </div>
+                <div class="card-value" id="productos-agotados">0</div>
+                <div class="card-footer">sin stock disponible</div>
+            </div>
+        </div>
 
-    <script src="js/main.js"></script>
-    <script src="js/dashboard.js"></script>
+        <!-- Tabla de Productos -->
+        <div class="card">
+            <div class="card-header">
+                <h3>Productos en Inventario</h3>
+                <a href="agregar-producto.html" class="btn btn-success">
+                    <i class="fas fa-plus"></i> Nuevo Producto
+                </a>
+            </div>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Categoría</th>
+                            <th>Talla</th>
+                            <th>Color</th>
+                            <th>Stock</th>
+                            <th>Precio Venta</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventario-table-body">
+                        <!-- Los productos se cargarán dinámicamente -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Paginación -->
+            <div class="pagination" id="pagination">
+                <!-- La paginación se generará dinámicamente -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="js/datos.js"></script>
+    <script src="js/sistema.js"></script>
+    <script src="js/productos.js"></script>
 </body>
 </html>
