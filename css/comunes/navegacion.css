@@ -6,6 +6,7 @@
     position: sticky;
     top: 0;
     z-index: 1000;
+    width: 100%;
 }
 
 .nav-container {
@@ -15,22 +16,26 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
 }
 
 .nav-brand {
     display: flex;
     align-items: center;
     gap: var(--espacio-xs);
+    text-decoration: none;
 }
 
 .nav-brand i {
     font-size: 1.8rem;
+    color: var(--color-blanco);
 }
 
 .nav-brand h1 {
     font-size: 1.5rem;
     color: var(--color-blanco);
     margin: 0;
+    font-weight: 700;
 }
 
 .nav-toggle {
@@ -40,12 +45,21 @@
     font-size: 1.5rem;
     cursor: pointer;
     display: none;
+    padding: var(--espacio-xs);
+    border-radius: var(--radio-borde-sm);
+    transition: var(--transicion-rapida);
+}
+
+.nav-toggle:hover {
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .nav-menu {
     display: flex;
     list-style: none;
     gap: var(--espacio-xs);
+    margin: 0;
+    padding: 0;
 }
 
 .nav-link {
@@ -56,15 +70,48 @@
     align-items: center;
     gap: 8px;
     transition: var(--transicion-rapida);
+    font-weight: 500;
+    position: relative;
+    text-decoration: none;
 }
 
-.nav-link:hover,
-.nav-link.active {
+.nav-link:hover {
     background-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.nav-link.active {
+    background-color: rgba(255, 255, 255, 0.25);
+    font-weight: 600;
+}
+
+.nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 3px;
+    background-color: var(--color-blanco);
+    border-radius: 2px;
 }
 
 .nav-link i {
     font-size: 1.2rem;
+}
+
+.nav-link .badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: var(--color-peligro);
+    color: white;
+    font-size: 0.7rem;
+    padding: 2px 6px;
+    border-radius: 10px;
+    min-width: 18px;
+    text-align: center;
 }
 
 /* Encabezado de Página */
@@ -72,6 +119,7 @@
     margin-bottom: var(--espacio-lg);
     padding-bottom: var(--espacio-sm);
     border-bottom: 2px solid var(--color-lila);
+    animation: fadeIn 0.5s ease;
 }
 
 .page-header h2 {
@@ -79,4 +127,121 @@
     align-items: center;
     gap: var(--espacio-xs);
     margin-bottom: var(--espacio-xs);
+    color: var(--color-morado);
+}
+
+.page-header p {
+    color: var(--color-gris-oscuro);
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+body.modo-oscuro .page-header p {
+    color: #cccccc;
+}
+
+/* Breadcrumbs */
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: var(--espacio-xs);
+    margin-bottom: var(--espacio-md);
+    padding: var(--espacio-sm) 0;
+    list-style: none;
+    font-size: 0.9rem;
+}
+
+.breadcrumb-item {
+    display: flex;
+    align-items: center;
+    gap: var(--espacio-xs);
+}
+
+.breadcrumb-item a {
+    color: var(--color-gris-oscuro);
+    text-decoration: none;
+    transition: var(--transicion-rapida);
+}
+
+.breadcrumb-item a:hover {
+    color: var(--color-morado);
+}
+
+.breadcrumb-item.active {
+    color: var(--color-morado);
+    font-weight: 600;
+}
+
+.breadcrumb-separator {
+    color: var(--color-gris);
+}
+
+body.modo-oscuro .breadcrumb-item a {
+    color: #cccccc;
+}
+
+body.modo-oscuro .breadcrumb-item.active {
+    color: var(--color-lila);
+}
+
+/* Navegación con pestañas */
+.nav-tabs {
+    display: flex;
+    border-bottom: 2px solid var(--color-gris);
+    margin-bottom: var(--espacio-md);
+    list-style: none;
+    gap: var(--espacio-xs);
+}
+
+.nav-tab {
+    padding: var(--espacio-sm) var(--espacio-md);
+    border: none;
+    background: none;
+    color: var(--color-gris-oscuro);
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transicion-rapida);
+    position: relative;
+    border-radius: var(--radio-borde-sm) var(--radio-borde-sm) 0 0;
+}
+
+.nav-tab:hover {
+    color: var(--color-morado);
+    background-color: rgba(156, 39, 176, 0.05);
+}
+
+.nav-tab.active {
+    color: var(--color-morado);
+    font-weight: 600;
+}
+
+.nav-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: var(--color-morado);
+}
+
+body.modo-oscuro .nav-tabs {
+    border-bottom-color: #444;
+}
+
+body.modo-oscuro .nav-tab {
+    color: #cccccc;
+}
+
+body.modo-oscuro .nav-tab:hover {
+    color: var(--color-lila);
+    background-color: rgba(200, 162, 200, 0.1);
+}
+
+body.modo-oscuro .nav-tab.active {
+    color: var(--color-lila);
+}
+
+body.modo-oscuro .nav-tab.active::after {
+    background-color: var(--color-lila);
 }
