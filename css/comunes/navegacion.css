@@ -1,0 +1,82 @@
+/* Barra de Navegación */
+.navbar {
+    background: linear-gradient(135deg, var(--color-rosa), var(--color-morado));
+    color: var(--color-blanco);
+    box-shadow: var(--sombra-fuerte);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: var(--espacio-sm) var(--espacio-md);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: var(--espacio-xs);
+}
+
+.nav-brand i {
+    font-size: 1.8rem;
+}
+
+.nav-brand h1 {
+    font-size: 1.5rem;
+    color: var(--color-blanco);
+    margin: 0;
+}
+
+.nav-toggle {
+    background: none;
+    border: none;
+    color: var(--color-blanco);
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: none;
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+    gap: var(--espacio-xs);
+}
+
+.nav-link {
+    color: var(--color-blanco);
+    padding: var(--espacio-xs) var(--espacio-sm);
+    border-radius: var(--radio-borde-sm);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: var(--transicion-rapida);
+}
+
+.nav-link:hover,
+.nav-link.active {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.nav-link i {
+    font-size: 1.2rem;
+}
+
+/* Encabezado de Página */
+.page-header {
+    margin-bottom: var(--espacio-lg);
+    padding-bottom: var(--espacio-sm);
+    border-bottom: 2px solid var(--color-lila);
+}
+
+.page-header h2 {
+    display: flex;
+    align-items: center;
+    gap: var(--espacio-xs);
+    margin-bottom: var(--espacio-xs);
+}
