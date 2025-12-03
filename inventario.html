@@ -3,192 +3,191 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jessica Boutique - Inventario</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- CSS Comunes -->
-    <link rel="stylesheet" href="css/comunes/base.css">
-    <link rel="stylesheet" href="css/comunes/navegacion.css">
-    <link rel="stylesheet" href="css/comunes/componentes.css">
-    <link rel="stylesheet" href="css/comunes/responsive.css">
-    
-    <!-- CSS Específico -->
+    <title>Inventario - Jessica Boutique</title>
+    <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/inventario.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <!-- Navegación -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-brand">
+    <header>
+        <div class="logo-container">
+            <div class="logo">
                 <i class="fas fa-store"></i>
-                <h1>Jessica Boutique</h1>
+                <span>Jessica Boutique</span>
             </div>
-            <button class="nav-toggle" id="navToggle">
-                <i class="fas fa-bars"></i>
-            </button>
-            <ul class="nav-menu" id="navMenu">
-                <li><a href="index.html" class="nav-link"><i class="fas fa-tachometer-alt"></i> Panel</a></li>
-                <li><a href="inventario.html" class="nav-link active"><i class="fas fa-boxes"></i> Inventario</a></li>
-                <li><a href="agregar-producto.html" class="nav-link"><i class="fas fa-plus-circle"></i> Agregar</a></li>
-                <li><a href="ventas.html" class="nav-link"><i class="fas fa-shopping-cart"></i> Ventas</a></li>
-                <li><a href="reportes.html" class="nav-link"><i class="fas fa-chart-bar"></i> Reportes</a></li>
-                <li><a href="gestion.html" class="nav-link"><i class="fas fa-cog"></i> Gestión</a></li>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html"><i class="fas fa-boxes"></i> INVENTARIO</a></li>
+                <li><a href="agregar-productos.html"><i class="fas fa-plus-circle"></i> AGREGAR PRODUCTO</a></li>
+                <li><a href="#"><i class="fas fa-shopping-cart"></i> VENTAS</a></li>
+                <li><a href="#"><i class="fas fa-chart-line"></i> ESTADÍSTICAS</a></li>
+                <li><a href="#"><i class="fas fa-cog"></i> CONFIGURACIÓN</a></li>
             </ul>
-        </div>
-    </nav>
+        </nav>
+    </header>
 
-    <!-- Contenido Principal -->
-    <main class="container">
-        <div class="page-header">
-            <h2><i class="fas fa-boxes"></i> Inventario de Productos</h2>
-            <p>Gestiona todos los productos de la tienda</p>
-        </div>
-
-        <!-- Filtros y Búsqueda -->
-        <div class="card card-filtros">
-            <div class="filtros-grid">
-                <div class="filtro-item">
-                    <label for="buscarProducto" class="filtro-label">
-                        <i class="fas fa-search"></i> Buscar
-                    </label>
-                    <input type="text" id="buscarProducto" class="form-control" placeholder="Nombre, código o marca...">
-                </div>
-                
-                <div class="filtro-item">
-                    <label for="filtroCategoria" class="filtro-label">Categoría</label>
-                    <select id="filtroCategoria" class="form-control">
-                        <option value="todas">Todas las categorías</option>
-                        <!-- Categorías dinámicas -->
-                    </select>
-                </div>
-                
-                <div class="filtro-item">
-                    <label for="filtroEstado" class="filtro-label">Estado</label>
-                    <select id="filtroEstado" class="form-control">
-                        <option value="todos">Todos</option>
-                        <option value="instock">En Stock</option>
-                        <option value="lowstock">Stock Bajo</option>
-                        <option value="outofstock">Agotados</option>
-                    </select>
-                </div>
-                
-                <div class="filtro-item">
-                    <label for="ordenarPor" class="filtro-label">Ordenar por</label>
-                    <select id="ordenarPor" class="form-control">
-                        <option value="nombre">Nombre A-Z</option>
-                        <option value="stock">Stock (Mayor a menor)</option>
-                        <option value="precio">Precio (Mayor a menor)</option>
-                        <option value="reciente">Más Recientes</option>
-                    </select>
-                </div>
-                
-                <div class="filtro-item">
-                    <button id="aplicarFiltros" class="btn btn-primary btn-filtro">
-                        <i class="fas fa-filter"></i> Aplicar Filtros
-                    </button>
-                    <button id="limpiarFiltros" class="btn btn-secondary btn-filtro">
-                        <i class="fas fa-redo"></i> Limpiar
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Tabla de Productos -->
-        <div class="card">
-            <div class="card-header">
-                <h3>Productos en Inventario</h3>
-                <div>
-                    <a href="agregar-producto.html" class="btn btn-primary">
+    <main>
+        <section class="inventario-container">
+            <div class="page-header">
+                <h1><i class="fas fa-boxes"></i> Inventario de Productos</h1>
+                <div class="header-actions">
+                    <a href="agregar-productos.html" class="btn-primary">
                         <i class="fas fa-plus"></i> Nuevo Producto
                     </a>
-                    <button id="exportarInventario" class="btn btn-success">
+                    <button class="btn-secondary" id="exportBtn">
                         <i class="fas fa-file-export"></i> Exportar
                     </button>
                 </div>
             </div>
             
+            <div class="filtros-busqueda">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="buscarProducto" placeholder="Buscar producto por nombre...">
+                </div>
+                
+                <div class="filters-container">
+                    <div class="filter-group">
+                        <label for="filtroCategoria"><i class="fas fa-tag"></i> Categoría</label>
+                        <select id="filtroCategoria">
+                            <option value="">Todas</option>
+                            <option value="vestidos">Vestidos</option>
+                            <option value="pantalones">Pantalones</option>
+                            <option value="blusas">Blusas</option>
+                            <option value="faldas">Faldas</option>
+                            <option value="chaquetas">Chaquetas</option>
+                            <option value="accesorios">Accesorios</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="filtroMarca"><i class="fas fa-copyright"></i> Marca</label>
+                        <select id="filtroMarca">
+                            <option value="">Todas</option>
+                            <option value="zara">Zara</option>
+                            <option value="mango">Mango</option>
+                            <option value="h&m">H&M</option>
+                            <option value="bershka">Bershka</option>
+                            <option value="stradivarius">Stradivarius</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="filtroTalla"><i class="fas fa-ruler"></i> Talla</label>
+                        <select id="filtroTalla">
+                            <option value="">Todas</option>
+                            <option value="xs">XS</option>
+                            <option value="s">S</option>
+                            <option value="m">M</option>
+                            <option value="l">L</option>
+                            <option value="xl">XL</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="filtroCantidad"><i class="fas fa-box"></i> Cantidad</label>
+                        <select id="filtroCantidad">
+                            <option value="">Sin filtro</option>
+                            <option value="bajo">Bajo stock (< 5)</option>
+                            <option value="medio">Stock medio (5-20)</option>
+                            <option value="alto">Stock alto (> 20)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="filtroStock"><i class="fas fa-check-circle"></i> Disponibilidad</label>
+                        <select id="filtroStock">
+                            <option value="">Todos</option>
+                            <option value="si">En stock</option>
+                            <option value="no">Agotados</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="ordenarPor"><i class="fas fa-sort"></i> Ordenar por</label>
+                        <select id="ordenarPor">
+                            <option value="recientes">Más recientes</option>
+                            <option value="cantidad">Cantidad</option>
+                            <option value="precio-asc">Precio (menor a mayor)</option>
+                            <option value="precio-desc">Precio (mayor a menor)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
             <div class="table-container">
-                <table class="table table-inventario">
+                <table class="inventario-table">
                     <thead>
                         <tr>
-                            <th>Código</th>
+                            <th>ID</th>
                             <th>Nombre</th>
                             <th>Categoría</th>
+                            <th>Marca</th>
                             <th>Talla</th>
                             <th>Color</th>
-                            <th>Stock</th>
+                            <th>Precio Compra</th>
                             <th>Precio Venta</th>
+                            <th>Cantidad</th>
                             <th>Estado</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody id="tablaProductos">
-                        <!-- Productos dinámicos -->
+                        <!-- Los productos se cargarán dinámicamente con JavaScript -->
                     </tbody>
                 </table>
+                
+                <div class="pagination">
+                    <button id="prevPage" class="pagination-btn"><i class="fas fa-chevron-left"></i> Anterior</button>
+                    <div class="page-numbers" id="pageNumbers">
+                        <!-- Los números de página se generarán dinámicamente -->
+                    </div>
+                    <button id="nextPage" class="pagination-btn">Siguiente <i class="fas fa-chevron-right"></i></button>
+                </div>
+                
+                <div class="table-info">
+                    <p id="productCount">Mostrando 0 productos</p>
+                </div>
             </div>
-            
-            <!-- Paginación -->
-            <div class="paginacion" id="paginacion">
-                <!-- Paginación dinámica -->
+        </section>
+        
+        <!-- Modal para editar producto -->
+        <div class="modal" id="editarModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2><i class="fas fa-edit"></i> Editar Producto</h2>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <!-- Contenido del formulario de edición -->
+                </div>
             </div>
         </div>
-
-        <!-- Resumen del Inventario -->
-        <div class="resumen-inventario">
-            <div class="card card-resumen">
-                <h3><i class="fas fa-cubes"></i> Productos Totales</h3>
-                <div class="resumen-valor" id="resumenTotal">0</div>
-                <p>en inventario</p>
-            </div>
-            
-            <div class="card card-resumen">
-                <h3><i class="fas fa-money-bill-wave"></i> Valor Total</h3>
-                <div class="resumen-valor" id="resumenValor">S/. 0.00</div>
-                <p>valor del inventario</p>
-            </div>
-            
-            <div class="card card-resumen">
-                <h3><i class="fas fa-exclamation-triangle"></i> Por Agotarse</h3>
-                <div class="resumen-valor" id="resumenBajo">0</div>
-                <p>productos con stock bajo</p>
-            </div>
-            
-            <div class="card card-resumen">
-                <h3><i class="fas fa-times-circle"></i> Agotados</h3>
-                <div class="resumen-valor" id="resumenAgotados">0</div>
-                <p>productos sin stock</p>
+        
+        <!-- Modal para eliminar producto -->
+        <div class="modal" id="eliminarModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2><i class="fas fa-trash"></i> Eliminar Producto</h2>
+                    <button class="close-modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>¿Estás seguro de que deseas eliminar este producto?</p>
+                    <p id="productoAEliminar"></p>
+                    <div class="modal-actions">
+                        <button class="btn-cancel">Cancelar</button>
+                        <button class="btn-danger" id="confirmarEliminar">Eliminar</button>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
 
-    <!-- Modal de Confirmación Eliminación -->
-    <div id="modalEliminar" class="modal">
-        <div class="modal-contenido">
-            <div class="modal-header">
-                <h3><i class="fas fa-exclamation-triangle"></i> Confirmar Eliminación</h3>
-                <button class="btn-cerrar-modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <p>¿Estás seguro de que quieres eliminar este producto? Esta acción no se puede deshacer.</p>
-                <div class="info-producto-eliminar">
-                    <p><strong>Producto:</strong> <span id="nombreProductoEliminar"></span></p>
-                    <p><strong>Código:</strong> <span id="codigoProductoEliminar"></span></p>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" id="cancelarEliminar">Cancelar</button>
-                <button class="btn btn-danger" id="confirmarEliminar">Eliminar</button>
-            </div>
-        </div>
-    </div>
+    <footer>
+        <p>Jessica Boutique &copy; 2023 - Sistema de Gestión de Inventario y Ventas</p>
+    </footer>
 
-    <!-- JavaScript Comunes -->
-    <script src="js/comunes/datos.js"></script>
-    <script src="js/comunes/sistema.js"></script>
-    <script src="js/comunes/eventos.js"></script>
-    
-    <!-- JavaScript Específico -->
     <script src="js/inventario.js"></script>
 </body>
 </html>
