@@ -1,79 +1,103 @@
 /* Estilos específicos para el Panel de Control */
 
-.dashboard-grid {
+/* Tarjetas de resumen del dashboard */
+.dashboard-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: var(--espacio-md);
-    margin-bottom: var(--espacio-lg);
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
 }
 
-.dashboard-card {
-    background: linear-gradient(135deg, var(--color-lila), var(--color-morado));
-    color: white;
-    border-radius: var(--radio-borde);
-    padding: var(--espacio-lg);
+.card-resumen {
     text-align: center;
-    transition: transform 0.3s ease;
+    padding: 2rem 1.5rem;
+    position: relative;
+    overflow: hidden;
 }
 
-.dashboard-card:hover {
-    transform: translateY(-5px);
-}
-
-.card-value {
-    font-size: 2.5rem;
-    font-weight: bold;
-    margin: var(--espacio-sm) 0;
-}
-
-.card-label {
-    font-size: 1rem;
-    opacity: 0.9;
-}
-
-/* Últimas ventas */
-.ventas-recientes {
-    margin-top: var(--espacio-lg);
-}
-
-.venta-item {
+.card-resumen .card-icon-bg {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: var(--espacio-sm);
-    border-bottom: 1px solid var(--color-gris);
+    justify-content: center;
+    margin: 0 auto 1rem;
+    font-size: 1.8rem;
 }
 
-.venta-item:last-child {
-    border-bottom: none;
+.card-resumen .card-icon-bg.stock {
+    background-color: rgba(156, 39, 176, 0.1);
+    color: var(--color-morado);
 }
 
-/* Productos con stock bajo */
-.stock-bajo-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: var(--espacio-sm);
+.card-resumen .card-icon-bg.ventas {
+    background-color: rgba(255, 102, 178, 0.1);
+    color: var(--color-rosa);
 }
 
-.producto-stock-bajo {
+.card-resumen .card-icon-bg.alerta {
     background-color: rgba(255, 152, 0, 0.1);
-    border: 1px solid var(--color-advertencia);
-    border-radius: var(--radio-borde-sm);
-    padding: var(--espacio-sm);
+    color: var(--color-advertencia);
 }
 
-.producto-stock-bajo .stock-critico {
-    color: var(--color-peligro);
-    font-weight: bold;
+.card-resumen .card-icon-bg.tendencia {
+    background-color: rgba(200, 162, 200, 0.1);
+    color: var(--color-lila);
+}
+
+.card-resumen h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: var(--color-gris-oscuro);
+}
+
+.card-resumen .card-value {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin: 0.5rem 0;
+    color: var(--color-negro);
+}
+
+.card-resumen .card-desc {
+    font-size: 0.9rem;
+    color: var(--color-gris-oscuro);
+    margin-top: 0.5rem;
+}
+
+/* Tablas en el dashboard */
+#ultimasVentas tr:hover,
+#productosStockBajo tr:hover {
+    background-color: rgba(200, 162, 200, 0.05);
+}
+
+#ultimasVentas td,
+#productosStockBajo td {
+    padding: 0.8rem;
+}
+
+#productosStockBajo .btn {
+    padding: 0.3rem 0.7rem;
+    font-size: 0.85rem;
 }
 
 /* Responsive para dashboard */
 @media (max-width: 768px) {
-    .dashboard-grid {
+    .dashboard-cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 576px) {
+    .dashboard-cards {
         grid-template-columns: 1fr;
     }
     
-    .card-value {
-        font-size: 2rem;
+    .card-resumen {
+        padding: 1.5rem 1rem;
+    }
+    
+    .card-resumen .card-value {
+        font-size: 1.8rem;
     }
 }
