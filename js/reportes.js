@@ -1,350 +1,348 @@
-let graficoVentas = null;
+// Reportes Functions
+document.addEventListener('DOMContentLoaded', () => {
+  if (document.getElementById('reports')) {
+    setupReportsSection();
+  }
+});
 
-function inicializarReportes() {
-    crearGrafico();
-    actualizarReporte();
-    
-    document.getElementById('periodo').addEventListener('change', actualizarGrafico);
+function setupReportsSection() {
+  setupTimeFilters();
+  loadReports();
 }
 
-function crearGrafico() {
-    const ctx = document.getElementById('grafico-ventas');
-    if (!ctx) return;
-    
-    graficoVentas = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: [],
-            datasets: [{
-                label: 'Ventas (S/.)',
-                data: [],
-                borderColor: '#e91e63',
-                backgroundColor: 'rgba(233, 30, 99, 0.1)',
-                borderWidth: 2,
-                tension: 0.1,
-                fill: true
-            }]
+function setupTimeFilters() {
+  const timeFilters = document.querySelectorAll('.time-filter');
+  const customDateRange = document.getElementById('customDateRange');
+  const applyDateRangeBtn = document.getElementById('applyDateRange');
+  
+  timeFilters.forEach(filter => {
+    filter.addEventListener('click', () => {
+      timeFilters.forEach(f => f.classList.remove('active'));
+      filter.classList.add('active');
+      
+      if (filter.getAttribute('data-period') === 'custom') {
+        if (customDateRange) customDateRange.style.display = 'grid';
+      } else {
+        if (customDateRange) customDateRange.style.display = 'none';
+        loadReports();
+      }
+    });
+  });
+  
+  if (applyDateRangeBtn) {
+    applyDateRangeBtn.addEventListener('click', loadReports);
+  }
+}
+
+function loadReports() {
+  const activeFilter = document.querySelector('.time-filter.active');
+  const period = activeFilter ? activeFilter.getAttribute('data-period') : 'month';
+  
+  let filteredSales = [];
+  const now = new Date();
+  
+  switch (period) {
+    case 'day':
+      const today = now.toISOString().split('T')[0];
+      filteredSales = appState.sales.filter(sale => sale.date.startsWith(today));
+      break;
+    case 'week':
+      const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+      filteredSales = appState.sales.filter(sale => new Date(sale.date) >= oneWeekAgo);
+      break;
+    case 'month':
+      const oneMonthAgo = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
+      filteredSales = appState.sales.filter(sale => new Date(sale.date) >= oneMonthAgo);
+      break;
+    case 'year':
+      const oneYearAgo = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
+      filteredSales = appState.sales.filter(sale => new Date(sale.date) >= oneYearAgo);
+      break;
+    case 'custom':
+      const startDate = document.getElementById('startDate')?.value;
+      const endDate = document.getElementById('endDate')?.value;
+      
+      if (startDate && endDate) {
+        filteredSales = appState.sales.filter(sale => {
+          const saleDate = sale.date.split('T')[0];
+          return saleDate >= startDate && saleDate <= endDate;
+        });
+      } else {
+        filteredSales = appState.sales;
+      }
+      break;
+    default:
+      filteredSales = appState.sales;
+  }
+  
+  updateReportsSummary(filteredSales);
+  loadSalesProfitChart(filteredSales);
+  loadTopProductsChart(filteredSales);
+  loadWeekdaySalesChart(filteredSales);
+  loadTopCustomers(filteredSales);
+}
+
+function updateReportsSummary(sales) {
+  const totalSales = sales.reduce((sum, sale) => sum + sale.total, 0);
+  const profit = sales.reduce((sum, sale) => {
+    const saleProfit = sale.items.reduce((itemSum, item) => {
+      const product = appState.products.find(p => p.id === item.productId);
+      const cost = product ? product.cost * item.quantity : 0;
+      return itemSum + (item.subtotal - cost);
+    }, 0);
+    return sum + saleProfit;
+  }, 0);
+  
+  const avgSale = sales.length > 0 ? totalSales / sales.length : 0;
+  const uniqueCustomers = [...new Set(sales.map(sale => sale.clientName))].length;
+  
+  if (document.getElementById('reportTotalSales')) {
+    document.getElementById('reportTotalSales').textContent = formatCurrency(totalSales);
+  }
+  
+  if (document.getElementById('reportProfit')) {
+    document.getElementById('reportProfit').textContent = formatCurrency(profit);
+  }
+  
+  if (document.getElementById('reportAvgSale')) {
+    document.getElementById('reportAvgSale').textContent = formatCurrency(avgSale);
+  }
+  
+  if (document.getElementById('reportCustomers')) {
+    document.getElementById('reportCustomers').textContent = uniqueCustomers;
+  }
+}
+
+function loadSalesProfitChart(sales) {
+  const ctx = document.getElementById('salesProfitChart');
+  if (!ctx) return;
+  
+  const last12Months = Array.from({length: 12}, (_, i) => {
+    const date = new Date();
+    date.setMonth(date.getMonth() - i);
+    return date.toISOString().substring(0, 7);
+  }).reverse();
+  
+  const salesByMonth = last12Months.map(month => {
+    const monthSales = sales
+      .filter(sale => sale.date.startsWith(month))
+      .reduce((sum, sale) => sum + sale.total, 0);
+    return monthSales;
+  });
+  
+  const profitByMonth = last12Months.map(month => {
+    const monthSales = sales.filter(sale => sale.date.startsWith(month));
+    const profit = monthSales.reduce((sum, sale) => {
+      const saleProfit = sale.items.reduce((itemSum, item) => {
+        const product = appState.products.find(p => p.id === item.productId);
+        const cost = product ? product.cost * item.quantity : 0;
+        return itemSum + (item.subtotal - cost);
+      }, 0);
+      return sum + saleProfit;
+    }, 0);
+    return profit;
+  });
+  
+  const monthLabels = last12Months.map(month => {
+    const [year, monthNum] = month.split('-');
+    return `${monthNum}/${year.slice(2)}`;
+  });
+  
+  if (window.salesProfitChart instanceof Chart) {
+    window.salesProfitChart.destroy();
+  }
+  
+  window.salesProfitChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: monthLabels,
+      datasets: [
+        {
+          label: 'Ventas',
+          data: salesByMonth,
+          backgroundColor: 'rgba(78, 115, 223, 0.7)',
+          borderColor: '#4e73df',
+          borderWidth: 1
         },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: true,
-                    position: 'top'
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        callback: function(value) {
-                            return 'S/. ' + value;
-                        }
-                    }
-                }
-            }
+        {
+          label: 'Ganancias',
+          data: profitByMonth,
+          backgroundColor: 'rgba(28, 200, 138, 0.7)',
+          borderColor: '#1cc88a',
+          borderWidth: 1
         }
-    });
-}
-
-function actualizarReporte() {
-    actualizarEstadisticas();
-    actualizarGrafico();
-    actualizarTopProductos();
-    actualizarUltimasVentas();
-}
-
-function actualizarGrafico() {
-    if (!graficoVentas) return;
-    
-    const periodo = document.getElementById('periodo').value;
-    const { labels, datos } = obtenerDatosGrafico(periodo);
-    
-    graficoVentas.data.labels = labels;
-    graficoVentas.data.datasets[0].data = datos;
-    graficoVentas.update();
-    
-    actualizarEstadisticas();
-}
-
-function obtenerDatosGrafico(periodo) {
-    const hoy = new Date();
-    let ventasFiltradas = [];
-    
-    switch(periodo) {
-        case 'hoy':
-            const inicioHoy = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate());
-            const finHoy = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate(), 23, 59, 59);
-            ventasFiltradas = datos.ventas.filter(v => {
-                const fechaVenta = new Date(v.fecha);
-                return fechaVenta >= inicioHoy && fechaVenta <= finHoy;
-            });
-            break;
-            
-        case 'semana':
-            const inicioSemana = new Date(hoy);
-            inicioSemana.setDate(hoy.getDate() - 6);
-            inicioSemana.setHours(0, 0, 0, 0);
-            ventasFiltradas = datos.ventas.filter(v => new Date(v.fecha) >= inicioSemana);
-            break;
-            
-        case 'mes':
-            const inicioMes = new Date(hoy.getFullYear(), hoy.getMonth(), 1);
-            ventasFiltradas = datos.ventas.filter(v => new Date(v.fecha) >= inicioMes);
-            break;
-            
-        case 'anio':
-            const inicioAnio = new Date(hoy.getFullYear(), 0, 1);
-            ventasFiltradas = datos.ventas.filter(v => new Date(v.fecha) >= inicioAnio);
-            break;
-    }
-    
-    return procesarDatos(ventasFiltradas, periodo);
-}
-
-function procesarDatos(ventas, periodo) {
-    const datosAgrupados = {};
-    
-    if (ventas.length === 0) {
-        return { labels: [], datos: [] };
-    }
-    
-    if (periodo === 'hoy') {
-        for (let hora = 8; hora <= 21; hora++) {
-            datosAgrupados[`${hora}:00`] = 0;
+      ]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true,
+          grid: {
+            drawBorder: false
+          },
+          ticks: {
+            callback: value => 'S/ ' + value
+          }
+        },
+        x: {
+          grid: {
+            display: false
+          }
         }
-        
-        ventas.forEach(venta => {
-            const hora = new Date(venta.fecha).getHours();
-            const horaClave = `${hora}:00`;
-            if (datosAgrupados[horaClave] !== undefined) {
-                datosAgrupados[horaClave] += venta.total;
-            }
-        });
-        
-    } else if (periodo === 'semana') {
-        const dias = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
-        const hoy = new Date();
-        
-        for (let i = 6; i >= 0; i--) {
-            const fecha = new Date(hoy);
-            fecha.setDate(hoy.getDate() - i);
-            const dia = dias[fecha.getDay()];
-            datosAgrupados[dia] = 0;
+      },
+      plugins: {
+        legend: {
+          position: 'top'
         }
-        
-        ventas.forEach(venta => {
-            const fechaVenta = new Date(venta.fecha);
-            const dia = dias[fechaVenta.getDay()];
-            if (datosAgrupados[dia] !== undefined) {
-                datosAgrupados[dia] += venta.total;
-            }
-        });
-        
-    } else if (periodo === 'mes') {
-        const hoy = new Date();
-        const diasEnMes = new Date(hoy.getFullYear(), hoy.getMonth() + 1, 0).getDate();
-        
-        for (let i = 1; i <= diasEnMes; i++) {
-            datosAgrupados[i] = 0;
+      }
+    }
+  });
+}
+
+function loadTopProductsChart(sales) {
+  const ctx = document.getElementById('topProductsChart');
+  if (!ctx) return;
+  
+  const productSales = {};
+  
+  sales.forEach(sale => {
+    sale.items.forEach(item => {
+      if (!productSales[item.name]) {
+        productSales[item.name] = 0;
+      }
+      productSales[item.name] += item.quantity;
+    });
+  });
+  
+  const sortedProducts = Object.entries(productSales)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 8);
+  
+  const productNames = sortedProducts.map(([name]) => name);
+  const productQuantities = sortedProducts.map(([, quantity]) => quantity);
+  
+  if (window.topProductsChart instanceof Chart) {
+    window.topProductsChart.destroy();
+  }
+  
+  if (sortedProducts.length === 0) {
+    ctx.canvas.parentNode.innerHTML = '<p class="empty-state">No hay datos de ventas</p>';
+    return;
+  }
+  
+  window.topProductsChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: productNames,
+      datasets: [{
+        data: productQuantities,
+        backgroundColor: [
+          '#4e73df', '#1cc88a', '#36b9cc', '#f6c23e',
+          '#e74a3b', '#6f42c1', '#fd7e14', '#20c9a6'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'right'
         }
-        
-        ventas.forEach(venta => {
-            const fechaVenta = new Date(venta.fecha);
-            const dia = fechaVenta.getDate();
-            if (datosAgrupados[dia] !== undefined) {
-                datosAgrupados[dia] += venta.total;
-            }
-        });
-        
-    } else if (periodo === 'anio') {
-        const meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
-        
-        meses.forEach(mes => {
-            datosAgrupados[mes] = 0;
-        });
-        
-        ventas.forEach(venta => {
-            const fechaVenta = new Date(venta.fecha);
-            const mes = fechaVenta.getMonth();
-            const mesNombre = meses[mes];
-            datosAgrupados[mesNombre] += venta.total;
-        });
+      }
     }
-    
-    return {
-        labels: Object.keys(datosAgrupados),
-        datos: Object.values(datosAgrupados)
-    };
+  });
 }
 
-function actualizarEstadisticas() {
-    const periodo = document.getElementById('periodo').value;
-    const hoy = new Date();
-    let ventasFiltradas = [];
-    
-    switch(periodo) {
-        case 'hoy':
-            const inicioHoy = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate());
-            const finHoy = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate(), 23, 59, 59);
-            ventasFiltradas = datos.ventas.filter(v => {
-                const fechaVenta = new Date(v.fecha);
-                return fechaVenta >= inicioHoy && fechaVenta <= finHoy;
-            });
-            break;
-        case 'semana':
-            const inicioSemana = new Date(hoy);
-            inicioSemana.setDate(hoy.getDate() - 6);
-            inicioSemana.setHours(0, 0, 0, 0);
-            ventasFiltradas = datos.ventas.filter(v => new Date(v.fecha) >= inicioSemana);
-            break;
-        case 'mes':
-            const inicioMes = new Date(hoy.getFullYear(), hoy.getMonth(), 1);
-            ventasFiltradas = datos.ventas.filter(v => new Date(v.fecha) >= inicioMes);
-            break;
-        case 'anio':
-            const inicioAnio = new Date(hoy.getFullYear(), 0, 1);
-            ventasFiltradas = datos.ventas.filter(v => new Date(v.fecha) >= inicioAnio);
-            break;
+function loadWeekdaySalesChart(sales) {
+  const ctx = document.getElementById('weekdaySalesChart');
+  if (!ctx) return;
+  
+  const weekdays = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+  const salesByWeekday = Array(7).fill(0);
+  
+  sales.forEach(sale => {
+    const saleDate = new Date(sale.date);
+    const weekday = saleDate.getDay();
+    salesByWeekday[weekday] += sale.total;
+  });
+  
+  if (window.weekdaySalesChart instanceof Chart) {
+    window.weekdaySalesChart.destroy();
+  }
+  
+  window.weekdaySalesChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: weekdays,
+      datasets: [{
+        label: 'Ventas por día',
+        data: salesByWeekday,
+        backgroundColor: 'rgba(54, 185, 204, 0.7)',
+        borderColor: '#36b9cc',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true,
+          grid: {
+            drawBorder: false
+          },
+          ticks: {
+            callback: value => 'S/ ' + value
+          }
+        },
+        x: {
+          grid: {
+            display: false
+          }
+        }
+      }
     }
-    
-    const ventasTotales = ventasFiltradas.reduce((sum, v) => sum + v.total, 0);
-    const productosVendidos = ventasFiltradas.reduce((sum, v) => 
-        sum + v.items.reduce((sumItems, item) => sumItems + item.cantidad, 0), 0);
-    const clientesUnicos = new Set(ventasFiltradas.map(v => v.cliente)).size;
-    
-    document.getElementById('ventas-totales').textContent = `S/. ${ventasTotales.toFixed(2)}`;
-    document.getElementById('cantidad-ventas').textContent = ventasFiltradas.length;
-    document.getElementById('productos-vendidos').textContent = productosVendidos;
-    document.getElementById('total-clientes').textContent = clientesUnicos;
+  });
 }
 
-function actualizarTopProductos() {
-    const container = document.getElementById('top-productos');
-    if (!container) return;
-    
-    const productosVendidos = {};
-    
-    datos.ventas.forEach(venta => {
-        venta.items.forEach(item => {
-            if (!productosVendidos[item.nombre]) {
-                productosVendidos[item.nombre] = {
-                    nombre: item.nombre,
-                    cantidad: 0,
-                    total: 0
-                };
-            }
-            productosVendidos[item.nombre].cantidad += item.cantidad;
-            productosVendidos[item.nombre].total += item.subtotal;
-        });
-    });
-    
-    const topProductos = Object.values(productosVendidos)
-        .sort((a, b) => b.cantidad - a.cantidad)
-        .slice(0, 5);
-    
-    container.innerHTML = '';
-    
-    if (topProductos.length === 0) {
-        container.innerHTML = '<p style="text-align: center; color: #999;">No hay ventas aún</p>';
-        return;
+function loadTopCustomers(sales) {
+  const container = document.getElementById('topCustomersList');
+  if (!container) return;
+  
+  const customerSales = {};
+  
+  sales.forEach(sale => {
+    const customerKey = sale.clientName;
+    if (!customerSales[customerKey]) {
+      customerSales[customerKey] = {
+        name: sale.clientName,
+        phone: sale.clientPhone,
+        total: 0,
+        count: 0
+      };
     }
-    
-    topProductos.forEach((producto, index) => {
-        const div = document.createElement('div');
-        div.style.display = 'flex';
-        div.style.justifyContent = 'space-between';
-        div.style.alignItems = 'center';
-        div.style.padding = '0.8rem';
-        div.style.background = '#fafafa';
-        div.style.borderRadius = '8px';
-        
-        div.innerHTML = `
-            <div style="display: flex; align-items: center; gap: 1rem;">
-                <div style="width: 30px; height: 30px; background: #e91e63; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">
-                    ${index + 1}
-                </div>
-                <div>
-                    <div style="font-weight: bold;">${producto.nombre}</div>
-                    <small style="color: #666;">${producto.cantidad} unidades</small>
-                </div>
-            </div>
-            <div style="font-weight: bold; color: #4caf50;">
-                S/. ${producto.total.toFixed(2)}
-            </div>
-        `;
-        
-        container.appendChild(div);
-    });
-}
-
-function actualizarUltimasVentas() {
-    const container = document.getElementById('ultimas-ventas');
-    if (!container) return;
-    
-    const ultimasVentas = [...datos.ventas]
-        .sort((a, b) => new Date(b.fecha) - new Date(a.fecha))
-        .slice(0, 10);
-    
-    container.innerHTML = '';
-    
-    if (ultimasVentas.length === 0) {
-        container.innerHTML = '<p style="text-align: center; color: #999;">No hay ventas aún</p>';
-        return;
-    }
-    
-    ultimasVentas.forEach(venta => {
-        const div = document.createElement('div');
-        div.style.padding = '1rem';
-        div.style.borderBottom = '1px solid #eee';
-        
-        const fecha = new Date(venta.fecha);
-        const fechaStr = fecha.toLocaleDateString('es-PE');
-        const horaStr = fecha.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' });
-        
-        div.innerHTML = `
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
-                <div>
-                    <strong style="display: block; margin-bottom: 0.2rem;">${venta.cliente}</strong>
-                    <small style="color: #666;">${fechaStr} ${horaStr}</small>
-                </div>
-                <span style="font-weight: bold; color: #e91e63;">S/. ${venta.total.toFixed(2)}</span>
-            </div>
-            <div style="font-size: 0.85rem; color: #666;">
-                ${venta.items.length} producto(s)
-            </div>
-        `;
-        
-        container.appendChild(div);
-    });
-}
-
-function exportarReporte() {
-    const periodo = document.getElementById('periodo').value;
-    const hoy = new Date();
-    
-    let csv = 'Fecha,Cliente,Productos,Cantidad,Total\n';
-    
-    datos.ventas.forEach(venta => {
-        const fecha = new Date(venta.fecha).toLocaleDateString('es-PE');
-        const productos = venta.items.map(item => `${item.nombre} (${item.cantidad})`).join(', ');
-        const cantidadTotal = venta.items.reduce((sum, item) => sum + item.cantidad, 0);
-        
-        csv += `"${fecha}","${venta.cliente}","${productos}",${cantidadTotal},${venta.total}\n`;
-    });
-    
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    const url = URL.createObjectURL(blob);
-    
-    link.setAttribute('href', url);
-    link.setAttribute('download', `reporte-ventas-${periodo}-${new Date().toISOString().slice(0,10)}.csv`);
-    link.style.visibility = 'hidden';
-    
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    
-    mostrarNotificacion('Reporte exportado', 'exito');
+    customerSales[customerKey].total += sale.total;
+    customerSales[customerKey].count += 1;
+  });
+  
+  const sortedCustomers = Object.values(customerSales)
+    .sort((a, b) => b.total - a.total)
+    .slice(0, 5);
+  
+  if (sortedCustomers.length === 0) {
+    container.innerHTML = '<p class="empty-state">No hay datos de clientes</p>';
+    return;
+  }
+  
+  container.innerHTML = sortedCustomers.map(customer => `
+    <div class="customer-item">
+      <div class="customer-info">
+        <h4>${customer.name}</h4>
+        ${customer.phone ? `<p>${customer.phone}</p>` : ''}
+        <p>${customer.count} compra${customer.count !== 1 ? 's' : ''}</p>
+      </div>
+      <div class="customer-sales">${formatCurrency(customer.total)}</div>
+    </div>
+  `).join('');
 }
