@@ -1,50 +1,52 @@
 /* Estilos específicos para Reportes */
 
-/* Filtros de reportes */
+/* Filtros de Reportes */
 .filtros-reportes {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
+    gap: var(--espacio-sm);
     align-items: end;
 }
 
-/* Métricas principales */
+/* Métricas Principales */
 .metricas-principales {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2rem;
+    gap: var(--espacio-md);
+    margin-bottom: var(--espacio-lg);
 }
 
 .card-metrica {
     text-align: center;
-    padding: 1.5rem;
+    padding: var(--espacio-lg);
+    position: relative;
+    overflow: hidden;
 }
 
 .metrica-icono {
-    width: 60px;
-    height: 60px;
+    width: 70px;
+    height: 70px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 1rem;
-    font-size: 1.5rem;
+    margin: 0 auto var(--espacio-sm);
+    font-size: 1.8rem;
 }
 
 .metrica-icono.ventas {
-    background-color: rgba(156, 39, 176, 0.1);
-    color: var(--color-morado);
-}
-
-.metrica-icono.ganancias {
     background-color: rgba(76, 175, 80, 0.1);
     color: var(--color-exito);
 }
 
-.metrica-icono.clientes {
+.metrica-icono.ganancias {
     background-color: rgba(33, 150, 243, 0.1);
     color: var(--color-info);
+}
+
+.metrica-icono.clientes {
+    background-color: rgba(156, 39, 176, 0.1);
+    color: var(--color-morado);
 }
 
 .metrica-icono.productos {
@@ -53,18 +55,17 @@
 }
 
 .metrica-valor {
-    font-size: 2rem;
+    font-size: 2.2rem;
     font-weight: 700;
-    margin: 0.5rem 0;
-    color: var(--color-negro);
+    margin: var(--espacio-sm) 0;
+    color: var(--color-morado);
 }
 
 .metrica-tendencia {
     font-size: 0.9rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.3rem;
+    padding: 4px 10px;
+    border-radius: 20px;
+    display: inline-block;
 }
 
 .metrica-tendencia .fa-arrow-up {
@@ -79,8 +80,14 @@
 .graficas-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2rem;
+    gap: var(--espacio-md);
+    margin-bottom: var(--espacio-lg);
+}
+
+@media (max-width: 1200px) {
+    .graficas-container {
+        grid-template-columns: 1fr;
+    }
 }
 
 .grafica-placeholder {
@@ -88,9 +95,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(0, 0, 0, 0.02);
+    background-color: var(--color-gris-claro);
     border-radius: var(--radio-borde-sm);
-    border: 1px dashed var(--color-gris);
 }
 
 .grafica-mensaje {
@@ -100,160 +106,116 @@
 
 .grafica-mensaje i {
     font-size: 3rem;
-    margin-bottom: 1rem;
     color: var(--color-lila);
+    margin-bottom: var(--espacio-sm);
+    display: block;
 }
 
-/* Tablas de reportes */
+/* Tablas de Reportes */
 .tablas-reportes {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2rem;
+    gap: var(--espacio-md);
+    margin-bottom: var(--espacio-lg);
 }
 
-.tendencia-producto {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.tendencia-producto .fa-arrow-up {
-    color: var(--color-exito);
-}
-
-.tendencia-producto .fa-arrow-down {
-    color: var(--color-peligro);
-}
-
-.tendencia-producto .fa-minus {
-    color: var(--color-gris-oscuro);
-}
-
-.clasificacion-cliente {
-    display: inline-block;
-    padding: 0.3rem 0.8rem;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 600;
-}
-
-.clasificacion-vip {
-    background-color: rgba(255, 193, 7, 0.1);
-    color: #ffc107;
-}
-
-.clasificacion-frecuente {
-    background-color: rgba(33, 150, 243, 0.1);
-    color: var(--color-info);
-}
-
-.clasificacion-nuevo {
-    background-color: rgba(40, 167, 69, 0.1);
-    color: var(--color-exito);
-}
-
-/* Reporte detallado */
-.acciones-reporte {
-    display: flex;
-    gap: 0.5rem;
-}
-
-.encabezado-reporte {
-    text-align: center;
-    margin-bottom: 2rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 2px solid var(--color-gris-claro);
-}
-
-.encabezado-reporte h2 {
-    color: var(--color-morado);
-    margin-bottom: 0.5rem;
-}
-
-.seccion-reporte {
-    margin-bottom: 2rem;
-}
-
-.seccion-reporte:last-child {
-    margin-bottom: 0;
-}
-
-.resumen-ejecutivo {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-}
-
-.resumen-item {
-    background-color: rgba(0, 0, 0, 0.02);
-    padding: 1rem;
-    border-radius: var(--radio-borde-sm);
-}
-
-.resumen-item span:first-child {
-    display: block;
-    font-size: 0.9rem;
-    color: var(--color-gris-oscuro);
-    margin-bottom: 0.3rem;
-}
-
-.resumen-item span:last-child {
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: var(--color-negro);
-}
-
-.table-reporte th {
-    background-color: var(--color-lila);
-    color: white;
-}
-
-.analisis-recomendaciones {
-    background-color: rgba(33, 150, 243, 0.05);
-    border: 1px solid rgba(33, 150, 243, 0.2);
-    border-radius: var(--radio-borde-sm);
-    padding: 1.5rem;
-}
-
-.analisis-recomendaciones h4 {
-    color: var(--color-info);
-    margin-bottom: 1rem;
-}
-
-/* Responsive para reportes */
-@media (max-width: 1024px) {
-    .graficas-container {
-        grid-template-columns: 1fr;
-    }
-    
+@media (max-width: 1200px) {
     .tablas-reportes {
         grid-template-columns: 1fr;
     }
 }
 
+/* Reporte Detallado */
+.reporte-detallado {
+    background-color: var(--color-blanco);
+    border-radius: var(--radio-borde);
+    padding: var(--espacio-lg);
+}
+
+.encabezado-reporte {
+    text-align: center;
+    margin-bottom: var(--espacio-xl);
+    padding-bottom: var(--espacio-md);
+    border-bottom: 2px solid var(--color-lila);
+}
+
+.encabezado-reporte h2 {
+    color: var(--color-morado);
+    margin-bottom: var(--espacio-xs);
+}
+
+.seccion-reporte {
+    margin-bottom: var(--espacio-xl);
+}
+
+.seccion-reporte h3 {
+    color: var(--color-morado);
+    margin-bottom: var(--espacio-md);
+    padding-bottom: var(--espacio-xs);
+    border-bottom: 1px solid var(--color-gris);
+}
+
+.resumen-ejecutivo {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--espacio-md);
+    background-color: var(--color-gris-claro);
+    padding: var(--espacio-md);
+    border-radius: var(--radio-borde-sm);
+}
+
+.resumen-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--color-gris);
+}
+
+.resumen-item:last-child {
+    border-bottom: none;
+}
+
+.resumen-item span:first-child {
+    color: var(--color-gris-oscuro);
+}
+
+.resumen-item span:last-child {
+    font-weight: 600;
+    color: var(--color-morado);
+}
+
+/* Tabla de reporte */
+.table-reporte th {
+    background-color: var(--color-lila);
+    color: var(--color-blanco);
+}
+
+/* Análisis y Recomendaciones */
+.analisis-recomendaciones {
+    background-color: rgba(200, 162, 200, 0.05);
+    border-radius: var(--radio-borde-sm);
+    padding: var(--espacio-md);
+    border-left: 4px solid var(--color-lila);
+}
+
+.acciones-reporte {
+    display: flex;
+    gap: var(--espacio-sm);
+}
+
+/* Responsive para Reportes */
 @media (max-width: 768px) {
-    .filtros-reportes {
-        grid-template-columns: 1fr;
-    }
-    
     .metricas-principales {
         grid-template-columns: repeat(2, 1fr);
     }
     
-    .graficas-container {
+    .graficas-container,
+    .tablas-reportes {
         grid-template-columns: 1fr;
     }
     
     .grafica-placeholder {
         height: 250px;
-    }
-}
-
-@media (max-width: 576px) {
-    .metricas-principales {
-        grid-template-columns: 1fr;
     }
     
     .resumen-ejecutivo {
@@ -262,10 +224,27 @@
     
     .acciones-reporte {
         flex-direction: column;
-        width: 100%;
     }
     
-    .acciones-reporte .btn {
+    .acciones-reporte button {
         width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .metricas-principales {
+        grid-template-columns: 1fr;
+    }
+    
+    .filtros-reportes {
+        grid-template-columns: 1fr;
+    }
+    
+    .card-metrica {
+        padding: var(--espacio-md);
+    }
+    
+    .metrica-valor {
+        font-size: 1.8rem;
     }
 }
