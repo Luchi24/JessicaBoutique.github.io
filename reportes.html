@@ -3,112 +3,437 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jessica Boutique | Reportes</title>
+    <title>InventarioPro | Reportes</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/reportes.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <div class="navbar">
-        <div class="logo">
-            <i class="fas fa-store"></i>
-            <h1>Jessica Boutique</h1>
-        </div>
-        <div class="nav-buttons">
-            <a href="index.html" class="nav-btn"><i class="fas fa-home"></i> Inicio</a>
-            <a href="inventario.html" class="nav-btn"><i class="fas fa-boxes"></i> Inventario</a>
-            <a href="agregar-producto.html" class="nav-btn"><i class="fas fa-plus"></i> Agregar</a>
-            <a href="ventas.html" class="nav-btn"><i class="fas fa-shopping-cart"></i> Ventas</a>
-            <a href="reportes.html" class="nav-btn active"><i class="fas fa-chart-line"></i> Reportes</a>
-            <a href="gestion.html" class="nav-btn"><i class="fas fa-cog"></i> Configuración</a>
-        </div>
-    </div>
-
     <div class="container">
-        <div class="seccion-header">
-            <h2><i class="fas fa-chart-line"></i> Reportes de Ventas</h2>
-            <div style="display: flex; gap: 1rem;">
-                <select id="periodo" onchange="actualizarGrafico()" 
-                        style="padding: 0.8rem; border: 1px solid #ddd; border-radius: 6px;">
-                    <option value="hoy">Hoy</option>
-                    <option value="semana">Esta semana</option>
-                    <option value="mes" selected>Este mes</option>
-                    <option value="anio">Este año</option>
-                </select>
-                <button onclick="exportarReporte()" class="btn-secundario">
-                    <i class="fas fa-download"></i> Exportar
+        <!-- Sidebar/Navegación -->
+        <nav class="sidebar" id="sidebar">
+            <div class="logo">
+                <h1><i class="fas fa-boxes"></i> <span>InventarioPro</span></h1>
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
                 </button>
             </div>
+            
+            <ul class="nav-menu">
+                <li>
+                    <a href="index.html" class="nav-link">
+                        <i class="fas fa-tachometer-alt"></i> <span>Panel de Control</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="inventario.html" class="nav-link">
+                        <i class="fas fa-box"></i> <span>Inventario</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="agregar-producto.html" class="nav-link">
+                        <i class="fas fa-plus-circle"></i> <span>Agregar Producto</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="ventas.html" class="nav-link">
+                        <i class="fas fa-cash-register"></i> <span>Ventas</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="reportes.html" class="nav-link active">
+                        <i class="fas fa-chart-bar"></i> <span>Reportes</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="gestion.html" class="nav-link">
+                        <i class="fas fa-cog"></i> <span>Configuración</span>
+                    </a>
+                </li>
+            </ul>
+            
+            <div class="theme-toggle">
+                <button id="themeToggle">
+                    <i class="fas fa-moon"></i> <span>Tema Oscuro</span>
+                </button>
+            </div>
+            
+            <div class="user-info">
+                <div class="avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="user-details">
+                    <span class="username">Administrador</span>
+                    <span class="user-role">Dueño</span>
+                </div>
+            </div>
+        </nav>
+        
+        <!-- Contenido Principal -->
+        <main class="main-content">
+            <div class="section-header">
+                <h2><i class="fas fa-chart-bar"></i> Reportes</h2>
+                <p>Análisis de ventas y métricas del negocio</p>
+            </div>
+            
+            <div class="reports-controls">
+                <div class="time-filters">
+                    <button class="time-filter active" data-period="today">Hoy</button>
+                    <button class="time-filter" data-period="yesterday">Ayer</button>
+                    <button class="time-filter" data-period="week">Esta Semana</button>
+                    <button class="time-filter" data-period="month">Este Mes</button>
+                    <button class="time-filter" data-period="year">Este Año</button>
+                    <button class="time-filter" data-period="custom">Personalizado</button>
+                </div>
+                
+                <div class="custom-date-range" id="customDateRange">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="startDate">Desde:</label>
+                            <input type="date" id="startDate">
+                        </div>
+                        <div class="form-group">
+                            <label for="endDate">Hasta:</label>
+                            <input type="date" id="endDate">
+                        </div>
+                        <button class="btn btn-secondary" id="applyDateRange">
+                            <i class="fas fa-filter"></i> Aplicar
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="export-options">
+                    <button class="btn btn-outline" id="exportReport">
+                        <i class="fas fa-file-export"></i> Exportar Reporte
+                    </button>
+                </div>
+            </div>
+            
+            <div class="reports-summary">
+                <div class="card stat-card">
+                    <div class="card-content">
+                        <h3>Ventas Totales</h3>
+                        <p class="stat-number" id="reportTotalSales">S/ 0.00</p>
+                        <p class="stat-change" id="salesChange">vs período anterior</p>
+                    </div>
+                </div>
+                
+                <div class="card stat-card">
+                    <div class="card-content">
+                        <h3>Ganancias</h3>
+                        <p class="stat-number" id="reportProfit">S/ 0.00</p>
+                        <p class="stat-change" id="profitChange">vs período anterior</p>
+                    </div>
+                </div>
+                
+                <div class="card stat-card">
+                    <div class="card-content">
+                        <h3>Ventas Promedio</h3>
+                        <p class="stat-number" id="reportAvgSale">S/ 0.00</p>
+                        <p class="stat-change" id="avgSaleChange">por venta</p>
+                    </div>
+                </div>
+                
+                <div class="card stat-card">
+                    <div class="card-content">
+                        <h3>Productos Vendidos</h3>
+                        <p class="stat-number" id="reportProductsSold">0</p>
+                        <p class="stat-change" id="productsChange">unidades</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="reports-tabs">
+                <div class="tab-buttons">
+                    <button class="tab-btn active" data-tab="general">General</button>
+                    <button class="tab-btn" data-tab="products">Productos</button>
+                    <button class="tab-btn" data-tab="clients">Clientes</button>
+                    <button class="tab-btn" data-tab="inventory">Inventario</button>
+                </div>
+                
+                <div class="tab-content active" id="general-tab">
+                    <div class="charts-grid">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Ventas vs Ganancias</h3>
+                                <select class="chart-period" id="salesProfitPeriod">
+                                    <option value="daily">Diario</option>
+                                    <option value="weekly">Semanal</option>
+                                    <option value="monthly">Mensual</option>
+                                </select>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="salesProfitChart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Ventas por Día de la Semana</h3>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="weekdaySalesChart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Métodos de Pago</h3>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="paymentMethodsChart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Tendencia de Ventas</h3>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="salesTrendChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Ventas por Hora del Día</h3>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="hourlySalesChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="products-tab">
+                    <div class="charts-grid">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Productos Más Vendidos</h3>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="topProductsChart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Productos Más Rentables</h3>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="topProfitableChart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Productos por Categoría</h3>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="categorySalesChart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Productos con Stock Bajo</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="low-stock-list" id="lowStockList">
+                                    <p class="empty-state">No hay productos con stock bajo</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Tabla de Productos</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-container">
+                                <table class="data-table" id="productsReportTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Producto</th>
+                                            <th>Categoría</th>
+                                            <th>Vendidos</th>
+                                            <th>Ingresos</th>
+                                            <th>Ganancias</th>
+                                            <th>Margen</th>
+                                            <th>Stock Actual</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="productsReportBody">
+                                        <!-- Datos de productos se cargarán aquí -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="clients-tab">
+                    <div class="charts-grid">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Clientes Más Frecuentes</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="top-customers" id="topCustomersList">
+                                    <p class="empty-state">No hay datos de clientes</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Clientes con Mayor Gasto</h3>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="topSpendingChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Historial de Compras por Cliente</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <select id="selectClient" class="client-selector">
+                                    <option value="">Seleccionar cliente...</option>
+                                </select>
+                            </div>
+                            <div class="client-details" id="clientDetails">
+                                <p class="empty-state">Seleccione un cliente para ver su historial</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="inventory-tab">
+                    <div class="charts-grid">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Valor del Inventario</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="inventory-value">
+                                    <p class="value-number" id="inventoryValue">S/ 0.00</p>
+                                    <p class="value-label">Valor total del inventario</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Productos por Agotarse</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="depleting-list" id="depletingList">
+                                    <p class="empty-state">No hay productos por agotarse</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Rotación de Inventario</h3>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="inventoryTurnoverChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Análisis ABC de Inventario</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="abc-analysis">
+                                <div class="abc-category">
+                                    <h4><span class="abc-a">A</span> Productos Clave (80% del valor)</h4>
+                                    <div class="abc-list" id="abcCategoryA">
+                                        <!-- Productos categoría A -->
+                                    </div>
+                                </div>
+                                <div class="abc-category">
+                                    <h4><span class="abc-b">B</span> Productos Intermedios (15% del valor)</h4>
+                                    <div class="abc-list" id="abcCategoryB">
+                                        <!-- Productos categoría B -->
+                                    </div>
+                                </div>
+                                <div class="abc-category">
+                                    <h4><span class="abc-c">C</span> Productos Menores (5% del valor)</h4>
+                                    <div class="abc-list" id="abcCategoryC">
+                                        <!-- Productos categoría C -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>Recomendaciones</h3>
+                </div>
+                <div class="card-body">
+                    <div class="recommendations" id="recommendations">
+                        <div class="recommendation-item">
+                            <i class="fas fa-lightbulb recommendation-icon"></i>
+                            <div class="recommendation-content">
+                                <h4>Optimiza tu inventario</h4>
+                                <p>Basado en el análisis ABC, enfócate en los productos categoría A para maximizar tus ganancias.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Modal para confirmaciones -->
+    <div class="modal" id="confirmationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Confirmar Acción</h3>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="modalMessage">¿Está seguro de realizar esta acción?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="modalCancel">Cancelar</button>
+                <button class="btn btn-primary" id="modalConfirm">Confirmar</button>
+            </div>
         </div>
-
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
-            <div style="background: white; padding: 1.5rem; border-radius: 10px; text-align: center;">
-                <div style="width: 50px; height: 50px; background: #e8f5e9; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
-                    <i class="fas fa-money-bill-wave" style="color: #4caf50; font-size: 1.5rem;"></i>
-                </div>
-                <p style="color: #666; margin-bottom: 0.5rem;">Ventas Totales</p>
-                <p id="ventas-totales" style="font-size: 1.8rem; font-weight: bold; color: #4caf50;">S/. 0</p>
+    </div>
+    
+    <!-- Modal Detalles Venta -->
+    <div class="modal" id="saleDetailsModal">
+        <div class="modal-content wide">
+            <div class="modal-header">
+                <h3>Detalles de Venta</h3>
+                <button class="modal-close" id="closeSaleDetails">&times;</button>
             </div>
-            
-            <div style="background: white; padding: 1.5rem; border-radius: 10px; text-align: center;">
-                <div style="width: 50px; height: 50px; background: #fce4ec; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
-                    <i class="fas fa-shopping-cart" style="color: #e91e63; font-size: 1.5rem;"></i>
-                </div>
-                <p style="color: #666; margin-bottom: 0.5rem;">Cantidad de Ventas</p>
-                <p id="cantidad-ventas" style="font-size: 1.8rem; font-weight: bold; color: #e91e63;">0</p>
-            </div>
-            
-            <div style="background: white; padding: 1.5rem; border-radius: 10px; text-align: center;">
-                <div style="width: 50px; height: 50px; background: #fff3e0; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
-                    <i class="fas fa-box" style="color: #ff9800; font-size: 1.5rem;"></i>
-                </div>
-                <p style="color: #666; margin-bottom: 0.5rem;">Productos Vendidos</p>
-                <p id="productos-vendidos" style="font-size: 1.8rem; font-weight: bold; color: #ff9800;">0</p>
-            </div>
-            
-            <div style="background: white; padding: 1.5rem; border-radius: 10px; text-align: center;">
-                <div style="width: 50px; height: 50px; background: #e3f2fd; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
-                    <i class="fas fa-user" style="color: #2196f3; font-size: 1.5rem;"></i>
-                </div>
-                <p style="color: #666; margin-bottom: 0.5rem;">Clientes</p>
-                <p id="total-clientes" style="font-size: 1.8rem; font-weight: bold; color: #2196f3;">0</p>
-            </div>
-        </div>
-
-        <div style="background: white; padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem;">
-            <h3 style="color: #e91e63; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
-                <i class="fas fa-chart-bar"></i> Gráfico de Ventas
-            </h3>
-            <div style="position: relative; height: 300px;">
-                <canvas id="grafico-ventas"></canvas>
-            </div>
-        </div>
-
-        <div style="display: grid; grid-template-columns: 1fr; gap: 1.5rem;">
-            <div style="background: white; padding: 1.5rem; border-radius: 10px;">
-                <h3 style="color: #e91e63; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
-                    <i class="fas fa-star"></i> Productos Más Vendidos
-                </h3>
-                <div id="top-productos" style="display: grid; gap: 0.8rem;">
-                    <!-- Productos más vendidos se cargarán aquí -->
-                </div>
-            </div>
-            
-            <div style="background: white; padding: 1.5rem; border-radius: 10px;">
-                <h3 style="color: #e91e63; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
-                    <i class="fas fa-history"></i> Últimas Ventas
-                </h3>
-                <div id="ultimas-ventas" style="max-height: 300px; overflow-y: auto;">
-                    <!-- Últimas ventas se cargarán aquí -->
+            <div class="modal-body">
+                <div class="sale-details" id="saleDetailsContent">
+                    <!-- Detalles de la venta se cargarán aquí -->
                 </div>
             </div>
         </div>
     </div>
-
-    <div id="notificaciones"></div>
-
+    
+    <!-- Notificaciones -->
+    <div class="notification-container" id="notificationContainer"></div>
+    
     <script src="js/main.js"></script>
-    <script src="js/header.js"></script>
-    <script src="js/agregar.js"></script>
+    <script src="js/reportes.js"></script>
 </body>
 </html>
