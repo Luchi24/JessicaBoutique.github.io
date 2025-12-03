@@ -1,72 +1,75 @@
-/* Estilos específicos para la página de Ventas */
+/* Estilos específicos para Ventas */
 
-/* Proceso de venta */
+/* Proceso de Venta */
 .proceso-venta {
-    margin-bottom: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .card-paso {
-    margin-bottom: 1.5rem;
+    margin-bottom: var(--espacio-lg);
     transition: all 0.3s ease;
-}
-
-.card-paso .card-header {
-    background-color: rgba(200, 162, 200, 0.1);
 }
 
 .badge-paso {
     background-color: var(--color-lila);
-    color: white;
-    padding: 0.3rem 0.8rem;
+    color: var(--color-blanco);
+    padding: 4px 10px;
     border-radius: 20px;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     font-weight: 600;
 }
 
-/* Búsqueda de productos */
+/* Búsqueda de Productos */
 .buscar-producto {
-    margin-bottom: 1.5rem;
+    margin-bottom: var(--espacio-md);
 }
 
 .input-group-busqueda {
     display: flex;
-    gap: 0.5rem;
+    gap: 10px;
     align-items: center;
+    background-color: var(--color-gris-claro);
+    padding: 10px;
+    border-radius: var(--radio-borde-sm);
 }
 
-.input-group-busqueda .fa-search {
+.input-group-busqueda i {
     color: var(--color-gris-oscuro);
+    font-size: 1.2rem;
 }
 
 .input-group-busqueda .form-control {
     flex: 1;
+    border: none;
+    background: transparent;
 }
 
-/* Lista de productos */
+/* Lista de Productos */
 .lista-productos {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 1rem;
+    gap: var(--espacio-sm);
     max-height: 400px;
     overflow-y: auto;
-    padding: 1rem;
-    border: 1px solid var(--color-gris);
+    padding: 10px;
+    background-color: var(--color-gris-claro);
     border-radius: var(--radio-borde-sm);
-    margin-bottom: 1.5rem;
 }
 
 .producto-item {
-    background-color: white;
-    border: 1px solid var(--color-gris);
+    background-color: var(--color-blanco);
     border-radius: var(--radio-borde-sm);
-    padding: 1rem;
+    padding: var(--espacio-sm);
+    border: 1px solid var(--color-gris);
     cursor: pointer;
-    transition: var(--transicion-rapida);
+    transition: all 0.2s ease;
 }
 
 .producto-item:hover {
     border-color: var(--color-lila);
-    box-shadow: var(--sombra-suave);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .producto-item.seleccionado {
@@ -74,103 +77,110 @@
     background-color: rgba(156, 39, 176, 0.05);
 }
 
-.producto-info h4 {
-    margin: 0 0 0.5rem;
-    font-size: 1rem;
+.producto-info {
+    margin-bottom: var(--espacio-xs);
+}
+
+.producto-nombre {
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: var(--color-morado);
 }
 
 .producto-detalles {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: var(--color-gris-oscuro);
-    margin-bottom: 0.5rem;
+    display: flex;
+    gap: 10px;
 }
 
 .producto-precio {
     font-weight: 600;
-    color: var(--color-morado);
+    color: var(--color-exito);
 }
 
 .producto-stock {
     font-size: 0.8rem;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background-color: var(--color-gris-claro);
 }
 
-.producto-stock.bajo {
-    color: var(--color-advertencia);
+/* Carrito de Compras */
+.table-carrito th,
+.table-carrito td {
+    padding: 12px 8px;
 }
 
-.producto-stock.agotado {
-    color: var(--color-peligro);
-}
-
-/* Carrito de compras */
-.table-carrito th {
-    background-color: var(--color-lila);
-    color: white;
-}
-
-.cantidad-producto {
+.cantidad-control {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 5px;
 }
 
 .btn-cantidad {
-    width: 30px;
-    height: 30px;
-    padding: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid var(--color-gris);
+    background: var(--color-blanco);
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
+.btn-cantidad:hover {
+    background-color: var(--color-gris-claro);
+}
+
+.input-cantidad {
+    width: 50px;
+    text-align: center;
+    padding: 4px;
+    border: 1px solid var(--color-gris);
+    border-radius: 4px;
+}
+
+/* Totales */
 .totales-carrito {
-    margin-top: 1.5rem;
-    padding: 1rem;
-    background-color: rgba(0, 0, 0, 0.02);
+    background-color: var(--color-gris-claro);
     border-radius: var(--radio-borde-sm);
+    padding: var(--espacio-md);
+    margin-top: var(--espacio-md);
 }
 
 .total-item {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 0.5rem;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--color-gris);
 }
 
-.total-item.total-final {
+.total-item:last-child {
+    border-bottom: none;
+}
+
+.total-final {
     font-size: 1.2rem;
-    font-weight: 700;
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 2px solid var(--color-gris);
+    font-weight: 600;
     color: var(--color-morado);
 }
 
-/* Método de pago */
+/* Métodos de Pago */
 .opciones-pago {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: var(--espacio-sm);
+    margin-bottom: var(--espacio-md);
 }
 
 .opcion-pago {
-    flex: 1;
+    display: block;
 }
 
 .opcion-pago input {
     display: none;
-}
-
-.opcion-contenido {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 1rem;
-    border: 2px solid var(--color-gris);
-    border-radius: var(--radio-borde-sm);
-    cursor: pointer;
-    transition: var(--transicion-rapida);
 }
 
 .opcion-pago input:checked + .opcion-contenido {
@@ -178,64 +188,61 @@
     background-color: rgba(156, 39, 176, 0.05);
 }
 
+.opcion-contenido {
+    border: 2px solid var(--color-gris);
+    border-radius: var(--radio-borde-sm);
+    padding: var(--espacio-sm);
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.opcion-contenido:hover {
+    border-color: var(--color-lila);
+}
+
 .opcion-contenido i {
     font-size: 1.5rem;
-    margin-bottom: 0.5rem;
     color: var(--color-morado);
+    margin-bottom: 8px;
+    display: block;
 }
 
-.campo-tarjeta,
+.opcion-contenido span {
+    display: block;
+    font-weight: 600;
+}
+
+/* Campo tarjeta */
+.campo-tarjeta {
+    background-color: rgba(255, 152, 0, 0.05);
+    border-radius: var(--radio-borde-sm);
+    padding: var(--espacio-sm);
+    margin-top: var(--espacio-sm);
+}
+
 .campo-descuento {
-    margin-top: 1rem;
+    margin-top: var(--espacio-md);
 }
 
-/* Ventas recientes */
+/* Ventas Recientes */
+#ventasRecientes tr {
+    transition: background-color 0.2s ease;
+}
+
 #ventasRecientes tr:hover {
     background-color: rgba(200, 162, 200, 0.05);
 }
 
-.estado-venta {
-    display: inline-block;
-    padding: 0.3rem 0.8rem;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 600;
+/* Responsive para Ventas */
+@media (max-width: 1024px) {
+    .lista-productos {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
 }
 
-.estado-completada {
-    background-color: rgba(76, 175, 80, 0.1);
-    color: var(--color-exito);
-}
-
-.estado-pendiente {
-    background-color: rgba(255, 152, 0, 0.1);
-    color: var(--color-advertencia);
-}
-
-.estado-cancelada {
-    background-color: rgba(244, 67, 54, 0.1);
-    color: var(--color-peligro);
-}
-
-/* Modal de confirmación */
-.resumen-venta-modal {
-    background-color: rgba(0, 0, 0, 0.02);
-    border-radius: var(--radio-borde-sm);
-    padding: 1rem;
-    margin-bottom: 1rem;
-}
-
-.resumen-venta-modal p {
-    margin: 0.5rem 0;
-}
-
-/* Responsive para ventas */
 @media (max-width: 768px) {
     .input-group-busqueda {
-        flex-direction: column;
-    }
-    
-    .opciones-pago {
         flex-direction: column;
     }
     
@@ -243,11 +250,30 @@
         grid-template-columns: 1fr;
     }
     
+    .opciones-pago {
+        grid-template-columns: 1fr;
+    }
+    
+    .table-carrito {
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .card-paso {
+        padding: var(--espacio-sm);
+    }
+    
+    .producto-detalles {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
     .form-actions {
         flex-direction: column;
     }
     
-    .form-actions .btn {
+    .form-actions button {
         width: 100%;
     }
 }
