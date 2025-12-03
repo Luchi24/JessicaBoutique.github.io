@@ -1,22 +1,29 @@
-// Manejo de eventos globales
+// js/comunes/eventos.js - Versión actualizada
 document.addEventListener('DOMContentLoaded', function() {
-    // Navegación móvil
+    // Inicialización básica de eventos
+    inicializarEventosBasicos();
+});
+
+function inicializarEventosBasicos() {
+    // Navegación móvil (ya se hace en sistema.js, pero por si acaso)
     const navToggle = document.getElementById('navToggle');
     const navMenu = document.getElementById('navMenu');
     
-    if (navToggle && navMenu) {
+    if (navToggle && navMenu && !navToggle.hasAttribute('data-initialized')) {
+        navToggle.setAttribute('data-initialized', 'true');
         navToggle.addEventListener('click', function() {
             navMenu.classList.toggle('show');
         });
-        
-        document.addEventListener('click', function(e) {
-            if (!e.target.closest('.navbar') && navMenu.classList.contains('show')) {
-                navMenu.classList.remove('show');
-            }
-        });
     }
     
-    // Actualizar enlaces activos
+    // Cerrar menú al hacer clic fuera
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.navbar') && navMenu && navMenu.classList.contains('show')) {
+            navMenu.classList.remove('show');
+        }
+    });
+    
+    // Marcar enlace activo
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
     document.querySelectorAll('.nav-link').forEach(link => {
         if (link.getAttribute('href') === currentPage) {
@@ -25,48 +32,4 @@ document.addEventListener('DOMContentLoaded', function() {
             link.classList.remove('active');
         }
     });
-    
-    // Inicializar tooltips
-    const tooltips = document.querySelectorAll('[title]');
-    tooltips.forEach(el => {
-        el.addEventListener('mouseenter', mostrarTooltip);
-        el.addEventListener('mouseleave', ocultarTooltip);
-    });
-});
-
-function mostrarTooltip(e) {
-    const target = e.target;
-    const texto = target.getAttribute('title');
-    
-    if (!texto) return;
-    
-    const tooltip = document.createElement('div');
-    tooltip.className = 'tooltip';
-    tooltip.textContent = texto;
-    tooltip.style.cssText = `
-        position: absolute;
-        background: rgba(0,0,0,0.8);
-        color: white;
-        padding: 5px 10px;
-        border-radius: 4px;
-        font-size: 12px;
-        z-index: 1000;
-        white-space: nowrap;
-    `;
-    
-    document.body.appendChild(tooltip);
-    
-    const rect = target.getBoundingClientRect();
-    tooltip.style.top = (rect.top - tooltip.offsetHeight - 5) + 'px';
-    tooltip.style.left = (rect.left + (rect.width - tooltip.offsetWidth) / 2) + 'px';
-    
-    target._tooltip = tooltip;
-}
-
-function ocultarTooltip(e) {
-    const target = e.target;
-    if (target._tooltip) {
-        target._tooltip.remove();
-        delete target._tooltip;
-    }
 }
