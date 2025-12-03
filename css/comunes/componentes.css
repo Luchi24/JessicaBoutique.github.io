@@ -1,0 +1,120 @@
+/* Tarjetas */
+.card {
+    background-color: var(--color-blanco);
+    border-radius: var(--radio-borde);
+    padding: var(--espacio-md);
+    box-shadow: var(--sombra-suave);
+    margin-bottom: var(--espacio-md);
+    transition: var(--transicion-media);
+}
+
+.card:hover {
+    box-shadow: var(--sombra-fuerte);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--espacio-md);
+}
+
+.card-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--color-morado);
+}
+
+.card-body {
+    padding: var(--espacio-sm) 0;
+}
+
+/* Botones */
+.btn {
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: var(--radio-borde-sm);
+    cursor: pointer;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: var(--transicion-rapida);
+    font-size: 0.95rem;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+.btn-primary {
+    background-color: var(--color-morado);
+    color: var(--color-blanco);
+}
+
+.btn-secondary {
+    background-color: var(--color-lila);
+    color: var(--color-blanco);
+}
+
+.btn-success {
+    background-color: var(--color-exito);
+    color: var(--color-blanco);
+}
+
+.btn-warning {
+    background-color: var(--color-advertencia);
+    color: var(--color-blanco);
+}
+
+.btn-danger {
+    background-color: var(--color-peligro);
+    color: var(--color-blanco);
+}
+
+.btn-sm {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+}
+
+/* Formularios básicos */
+.form-group {
+    margin-bottom: var(--espacio-md);
+}
+
+.form-label {
+    display: block;
+    margin-bottom: var(--espacio-xs);
+    font-weight: 600;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid var(--color-gris);
+    border-radius: var(--radio-borde-sm);
+    font-size: 1rem;
+}
+
+/* Tablas básicas */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th,
+.table td {
+    padding: 0.8rem;
+    text-align: left;
+    border-bottom: 1px solid var(--color-gris);
+}
+
+.table th {
+    background-color: var(--color-lila);
+    color: var(--color-blanco);
+    font-weight: 600;
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
