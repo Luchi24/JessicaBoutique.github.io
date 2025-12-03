@@ -3,211 +3,222 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jessica Boutique | Reportes</title>
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/reportes.css">
-    <link rel="stylesheet" href="css/correcciones.css">
+    <title>Jessica Boutique - Reportes</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/estilos.css">
+    <link rel="stylesheet" href="css/componentes.css">
+    <link rel="stylesheet" href="css/tablas-formularios.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <!-- Chart.js para gráficos -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <!-- Navbar -->
-    <div class="navbar">
-        <div class="logo">
-            <i class="fas fa-store"></i>
-            <h1>Jessica Boutique</h1>
-            <span class="subtitle">Sistema de Gestión</span>
+    <!-- Barra de Navegación -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-store"></i>
+                <h1>Jessica Boutique</h1>
+            </div>
+            <button class="nav-toggle" id="navToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="nav-link"><i class="fas fa-tachometer-alt"></i> Panel</a></li>
+                <li><a href="inventario.html" class="nav-link"><i class="fas fa-boxes"></i> Inventario</a></li>
+                <li><a href="agregar-producto.html" class="nav-link"><i class="fas fa-plus-circle"></i> Agregar</a></li>
+                <li><a href="ventas.html" class="nav-link"><i class="fas fa-shopping-cart"></i> Ventas</a></li>
+                <li><a href="reportes.html" class="nav-link active"><i class="fas fa-chart-bar"></i> Reportes</a></li>
+                <li><a href="gestion.html" class="nav-link"><i class="fas fa-cog"></i> Gestión</a></li>
+            </ul>
         </div>
-        <div class="nav-buttons">
-            <a href="index.html" class="nav-btn">
-                <i class="fas fa-home"></i> Inicio
-            </a>
-            <a href="inventario.html" class="nav-btn">
-                <i class="fas fa-boxes"></i> Inventario
-            </a>
-            <a href="agregar-producto.html" class="nav-btn">
-                <i class="fas fa-plus-circle"></i> Agregar
-            </a>
-            <a href="ventas.html" class="nav-btn">
-                <i class="fas fa-cash-register"></i> Ventas
-            </a>
-            <a href="reportes.html" class="nav-btn active">
-                <i class="fas fa-chart-bar"></i> Reportes
-            </a>
-            <a href="gestion.html" class="nav-btn">
-                <i class="fas fa-cog"></i> Gestión
-            </a>
-        </div>
-    </div>
+    </nav>
 
-    <div class="container">
-        <div class="seccion-header">
+    <!-- Contenido Principal -->
+    <main class="container">
+        <div class="page-header">
             <h2><i class="fas fa-chart-bar"></i> Reportes y Estadísticas</h2>
-            <div class="filtros-reportes">
-                <select id="filtro-periodo" onchange="cambiarPeriodo()">
-                    <option value="hoy">Hoy</option>
-                    <option value="semana">Esta semana</option>
-                    <option value="mes" selected>Este mes</option>
-                    <option value="trimestre">Este trimestre</option>
-                    <option value="anio">Este año</option>
-                    <option value="personalizado">Personalizado</option>
-                </select>
-                <div id="fechas-personalizadas" style="display: none;">
-                    <input type="date" id="fecha-desde">
-                    <input type="date" id="fecha-hasta">
-                    <button class="btn-principal" onclick="aplicarFiltroPersonalizado()">
-                        <i class="fas fa-filter"></i>
-                    </button>
+            <p>Análisis de ventas y rendimiento de la boutique</p>
+        </div>
+
+        <!-- Filtros de Reportes -->
+        <div class="card">
+            <div class="card-header">
+                <h3>Filtros del Reporte</h3>
+            </div>
+            <div class="card-body">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="filtro-periodo">Período</label>
+                        <select id="filtro-periodo" class="form-control">
+                            <option value="hoy">Hoy</option>
+                            <option value="semana">Esta Semana</option>
+                            <option value="mes" selected>Este Mes</option>
+                            <option value="personalizado">Personalizado</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group" id="fechas-personalizadas" style="display: none;">
+                        <label for="fecha-inicio">Desde</label>
+                        <input type="date" id="fecha-inicio" class="form-control">
+                    </div>
+                    
+                    <div class="form-group" id="fecha-fin-container" style="display: none;">
+                        <label for="fecha-fin">Hasta</label>
+                        <input type="date" id="fecha-fin" class="form-control">
+                    </div>
+                    
+                    <div class="form-group">
+                        <button id="btn-aplicar-filtros" class="btn btn-primary" style="margin-top: 1.5rem;">
+                            <i class="fas fa-filter"></i> Aplicar Filtros
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Tarjetas de resumen -->
-        <div class="resumen-cards">
-            <div class="resumen-card">
-                <div class="card-icon">
-                    <i class="fas fa-money-bill-wave"></i>
+        <!-- Resumen de Ventas -->
+        <div class="dashboard-cards">
+            <div class="card summary-card">
+                <div class="card-header">
+                    <h3>Total Ventas</h3>
+                    <div class="card-icon sales">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
                 </div>
-                <h3>Ventas Totales</h3>
-                <p class="monto" id="ventas-totales">S/. 0.00</p>
-                <p class="subtitulo" id="ventas-cantidad">0 ventas</p>
+                <div class="card-value" id="total-ventas-reporte">S/. 0.00</div>
+                <div class="card-footer">período seleccionado</div>
             </div>
             
-            <div class="resumen-card">
-                <div class="card-icon">
-                    <i class="fas fa-chart-line"></i>
+            <div class="card summary-card">
+                <div class="card-header">
+                    <h3>Ganancias Netas</h3>
+                    <div class="card-icon success">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
                 </div>
-                <h3>Ganancia Total</h3>
-                <p class="monto" id="ganancia-reporte">S/. 0.00</p>
-                <p class="subtitulo" id="margen-ganancia">0% margen</p>
+                <div class="card-value" id="total-ganancias">S/. 0.00</div>
+                <div class="card-footer">después de comisiones</div>
             </div>
             
-            <div class="resumen-card">
-                <div class="card-icon">
-                    <i class="fas fa-shopping-bag"></i>
+            <div class="card summary-card">
+                <div class="card-header">
+                    <h3>Cantidad de Ventas</h3>
+                    <div class="card-icon info">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
                 </div>
-                <h3>Productos Vendidos</h3>
-                <p class="monto" id="productos-vendidos">0</p>
-                <p class="subtitulo">unidades</p>
+                <div class="card-value" id="cantidad-ventas">0</div>
+                <div class="card-footer">transacciones realizadas</div>
             </div>
             
-            <div class="resumen-card">
-                <div class="card-icon">
-                    <i class="fas fa-users"></i>
+            <div class="card summary-card">
+                <div class="card-header">
+                    <h3>Comisiones</h3>
+                    <div class="card-icon warning">
+                        <i class="fas fa-credit-card"></i>
+                    </div>
                 </div>
-                <h3>Clientes Atendidos</h3>
-                <p class="monto" id="clientes-atendidos">0</p>
-                <p class="subtitulo">clientes únicos</p>
+                <div class="card-value" id="total-comisiones">S/. 0.00</div>
+                <div class="card-footer">por pagos con tarjeta</div>
             </div>
         </div>
 
-        <!-- Gráficos principales -->
-        <div class="graficos-principales">
-            <div class="grafico-container">
-                <div class="grafico-header">
-                    <h3><i class="fas fa-chart-line"></i> Tendencia de Ventas</h3>
-                    <select id="filtro-tendencia" onchange="actualizarGraficoTendencia()">
-                        <option value="diario">Diario</option>
-                        <option value="semanal">Semanal</option>
-                        <option value="mensual">Mensual</option>
-                    </select>
-                </div>
-                <canvas id="grafico-tendencia"></canvas>
-            </div>
-            
-            <div class="grafico-container">
-                <div class="grafico-header">
-                    <h3><i class="fas fa-chart-pie"></i> Ventas por Categoría</h3>
-                </div>
-                <canvas id="grafico-categorias"></canvas>
-            </div>
-        </div>
-
-        <!-- Tabla de ventas detalladas -->
-        <div class="tabla-contenedor">
-            <div class="tabla-header">
-                <h3><i class="fas fa-history"></i> Historial de Ventas</h3>
-                <div class="acciones-tabla">
-                    <button class="btn-secundario" onclick="exportarReporteExcel()">
-                        <i class="fas fa-file-excel"></i> Exportar Excel
-                    </button>
-                    <button class="btn-secundario" onclick="imprimirReporte()">
-                        <i class="fas fa-print"></i> Imprimir
-                    </button>
-                </div>
-            </div>
-            <table id="tabla-ventas">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Fecha</th>
-                        <th>Cliente</th>
-                        <th>Productos</th>
-                        <th>Cantidad</th>
-                        <th>Total</th>
-                        <th>Ganancia</th>
-                        <th>Método</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody id="lista-ventas-reporte">
-                    <!-- Ventas se cargarán aquí -->
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Estadísticas avanzadas -->
-        <div class="estadisticas-avanzadas">
-            <div class="estadistica-avanzada">
-                <h3><i class="fas fa-star"></i> Productos Más Vendidos</h3>
-                <div id="top-productos" class="lista-top">
-                    <!-- Top productos se cargarán aquí -->
+        <!-- Gráficos -->
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Ventas por Período</h3>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="grafico-ventas" height="250"></canvas>
+                    </div>
                 </div>
             </div>
             
-            <div class="estadistica-avanzada">
-                <h3><i class="fas fa-user-friends"></i> Mejores Clientes</h3>
-                <div id="top-clientes" class="lista-top">
-                    <!-- Top clientes se cargarán aquí -->
-                </div>
-            </div>
-            
-            <div class="estadistica-avanzada">
-                <h3><i class="fas fa-clock"></i> Horarios Pico</h3>
-                <div id="horarios-pico" class="lista-top">
-                    <!-- Horarios se cargarán aquí -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Métodos de Pago</h3>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="grafico-metodos-pago" height="250"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Informe de inventario -->
-        <div class="informe-inventario">
-            <h3><i class="fas fa-boxes"></i> Estado del Inventario</h3>
-            <div class="indicadores-inventario">
-                <div class="indicador">
-                    <span class="indicador-label">Productos con stock</span>
-                    <span class="indicador-valor" id="productos-con-stock">0</span>
-                </div>
-                <div class="indicador">
-                    <span class="indicador-label">Stock bajo (< 5)</span>
-                    <span class="indicador-valor" id="stock-bajo-reporte">0</span>
-                </div>
-                <div class="indicador">
-                    <span class="indicador-label">Agotados</span>
-                    <span class="indicador-valor" id="productos-agotados">0</span>
-                </div>
-                <div class="indicador">
-                    <span class="indicador-label">Valor total inventario</span>
-                    <span class="indicador-valor" id="valor-inventario">S/. 0.00</span>
+        <!-- Productos Más Vendidos -->
+        <div class="card mt-3">
+            <div class="card-header">
+                <h3>Productos Más Vendidos</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Producto</th>
+                                        <th>Cantidad Vendida</th>
+                                        <th>Total Ventas</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="productos-vendidos-body">
+                                    <!-- Los productos más vendidos se cargarán dinámicamente -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <canvas id="grafico-productos-top" height="200"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Notificaciones -->
-    <div id="notificaciones" class="notificaciones"></div>
+        <!-- Historial de Ventas -->
+        <div class="card mt-3">
+            <div class="card-header">
+                <h3>Historial de Ventas</h3>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Fecha y Hora</th>
+                                <th>Cliente</th>
+                                <th>Productos</th>
+                                <th>Método de Pago</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ventas-reporte-body">
+                            <!-- El historial de ventas se cargará dinámicamente -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
 
-    <script src="js/main.js"></script>
+    <!-- Scripts -->
+    <script src="js/datos.js"></script>
+    <script src="js/sistema.js"></script>
     <script src="js/reportes.js"></script>
+    <script>
+        // Mostrar/ocultar fechas personalizadas
+        document.getElementById('filtro-periodo').addEventListener('change', function() {
+            const esPersonalizado = this.value === 'personalizado';
+            document.getElementById('fechas-personalizadas').style.display = 
+                esPersonalizado ? 'block' : 'none';
+            document.getElementById('fecha-fin-container').style.display = 
+                esPersonalizado ? 'block' : 'none';
+        });
+    </script>
 </body>
 </html>
