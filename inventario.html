@@ -34,23 +34,28 @@
     <main class="container">
         <div class="page-header">
             <h2><i class="fas fa-boxes"></i> Inventario de Productos</h2>
-            <p>Gestiona tu inventario de productos</p>
+            <p>Gestiona todos los productos de la tienda</p>
         </div>
 
         <!-- Filtros y Búsqueda -->
         <div class="filters-container">
-            <div class="search-box">
-                <i class="fas fa-search"></i>
-                <input type="text" id="buscarProducto" placeholder="Buscar producto..." class="form-control">
+            <div class="form-group">
+                <label>Buscar Producto</label>
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="buscarProducto" placeholder="Nombre, código o marca..." class="form-control">
+                </div>
             </div>
-            <div class="filter-group">
-                <label for="filtroCategoria" class="form-label">Categoría</label>
+            
+            <div class="form-group">
+                <label for="filtroCategoria">Categoría</label>
                 <select id="filtroCategoria" class="form-control">
                     <option value="todas">Todas las categorías</option>
                 </select>
             </div>
-            <div class="filter-group">
-                <label for="filtroEstado" class="form-label">Estado</label>
+            
+            <div class="form-group">
+                <label for="filtroEstado">Estado</label>
                 <select id="filtroEstado" class="form-control">
                     <option value="todos">Todos</option>
                     <option value="instock">En Stock</option>
@@ -58,102 +63,335 @@
                     <option value="outofstock">Agotados</option>
                 </select>
             </div>
-            <div class="filter-group">
-                <label for="ordenarPor" class="form-label">Ordenar por</label>
+            
+            <div class="form-group">
+                <label for="ordenarPor">Ordenar por</label>
                 <select id="ordenarPor" class="form-control">
                     <option value="nombre">Nombre</option>
-                    <option value="precio">Precio</option>
                     <option value="stock">Stock</option>
-                    <option value="reciente">Más recientes</option>
+                    <option value="precio">Precio</option>
+                    <option value="reciente">Más Recientes</option>
                 </select>
             </div>
-            <button id="btnAplicarFiltros" class="btn btn-primary">Aplicar Filtros</button>
+            
+            <div class="form-group">
+                <button id="aplicarFiltros" class="btn btn-primary btn-block">
+                    <i class="fas fa-filter"></i> Aplicar Filtros
+                </button>
+            </div>
         </div>
 
         <!-- Tabla de Productos -->
         <div class="card">
             <div class="card-header">
-                <h3>Lista de Productos</h3>
-                <div>
-                    <button id="btnExportarInventario" class="btn btn-secondary">
-                        <i class="fas fa-download"></i> Exportar
-                    </button>
-                    <a href="agregar-producto.html" class="btn btn-primary">
-                        <i class="fas fa-plus"></i> Nuevo Producto
-                    </a>
-                </div>
+                <h3>Productos en Inventario</h3>
+                <a href="agregar-producto.html" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Nuevo Producto
+                </a>
             </div>
+            
             <div class="table-responsive">
                 <table class="table" id="tablaInventario">
                     <thead>
                         <tr>
+                            <th>Código</th>
                             <th>Nombre</th>
                             <th>Categoría</th>
                             <th>Talla</th>
                             <th>Color</th>
                             <th>Stock</th>
+                            <th>Precio Compra</th>
                             <th>Precio Venta</th>
                             <th>Estado</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
-                    <tbody id="cuerpoTablaInventario">
-                        <!-- Los productos se cargarán aquí dinámicamente -->
+                    <tbody>
+                        <!-- Datos dinámicos -->
                     </tbody>
                 </table>
             </div>
-            <div id="paginacionInventario" class="pagination">
-                <!-- La paginación se generará aquí -->
+            
+            <!-- Paginación -->
+            <div class="pagination" id="paginacion">
+                <!-- Paginación dinámica -->
             </div>
         </div>
 
         <!-- Resumen del Inventario -->
-        <div class="dashboard-cards">
+        <div class="inventory-summary">
             <div class="card summary-card">
                 <h3>Productos Totales</h3>
-                <div class="card-value" id="resumenTotalProductos">0</div>
+                <div class="summary-value" id="resumenTotal">0</div>
                 <p>en inventario</p>
             </div>
+            
             <div class="card summary-card">
                 <h3>Valor Total</h3>
-                <div class="card-value" id="resumenValorTotal">S/. 0.00</div>
+                <div class="summary-value" id="resumenValor">S/. 0.00</div>
                 <p>valor del inventario</p>
             </div>
+            
             <div class="card summary-card">
                 <h3>Por Agotarse</h3>
-                <div class="card-value" id="resumenStockBajo">0</div>
+                <div class="summary-value" id="resumenBajo">0</div>
                 <p>productos con stock bajo</p>
             </div>
+            
             <div class="card summary-card">
                 <h3>Agotados</h3>
-                <div class="card-value" id="resumenAgotados">0</div>
+                <div class="summary-value" id="resumenAgotados">0</div>
                 <p>productos sin stock</p>
             </div>
         </div>
     </main>
 
-    <!-- Modal para Editar Producto -->
-    <div id="modalEditarProducto" class="modal">
+    <!-- Modal de Confirmación -->
+    <div id="modalEliminar" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Editar Producto</h3>
-                <button id="cerrarModalEditar" class="btn btn-secondary">&times;</button>
+                <h3>Confirmar Eliminación</h3>
+                <button class="btn btn-sm" onclick="cerrarModal('modalEliminar')">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
             <div class="modal-body">
-                <!-- El formulario de edición se cargará aquí -->
+                <p>¿Estás seguro de que quieres eliminar este producto? Esta acción no se puede deshacer.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="cerrarModal('modalEliminar')">Cancelar</button>
+                <button class="btn btn-danger" id="confirmarEliminar">Eliminar</button>
             </div>
         </div>
     </div>
 
     <script src="js/datos.js"></script>
     <script src="js/sistema.js"></script>
-    <script src="js/productos.js"></script>
     <script>
+        // Variables globales para inventario
+        let productosFiltrados = [];
+        let productoAEliminar = null;
+        const productosPorPagina = 10;
+        let paginaActual = 1;
+        
+        // Inicializar inventario
         document.addEventListener('DOMContentLoaded', function() {
-            // Inicializar la página de inventario
-            if (typeof Productos !== 'undefined') {
-                Productos.inicializarPaginaInventario();
+            cargarFiltros();
+            cargarProductos();
+            actualizarResumen();
+            configurarEventos();
+        });
+        
+        function cargarFiltros() {
+            const config = SistemaDatos.obtenerConfiguracion();
+            const selectCategoria = document.getElementById('filtroCategoria');
+            
+            // Limpiar opciones
+            selectCategoria.innerHTML = '<option value="todas">Todas las categorías</option>';
+            
+            // Agregar categorías
+            config.categorias.forEach(categoria => {
+                const option = document.createElement('option');
+                option.value = categoria;
+                option.textContent = categoria;
+                selectCategoria.appendChild(option);
+            });
+        }
+        
+        function cargarProductos(filtros = {}) {
+            productosFiltrados = SistemaDatos.filtrarProductos(filtros);
+            paginaActual = 1;
+            renderizarTabla();
+            renderizarPaginacion();
+        }
+        
+        function renderizarTabla() {
+            const tbody = document.getElementById('tablaInventario').querySelector('tbody');
+            tbody.innerHTML = '';
+            
+            // Calcular índices para paginación
+            const inicio = (paginaActual - 1) * productosPorPagina;
+            const fin = inicio + productosPorPagina;
+            const productosPagina = productosFiltrados.slice(inicio, fin);
+            
+            if (productosPagina.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="10" class="text-center">No se encontraron productos</td>
+                    </tr>
+                `;
+                return;
             }
+            
+            productosPagina.forEach(producto => {
+                let estadoClass = '';
+                let estadoText = '';
+                
+                switch(producto.estado) {
+                    case 'instock':
+                        estadoClass = 'status-instock';
+                        estadoText = 'En Stock';
+                        break;
+                    case 'lowstock':
+                        estadoClass = 'status-lowstock';
+                        estadoText = 'Stock Bajo';
+                        break;
+                    case 'outofstock':
+                        estadoClass = 'status-outofstock';
+                        estadoText = 'Agotado';
+                        break;
+                }
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${producto.codigo || 'N/A'}</td>
+                    <td>${producto.nombre}</td>
+                    <td>${producto.categoria}</td>
+                    <td>${producto.talla}</td>
+                    <td>${producto.color}</td>
+                    <td>${producto.stock}</td>
+                    <td>S/. ${producto.precioCompra.toFixed(2)}</td>
+                    <td>S/. ${producto.precioVenta.toFixed(2)}</td>
+                    <td><span class="status ${estadoClass}">${estadoText}</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <a href="agregar-producto.html?id=${producto.id}" class="btn btn-warning btn-sm">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <button class="btn btn-danger btn-sm btn-eliminar" data-id="${producto.id}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+            
+            // Agregar eventos a botones de eliminar
+            document.querySelectorAll('.btn-eliminar').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    mostrarModalEliminar(id);
+                });
+            });
+        }
+        
+        function renderizarPaginacion() {
+            const paginacion = document.getElementById('paginacion');
+            paginacion.innerHTML = '';
+            
+            const totalPaginas = Math.ceil(productosFiltrados.length / productosPorPagina);
+            
+            if (totalPaginas <= 1) return;
+            
+            // Botón anterior
+            const btnAnterior = document.createElement('button');
+            btnAnterior.className = 'page-link';
+            btnAnterior.innerHTML = '<i class="fas fa-chevron-left"></i>';
+            btnAnterior.disabled = paginaActual === 1;
+            btnAnterior.addEventListener('click', () => {
+                if (paginaActual > 1) {
+                    paginaActual--;
+                    renderizarTabla();
+                }
+            });
+            paginacion.appendChild(btnAnterior);
+            
+            // Números de página
+            for (let i = 1; i <= totalPaginas; i++) {
+                const btnPagina = document.createElement('button');
+                btnPagina.className = `page-link ${i === paginaActual ? 'active' : ''}`;
+                btnPagina.textContent = i;
+                btnPagina.addEventListener('click', () => {
+                    paginaActual = i;
+                    renderizarTabla();
+                });
+                paginacion.appendChild(btnPagina);
+            }
+            
+            // Botón siguiente
+            const btnSiguiente = document.createElement('button');
+            btnSiguiente.className = 'page-link';
+            btnSiguiente.innerHTML = '<i class="fas fa-chevron-right"></i>';
+            btnSiguiente.disabled = paginaActual === totalPaginas;
+            btnSiguiente.addEventListener('click', () => {
+                if (paginaActual < totalPaginas) {
+                    paginaActual++;
+                    renderizarTabla();
+                }
+            });
+            paginacion.appendChild(btnSiguiente);
+        }
+        
+        function actualizarResumen() {
+            const stats = SistemaDatos.obtenerEstadisticas();
+            
+            document.getElementById('resumenTotal').textContent = stats.totalProductos;
+            document.getElementById('resumenValor').textContent = `S/. ${stats.valorInventario.toFixed(2)}`;
+            document.getElementById('resumenBajo').textContent = stats.stockBajo;
+            document.getElementById('resumenAgotados').textContent = stats.agotados;
+        }
+        
+        function configurarEventos() {
+            // Aplicar filtros
+            document.getElementById('aplicarFiltros').addEventListener('click', function() {
+                const filtros = {
+                    categoria: document.getElementById('filtroCategoria').value,
+                    estado: document.getElementById('filtroEstado').value,
+                    busqueda: document.getElementById('buscarProducto').value,
+                    ordenarPor: document.getElementById('ordenarPor').value
+                };
+                cargarProductos(filtros);
+            });
+            
+            // Buscar con Enter
+            document.getElementById('buscarProducto').addEventListener('keyup', function(e) {
+                if (e.key === 'Enter') {
+                    document.getElementById('aplicarFiltros').click();
+                }
+            });
+        }
+        
+        function mostrarModalEliminar(id) {
+            productoAEliminar = id;
+            document.getElementById('modalEliminar').style.display = 'flex';
+        }
+        
+        function cerrarModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+        
+        // Configurar eliminación
+        document.getElementById('confirmarEliminar').addEventListener('click', function() {
+            if (productoAEliminar) {
+                eliminarProducto(productoAEliminar);
+            }
+        });
+        
+        function eliminarProducto(id) {
+            const productos = SistemaDatos.obtenerProductos();
+            const index = productos.findIndex(p => p.id === id);
+            
+            if (index !== -1) {
+                productos.splice(index, 1);
+                SistemaDatos.guardarProductos(productos);
+                
+                Sistema.mostrarMensaje('success', 'Producto eliminado correctamente');
+                cerrarModal('modalEliminar');
+                
+                // Recargar datos
+                cargarProductos();
+                actualizarResumen();
+            }
+        }
+        
+        // Cerrar modal al hacer clic fuera
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.style.display = 'none';
+                }
+            });
         });
     </script>
 </body>
