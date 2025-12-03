@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="css/responsive.css">
 </head>
 <body>
-    <!-- Barra de Navegación -->
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-brand">
@@ -32,11 +31,10 @@
         </div>
     </nav>
 
-    <!-- Contenido Principal -->
     <main class="container">
         <div class="page-header">
             <h2><i class="fas fa-cog"></i> Configuración del Sistema</h2>
-            <p>Personaliza y gestiona la configuración de Jessica Boutique</p>
+            <p>Personaliza y gestiona los parámetros del sistema</p>
         </div>
 
         <!-- Configuración General -->
@@ -47,41 +45,39 @@
             <div class="card-body">
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="select-tema">Tema de la Aplicación</label>
-                        <select id="select-tema" class="form-control">
-                            <option value="claro">Modo Claro</option>
-                            <option value="oscuro">Modo Oscuro</option>
+                        <label for="configTema" class="form-label">Tema del Sistema</label>
+                        <select id="configTema" class="form-control">
+                            <option value="claro">Claro</option>
+                            <option value="oscuro">Oscuro</option>
                         </select>
                     </div>
                     
                     <div class="form-group">
-                        <label for="select-moneda">Moneda</label>
-                        <select id="select-moneda" class="form-control">
-                            <option value="S/.">Soles (S/.)</option>
-                            <option value="$">Dólares ($)</option>
-                            <option value="€">Euros (€)</option>
+                        <label for="configMoneda" class="form-label">Símbolo de Moneda</label>
+                        <select id="configMoneda" class="form-control">
+                            <option value="S/.">S/. (Soles)</option>
+                            <option value="$">$ (Dólares)</option>
+                            <option value="€">€ (Euros)</option>
                         </select>
                     </div>
                 </div>
                 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="input-alerta-stock">Alerta de Stock Mínimo</label>
-                        <input type="number" id="input-alerta-stock" class="form-control" 
-                               min="1" value="5">
-                        <small class="form-text">Cantidad mínima para alertar sobre stock bajo</small>
+                        <label for="configAlertaStock" class="form-label">Alerta de Stock Bajo</label>
+                        <input type="number" id="configAlertaStock" class="form-control" min="1" value="5">
+                        <small class="form-text">Cantidad mínima para activar alerta de stock bajo</small>
                     </div>
                     
                     <div class="form-group">
-                        <label for="input-comision-tarjeta">Comisión por Tarjeta (%)</label>
-                        <input type="number" id="input-comision-tarjeta" class="form-control" 
-                               min="0" max="20" step="0.1" value="5">
-                        <small class="form-text">Porcentaje adicional por pagos con tarjeta</small>
+                        <label for="configComisionTarjeta" class="form-label">Comisión por Tarjeta (%)</label>
+                        <input type="number" id="configComisionTarjeta" class="form-control" min="0" max="50" step="0.1" value="5">
+                        <small class="form-text">Porcentaje de comisión por pagos con tarjeta</small>
                     </div>
                 </div>
                 
                 <div class="form-actions">
-                    <button id="btn-guardar-config" class="btn btn-primary">
+                    <button id="btnGuardarConfig" class="btn btn-primary">
                         <i class="fas fa-save"></i> Guardar Configuración
                     </button>
                 </div>
@@ -89,116 +85,137 @@
         </div>
 
         <!-- Gestión de Categorías -->
-        <div class="card mt-3">
+        <div class="card">
             <div class="card-header">
                 <h3>Gestión de Categorías</h3>
             </div>
             <div class="card-body">
                 <div class="form-row">
-                    <div class="form-group" style="flex: 1;">
-                        <label for="input-nueva-categoria">Nueva Categoría</label>
-                        <input type="text" id="input-nueva-categoria" class="form-control" 
-                               placeholder="Ej: Chaquetas">
-                    </div>
                     <div class="form-group">
-                        <button id="btn-agregar-categoria" class="btn btn-primary" style="margin-top: 1.5rem;">
-                            <i class="fas fa-plus"></i> Agregar
-                        </button>
+                        <label for="nuevaCategoria" class="form-label">Nueva Categoría</label>
+                        <div class="input-group">
+                            <input type="text" id="nuevaCategoria" class="form-control" placeholder="Nombre de la categoría">
+                            <button id="btnAgregarCategoria" class="btn btn-primary">
+                                <i class="fas fa-plus"></i> Agregar
+                            </button>
+                        </div>
                     </div>
                 </div>
                 
-                <div class="mt-3">
-                    <h4>Categorías Existentes</h4>
-                    <ul class="list-group" id="lista-categorias">
-                        <!-- Las categorías se cargarán dinámicamente -->
-                    </ul>
+                <div class="table-responsive mt-3">
+                    <table class="table" id="tablaCategorias">
+                        <thead>
+                            <tr>
+                                <th>Categoría</th>
+                                <th>Productos</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Las categorías se cargarán aquí -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
 
         <!-- Gestión de Colores -->
-        <div class="card mt-3">
+        <div class="card">
             <div class="card-header">
                 <h3>Gestión de Colores</h3>
             </div>
             <div class="card-body">
                 <div class="form-row">
-                    <div class="form-group" style="flex: 1;">
-                        <label for="input-nuevo-color">Nuevo Color</label>
-                        <input type="text" id="input-nuevo-color" class="form-control" 
-                               placeholder="Ej: Turquesa">
-                    </div>
                     <div class="form-group">
-                        <button id="btn-agregar-color" class="btn btn-primary" style="margin-top: 1.5rem;">
-                            <i class="fas fa-plus"></i> Agregar
-                        </button>
+                        <label for="nuevoColor" class="form-label">Nuevo Color</label>
+                        <div class="input-group">
+                            <input type="text" id="nuevoColor" class="form-control" placeholder="Nombre del color">
+                            <button id="btnAgregarColor" class="btn btn-primary">
+                                <i class="fas fa-plus"></i> Agregar
+                            </button>
+                        </div>
                     </div>
                 </div>
                 
-                <div class="mt-3">
-                    <h4>Colores Existentes</h4>
-                    <ul class="list-group" id="lista-colores">
-                        <!-- Los colores se cargarán dinámicamente -->
-                    </ul>
+                <div class="table-responsive mt-3">
+                    <table class="table" id="tablaColores">
+                        <thead>
+                            <tr>
+                                <th>Color</th>
+                                <th>Productos</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Los colores se cargarán aquí -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
 
         <!-- Gestión de Tallas -->
-        <div class="row mt-3">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h3>Tallas Generales</h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="form-row">
-                            <div class="form-group" style="flex: 1;">
-                                <label for="input-nueva-talla">Nueva Talla</label>
-                                <input type="text" id="input-nueva-talla" class="form-control" 
-                                       placeholder="Ej: XXL">
-                            </div>
-                            <div class="form-group">
-                                <button id="btn-agregar-talla" class="btn btn-primary" style="margin-top: 1.5rem;">
-                                    <i class="fas fa-plus"></i> Agregar
-                                </button>
-                            </div>
+        <div class="card">
+            <div class="card-header">
+                <h3>Gestión de Tallas</h3>
+            </div>
+            <div class="card-body">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="nuevaTalla" class="form-label">Nueva Talla General</label>
+                        <div class="input-group">
+                            <input type="text" id="nuevaTalla" class="form-control" placeholder="Ej: XL, XXL">
+                            <button id="btnAgregarTalla" class="btn btn-primary">
+                                <i class="fas fa-plus"></i> Agregar
+                            </button>
                         </div>
-                        
-                        <div class="mt-3">
-                            <h4>Tallas Existentes</h4>
-                            <ul class="list-group" id="lista-tallas">
-                                <!-- Las tallas se cargarán dinámicamente -->
-                            </ul>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="nuevaTallaPantalon" class="form-label">Nueva Talla de Pantalón</label>
+                        <div class="input-group">
+                            <input type="text" id="nuevaTallaPantalon" class="form-control" placeholder="Ej: 40, 42">
+                            <button id="btnAgregarTallaPantalon" class="btn btn-primary">
+                                <i class="fas fa-plus"></i> Agregar
+                            </button>
                         </div>
                     </div>
                 </div>
-            </div>
-            
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h3>Tallas de Pantalón</h3>
-                    </div>
-                    <div class="card-body">
-                        <div class="form-row">
-                            <div class="form-group" style="flex: 1;">
-                                <label for="input-nueva-talla-pantalon">Nueva Talla de Pantalón</label>
-                                <input type="text" id="input-nueva-talla-pantalon" class="form-control" 
-                                       placeholder="Ej: 40">
-                            </div>
-                            <div class="form-group">
-                                <button id="btn-agregar-talla-pantalon" class="btn btn-primary" style="margin-top: 1.5rem;">
-                                    <i class="fas fa-plus"></i> Agregar
-                                </button>
-                            </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4>Tallas Generales</h4>
+                        <div class="table-responsive">
+                            <table class="table" id="tablaTallas">
+                                <thead>
+                                    <tr>
+                                        <th>Talla</th>
+                                        <th>Productos</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Las tallas generales se cargarán aquí -->
+                                </tbody>
+                            </table>
                         </div>
-                        
-                        <div class="mt-3">
-                            <h4>Tallas de Pantalón Existentes</h4>
-                            <ul class="list-group" id="lista-tallas-pantalon">
-                                <!-- Las tallas de pantalón se cargarán dinámicamente -->
-                            </ul>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <h4>Tallas de Pantalón</h4>
+                        <div class="table-responsive">
+                            <table class="table" id="tablaTallasPantalon">
+                                <thead>
+                                    <tr>
+                                        <th>Talla</th>
+                                        <th>Productos</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Las tallas de pantalón se cargarán aquí -->
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -206,46 +223,474 @@
         </div>
 
         <!-- Gestión de Datos -->
-        <div class="card mt-3">
+        <div class="card">
             <div class="card-header">
                 <h3>Gestión de Datos</h3>
             </div>
             <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <h4>Exportar Datos</h4>
-                        <p>Exporta todos los datos del sistema en formato JSON para respaldo.</p>
-                        <button id="btn-exportar-datos" class="btn btn-primary">
-                            <i class="fas fa-download"></i> Exportar Datos
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <strong>Advertencia:</strong> Las siguientes operaciones afectan todos los datos del sistema.
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group text-center">
+                        <button id="btnExportarDatos" class="btn btn-primary">
+                            <i class="fas fa-download"></i> Exportar Todos los Datos
                         </button>
-                    </div>
-                    
-                    <div class="col-md-6">
-                        <h4>Importar Datos</h4>
-                        <p>Importa datos desde un archivo JSON. ¡Cuidado! Esto sobrescribirá todos los datos actuales.</p>
-                        <input type="file" id="input-importar-datos" accept=".json" style="display: none;">
-                        <button id="btn-importar-datos" class="btn btn-warning">
+                        <button id="btnImportarDatos" class="btn btn-secondary">
                             <i class="fas fa-upload"></i> Importar Datos
+                        </button>
+                        <button id="btnRestablecerDatos" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Restablecer Datos
                         </button>
                     </div>
                 </div>
                 
-                <div class="row mt-4">
-                    <div class="col-md-12">
-                        <h4>Restablecer Datos</h4>
-                        <p>Restablece todos los datos a los valores de ejemplo. ¡Esta acción no se puede deshacer!</p>
-                        <button id="btn-restablecer-datos" class="btn btn-danger">
-                            <i class="fas fa-trash"></i> Restablecer a Datos de Ejemplo
-                        </button>
+                <div class="form-row mt-3">
+                    <div class="form-group">
+                        <input type="file" id="inputImportarDatos" accept=".json" style="display: none;">
+                        <small class="form-text">Importa un archivo JSON con todos los datos del sistema. Se sobrescribirán los datos actuales.</small>
                     </div>
+                </div>
+                
+                <div class="alert alert-info mt-3">
+                    <i class="fas fa-info-circle"></i>
+                    <strong>Información:</strong> Los datos se guardan automáticamente en tu navegador. 
+                    Usa la exportación para crear copias de seguridad.
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- Scripts -->
     <script src="js/datos.js"></script>
     <script src="js/sistema.js"></script>
     <script src="js/configuracion.js"></script>
+    <script>
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            cargarConfiguracion();
+            cargarListas();
+            configurarEventos();
+        });
+        
+        function cargarConfiguracion() {
+            const config = SistemaDatos.obtenerConfiguracion();
+            
+            document.getElementById('configTema').value = config.tema;
+            document.getElementById('configMoneda').value = config.moneda;
+            document.getElementById('configAlertaStock').value = config.alertaStock;
+            document.getElementById('configComisionTarjeta').value = config.comisionTarjeta * 100;
+        }
+        
+        function cargarListas() {
+            cargarCategorias();
+            cargarColores();
+            cargarTallas();
+            cargarTallasPantalon();
+        }
+        
+        function cargarCategorias() {
+            const config = SistemaDatos.obtenerConfiguracion();
+            const productos = SistemaDatos.obtenerProductos();
+            const tbody = document.getElementById('tablaCategorias').querySelector('tbody');
+            
+            tbody.innerHTML = '';
+            
+            config.categorias.forEach(categoria => {
+                const productosEnCategoria = productos.filter(p => p.categoria === categoria).length;
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${categoria}</td>
+                    <td>${productosEnCategoria}</td>
+                    <td>
+                        <button class="btn btn-danger btn-sm eliminar-categoria" data-categoria="${categoria}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+            
+            // Agregar eventos a los botones de eliminar
+            document.querySelectorAll('.eliminar-categoria').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const categoria = this.getAttribute('data-categoria');
+                    eliminarCategoria(categoria);
+                });
+            });
+        }
+        
+        function cargarColores() {
+            const config = SistemaDatos.obtenerConfiguracion();
+            const productos = SistemaDatos.obtenerProductos();
+            const tbody = document.getElementById('tablaColores').querySelector('tbody');
+            
+            tbody.innerHTML = '';
+            
+            config.colores.forEach(color => {
+                const productosConColor = productos.filter(p => p.color === color).length;
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${color}</td>
+                    <td>${productosConColor}</td>
+                    <td>
+                        <button class="btn btn-danger btn-sm eliminar-color" data-color="${color}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+            
+            // Agregar eventos a los botones de eliminar
+            document.querySelectorAll('.eliminar-color').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const color = this.getAttribute('data-color');
+                    eliminarColor(color);
+                });
+            });
+        }
+        
+        function cargarTallas() {
+            const config = SistemaDatos.obtenerConfiguracion();
+            const productos = SistemaDatos.obtenerProductos();
+            const tbody = document.getElementById('tablaTallas').querySelector('tbody');
+            
+            tbody.innerHTML = '';
+            
+            config.tallas.forEach(talla => {
+                const productosConTalla = productos.filter(p => 
+                    p.categoria !== 'Pantalones' && p.talla === talla).length;
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${talla}</td>
+                    <td>${productosConTalla}</td>
+                    <td>
+                        <button class="btn btn-danger btn-sm eliminar-talla" data-talla="${talla}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+            
+            // Agregar eventos a los botones de eliminar
+            document.querySelectorAll('.eliminar-talla').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const talla = this.getAttribute('data-talla');
+                    eliminarTalla(talla);
+                });
+            });
+        }
+        
+        function cargarTallasPantalon() {
+            const config = SistemaDatos.obtenerConfiguracion();
+            const productos = SistemaDatos.obtenerProductos();
+            const tbody = document.getElementById('tablaTallasPantalon').querySelector('tbody');
+            
+            tbody.innerHTML = '';
+            
+            config.tallasPantalon.forEach(talla => {
+                const productosConTalla = productos.filter(p => 
+                    p.categoria === 'Pantalones' && p.talla === talla).length;
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${talla}</td>
+                    <td>${productosConTalla}</td>
+                    <td>
+                        <button class="btn btn-danger btn-sm eliminar-talla-pantalon" data-talla="${talla}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+            
+            // Agregar eventos a los botones de eliminar
+            document.querySelectorAll('.eliminar-talla-pantalon').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const talla = this.getAttribute('data-talla');
+                    eliminarTallaPantalon(talla);
+                });
+            });
+        }
+        
+        function configurarEventos() {
+            // Guardar configuración general
+            document.getElementById('btnGuardarConfig').addEventListener('click', guardarConfiguracion);
+            
+            // Agregar categoría
+            document.getElementById('btnAgregarCategoria').addEventListener('click', agregarCategoria);
+            document.getElementById('nuevaCategoria').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    agregarCategoria();
+                }
+            });
+            
+            // Agregar color
+            document.getElementById('btnAgregarColor').addEventListener('click', agregarColor);
+            document.getElementById('nuevoColor').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    agregarColor();
+                }
+            });
+            
+            // Agregar talla
+            document.getElementById('btnAgregarTalla').addEventListener('click', agregarTalla);
+            document.getElementById('nuevaTalla').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    agregarTalla();
+                }
+            });
+            
+            // Agregar talla de pantalón
+            document.getElementById('btnAgregarTallaPantalon').addEventListener('click', agregarTallaPantalon);
+            document.getElementById('nuevaTallaPantalon').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    agregarTallaPantalon();
+                }
+            });
+            
+            // Exportar datos
+            document.getElementById('btnExportarDatos').addEventListener('click', function() {
+                Sistema.exportarDatosSistema();
+            });
+            
+            // Importar datos
+            document.getElementById('btnImportarDatos').addEventListener('click', function() {
+                document.getElementById('inputImportarDatos').click();
+            });
+            
+            document.getElementById('inputImportarDatos').addEventListener('change', function(e) {
+                if (e.target.files.length > 0) {
+                    importarDatos(e.target.files[0]);
+                }
+            });
+            
+            // Restablecer datos
+            document.getElementById('btnRestablecerDatos').addEventListener('click', function() {
+                if (confirm('¿ESTÁS SEGURO? Esta acción eliminará TODOS los datos y los restablecerá a los valores de ejemplo. Esta acción no se puede deshacer.')) {
+                    SistemaDatos.restablecerDatosEjemplo();
+                    Sistema.mostrarMensaje('success', 'Datos restablecidos correctamente');
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1500);
+                }
+            });
+        }
+        
+        function guardarConfiguracion() {
+            const config = SistemaDatos.obtenerConfiguracion();
+            
+            config.tema = document.getElementById('configTema').value;
+            config.moneda = document.getElementById('configMoneda').value;
+            config.alertaStock = parseInt(document.getElementById('configAlertaStock').value);
+            config.comisionTarjeta = parseFloat(document.getElementById('configComisionTarjeta').value) / 100;
+            
+            SistemaDatos.guardarConfiguracion(config);
+            Sistema.mostrarMensaje('success', 'Configuración guardada correctamente');
+            
+            // Aplicar tema inmediatamente
+            if (config.tema === 'oscuro') {
+                document.body.classList.add('modo-oscuro');
+            } else {
+                document.body.classList.remove('modo-oscuro');
+            }
+        }
+        
+        function agregarCategoria() {
+            const input = document.getElementById('nuevaCategoria');
+            const categoria = input.value.trim();
+            
+            if (!categoria) {
+                Sistema.mostrarMensaje('error', 'Ingresa un nombre para la categoría');
+                return;
+            }
+            
+            const config = SistemaDatos.obtenerConfiguracion();
+            
+            if (config.categorias.includes(categoria)) {
+                Sistema.mostrarMensaje('error', 'Esta categoría ya existe');
+                return;
+            }
+            
+            config.categorias.push(categoria);
+            SistemaDatos.guardarConfiguracion(config);
+            
+            Sistema.mostrarMensaje('success', 'Categoría agregada correctamente');
+            input.value = '';
+            cargarCategorias();
+        }
+        
+        function eliminarCategoria(categoria) {
+            // Verificar si hay productos en esta categoría
+            const productos = SistemaDatos.obtenerProductos();
+            const productosEnCategoria = productos.filter(p => p.categoria === categoria);
+            
+            if (productosEnCategoria.length > 0) {
+                Sistema.mostrarMensaje('error', `No se puede eliminar. Hay ${productosEnCategoria.length} productos en esta categoría.`);
+                return;
+            }
+            
+            if (confirm(`¿Estás seguro de que quieres eliminar la categoría "${categoria}"?`)) {
+                const config = SistemaDatos.obtenerConfiguracion();
+                config.categorias = config.categorias.filter(c => c !== categoria);
+                SistemaDatos.guardarConfiguracion(config);
+                
+                Sistema.mostrarMensaje('success', 'Categoría eliminada correctamente');
+                cargarCategorias();
+            }
+        }
+        
+        function agregarColor() {
+            const input = document.getElementById('nuevoColor');
+            const color = input.value.trim();
+            
+            if (!color) {
+                Sistema.mostrarMensaje('error', 'Ingresa un nombre para el color');
+                return;
+            }
+            
+            const config = SistemaDatos.obtenerConfiguracion();
+            
+            if (config.colores.includes(color)) {
+                Sistema.mostrarMensaje('error', 'Este color ya existe');
+                return;
+            }
+            
+            config.colores.push(color);
+            SistemaDatos.guardarConfiguracion(config);
+            
+            Sistema.mostrarMensaje('success', 'Color agregado correctamente');
+            input.value = '';
+            cargarColores();
+        }
+        
+        function eliminarColor(color) {
+            // Verificar si hay productos con este color
+            const productos = SistemaDatos.obtenerProductos();
+            const productosConColor = productos.filter(p => p.color === color);
+            
+            if (productosConColor.length > 0) {
+                Sistema.mostrarMensaje('error', `No se puede eliminar. Hay ${productosConColor.length} productos con este color.`);
+                return;
+            }
+            
+            if (confirm(`¿Estás seguro de que quieres eliminar el color "${color}"?`)) {
+                const config = SistemaDatos.obtenerConfiguracion();
+                config.colores = config.colores.filter(c => c !== color);
+                SistemaDatos.guardarConfiguracion(config);
+                
+                Sistema.mostrarMensaje('success', 'Color eliminada correctamente');
+                cargarColores();
+            }
+        }
+        
+        function agregarTalla() {
+            const input = document.getElementById('nuevaTalla');
+            const talla = input.value.trim().toUpperCase();
+            
+            if (!talla) {
+                Sistema.mostrarMensaje('error', 'Ingresa una talla');
+                return;
+            }
+            
+            const config = SistemaDatos.obtenerConfiguracion();
+            
+            if (config.tallas.includes(talla)) {
+                Sistema.mostrarMensaje('error', 'Esta talla ya existe');
+                return;
+            }
+            
+            config.tallas.push(talla);
+            SistemaDatos.guardarConfiguracion(config);
+            
+            Sistema.mostrarMensaje('success', 'Talla agregada correctamente');
+            input.value = '';
+            cargarTallas();
+        }
+        
+        function eliminarTalla(talla) {
+            // Verificar si hay productos con esta talla (excepto pantalones)
+            const productos = SistemaDatos.obtenerProductos();
+            const productosConTalla = productos.filter(p => 
+                p.categoria !== 'Pantalones' && p.talla === talla);
+            
+            if (productosConTalla.length > 0) {
+                Sistema.mostrarMensaje('error', `No se puede eliminar. Hay ${productosConTalla.length} productos con esta talla.`);
+                return;
+            }
+            
+            if (confirm(`¿Estás seguro de que quieres eliminar la talla "${talla}"?`)) {
+                const config = SistemaDatos.obtenerConfiguracion();
+                config.tallas = config.tallas.filter(t => t !== talla);
+                SistemaDatos.guardarConfiguracion(config);
+                
+                Sistema.mostrarMensaje('success', 'Talla eliminada correctamente');
+                cargarTallas();
+            }
+        }
+        
+        function agregarTallaPantalon() {
+            const input = document.getElementById('nuevaTallaPantalon');
+            const talla = input.value.trim();
+            
+            if (!talla) {
+                Sistema.mostrarMensaje('error', 'Ingresa una talla de pantalón');
+                return;
+            }
+            
+            const config = SistemaDatos.obtenerConfiguracion();
+            
+            if (config.tallasPantalon.includes(talla)) {
+                Sistema.mostrarMensaje('error', 'Esta talla de pantalón ya existe');
+                return;
+            }
+            
+            config.tallasPantalon.push(talla);
+            SistemaDatos.guardarConfiguracion(config);
+            
+            Sistema.mostrarMensaje('success', 'Talla de pantalón agregada correctamente');
+            input.value = '';
+            cargarTallasPantalon();
+        }
+        
+        function eliminarTallaPantalon(talla) {
+            // Verificar si hay pantalones con esta talla
+            const productos = SistemaDatos.obtenerProductos();
+            const productosConTalla = productos.filter(p => 
+                p.categoria === 'Pantalones' && p.talla === talla);
+            
+            if (productosConTalla.length > 0) {
+                Sistema.mostrarMensaje('error', `No se puede eliminar. Hay ${productosConTalla.length} pantalones con esta talla.`);
+                return;
+            }
+            
+            if (confirm(`¿Estás seguro de que quieres eliminar la talla de pantalón "${talla}"?`)) {
+                const config = SistemaDatos.obtenerConfiguracion();
+                config.tallasPantalon = config.tallasPantalon.filter(t => t !== talla);
+                SistemaDatos.guardarConfiguracion(config);
+                
+                Sistema.mostrarMensaje('success', 'Talla de pantalón eliminada correctamente');
+                cargarTallasPantalon();
+            }
+        }
+        
+        async function importarDatos(archivo) {
+            try {
+                await Sistema.importarDatosSistema(archivo);
+                // Recargar listas después de importar
+                cargarListas();
+                cargarConfiguracion();
+            } catch (error) {
+                // El error ya se maneja en sistema.js
+            }
+        }
+    </script>
 </body>
 </html>
