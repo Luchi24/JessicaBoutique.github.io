@@ -1,269 +1,467 @@
-/* Agregar Producto Styles */
-.add-product-form {
-  max-width: 800px;
-  margin: 0 auto;
+/* Agregar Producto - Jessica Boutique */
+.image-upload {
+  border: 3px dashed var(--primary-light);
+  border-radius: var(--border-radius);
+  padding: 3rem 2rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  background-color: rgba(231, 84, 128, 0.05);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
 }
 
-.form-tabs {
-  display: flex;
-  border-bottom: 1px solid var(--gray-300);
-  margin-bottom: 1.5rem;
-  flex-wrap: wrap;
+.image-upload:hover {
+  border-color: var(--primary);
+  background-color: rgba(231, 84, 128, 0.1);
+  transform: translateY(-2px);
 }
 
-.tab-btn {
-  padding: 0.75rem 1.5rem;
-  background: none;
-  border: none;
-  border-bottom: 3px solid transparent;
+.image-upload.dragover {
+  border-color: var(--secondary);
+  background-color: rgba(212, 175, 55, 0.1);
+}
+
+.upload-placeholder {
   color: var(--gray-600);
-  font-weight: 500;
+  margin-bottom: 1.5rem;
+}
+
+.upload-placeholder i {
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
+  display: block;
+  color: var(--primary);
+  opacity: 0.7;
+}
+
+.upload-placeholder h4 {
+  font-size: 1.25rem;
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+  font-family: var(--font-heading);
+}
+
+.upload-placeholder p {
+  margin-bottom: 0.25rem;
+  color: var(--gray-600);
+}
+
+.upload-placeholder small {
+  color: var(--gray-500);
+  font-size: 0.875rem;
+}
+
+.upload-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.image-preview {
+  width: 100%;
+  height: 280px;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  position: relative;
+  border: 1px solid var(--gray-200);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.image-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.image-preview:hover img {
+  transform: scale(1.05);
+}
+
+.remove-image-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: linear-gradient(135deg, var(--danger) 0%, #d32f2f 100%);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 2.5rem;
+  height: 2.5rem;
   cursor: pointer;
-  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  box-shadow: 0 4px 10px rgba(244, 67, 54, 0.3);
+  transition: all 0.3s ease;
+  z-index: 10;
 }
 
-.tab-btn:hover {
+.remove-image-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 15px rgba(244, 67, 54, 0.4);
+}
+
+/* Combination styles for clothing */
+.combination-header {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--primary-light);
+}
+
+.combination-header h4 {
+  font-size: 1.3rem;
   color: var(--primary);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-heading);
 }
 
-.tab-btn.active {
+.combinations-list {
+  margin-bottom: 1.5rem;
+}
+
+.combination-row {
+  background: linear-gradient(135deg, rgba(231, 84, 128, 0.05) 0%, rgba(255, 255, 255, 0.1) 100%);
+  border: 2px solid var(--gray-200);
+  border-radius: var(--border-radius);
+  padding: 1.75rem;
+  margin-bottom: 1.25rem;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.combination-row:hover {
+  border-color: var(--primary-light);
+  box-shadow: 0 5px 15px rgba(231, 84, 128, 0.1);
+  transform: translateY(-2px);
+}
+
+.combination-row-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--gray-200);
+}
+
+.combination-number {
+  font-weight: 700;
   color: var(--primary);
-  border-bottom-color: var(--primary);
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
-.tab-content {
+.combination-number i {
+  color: var(--secondary);
+}
+
+.remove-combination {
+  background: linear-gradient(135deg, var(--danger) 0%, #d32f2f 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.remove-combination:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(244, 67, 54, 0.3);
+}
+
+/* Tips for clothing boutique */
+.tips {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.tip-item {
+  display: flex;
+  gap: 1.25rem;
+  padding: 1.75rem;
+  background: linear-gradient(135deg, rgba(231, 84, 128, 0.08) 0%, rgba(255, 255, 255, 0.1) 100%);
+  border-radius: var(--border-radius);
+  border-left: 4px solid var(--secondary);
+  transition: all 0.3s ease;
+}
+
+.tip-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(212, 175, 55, 0.15);
+}
+
+.tip-item i {
+  color: var(--secondary);
+  font-size: 1.75rem;
+  margin-top: 0.25rem;
+  flex-shrink: 0;
+}
+
+.tip-item h5 {
+  font-size: 1.1rem;
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+  font-family: var(--font-heading);
+}
+
+.tip-item p {
+  margin: 0;
+  color: var(--gray-700);
+  line-height: 1.6;
+}
+
+/* Form validation styles - boutique */
+.form-group.error input,
+.form-group.error select,
+.form-group.error textarea {
+  border-color: var(--danger);
+  background-color: rgba(244, 67, 54, 0.05);
+}
+
+.form-group .error-message {
+  color: var(--danger);
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
   display: none;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.tab-content.active {
+.form-group.error .error-message {
+  display: flex;
+}
+
+.form-group .error-message i {
+  font-size: 1rem;
+}
+
+/* Success state */
+.form-group.success input,
+.form-group.success select,
+.form-group.success textarea {
+  border-color: #4CAF50;
+  background-color: rgba(76, 175, 80, 0.05);
+}
+
+/* Loading state */
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--border-radius);
+  z-index: 100;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid var(--gray-300);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Product type selector for clothing */
+.product-type-selector {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.type-option {
+  padding: 1.5rem 1rem;
+  text-align: center;
+  border: 2px solid var(--gray-300);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: var(--white);
+}
+
+.type-option:hover {
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(231, 84, 128, 0.1);
+}
+
+.type-option.selected {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  border-color: var(--primary);
+  color: white;
+  box-shadow: 0 5px 15px rgba(231, 84, 128, 0.2);
+}
+
+.type-option i {
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
   display: block;
 }
 
-/* Variants management */
-.variants-section {
-  background-color: var(--gray-100);
-  padding: 1.5rem;
-  border-radius: var(--border-radius);
-  margin-bottom: 1.5rem;
+.type-option span {
+  font-weight: 600;
+  font-size: 0.95rem;
 }
 
-.variant-option {
+/* Size and color preview */
+.attribute-preview {
   display: flex;
-  align-items: center;
   gap: 1rem;
-  margin-bottom: 1rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
 }
 
-.variant-options-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1rem;
-  margin: 1rem 0;
-}
-
-.variant-option-tag {
-  display: inline-flex;
+.attribute-item {
+  display: flex;
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 1rem;
-  background-color: var(--white);
-  border: 1px solid var(--gray-300);
+  background-color: var(--gray-100);
   border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
 }
 
-.remove-variant-option {
+.attribute-item .color-sample {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid var(--gray-300);
+}
+
+.attribute-item .remove-attribute {
   background: none;
   border: none;
   color: var(--danger);
   cursor: pointer;
-  font-size: 0.875rem;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
 }
 
-.variants-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 1rem;
-}
-
-.variants-table th,
-.variants-table td {
-  padding: 0.75rem;
-  border: 1px solid var(--gray-300);
-  text-align: left;
-}
-
-.variants-table th {
-  background-color: var(--gray-100);
-  font-weight: 600;
-}
-
-.variant-row input {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid var(--gray-300);
-  border-radius: var(--border-radius);
-}
-
-/* Image upload */
-.image-upload-area {
-  border: 2px dashed var(--gray-400);
-  border-radius: var(--border-radius);
-  padding: 3rem 1rem;
-  text-align: center;
-  margin-bottom: 1rem;
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.image-upload-area:hover {
-  border-color: var(--primary);
-  background-color: rgba(78, 115, 223, 0.05);
-}
-
-.image-upload-area i {
-  font-size: 3rem;
-  color: var(--gray-500);
-  margin-bottom: 1rem;
-}
-
-.image-upload-area p {
-  color: var(--gray-600);
-  margin-bottom: 0.5rem;
-}
-
-.image-preview {
+/* Seasonal tags */
+.season-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 0.75rem;
   margin-top: 1rem;
 }
 
-.preview-item {
-  position: relative;
-  width: 100px;
-  height: 100px;
-  border-radius: var(--border-radius);
-  overflow: hidden;
-}
-
-.preview-item img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.remove-image {
-  position: absolute;
-  top: 0.25rem;
-  right: 0.25rem;
-  width: 1.5rem;
-  height: 1.5rem;
-  border-radius: 50%;
-  background-color: var(--danger);
-  color: white;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.75rem;
-}
-
-/* Form steps */
-.form-steps {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 2rem;
-  counter-reset: step;
-}
-
-.step {
-  flex: 1;
-  text-align: center;
-  position: relative;
-}
-
-.step:not(:last-child)::after {
-  content: '';
-  position: absolute;
-  top: 15px;
-  right: -50%;
-  width: 100%;
-  height: 2px;
-  background-color: var(--gray-300);
-  z-index: 1;
-}
-
-.step.completed:not(:last-child)::after {
-  background-color: var(--secondary);
-}
-
-.step-icon {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background-color: var(--gray-300);
-  color: var(--gray-600);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 0.5rem;
-  position: relative;
-  z-index: 2;
-}
-
-.step.active .step-icon {
-  background-color: var(--primary);
-  color: white;
-}
-
-.step.completed .step-icon {
-  background-color: var(--secondary);
-  color: white;
-}
-
-.step-label {
-  font-size: 0.875rem;
-  color: var(--gray-600);
-}
-
-.step.active .step-label {
-  color: var(--primary);
+.season-tag {
+  padding: 0.5rem 1.25rem;
+  background-color: var(--white);
+  border: 2px solid var(--gray-300);
+  border-radius: 20px;
+  font-size: 0.9rem;
   font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: var(--gray-700);
 }
 
-.step.completed .step-label {
-  color: var(--secondary);
+.season-tag:hover {
+  border-color: var(--primary);
+  color: var(--primary);
 }
 
-/* Advanced options */
-.advanced-options {
-  background-color: var(--gray-100);
-  padding: 1.5rem;
-  border-radius: var(--border-radius);
-  margin-bottom: 1.5rem;
+.season-tag.selected {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  border-color: var(--primary);
+  color: white;
 }
 
-.option-group {
-  margin-bottom: 1rem;
+/* Material selector for clothing */
+.material-selector {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.75rem;
+  margin-top: 0.5rem;
 }
 
-.option-group:last-child {
-  margin-bottom: 0;
+.material-option {
+  padding: 0.75rem;
+  text-align: center;
+  border: 2px solid var(--gray-300);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .form-steps {
-    flex-direction: column;
-    gap: 1rem;
-  }
-  
-  .step:not(:last-child)::after {
-    display: none;
-  }
-  
-  .variant-options-container {
-    grid-template-columns: 1fr;
-  }
+.material-option:hover {
+  border-color: var(--primary);
+  background-color: rgba(231, 84, 128, 0.05);
+}
+
+.material-option.selected {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  border-color: var(--primary);
+  color: white;
+}
+
+/* Care instructions */
+.care-instructions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.care-icon {
+  width: 40px;
+  height: 40px;
+  border: 2px solid var(--gray-300);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: var(--gray-600);
+  transition: all 0.3s ease;
+}
+
+.care-icon:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: scale(1.1);
+}
+
+.care-icon.selected {
+  background-color: var(--primary);
+  border-color: var(--primary);
+  color: white;
 }
