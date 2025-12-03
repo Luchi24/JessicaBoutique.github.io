@@ -3,161 +3,273 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jessica Boutique | Agregar Producto</title>
+    <title>InventarioPro | Agregar Producto</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/agregar.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <!-- El sidebar se insertará automáticamente -->
-    
-    <div class="content-header">
-        <h2><i class="fas fa-plus-circle"></i> Nuevo Producto</h2>
-        <div class="header-actions">
-            <a href="inventario.html" class="btn btn-secondary">
-                <i class="fas fa-arrow-left"></i> Volver
-            </a>
-        </div>
-    </div>
-
-    <div class="grid grid-2">
-        <div class="card">
-            <div class="card-header">
-                <h3><i class="fas fa-edit"></i> Información del Producto</h3>
+    <div class="container">
+        <!-- Sidebar/Navegación -->
+        <nav class="sidebar" id="sidebar">
+            <div class="logo">
+                <h1><i class="fas fa-boxes"></i> <span>InventarioPro</span></h1>
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
             </div>
-            <form id="form-agregar" onsubmit="agregarProducto(event)">
-                <div class="form-group">
-                    <label class="form-label">Nombre del Producto *</label>
-                    <input type="text" id="nombre" required placeholder="Ej: Vestido Floral" class="form-control" oninput="actualizarVistaPrevia()">
+            
+            <ul class="nav-menu">
+                <li>
+                    <a href="index.html" class="nav-link">
+                        <i class="fas fa-tachometer-alt"></i> <span>Panel de Control</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="inventario.html" class="nav-link">
+                        <i class="fas fa-box"></i> <span>Inventario</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="agregar-producto.html" class="nav-link active">
+                        <i class="fas fa-plus-circle"></i> <span>Agregar Producto</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="ventas.html" class="nav-link">
+                        <i class="fas fa-cash-register"></i> <span>Ventas</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="reportes.html" class="nav-link">
+                        <i class="fas fa-chart-bar"></i> <span>Reportes</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="gestion.html" class="nav-link">
+                        <i class="fas fa-cog"></i> <span>Configuración</span>
+                    </a>
+                </li>
+            </ul>
+            
+            <div class="theme-toggle">
+                <button id="themeToggle">
+                    <i class="fas fa-moon"></i> <span>Tema Oscuro</span>
+                </button>
+            </div>
+            
+            <div class="user-info">
+                <div class="avatar">
+                    <i class="fas fa-user-circle"></i>
                 </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label">Categoría *</label>
-                        <select id="categoria" required class="form-control" onchange="actualizarVistaPrevia()">
-                            <option value="">Seleccionar categoría</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Marca *</label>
-                        <input type="text" id="marca" required placeholder="Ej: Jessica Boutique" class="form-control" oninput="actualizarVistaPrevia()">
-                    </div>
+                <div class="user-details">
+                    <span class="username">Administrador</span>
+                    <span class="user-role">Dueño</span>
                 </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label">Precio de Compra *</label>
-                        <input type="number" id="precio-compra" required min="0" step="0.01" placeholder="S/. 0.00" class="form-control" oninput="actualizarVistaPrevia()">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Precio de Venta *</label>
-                        <input type="number" id="precio-venta" required min="0" step="0.01" placeholder="S/. 0.00" class="form-control" oninput="actualizarVistaPrevia()">
-                    </div>
-                </div>
-
-                <div class="card" style="margin-top: 1rem; background: #f8f9fa;">
-                    <div class="card-header">
-                        <h3><i class="fas fa-layer-group"></i> Combinaciones Talla-Color-Cantidad</h3>
-                        <button type="button" class="btn btn-sm btn-primary" onclick="agregarCombinacion()">
-                            <i class="fas fa-plus"></i> Agregar
-                        </button>
-                    </div>
-                    <div id="combinaciones-container" style="display: grid; gap: 1rem; padding: 1rem;">
-                        <!-- Las combinaciones se agregarán aquí -->
-                        <div class="combinacion-item">
+            </div>
+        </nav>
+        
+        <!-- Contenido Principal -->
+        <main class="main-content">
+            <div class="section-header">
+                <h2><i class="fas fa-plus-circle"></i> Agregar Producto</h2>
+                <p>Registra nuevos productos en el inventario</p>
+            </div>
+            
+            <div class="card">
+                <div class="card-body">
+                    <form id="addProductForm">
+                        <div class="form-section">
+                            <h3><i class="fas fa-info-circle"></i> Información Básica</h3>
+                            
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label class="form-label">Talla</label>
-                                    <select class="combinacion-talla form-control" required onchange="actualizarVistaPrevia()">
-                                        <option value="">Seleccionar talla</option>
-                                    </select>
+                                    <label for="productName">Nombre del Producto *</label>
+                                    <input type="text" id="productName" placeholder="Ej. Camiseta Básica" required>
+                                    <small class="form-help">Nombre descriptivo del producto</small>
                                 </div>
+                                
                                 <div class="form-group">
-                                    <label class="form-label">Color</label>
-                                    <select class="combinacion-color form-control" required onchange="actualizarVistaPrevia()">
-                                        <option value="">Seleccionar color</option>
+                                    <label for="productCategory">Categoría *</label>
+                                    <select id="productCategory" required>
+                                        <option value="">Seleccionar categoría</option>
                                     </select>
+                                    <small class="form-help">Categoría principal del producto</small>
                                 </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="productDescription">Descripción (Opcional)</label>
+                                <textarea id="productDescription" rows="3" placeholder="Descripción detallada del producto..."></textarea>
+                                <small class="form-help">Características, materiales, etc.</small>
+                            </div>
+                        </div>
+                        
+                        <div class="form-section">
+                            <h3><i class="fas fa-tag"></i> Precios y Costos</h3>
+                            
+                            <div class="form-row">
                                 <div class="form-group">
-                                    <label class="form-label">Cantidad</label>
-                                    <input type="number" class="combinacion-cantidad form-control" required min="0" placeholder="0" oninput="actualizarVistaPrevia()">
+                                    <label for="productPrice">Precio de Venta (S/) *</label>
+                                    <input type="number" id="productPrice" step="0.01" min="0" placeholder="0.00" required>
+                                    <small class="form-help">Precio al que se venderá al cliente</small>
                                 </div>
-                                <div class="form-group" style="display: flex; align-items: flex-end;">
-                                    <button type="button" class="btn btn-secondary btn-icon" onclick="eliminarCombinacion(this)" style="background: #dc3545; color: white;">
-                                        <i class="fas fa-times"></i>
+                                
+                                <div class="form-group">
+                                    <label for="productCost">Costo (S/) *</label>
+                                    <input type="number" id="productCost" step="0.01" min="0" placeholder="0.00" required>
+                                    <small class="form-help">Costo de adquisición del producto</small>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="productQuantity">Cantidad Inicial *</label>
+                                    <input type="number" id="productQuantity" min="0" placeholder="0" required>
+                                    <small class="form-help">Cantidad disponible en inventario</small>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="productMinStock">Stock Mínimo</label>
+                                    <input type="number" id="productMinStock" min="0" placeholder="5" value="5">
+                                    <small class="form-help">Se alertará cuando el stock esté por debajo de este número</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-section">
+                            <h3><i class="fas fa-palette"></i> Atributos Opcionales</h3>
+                            <p class="form-help">Agrega talla y color si tu producto tiene variaciones. Si no, puedes saltar esta sección.</p>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="productSize">Talla</label>
+                                    <select id="productSize">
+                                        <option value="">Sin talla específica</option>
+                                    </select>
+                                    <small class="form-help">Talla del producto (ropa, calzado, etc.)</small>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="productColor">Color</label>
+                                    <div class="color-selector">
+                                        <select id="productColor">
+                                            <option value="">Sin color específico</option>
+                                        </select>
+                                        <div class="color-preview" id="colorPreview"></div>
+                                    </div>
+                                    <small class="form-help">Color principal del producto</small>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="addCombination">
+                                    <span>Este producto tiene múltiples combinaciones (tallas/colores)</span>
+                                </label>
+                                <small class="form-help">Activar para agregar diferentes variaciones del mismo producto</small>
+                            </div>
+                            
+                            <div class="combinations-container" id="combinationsContainer">
+                                <div class="combination-header">
+                                    <h4><i class="fas fa-layer-group"></i> Combinaciones</h4>
+                                    <small class="form-help">Agrega las diferentes variaciones de talla y color para este producto</small>
+                                </div>
+                                <div class="combinations-list" id="combinationsList">
+                                    <!-- Las combinaciones se agregarán aquí dinámicamente -->
+                                </div>
+                                <button type="button" class="btn btn-secondary" id="addCombinationBtn">
+                                    <i class="fas fa-plus"></i> Agregar Combinación
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="form-section">
+                            <h3><i class="fas fa-image"></i> Imagen del Producto (Opcional)</h3>
+                            
+                            <div class="image-upload">
+                                <div class="upload-placeholder" id="imagePreview">
+                                    <i class="fas fa-image"></i>
+                                    <p>Arrastra una imagen o haz clic para seleccionar</p>
+                                    <small>Recomendado: 800x600px, máximo 2MB</small>
+                                </div>
+                                <input type="file" id="productImage" accept="image/*" style="display: none;">
+                                <div class="upload-actions">
+                                    <button type="button" class="btn btn-outline" id="selectImageBtn">
+                                        <i class="fas fa-folder-open"></i> Seleccionar Imagen
+                                    </button>
+                                    <button type="button" class="btn btn-outline" id="removeImageBtn" style="display: none;">
+                                        <i class="fas fa-trash"></i> Eliminar
                                     </button>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div style="padding: 0 1rem 1rem; text-align: center;">
-                        <small style="color: #666;">Agrega diferentes combinaciones de talla-color para el mismo producto</small>
-                    </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Guardar Producto
+                            </button>
+                            <button type="reset" class="btn btn-outline">
+                                <i class="fas fa-undo"></i> Limpiar Formulario
+                            </button>
+                            <a href="inventario.html" class="btn btn-outline">
+                                <i class="fas fa-times"></i> Cancelar
+                            </a>
+                        </div>
+                    </form>
                 </div>
-
-                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
-                    <button type="reset" class="btn btn-secondary" style="flex: 1;" onclick="limpiarFormulario()">
-                        <i class="fas fa-times"></i> Limpiar
-                    </button>
-                    <button type="submit" class="btn btn-primary" style="flex: 1;">
-                        <i class="fas fa-save"></i> Guardar Producto
-                    </button>
-                </div>
-            </form>
-        </div>
-
-        <div class="card">
-            <div class="card-header">
-                <h3><i class="fas fa-eye"></i> Vista Previa</h3>
             </div>
-            <div style="padding: 1.5rem;">
-                <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem;">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
-                        <div>
-                            <h4 id="preview-nombre" style="color: #333; margin-bottom: 0.5rem;">Nombre del Producto</h4>
-                            <span id="preview-categoria" class="badge badge-primary">Categoría</span>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3><i class="fas fa-lightbulb"></i> Sugerencias</h3>
+                </div>
+                <div class="card-body">
+                    <div class="tips">
+                        <div class="tip-item">
+                            <i class="fas fa-check-circle"></i>
+                            <p><strong>Completa todos los campos obligatorios</strong> (*) para asegurar un registro correcto.</p>
                         </div>
-                        <div style="text-align: right;">
-                            <div style="font-size: 0.9rem; color: #666;">Marca:</div>
-                            <div id="preview-marca" style="font-weight: 600;">-</div>
+                        <div class="tip-item">
+                            <i class="fas fa-check-circle"></i>
+                            <p><strong>Usa combinaciones</strong> cuando tengas el mismo producto en diferentes tallas o colores.</p>
                         </div>
-                    </div>
-                    
-                    <div style="display: grid; gap: 0.8rem;">
-                        <div style="display: flex; justify-content: space-between; background: white; padding: 0.8rem; border-radius: 6px;">
-                            <span style="color: #666;">Precio Compra:</span>
-                            <span id="preview-precio-compra" style="font-weight: 600; color: #2196f3;">S/. 0.00</span>
+                        <div class="tip-item">
+                            <i class="fas fa-check-circle"></i>
+                            <p><strong>Define un stock mínimo</strong> para recibir alertas cuando necesites reponer inventario.</p>
                         </div>
-                        <div style="display: flex; justify-content: space-between; background: white; padding: 0.8rem; border-radius: 6px;">
-                            <span style="color: #666;">Precio Venta:</span>
-                            <span id="preview-precio-venta" style="font-weight: 600; color: #e91e63;">S/. 0.00</span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; background: white; padding: 0.8rem; border-radius: 6px;">
-                            <span style="color: #666;">Ganancia por unidad:</span>
-                            <span id="preview-ganancia" style="font-weight: 600; color: #28a745;">S/. 0.00 (0%)</span>
+                        <div class="tip-item">
+                            <i class="fas fa-check-circle"></i>
+                            <p><strong>Sube una imagen clara</strong> del producto para facilitar su identificación en el inventario.</p>
                         </div>
                     </div>
                 </div>
-
-                <h4 style="color: #333; margin-bottom: 1rem;">Combinaciones Agregadas</h4>
-                <div id="preview-combinaciones" style="max-height: 300px; overflow-y: auto;">
-                    <div style="text-align: center; padding: 2rem; color: #999;">
-                        <i class="fas fa-layer-group" style="font-size: 2rem; margin-bottom: 1rem;"></i>
-                        <p>Agrega combinaciones de talla-color-cantidad</p>
-                    </div>
-                </div>
-
-                <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #eee;">
-                    <div style="display: flex; justify-content: space-between; font-weight: 600; font-size: 1.1rem;">
-                        <span>Total Unidades:</span>
-                        <span id="preview-total-unidades" style="color: #e91e63;">0</span>
-                    </div>
-                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Modal para confirmaciones -->
+    <div class="modal" id="confirmationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Confirmar Acción</h3>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="modalMessage">¿Está seguro de realizar esta acción?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="modalCancel">Cancelar</button>
+                <button class="btn btn-primary" id="modalConfirm">Confirmar</button>
             </div>
         </div>
     </div>
-
+    
+    <!-- Notificaciones -->
+    <div class="notification-container" id="notificationContainer"></div>
+    
     <script src="js/main.js"></script>
     <script src="js/header.js"></script>
-    <script src="js/agregar.js"></script>
+    <script src="js/dashboard.js"></script>
 </body>
 </html>
