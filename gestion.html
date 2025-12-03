@@ -5,12 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jessica Boutique - Gestión</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="css/estilos.css">
-    <link rel="stylesheet" href="css/componentes.css">
-    <link rel="stylesheet" href="css/tablas-formularios.css">
-    <link rel="stylesheet" href="css/responsive.css">
+    
+    <!-- CSS Comunes -->
+    <link rel="stylesheet" href="css/comunes/base.css">
+    <link rel="stylesheet" href="css/comunes/navegacion.css">
+    <link rel="stylesheet" href="css/comunes/componentes.css">
+    <link rel="stylesheet" href="css/comunes/responsive.css">
+    
+    <!-- CSS Específico -->
+    <link rel="stylesheet" href="css/gestion.css">
 </head>
 <body>
+    <!-- Navegación -->
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-brand">
@@ -31,191 +37,142 @@
         </div>
     </nav>
 
+    <!-- Contenido Principal -->
     <main class="container">
         <div class="page-header">
             <h2><i class="fas fa-cog"></i> Configuración del Sistema</h2>
-            <p>Personaliza y gestiona los parámetros del sistema</p>
+            <p>Personaliza y gestiona tu sistema</p>
         </div>
 
         <!-- Configuración General -->
-        <div class="card">
-            <div class="card-header">
-                <h3>Configuración General</h3>
-            </div>
-            <div class="card-body">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="configTema" class="form-label">Tema del Sistema</label>
-                        <select id="configTema" class="form-control">
-                            <option value="claro">Claro</option>
-                            <option value="oscuro">Oscuro</option>
-                        </select>
+        <div class="seccion-configuracion">
+            <div class="card">
+                <div class="card-header">
+                    <h3><i class="fas fa-sliders-h"></i> Configuración General</h3>
+                </div>
+                <div class="card-body">
+                    <div class="config-grid">
+                        <div class="config-item">
+                            <label for="temaSistema" class="config-label">
+                                <i class="fas fa-palette"></i> Tema del Sistema
+                            </label>
+                            <select id="temaSistema" class="form-control">
+                                <option value="claro">Modo Claro</option>
+                                <option value="oscuro">Modo Oscuro</option>
+                                <option value="auto">Automático</option>
+                            </select>
+                        </div>
+                        
+                        <div class="config-item">
+                            <label for="monedaSistema" class="config-label">
+                                <i class="fas fa-money-bill-wave"></i> Moneda
+                            </label>
+                            <select id="monedaSistema" class="form-control">
+                                <option value="S/">Soles (S/.)</option>
+                                <option value="USD">Dólares ($)</option>
+                                <option value="EUR">Euros (€)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="config-item">
+                            <label for="alertaStock" class="config-label">
+                                <i class="fas fa-bell"></i> Alerta de Stock
+                            </label>
+                            <input type="number" id="alertaStock" class="form-control" min="1" value="5">
+                            <div class="config-helper">Cantidad mínima para alerta de stock bajo</div>
+                        </div>
+                        
+                        <div class="config-item">
+                            <label for="comisionTarjeta" class="config-label">
+                                <i class="fas fa-credit-card"></i> Comisión Tarjeta
+                            </label>
+                            <div class="input-group">
+                                <input type="number" id="comisionTarjeta" class="form-control" min="0" max="100" step="0.1" value="5">
+                                <span class="input-group-text">%</span>
+                            </div>
+                            <div class="config-helper">Porcentaje agregado por pago con tarjeta</div>
+                        </div>
                     </div>
                     
-                    <div class="form-group">
-                        <label for="configMoneda" class="form-label">Símbolo de Moneda</label>
-                        <select id="configMoneda" class="form-control">
-                            <option value="S/.">S/. (Soles)</option>
-                            <option value="$">$ (Dólares)</option>
-                            <option value="€">€ (Euros)</option>
-                        </select>
+                    <div class="config-actions">
+                        <button id="guardarConfiguracion" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Guardar Configuración
+                        </button>
                     </div>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="configAlertaStock" class="form-label">Alerta de Stock Bajo</label>
-                        <input type="number" id="configAlertaStock" class="form-control" min="1" value="5">
-                        <small class="form-text">Cantidad mínima para activar alerta de stock bajo</small>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="configComisionTarjeta" class="form-label">Comisión por Tarjeta (%)</label>
-                        <input type="number" id="configComisionTarjeta" class="form-control" min="0" max="50" step="0.1" value="5">
-                        <small class="form-text">Porcentaje de comisión por pagos con tarjeta</small>
-                    </div>
-                </div>
-                
-                <div class="form-actions">
-                    <button id="btnGuardarConfig" class="btn btn-primary">
-                        <i class="fas fa-save"></i> Guardar Configuración
-                    </button>
                 </div>
             </div>
         </div>
 
-        <!-- Gestión de Categorías -->
-        <div class="card">
-            <div class="card-header">
-                <h3>Gestión de Categorías</h3>
-            </div>
-            <div class="card-body">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="nuevaCategoria" class="form-label">Nueva Categoría</label>
-                        <div class="input-group">
-                            <input type="text" id="nuevaCategoria" class="form-control" placeholder="Nombre de la categoría">
-                            <button id="btnAgregarCategoria" class="btn btn-primary">
-                                <i class="fas fa-plus"></i> Agregar
-                            </button>
-                        </div>
-                    </div>
+        <!-- Gestión de Catálogos -->
+        <div class="seccion-catalogos">
+            <div class="card">
+                <div class="card-header">
+                    <h3><i class="fas fa-list-alt"></i> Gestión de Catálogos</h3>
                 </div>
-                
-                <div class="table-responsive mt-3">
-                    <table class="table" id="tablaCategorias">
-                        <thead>
-                            <tr>
-                                <th>Categoría</th>
-                                <th>Productos</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Las categorías se cargarán aquí -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- Gestión de Colores -->
-        <div class="card">
-            <div class="card-header">
-                <h3>Gestión de Colores</h3>
-            </div>
-            <div class="card-body">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="nuevoColor" class="form-label">Nuevo Color</label>
-                        <div class="input-group">
-                            <input type="text" id="nuevoColor" class="form-control" placeholder="Nombre del color">
-                            <button id="btnAgregarColor" class="btn btn-primary">
-                                <i class="fas fa-plus"></i> Agregar
-                            </button>
+                <div class="card-body">
+                    <div class="catalogos-grid">
+                        <!-- Categorías -->
+                        <div class="catalogo-item">
+                            <h4><i class="fas fa-tags"></i> Categorías</h4>
+                            <div class="catalogo-form">
+                                <div class="input-group">
+                                    <input type="text" id="nuevaCategoria" class="form-control" placeholder="Nueva categoría">
+                                    <button id="agregarCategoria" class="btn btn-primary">
+                                        <i class="fas fa-plus"></i> Agregar
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="catalogo-lista" id="listaCategorias">
+                                <!-- Categorías dinámicas -->
+                            </div>
                         </div>
-                    </div>
-                </div>
-                
-                <div class="table-responsive mt-3">
-                    <table class="table" id="tablaColores">
-                        <thead>
-                            <tr>
-                                <th>Color</th>
-                                <th>Productos</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Los colores se cargarán aquí -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- Gestión de Tallas -->
-        <div class="card">
-            <div class="card-header">
-                <h3>Gestión de Tallas</h3>
-            </div>
-            <div class="card-body">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="nuevaTalla" class="form-label">Nueva Talla General</label>
-                        <div class="input-group">
-                            <input type="text" id="nuevaTalla" class="form-control" placeholder="Ej: XL, XXL">
-                            <button id="btnAgregarTalla" class="btn btn-primary">
-                                <i class="fas fa-plus"></i> Agregar
-                            </button>
+                        
+                        <!-- Colores -->
+                        <div class="catalogo-item">
+                            <h4><i class="fas fa-palette"></i> Colores</h4>
+                            <div class="catalogo-form">
+                                <div class="input-group">
+                                    <input type="text" id="nuevoColor" class="form-control" placeholder="Nuevo color">
+                                    <button id="agregarColor" class="btn btn-primary">
+                                        <i class="fas fa-plus"></i> Agregar
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="catalogo-lista" id="listaColores">
+                                <!-- Colores dinámicos -->
+                            </div>
                         </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="nuevaTallaPantalon" class="form-label">Nueva Talla de Pantalón</label>
-                        <div class="input-group">
-                            <input type="text" id="nuevaTallaPantalon" class="form-control" placeholder="Ej: 40, 42">
-                            <button id="btnAgregarTallaPantalon" class="btn btn-primary">
-                                <i class="fas fa-plus"></i> Agregar
-                            </button>
+                        
+                        <!-- Tallas Generales -->
+                        <div class="catalogo-item">
+                            <h4><i class="fas fa-tshirt"></i> Tallas Generales</h4>
+                            <div class="catalogo-form">
+                                <div class="input-group">
+                                    <input type="text" id="nuevaTalla" class="form-control" placeholder="Nueva talla">
+                                    <button id="agregarTalla" class="btn btn-primary">
+                                        <i class="fas fa-plus"></i> Agregar
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="catalogo-lista" id="listaTallas">
+                                <!-- Tallas dinámicas -->
+                            </div>
                         </div>
-                    </div>
-                </div>
-                
-                <div class="row">
-                    <div class="col-md-6">
-                        <h4>Tallas Generales</h4>
-                        <div class="table-responsive">
-                            <table class="table" id="tablaTallas">
-                                <thead>
-                                    <tr>
-                                        <th>Talla</th>
-                                        <th>Productos</th>
-                                        <th>Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- Las tallas generales se cargarán aquí -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-6">
-                        <h4>Tallas de Pantalón</h4>
-                        <div class="table-responsive">
-                            <table class="table" id="tablaTallasPantalon">
-                                <thead>
-                                    <tr>
-                                        <th>Talla</th>
-                                        <th>Productos</th>
-                                        <th>Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- Las tallas de pantalón se cargarán aquí -->
-                                </tbody>
-                            </table>
+                        
+                        <!-- Tallas de Pantalón -->
+                        <div class="catalogo-item">
+                            <h4><i class="fas fa-vest"></i> Tallas de Pantalón</h4>
+                            <div class="catalogo-form">
+                                <div class="input-group">
+                                    <input type="text" id="nuevaTallaPantalon" class="form-control" placeholder="Nueva talla">
+                                    <button id="agregarTallaPantalon" class="btn btn-primary">
+                                        <i class="fas fa-plus"></i> Agregar
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="catalogo-lista" id="listaTallasPantalon">
+                                <!-- Tallas pantalón dinámicas -->
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -223,475 +180,222 @@
         </div>
 
         <!-- Gestión de Datos -->
-        <div class="card">
-            <div class="card-header">
-                <h3>Gestión de Datos</h3>
+        <div class="seccion-datos">
+            <div class="card">
+                <div class="card-header">
+                    <h3><i class="fas fa-database"></i> Gestión de Datos</h3>
+                </div>
+                <div class="card-body">
+                    <div class="datos-grid">
+                        <div class="datos-item">
+                            <div class="datos-icono backup">
+                                <i class="fas fa-download"></i>
+                            </div>
+                            <h4>Respaldar Datos</h4>
+                            <p>Guarda una copia de seguridad de todos tus datos</p>
+                            <button id="respaldarDatos" class="btn btn-success">
+                                <i class="fas fa-file-export"></i> Respaldar Ahora
+                            </button>
+                            <div class="datos-info">
+                                <small>Último respaldo: <span id="ultimoRespaldo">Nunca</span></small>
+                            </div>
+                        </div>
+                        
+                        <div class="datos-item">
+                            <div class="datos-icono restore">
+                                <i class="fas fa-upload"></i>
+                            </div>
+                            <h4>Restaurar Datos</h4>
+                            <p>Restaura datos desde un archivo de respaldo</p>
+                            <div class="input-group-restore">
+                                <input type="file" id="archivoRestaurar" accept=".json" class="form-control" style="display: none;">
+                                <button id="seleccionarArchivo" class="btn btn-warning">
+                                    <i class="fas fa-folder-open"></i> Seleccionar Archivo
+                                </button>
+                                <button id="restaurarDatos" class="btn btn-danger" disabled>
+                                    <i class="fas fa-redo"></i> Restaurar
+                                </button>
+                            </div>
+                            <div class="datos-info">
+                                <small>Selecciona un archivo JSON válido</small>
+                            </div>
+                        </div>
+                        
+                        <div class="datos-item">
+                            <div class="datos-icono reset">
+                                <i class="fas fa-trash-alt"></i>
+                            </div>
+                            <h4>Restablecer Sistema</h4>
+                            <p>Elimina todos los datos y restaura valores por defecto</p>
+                            <button id="restablecerSistema" class="btn btn-danger">
+                                <i class="fas fa-exclamation-triangle"></i> Restablecer Todo
+                            </button>
+                            <div class="datos-info">
+                                <small>Esta acción no se puede deshacer</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="card-body">
-                <div class="alert alert-warning">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <strong>Advertencia:</strong> Las siguientes operaciones afectan todos los datos del sistema.
+        </div>
+
+        <!-- Información del Sistema -->
+        <div class="seccion-informacion">
+            <div class="card">
+                <div class="card-header">
+                    <h3><i class="fas fa-info-circle"></i> Información del Sistema</h3>
                 </div>
-                
-                <div class="form-row">
-                    <div class="form-group text-center">
-                        <button id="btnExportarDatos" class="btn btn-primary">
-                            <i class="fas fa-download"></i> Exportar Todos los Datos
-                        </button>
-                        <button id="btnImportarDatos" class="btn btn-secondary">
-                            <i class="fas fa-upload"></i> Importar Datos
-                        </button>
-                        <button id="btnRestablecerDatos" class="btn btn-danger">
-                            <i class="fas fa-trash"></i> Restablecer Datos
-                        </button>
+                <div class="card-body">
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <h4><i class="fas fa-chart-bar"></i> Estadísticas</h4>
+                            <div class="info-estadisticas">
+                                <div class="estadistica">
+                                    <span>Productos Registrados:</span>
+                                    <strong id="infoProductos">0</strong>
+                                </div>
+                                <div class="estadistica">
+                                    <span>Ventas Realizadas:</span>
+                                    <strong id="infoVentas">0</strong>
+                                </div>
+                                <div class="estadistica">
+                                    <span>Clientes Registrados:</span>
+                                    <strong id="infoClientes">0</strong>
+                                </div>
+                                <div class="estadistica">
+                                    <span>Uso de Almacenamiento:</span>
+                                    <strong id="infoAlmacenamiento">0 KB</strong>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <h4><i class="fas fa-code"></i> Sistema</h4>
+                            <div class="info-sistema">
+                                <div class="sistema-item">
+                                    <span>Versión:</span>
+                                    <strong>1.0.0</strong>
+                                </div>
+                                <div class="sistema-item">
+                                    <span>Última Actualización:</span>
+                                    <strong>2024-01-01</strong>
+                                </div>
+                                <div class="sistema-item">
+                                    <span>Navegador:</span>
+                                    <strong id="infoNavegador">Desconocido</strong>
+                                </div>
+                                <div class="sistema-item">
+                                    <span>Compatibilidad:</span>
+                                    <strong>Chrome, Firefox, Edge, Safari</strong>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <h4><i class="fas fa-shield-alt"></i> Seguridad</h4>
+                            <div class="info-seguridad">
+                                <div class="seguridad-item">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>Datos encriptados</span>
+                                </div>
+                                <div class="seguridad-item">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>Sin conexión a internet</span>
+                                </div>
+                                <div class="seguridad-item">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>Backup local</span>
+                                </div>
+                                <div class="seguridad-item">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>Sin dependencias externas</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                
-                <div class="form-row mt-3">
-                    <div class="form-group">
-                        <input type="file" id="inputImportarDatos" accept=".json" style="display: none;">
-                        <small class="form-text">Importa un archivo JSON con todos los datos del sistema. Se sobrescribirán los datos actuales.</small>
-                    </div>
+            </div>
+        </div>
+
+        <!-- Acerca de -->
+        <div class="seccion-acerca">
+            <div class="card">
+                <div class="card-header">
+                    <h3><i class="fas fa-store"></i> Jessica Boutique</h3>
                 </div>
-                
-                <div class="alert alert-info mt-3">
-                    <i class="fas fa-info-circle"></i>
-                    <strong>Información:</strong> Los datos se guardan automáticamente en tu navegador. 
-                    Usa la exportación para crear copias de seguridad.
+                <div class="card-body">
+                    <div class="acerca-contenido">
+                        <div class="acerca-logo">
+                            <i class="fas fa-store"></i>
+                            <h2>Jessica Boutique</h2>
+                        </div>
+                        <div class="acerca-texto">
+                            <p>Sistema de gestión de inventario y ventas diseñado específicamente para boutiques de moda. Desarrollado para simplificar la administración de productos, control de stock y análisis de ventas.</p>
+                            
+                            <div class="acerca-caracteristicas">
+                                <h4>Características Principales:</h4>
+                                <ul>
+                                    <li><i class="fas fa-check"></i> Gestión completa de inventario</li>
+                                    <li><i class="fas fa-check"></i> Control de ventas y clientes</li>
+                                    <li><i class="fas fa-check"></i> Reportes y estadísticas detalladas</li>
+                                    <li><i class="fas fa-check"></i> Sistema de alertas de stock</li>
+                                    <li><i class="fas fa-check"></i> Diseño responsive para todos los dispositivos</li>
+                                    <li><i class="fas fa-check"></i> Funciona completamente sin internet</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="acerca-contacto">
+                                <h4>Soporte y Contacto:</h4>
+                                <p>Para soporte técnico o sugerencias, contacta al desarrollador.</p>
+                                <div class="contacto-info">
+                                    <p><i class="fas fa-user"></i> <strong>Desarrollador:</strong> Sistema Jessica Boutique</p>
+                                    <p><i class="fas fa-calendar"></i> <strong>Versión:</strong> 1.0.0</p>
+                                    <p><i class="fas fa-calendar-alt"></i> <strong>Última Actualización:</strong> Enero 2024</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </main>
 
-    <script src="js/datos.js"></script>
-    <script src="js/sistema.js"></script>
-    <script src="js/configuracion.js"></script>
-    <script>
-        // Inicializar
-        document.addEventListener('DOMContentLoaded', function() {
-            cargarConfiguracion();
-            cargarListas();
-            configurarEventos();
-        });
-        
-        function cargarConfiguracion() {
-            const config = SistemaDatos.obtenerConfiguracion();
-            
-            document.getElementById('configTema').value = config.tema;
-            document.getElementById('configMoneda').value = config.moneda;
-            document.getElementById('configAlertaStock').value = config.alertaStock;
-            document.getElementById('configComisionTarjeta').value = config.comisionTarjeta * 100;
-        }
-        
-        function cargarListas() {
-            cargarCategorias();
-            cargarColores();
-            cargarTallas();
-            cargarTallasPantalon();
-        }
-        
-        function cargarCategorias() {
-            const config = SistemaDatos.obtenerConfiguracion();
-            const productos = SistemaDatos.obtenerProductos();
-            const tbody = document.getElementById('tablaCategorias').querySelector('tbody');
-            
-            tbody.innerHTML = '';
-            
-            config.categorias.forEach(categoria => {
-                const productosEnCategoria = productos.filter(p => p.categoria === categoria).length;
-                
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${categoria}</td>
-                    <td>${productosEnCategoria}</td>
-                    <td>
-                        <button class="btn btn-danger btn-sm eliminar-categoria" data-categoria="${categoria}">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
-            
-            // Agregar eventos a los botones de eliminar
-            document.querySelectorAll('.eliminar-categoria').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const categoria = this.getAttribute('data-categoria');
-                    eliminarCategoria(categoria);
-                });
-            });
-        }
-        
-        function cargarColores() {
-            const config = SistemaDatos.obtenerConfiguracion();
-            const productos = SistemaDatos.obtenerProductos();
-            const tbody = document.getElementById('tablaColores').querySelector('tbody');
-            
-            tbody.innerHTML = '';
-            
-            config.colores.forEach(color => {
-                const productosConColor = productos.filter(p => p.color === color).length;
-                
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${color}</td>
-                    <td>${productosConColor}</td>
-                    <td>
-                        <button class="btn btn-danger btn-sm eliminar-color" data-color="${color}">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
-            
-            // Agregar eventos a los botones de eliminar
-            document.querySelectorAll('.eliminar-color').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const color = this.getAttribute('data-color');
-                    eliminarColor(color);
-                });
-            });
-        }
-        
-        function cargarTallas() {
-            const config = SistemaDatos.obtenerConfiguracion();
-            const productos = SistemaDatos.obtenerProductos();
-            const tbody = document.getElementById('tablaTallas').querySelector('tbody');
-            
-            tbody.innerHTML = '';
-            
-            config.tallas.forEach(talla => {
-                const productosConTalla = productos.filter(p => 
-                    p.categoria !== 'Pantalones' && p.talla === talla).length;
-                
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${talla}</td>
-                    <td>${productosConTalla}</td>
-                    <td>
-                        <button class="btn btn-danger btn-sm eliminar-talla" data-talla="${talla}">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
-            
-            // Agregar eventos a los botones de eliminar
-            document.querySelectorAll('.eliminar-talla').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const talla = this.getAttribute('data-talla');
-                    eliminarTalla(talla);
-                });
-            });
-        }
-        
-        function cargarTallasPantalon() {
-            const config = SistemaDatos.obtenerConfiguracion();
-            const productos = SistemaDatos.obtenerProductos();
-            const tbody = document.getElementById('tablaTallasPantalon').querySelector('tbody');
-            
-            tbody.innerHTML = '';
-            
-            config.tallasPantalon.forEach(talla => {
-                const productosConTalla = productos.filter(p => 
-                    p.categoria === 'Pantalones' && p.talla === talla).length;
-                
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${talla}</td>
-                    <td>${productosConTalla}</td>
-                    <td>
-                        <button class="btn btn-danger btn-sm eliminar-talla-pantalon" data-talla="${talla}">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
-            
-            // Agregar eventos a los botones de eliminar
-            document.querySelectorAll('.eliminar-talla-pantalon').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const talla = this.getAttribute('data-talla');
-                    eliminarTallaPantalon(talla);
-                });
-            });
-        }
-        
-        function configurarEventos() {
-            // Guardar configuración general
-            document.getElementById('btnGuardarConfig').addEventListener('click', guardarConfiguracion);
-            
-            // Agregar categoría
-            document.getElementById('btnAgregarCategoria').addEventListener('click', agregarCategoria);
-            document.getElementById('nuevaCategoria').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    agregarCategoria();
-                }
-            });
-            
-            // Agregar color
-            document.getElementById('btnAgregarColor').addEventListener('click', agregarColor);
-            document.getElementById('nuevoColor').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    agregarColor();
-                }
-            });
-            
-            // Agregar talla
-            document.getElementById('btnAgregarTalla').addEventListener('click', agregarTalla);
-            document.getElementById('nuevaTalla').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    agregarTalla();
-                }
-            });
-            
-            // Agregar talla de pantalón
-            document.getElementById('btnAgregarTallaPantalon').addEventListener('click', agregarTallaPantalon);
-            document.getElementById('nuevaTallaPantalon').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    agregarTallaPantalon();
-                }
-            });
-            
-            // Exportar datos
-            document.getElementById('btnExportarDatos').addEventListener('click', function() {
-                Sistema.exportarDatosSistema();
-            });
-            
-            // Importar datos
-            document.getElementById('btnImportarDatos').addEventListener('click', function() {
-                document.getElementById('inputImportarDatos').click();
-            });
-            
-            document.getElementById('inputImportarDatos').addEventListener('change', function(e) {
-                if (e.target.files.length > 0) {
-                    importarDatos(e.target.files[0]);
-                }
-            });
-            
-            // Restablecer datos
-            document.getElementById('btnRestablecerDatos').addEventListener('click', function() {
-                if (confirm('¿ESTÁS SEGURO? Esta acción eliminará TODOS los datos y los restablecerá a los valores de ejemplo. Esta acción no se puede deshacer.')) {
-                    SistemaDatos.restablecerDatosEjemplo();
-                    Sistema.mostrarMensaje('success', 'Datos restablecidos correctamente');
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 1500);
-                }
-            });
-        }
-        
-        function guardarConfiguracion() {
-            const config = SistemaDatos.obtenerConfiguracion();
-            
-            config.tema = document.getElementById('configTema').value;
-            config.moneda = document.getElementById('configMoneda').value;
-            config.alertaStock = parseInt(document.getElementById('configAlertaStock').value);
-            config.comisionTarjeta = parseFloat(document.getElementById('configComisionTarjeta').value) / 100;
-            
-            SistemaDatos.guardarConfiguracion(config);
-            Sistema.mostrarMensaje('success', 'Configuración guardada correctamente');
-            
-            // Aplicar tema inmediatamente
-            if (config.tema === 'oscuro') {
-                document.body.classList.add('modo-oscuro');
-            } else {
-                document.body.classList.remove('modo-oscuro');
-            }
-        }
-        
-        function agregarCategoria() {
-            const input = document.getElementById('nuevaCategoria');
-            const categoria = input.value.trim();
-            
-            if (!categoria) {
-                Sistema.mostrarMensaje('error', 'Ingresa un nombre para la categoría');
-                return;
-            }
-            
-            const config = SistemaDatos.obtenerConfiguracion();
-            
-            if (config.categorias.includes(categoria)) {
-                Sistema.mostrarMensaje('error', 'Esta categoría ya existe');
-                return;
-            }
-            
-            config.categorias.push(categoria);
-            SistemaDatos.guardarConfiguracion(config);
-            
-            Sistema.mostrarMensaje('success', 'Categoría agregada correctamente');
-            input.value = '';
-            cargarCategorias();
-        }
-        
-        function eliminarCategoria(categoria) {
-            // Verificar si hay productos en esta categoría
-            const productos = SistemaDatos.obtenerProductos();
-            const productosEnCategoria = productos.filter(p => p.categoria === categoria);
-            
-            if (productosEnCategoria.length > 0) {
-                Sistema.mostrarMensaje('error', `No se puede eliminar. Hay ${productosEnCategoria.length} productos en esta categoría.`);
-                return;
-            }
-            
-            if (confirm(`¿Estás seguro de que quieres eliminar la categoría "${categoria}"?`)) {
-                const config = SistemaDatos.obtenerConfiguracion();
-                config.categorias = config.categorias.filter(c => c !== categoria);
-                SistemaDatos.guardarConfiguracion(config);
-                
-                Sistema.mostrarMensaje('success', 'Categoría eliminada correctamente');
-                cargarCategorias();
-            }
-        }
-        
-        function agregarColor() {
-            const input = document.getElementById('nuevoColor');
-            const color = input.value.trim();
-            
-            if (!color) {
-                Sistema.mostrarMensaje('error', 'Ingresa un nombre para el color');
-                return;
-            }
-            
-            const config = SistemaDatos.obtenerConfiguracion();
-            
-            if (config.colores.includes(color)) {
-                Sistema.mostrarMensaje('error', 'Este color ya existe');
-                return;
-            }
-            
-            config.colores.push(color);
-            SistemaDatos.guardarConfiguracion(config);
-            
-            Sistema.mostrarMensaje('success', 'Color agregado correctamente');
-            input.value = '';
-            cargarColores();
-        }
-        
-        function eliminarColor(color) {
-            // Verificar si hay productos con este color
-            const productos = SistemaDatos.obtenerProductos();
-            const productosConColor = productos.filter(p => p.color === color);
-            
-            if (productosConColor.length > 0) {
-                Sistema.mostrarMensaje('error', `No se puede eliminar. Hay ${productosConColor.length} productos con este color.`);
-                return;
-            }
-            
-            if (confirm(`¿Estás seguro de que quieres eliminar el color "${color}"?`)) {
-                const config = SistemaDatos.obtenerConfiguracion();
-                config.colores = config.colores.filter(c => c !== color);
-                SistemaDatos.guardarConfiguracion(config);
-                
-                Sistema.mostrarMensaje('success', 'Color eliminada correctamente');
-                cargarColores();
-            }
-        }
-        
-        function agregarTalla() {
-            const input = document.getElementById('nuevaTalla');
-            const talla = input.value.trim().toUpperCase();
-            
-            if (!talla) {
-                Sistema.mostrarMensaje('error', 'Ingresa una talla');
-                return;
-            }
-            
-            const config = SistemaDatos.obtenerConfiguracion();
-            
-            if (config.tallas.includes(talla)) {
-                Sistema.mostrarMensaje('error', 'Esta talla ya existe');
-                return;
-            }
-            
-            config.tallas.push(talla);
-            SistemaDatos.guardarConfiguracion(config);
-            
-            Sistema.mostrarMensaje('success', 'Talla agregada correctamente');
-            input.value = '';
-            cargarTallas();
-        }
-        
-        function eliminarTalla(talla) {
-            // Verificar si hay productos con esta talla (excepto pantalones)
-            const productos = SistemaDatos.obtenerProductos();
-            const productosConTalla = productos.filter(p => 
-                p.categoria !== 'Pantalones' && p.talla === talla);
-            
-            if (productosConTalla.length > 0) {
-                Sistema.mostrarMensaje('error', `No se puede eliminar. Hay ${productosConTalla.length} productos con esta talla.`);
-                return;
-            }
-            
-            if (confirm(`¿Estás seguro de que quieres eliminar la talla "${talla}"?`)) {
-                const config = SistemaDatos.obtenerConfiguracion();
-                config.tallas = config.tallas.filter(t => t !== talla);
-                SistemaDatos.guardarConfiguracion(config);
-                
-                Sistema.mostrarMensaje('success', 'Talla eliminada correctamente');
-                cargarTallas();
-            }
-        }
-        
-        function agregarTallaPantalon() {
-            const input = document.getElementById('nuevaTallaPantalon');
-            const talla = input.value.trim();
-            
-            if (!talla) {
-                Sistema.mostrarMensaje('error', 'Ingresa una talla de pantalón');
-                return;
-            }
-            
-            const config = SistemaDatos.obtenerConfiguracion();
-            
-            if (config.tallasPantalon.includes(talla)) {
-                Sistema.mostrarMensaje('error', 'Esta talla de pantalón ya existe');
-                return;
-            }
-            
-            config.tallasPantalon.push(talla);
-            SistemaDatos.guardarConfiguracion(config);
-            
-            Sistema.mostrarMensaje('success', 'Talla de pantalón agregada correctamente');
-            input.value = '';
-            cargarTallasPantalon();
-        }
-        
-        function eliminarTallaPantalon(talla) {
-            // Verificar si hay pantalones con esta talla
-            const productos = SistemaDatos.obtenerProductos();
-            const productosConTalla = productos.filter(p => 
-                p.categoria === 'Pantalones' && p.talla === talla);
-            
-            if (productosConTalla.length > 0) {
-                Sistema.mostrarMensaje('error', `No se puede eliminar. Hay ${productosConTalla.length} pantalones con esta talla.`);
-                return;
-            }
-            
-            if (confirm(`¿Estás seguro de que quieres eliminar la talla de pantalón "${talla}"?`)) {
-                const config = SistemaDatos.obtenerConfiguracion();
-                config.tallasPantalon = config.tallasPantalon.filter(t => t !== talla);
-                SistemaDatos.guardarConfiguracion(config);
-                
-                Sistema.mostrarMensaje('success', 'Talla de pantalón eliminada correctamente');
-                cargarTallasPantalon();
-            }
-        }
-        
-        async function importarDatos(archivo) {
-            try {
-                await Sistema.importarDatosSistema(archivo);
-                // Recargar listas después de importar
-                cargarListas();
-                cargarConfiguracion();
-            } catch (error) {
-                // El error ya se maneja en sistema.js
-            }
-        }
-    </script>
-    <script src="js/main.js"></script>
+    <!-- Modales de Confirmación -->
+    <div id="modalRestablecer" class="modal">
+        <div class="modal-contenido">
+            <div class="modal-header">
+                <h3><i class="fas fa-exclamation-triangle"></i> Confirmar Restablecimiento</h3>
+                <button class="btn-cerrar-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="advertencia-restablecer">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <h4>¡ADVERTENCIA!</h4>
+                    <p>Esta acción eliminará TODOS los datos del sistema y restaurará los valores por defecto.</p>
+                    <p><strong>Esta acción no se puede deshacer.</strong></p>
+                    <div class="datos-eliminar">
+                        <p><i class="fas fa-box"></i> Productos: <span id="contadorProductosEliminar">0</span></p>
+                        <p><i class="fas fa-shopping-cart"></i> Ventas: <span id="contadorVentasEliminar">0</span></p>
+                        <p><i class="fas fa-users"></i> Clientes: <span id="contadorClientesEliminar">0</span></p>
+                    </div>
+                </div>
+                <div class="confirmacion-texto">
+                    <p>Escribe "ELIMINAR" para confirmar:</p>
+                    <input type="text" id="confirmarTexto" class="form-control" placeholder="ELIMINAR">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelarRestablecer">Cancelar</button>
+                <button class="btn btn-danger" id="confirmarRestablecer" disabled>Restablecer Sistema</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Comunes -->
+    <script src="js/comunes/datos.js"></script>
+    <script src="js/comunes/eventos.js"></script>
+    
+    <!-- JavaScript Específico -->
+    <script src="js/gestion.js"></script>
 </body>
 </html>
