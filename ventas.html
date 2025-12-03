@@ -3,122 +3,430 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jessica Boutique | Ventas</title>
+    <title>InventarioPro | Ventas</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/ventas.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="navbar">
-        <div class="logo">
-            <i class="fas fa-store"></i>
-            <h1>Jessica Boutique</h1>
-        </div>
-        <div class="nav-buttons">
-            <a href="index.html" class="nav-btn"><i class="fas fa-home"></i> Inicio</a>
-            <a href="inventario.html" class="nav-btn"><i class="fas fa-boxes"></i> Inventario</a>
-            <a href="agregar-producto.html" class="nav-btn"><i class="fas fa-plus"></i> Agregar</a>
-            <a href="ventas.html" class="nav-btn active"><i class="fas fa-shopping-cart"></i> Ventas</a>
-        </div>
-    </div>
-
     <div class="container">
-        <div class="seccion-header">
-            <h2><i class="fas fa-shopping-cart"></i> Nueva Venta</h2>
-            <div style="display: flex; align-items: center; gap: 1rem;">
-                <span class="badge">Venta #<span id="numero-venta">1</span></span>
-                <span id="fecha-actual" style="color: #999;"></span>
+        <!-- Sidebar/Navegación -->
+        <nav class="sidebar" id="sidebar">
+            <div class="logo">
+                <h1><i class="fas fa-boxes"></i> <span>InventarioPro</span></h1>
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            
+            <ul class="nav-menu">
+                <li>
+                    <a href="index.html" class="nav-link">
+                        <i class="fas fa-tachometer-alt"></i> <span>Panel de Control</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="inventario.html" class="nav-link">
+                        <i class="fas fa-box"></i> <span>Inventario</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="agregar-producto.html" class="nav-link">
+                        <i class="fas fa-plus-circle"></i> <span>Agregar Producto</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="ventas.html" class="nav-link active">
+                        <i class="fas fa-cash-register"></i> <span>Ventas</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="reportes.html" class="nav-link">
+                        <i class="fas fa-chart-bar"></i> <span>Reportes</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="gestion.html" class="nav-link">
+                        <i class="fas fa-cog"></i> <span>Configuración</span>
+                    </a>
+                </li>
+            </ul>
+            
+            <div class="theme-toggle">
+                <button id="themeToggle">
+                    <i class="fas fa-moon"></i> <span>Tema Oscuro</span>
+                </button>
+            </div>
+            
+            <div class="user-info">
+                <div class="avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="user-details">
+                    <span class="username">Administrador</span>
+                    <span class="user-role">Dueño</span>
+                </div>
+            </div>
+        </nav>
+        
+        <!-- Contenido Principal -->
+        <main class="main-content">
+            <div class="section-header">
+                <h2><i class="fas fa-cash-register"></i> Ventas</h2>
+                <p>Registro de ventas y caja</p>
+            </div>
+            
+            <div class="sales-container">
+                <div class="sales-left">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-box"></i> Productos Disponibles</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="search-bar">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="searchSaleProduct" placeholder="Buscar producto por nombre, categoría...">
+                            </div>
+                            
+                            <div class="quick-filters">
+                                <button class="filter-btn active" data-filter="all">Todos</button>
+                                <button class="filter-btn" data-filter="popular">Populares</button>
+                                <button class="filter-btn" data-filter="low">Stock Bajo</button>
+                            </div>
+                            
+                            <div class="category-filter">
+                                <select id="saleCategoryFilter">
+                                    <option value="">Todas las categorías</option>
+                                </select>
+                            </div>
+                            
+                            <div class="products-grid" id="saleProductsGrid">
+                                <!-- Los productos para venta se cargarán aquí -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-history"></i> Ventas Recientes</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="recent-sales" id="recentSales">
+                                <div class="recent-sale-item">
+                                    <div class="sale-info">
+                                        <span class="sale-client">Cliente General</span>
+                                        <span class="sale-time">Hace 5 min</span>
+                                    </div>
+                                    <div class="sale-amount">S/ 150.00</div>
+                                </div>
+                                <div class="recent-sale-item">
+                                    <div class="sale-info">
+                                        <span class="sale-client">Juan Pérez</span>
+                                        <span class="sale-time">Hace 15 min</span>
+                                    </div>
+                                    <div class="sale-amount">S/ 89.50</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="sales-right">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-shopping-cart"></i> Carrito de Venta</h3>
+                            <div class="cart-header-actions">
+                                <button class="btn-icon" id="clearCartBtn" title="Vaciar carrito">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                                <button class="btn-icon" id="saveCartBtn" title="Guardar carrito">
+                                    <i class="fas fa-save"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="sale-info">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="clientName">Cliente</label>
+                                        <div class="client-input">
+                                            <input type="text" id="clientName" placeholder="Nombre del cliente">
+                                            <button class="btn-icon" id="clientHistoryBtn" title="Historial de cliente">
+                                                <i class="fas fa-history"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="clientPhone">Teléfono</label>
+                                        <input type="text" id="clientPhone" placeholder="Teléfono (opcional)">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="saleNotes">Notas de venta</label>
+                                    <textarea id="saleNotes" rows="2" placeholder="Notas adicionales sobre la venta..."></textarea>
+                                </div>
+                            </div>
+                            
+                            <div class="cart-items">
+                                <div class="cart-header">
+                                    <h4>Productos Seleccionados</h4>
+                                    <span class="cart-count" id="cartCount">0 productos</span>
+                                </div>
+                                
+                                <div class="cart-table">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Producto</th>
+                                                <th style="width: 120px;">Cantidad</th>
+                                                <th style="width: 100px;">Precio</th>
+                                                <th style="width: 100px;">Subtotal</th>
+                                                <th style="width: 50px;"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="cartItems">
+                                            <!-- Los items del carrito se cargarán aquí -->
+                                        </tbody>
+                                    </table>
+                                    <div class="empty-cart" id="emptyCart">
+                                        <i class="fas fa-shopping-cart"></i>
+                                        <p>El carrito está vacío</p>
+                                        <p>Selecciona productos para agregar</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="payment-section">
+                                <div class="payment-header">
+                                    <h4><i class="fas fa-credit-card"></i> Método de Pago</h4>
+                                </div>
+                                
+                                <div class="payment-methods">
+                                    <label class="payment-method">
+                                        <input type="radio" name="paymentMethod" value="cash" checked>
+                                        <span class="payment-icon"><i class="fas fa-money-bill-wave"></i></span>
+                                        <span class="payment-text">Efectivo</span>
+                                    </label>
+                                    
+                                    <label class="payment-method">
+                                        <input type="radio" name="paymentMethod" value="transfer">
+                                        <span class="payment-icon"><i class="fas fa-university"></i></span>
+                                        <span class="payment-text">Transferencia</span>
+                                    </label>
+                                    
+                                    <label class="payment-method">
+                                        <input type="radio" name="paymentMethod" value="card">
+                                        <span class="payment-icon"><i class="fas fa-credit-card"></i></span>
+                                        <span class="payment-text">Tarjeta (+5%)</span>
+                                    </label>
+                                    
+                                    <label class="payment-method">
+                                        <input type="radio" name="paymentMethod" value="mixed">
+                                        <span class="payment-icon"><i class="fas fa-random"></i></span>
+                                        <span class="payment-text">Mixto</span>
+                                    </label>
+                                </div>
+                                
+                                <div class="mixed-payment" id="mixedPaymentSection" style="display: none;">
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label>Efectivo (S/)</label>
+                                            <input type="number" id="cashAmount" step="0.01" min="0" placeholder="0.00">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Transferencia (S/)</label>
+                                            <input type="number" id="transferAmount" step="0.01" min="0" placeholder="0.00">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Tarjeta (S/)</label>
+                                            <input type="number" id="cardAmount" step="0.01" min="0" placeholder="0.00">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="payment-summary">
+                                    <div class="summary-row">
+                                        <span>Subtotal:</span>
+                                        <span id="subtotalAmount">S/ 0.00</span>
+                                    </div>
+                                    <div class="summary-row">
+                                        <span>IGV (18%):</span>
+                                        <span id="igvAmount">S/ 0.00</span>
+                                    </div>
+                                    <div class="summary-row card-fee" id="cardFeeRow">
+                                        <span>Recargo tarjeta (5%):</span>
+                                        <span id="cardFeeAmount">S/ 0.00</span>
+                                    </div>
+                                    <div class="summary-row total">
+                                        <span>Total a pagar:</span>
+                                        <span id="totalAmount">S/ 0.00</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="cash-payment" id="cashPaymentSection">
+                                    <div class="form-group">
+                                        <label for="cashReceived">Efectivo recibido (S/)</label>
+                                        <input type="number" id="cashReceived" step="0.01" min="0" placeholder="0.00">
+                                    </div>
+                                    <div class="summary-row">
+                                        <span>Cambio:</span>
+                                        <span id="changeAmount">S/ 0.00</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="payment-actions">
+                                    <button class="btn btn-outline" id="cancelSale">
+                                        <i class="fas fa-times"></i> Cancelar Venta
+                                    </button>
+                                    <button class="btn btn-primary" id="completeSale">
+                                        <i class="fas fa-check-circle"></i> Completar Venta
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-calculator"></i> Calculadora Rápida</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="quick-calculator">
+                                <div class="calculator-display" id="calcDisplay">0</div>
+                                <div class="calculator-buttons">
+                                    <button class="calc-btn" data-value="7">7</button>
+                                    <button class="calc-btn" data-value="8">8</button>
+                                    <button class="calc-btn" data-value="9">9</button>
+                                    <button class="calc-btn op" data-value="/">÷</button>
+                                    
+                                    <button class="calc-btn" data-value="4">4</button>
+                                    <button class="calc-btn" data-value="5">5</button>
+                                    <button class="calc-btn" data-value="6">6</button>
+                                    <button class="calc-btn op" data-value="*">×</button>
+                                    
+                                    <button class="calc-btn" data-value="1">1</button>
+                                    <button class="calc-btn" data-value="2">2</button>
+                                    <button class="calc-btn" data-value="3">3</button>
+                                    <button class="calc-btn op" data-value="-">-</button>
+                                    
+                                    <button class="calc-btn" data-value="0">0</button>
+                                    <button class="calc-btn" data-value=".">.</button>
+                                    <button class="calc-btn" id="calcClear">C</button>
+                                    <button class="calc-btn op" data-value="+">+</button>
+                                    
+                                    <button class="calc-btn equals" id="calcEquals">=</button>
+                                </div>
+                                <div class="calculator-actions">
+                                    <button class="btn btn-outline" id="applyToCash">
+                                        Aplicar a Efectivo
+                                    </button>
+                                    <button class="btn btn-outline" id="applyToPrice">
+                                        Aplicar a Precio
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Modal para confirmaciones -->
+    <div class="modal" id="confirmationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Confirmar Acción</h3>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="modalMessage">¿Está seguro de realizar esta acción?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="modalCancel">Cancelar</button>
+                <button class="btn btn-primary" id="modalConfirm">Confirmar</button>
             </div>
         </div>
-
-        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem;">
-            <div>
-                <div style="background: white; padding: 1.5rem; border-radius: 10px; margin-bottom: 1.5rem;">
-                    <h3 style="color: #e91e63; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                        <i class="fas fa-user"></i> Cliente
-                    </h3>
-                    <input type="text" id="cliente-nombre" placeholder="Nombre del cliente" 
-                           style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 6px;">
-                </div>
-
-                <div style="background: white; padding: 1.5rem; border-radius: 10px; margin-bottom: 1.5rem;">
-                    <h3 style="color: #e91e63; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                        <i class="fas fa-search"></i> Buscar Productos
-                    </h3>
-                    <div style="position: relative; margin-bottom: 1rem;">
-                        <i class="fas fa-search" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #999;"></i>
-                        <input type="text" id="buscar-producto" placeholder="Escribe para buscar..." 
-                               style="width: 100%; padding: 0.8rem 1rem 0.8rem 2.5rem; border: 1px solid #ddd; border-radius: 6px;">
-                    </div>
-                    <div id="lista-productos" style="max-height: 300px; overflow-y: auto; border: 1px solid #eee; border-radius: 6px;">
-                        <!-- Productos se cargarán aquí -->
-                    </div>
-                </div>
-
-                <div style="background: white; padding: 1.5rem; border-radius: 10px;">
-                    <h3 style="color: #e91e63; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                        <i class="fas fa-shopping-cart"></i> Carrito
-                    </h3>
-                    <div id="carrito" style="min-height: 200px; max-height: 400px; overflow-y: auto;">
-                        <!-- Productos del carrito se cargarán aquí -->
-                    </div>
-                </div>
+    </div>
+    
+    <!-- Modal Historial Cliente -->
+    <div class="modal" id="clientHistoryModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Historial del Cliente</h3>
+                <button class="modal-close" id="closeClientHistory">&times;</button>
             </div>
-
-            <div>
-                <div style="background: white; padding: 1.5rem; border-radius: 10px; margin-bottom: 1.5rem;">
-                    <h3 style="color: #e91e63; margin-bottom: 1rem;">Resumen</h3>
-                    <div style="display: grid; gap: 0.8rem;">
-                        <div style="display: flex; justify-content: space-between;">
-                            <span>Subtotal:</span>
-                            <span id="subtotal">S/. 0.00</span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between;">
-                            <span>IGV (18%):</span>
-                            <span id="igv">S/. 0.00</span>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: bold; padding-top: 0.8rem; border-top: 1px solid #eee;">
-                            <span>Total:</span>
-                            <span id="total" style="color: #e91e63;">S/. 0.00</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div style="background: white; padding: 1.5rem; border-radius: 10px; margin-bottom: 1.5rem;">
-                    <h3 style="color: #e91e63; margin-bottom: 1rem;">Pago</h3>
-                    <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
-                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-                            <input type="radio" name="metodo-pago" value="efectivo" checked>
-                            <span>Efectivo</span>
-                        </label>
-                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-                            <input type="radio" name="metodo-pago" value="tarjeta">
-                            <span>Tarjeta</span>
-                        </label>
-                    </div>
-                    <div id="grupo-efectivo">
-                        <label style="display: block; margin-bottom: 0.5rem;">Monto Recibido</label>
-                        <input type="number" id="monto-recibido" placeholder="S/. 0.00" min="0" step="0.01"
-                               style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 6px;">
-                        <div id="vuelto" style="margin-top: 0.5rem; padding: 0.8rem; background: #e8f5e9; border-radius: 6px; display: none;">
-                            <strong>Vuelto: <span id="vuelto-monto">S/. 0.00</span></strong>
-                        </div>
-                    </div>
-                </div>
-
-                <div style="display: flex; gap: 1rem;">
-                    <button class="btn-secundario" onclick="cancelarVenta()" style="flex: 1;">Cancelar</button>
-                    <button class="btn-principal" onclick="finalizarVenta()" style="flex: 1;">
-                        <i class="fas fa-check"></i> Finalizar Venta
-                    </button>
+            <div class="modal-body">
+                <div class="client-history" id="clientHistoryContent">
+                    <p class="empty-state">No hay historial para este cliente</p>
                 </div>
             </div>
         </div>
     </div>
-
-    <div id="notificaciones"></div>
-
+    
+    <!-- Modal Ticket -->
+    <div class="modal" id="ticketModal">
+        <div class="modal-content wide">
+            <div class="modal-header">
+                <h3>Ticket de Venta</h3>
+                <button class="modal-close" id="closeTicket">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="ticket" id="ticketContent">
+                    <div class="ticket-header">
+                        <h2>InventarioPro</h2>
+                        <p>Sistema de Gestión de Inventario</p>
+                        <p>Ticket de Venta</p>
+                    </div>
+                    <div class="ticket-info">
+                        <p><strong>N° Venta:</strong> <span id="ticketNumber">001</span></p>
+                        <p><strong>Fecha:</strong> <span id="ticketDate">01/01/2024 10:00</span></p>
+                        <p><strong>Cliente:</strong> <span id="ticketClient">Cliente General</span></p>
+                    </div>
+                    <div class="ticket-items">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Cant</th>
+                                    <th>Producto</th>
+                                    <th>P.U.</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ticketItems">
+                                <!-- Items del ticket -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="ticket-totals">
+                        <p><strong>Subtotal:</strong> <span id="ticketSubtotal">S/ 0.00</span></p>
+                        <p><strong>IGV (18%):</strong> <span id="ticketIGV">S/ 0.00</span></p>
+                        <p><strong>Total:</strong> <span id="ticketTotal">S/ 0.00</span></p>
+                        <p><strong>Método de pago:</strong> <span id="ticketPayment">Efectivo</span></p>
+                    </div>
+                    <div class="ticket-footer">
+                        <p>¡Gracias por su compra!</p>
+                        <p>Vuelva pronto</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="printTicket">
+                    <i class="fas fa-print"></i> Imprimir
+                </button>
+                <button class="btn btn-primary" id="closeTicketBtn">
+                    <i class="fas fa-check"></i> Aceptar
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Notificaciones -->
+    <div class="notification-container" id="notificationContainer"></div>
+    
     <script src="js/main.js"></script>
-    <script src="js/header.js"></script>
-    <script src="js/agregar.js"></script>
+    <script src="js/ventas.js"></script>
 </body>
 </html>
