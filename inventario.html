@@ -3,76 +3,302 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jessica Boutique | Inventario</title>
+    <title>InventarioPro | Inventario</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/inventario.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <!-- El sidebar se insertará automáticamente -->
-    
-    <div class="content-header">
-        <h2><i class="fas fa-boxes"></i> Inventario de Productos</h2>
-        <div class="header-actions">
-            <a href="agregar-producto.html" class="btn btn-primary">
-                <i class="fas fa-plus"></i> Nuevo Producto
-            </a>
-        </div>
-    </div>
-
-    <div class="card">
-        <div class="card-header">
-            <h3><i class="fas fa-filter"></i> Filtros de Búsqueda</h3>
-        </div>
-        <div class="form-row">
-            <div class="form-group">
-                <div style="position: relative;">
-                    <i class="fas fa-search" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: #999;"></i>
-                    <input type="text" id="buscar-producto" placeholder="Buscar productos..." class="form-control" style="padding-left: 2.5rem;">
+    <div class="container">
+        <!-- Sidebar/Navegación -->
+        <nav class="sidebar" id="sidebar">
+            <div class="logo">
+                <h1><i class="fas fa-boxes"></i> <span>InventarioPro</span></h1>
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            
+            <ul class="nav-menu">
+                <li>
+                    <a href="index.html" class="nav-link">
+                        <i class="fas fa-tachometer-alt"></i> <span>Panel de Control</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="inventario.html" class="nav-link active">
+                        <i class="fas fa-box"></i> <span>Inventario</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="agregar-producto.html" class="nav-link">
+                        <i class="fas fa-plus-circle"></i> <span>Agregar Producto</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="ventas.html" class="nav-link">
+                        <i class="fas fa-cash-register"></i> <span>Ventas</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="reportes.html" class="nav-link">
+                        <i class="fas fa-chart-bar"></i> <span>Reportes</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="gestion.html" class="nav-link">
+                        <i class="fas fa-cog"></i> <span>Configuración</span>
+                    </a>
+                </li>
+            </ul>
+            
+            <div class="theme-toggle">
+                <button id="themeToggle">
+                    <i class="fas fa-moon"></i> <span>Tema Oscuro</span>
+                </button>
+            </div>
+            
+            <div class="user-info">
+                <div class="avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="user-details">
+                    <span class="username">Administrador</span>
+                    <span class="user-role">Dueño</span>
                 </div>
             </div>
-            <div class="form-group">
-                <select id="filtro-categoria" class="form-control">
-                    <option value="">Todas las categorías</option>
-                </select>
+        </nav>
+        
+        <!-- Contenido Principal -->
+        <main class="main-content">
+            <div class="section-header">
+                <h2><i class="fas fa-box"></i> Inventario</h2>
+                <p>Gestión completa de productos en stock</p>
+            </div>
+            
+            <div class="inventory-controls">
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInventory" placeholder="Buscar productos por nombre o descripción...">
+                </div>
+                
+                <div class="quick-actions">
+                    <button class="btn btn-primary" id="addProductBtn">
+                        <i class="fas fa-plus"></i> Agregar Producto
+                    </button>
+                    <button class="btn btn-outline" id="exportInventoryBtn">
+                        <i class="fas fa-file-export"></i> Exportar
+                    </button>
+                    <div class="view-toggle">
+                        <button class="view-btn active" id="tableViewBtn" title="Vista de tabla">
+                            <i class="fas fa-table"></i>
+                        </button>
+                        <button class="view-btn" id="gridViewBtn" title="Vista de cuadrícula">
+                            <i class="fas fa-th-large"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="filters">
+                    <div class="filter-group">
+                        <label for="filterCategory">Categoría:</label>
+                        <select id="filterCategory">
+                            <option value="">Todas las categorías</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="filterSize">Talla:</label>
+                        <select id="filterSize">
+                            <option value="">Todas las tallas</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="filterColor">Color:</label>
+                        <select id="filterColor">
+                            <option value="">Todos los colores</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="filterStock">Stock:</label>
+                        <select id="filterStock">
+                            <option value="">Todos</option>
+                            <option value="low">Stock Bajo</option>
+                            <option value="normal">Stock Normal</option>
+                            <option value="out">Agotado</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="sortBy">Ordenar por:</label>
+                        <select id="sortBy">
+                            <option value="quantity_desc">Cantidad (Mayor a menor)</option>
+                            <option value="quantity_asc">Cantidad (Menor a mayor)</option>
+                            <option value="price_desc">Precio (Mayor a menor)</option>
+                            <option value="price_asc">Precio (Menor a mayor)</option>
+                            <option value="name_asc">Nombre (A-Z)</option>
+                            <option value="name_desc">Nombre (Z-A)</option>
+                            <option value="date_desc">Fecha (Más reciente)</option>
+                            <option value="date_asc">Fecha (Más antiguo)</option>
+                        </select>
+                    </div>
+                    
+                    <button class="btn btn-outline" id="resetFilters">
+                        <i class="fas fa-redo"></i> Limpiar Filtros
+                    </button>
+                </div>
+            </div>
+            
+            <div class="bulk-actions" id="bulkActions">
+                <span class="bulk-count" id="selectedCount">0 productos seleccionados</span>
+                <button class="btn btn-outline" id="bulkEditBtn">
+                    <i class="fas fa-edit"></i> Editar
+                </button>
+                <button class="btn btn-danger" id="bulkDeleteBtn">
+                    <i class="fas fa-trash"></i> Eliminar
+                </button>
+                <button class="btn btn-secondary" id="bulkDeselectBtn">
+                    <i class="fas fa-times"></i> Deseleccionar
+                </button>
+            </div>
+            
+            <div class="inventory-summary">
+                <div class="summary-item">
+                    <span class="summary-label">Productos totales:</span>
+                    <span class="summary-value" id="summaryTotal">0</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Valor total:</span>
+                    <span class="summary-value" id="summaryValue">S/ 0.00</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Stock bajo:</span>
+                    <span class="summary-value" id="summaryLow">0</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Agotados:</span>
+                    <span class="summary-value" id="summaryOut">0</span>
+                </div>
+            </div>
+            
+            <!-- Vista de tabla -->
+            <div class="card table-view" id="tableView">
+                <div class="card-header">
+                    <h3>Productos en Inventario</h3>
+                </div>
+                <div class="card-body table-container">
+                    <table class="data-table inventory-table" id="inventoryTable">
+                        <thead>
+                            <tr>
+                                <th style="width: 30px;">
+                                    <input type="checkbox" id="selectAll">
+                                </th>
+                                <th>Producto</th>
+                                <th>Categoría</th>
+                                <th>Talla</th>
+                                <th>Color</th>
+                                <th>Stock</th>
+                                <th>Precio</th>
+                                <th>Valor Total</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventoryTableBody">
+                            <!-- Los productos se cargarán aquí con JavaScript -->
+                        </tbody>
+                    </table>
+                    <div class="empty-state" id="emptyInventory">
+                        <i class="fas fa-box-open"></i>
+                        <p>No hay productos en el inventario</p>
+                        <a href="agregar-producto.html" class="btn btn-primary">Agregar primer producto</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Vista de cuadrícula -->
+            <div class="inventory-grid" id="gridView">
+                <!-- Los productos se cargarán aquí con JavaScript -->
+            </div>
+            
+            <!-- Paginación -->
+            <div class="pagination" id="pagination">
+                <button class="btn btn-outline" id="prevPage">
+                    <i class="fas fa-chevron-left"></i> Anterior
+                </button>
+                <span class="page-info" id="pageInfo">Página 1 de 1</span>
+                <button class="btn btn-outline" id="nextPage">
+                    Siguiente <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Modal para confirmaciones -->
+    <div class="modal" id="confirmationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Confirmar Acción</h3>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="modalMessage">¿Está seguro de realizar esta acción?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="modalCancel">Cancelar</button>
+                <button class="btn btn-primary" id="modalConfirm">Confirmar</button>
             </div>
         </div>
     </div>
-
-    <div class="table-container">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Producto</th>
-                    <th>Categoría</th>
-                    <th>Talla/Color</th>
-                    <th>Stock</th>
-                    <th>Precio</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody id="lista-productos">
-                <!-- Productos se cargarán aquí -->
-            </tbody>
-        </table>
+    
+    <!-- Quick Edit Form -->
+    <div class="quick-edit-form" id="quickEditForm">
+        <div class="quick-edit-header">
+            <h3>Editar Producto</h3>
+            <button class="modal-close" id="closeQuickEdit">&times;</button>
+        </div>
+        <div class="quick-edit-body">
+            <form id="quickEditProductForm">
+                <input type="hidden" id="editProductId">
+                
+                <div class="form-group">
+                    <label for="editProductName">Nombre del Producto *</label>
+                    <input type="text" id="editProductName" required>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editProductPrice">Precio (S/) *</label>
+                        <input type="number" id="editProductPrice" step="0.01" min="0" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editProductQuantity">Cantidad *</label>
+                        <input type="number" id="editProductQuantity" min="0" required>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Guardar Cambios
+                    </button>
+                    <button type="button" class="btn btn-outline" id="cancelQuickEdit">
+                        Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
-
-    <div class="grid grid-3" style="margin-top: 1.5rem;">
-        <div class="stat-card">
-            <div class="stat-value" id="contador-total">0</div>
-            <div class="stat-label">Total Productos</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-value" id="contador-bajo" style="color: #ff9800;">0</div>
-            <div class="stat-label">Stock Bajo</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-value" id="valor-total" style="color: #28a745;">S/. 0</div>
-            <div class="stat-label">Valor Total</div>
-        </div>
-    </div>
-
+    
+    <div class="overlay" id="overlay"></div>
+    
+    <!-- Notificaciones -->
+    <div class="notification-container" id="notificationContainer"></div>
+    
     <script src="js/main.js"></script>
     <script src="js/header.js"></script>
-    <script src="js/inventario.js"></script>
+    <script src="js/dashboard.js"></script>
 </body>
 </html>
