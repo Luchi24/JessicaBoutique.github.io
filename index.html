@@ -3,111 +3,195 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jessica Boutique | Inicio</title>
+    <title>InventarioPro | Panel de Control</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/inventario.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <!-- El sidebar se insertará automáticamente -->
+    <div class="container">
+        <!-- Sidebar/Navegación -->
+        <nav class="sidebar" id="sidebar">
+            <div class="logo">
+                <h1><i class="fas fa-boxes"></i> <span>InventarioPro</span></h1>
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            
+            <ul class="nav-menu">
+                <li>
+                    <a href="index.html" class="nav-link active">
+                        <i class="fas fa-tachometer-alt"></i> <span>Panel de Control</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="inventario.html" class="nav-link">
+                        <i class="fas fa-box"></i> <span>Inventario</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="agregar-producto.html" class="nav-link">
+                        <i class="fas fa-plus-circle"></i> <span>Agregar Producto</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="ventas.html" class="nav-link">
+                        <i class="fas fa-cash-register"></i> <span>Ventas</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="reportes.html" class="nav-link">
+                        <i class="fas fa-chart-bar"></i> <span>Reportes</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="gestion.html" class="nav-link">
+                        <i class="fas fa-cog"></i> <span>Configuración</span>
+                    </a>
+                </li>
+            </ul>
+            
+            <div class="theme-toggle">
+                <button id="themeToggle">
+                    <i class="fas fa-moon"></i> <span>Tema Oscuro</span>
+                </button>
+            </div>
+            
+            <div class="user-info">
+                <div class="avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="user-details">
+                    <span class="username">Administrador</span>
+                    <span class="user-role">Dueño</span>
+                </div>
+            </div>
+        </nav>
+        
+        <!-- Contenido Principal -->
+        <main class="main-content">
+            <div class="section-header">
+                <h2><i class="fas fa-tachometer-alt"></i> Panel de Control</h2>
+                <p>Resumen general del sistema y estado actual</p>
+            </div>
+            
+            <div class="dashboard-cards">
+                <div class="card stat-card">
+                    <div class="card-icon" style="background-color: #4e73df;">
+                        <i class="fas fa-boxes"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Productos en Stock</h3>
+                        <p class="stat-number" id="totalProducts">0</p>
+                        <p class="stat-change"><span class="positive">+12</span> este mes</p>
+                    </div>
+                </div>
+                
+                <div class="card stat-card">
+                    <div class="card-icon" style="background-color: #1cc88a;">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Ventas Hoy</h3>
+                        <p class="stat-number" id="salesToday">S/ 0.00</p>
+                        <p class="stat-change"><span class="positive">+5%</span> vs ayer</p>
+                    </div>
+                </div>
+                
+                <div class="card stat-card">
+                    <div class="card-icon" style="background-color: #36b9cc;">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Ventas del Mes</h3>
+                        <p class="stat-number" id="salesMonth">S/ 0.00</p>
+                        <p class="stat-change"><span class="positive">+18%</span> vs mes pasado</p>
+                    </div>
+                </div>
+                
+                <div class="card stat-card">
+                    <div class="card-icon" style="background-color: #f6c23e;">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Stock Bajo</h3>
+                        <p class="stat-number" id="lowStock">0</p>
+                        <p class="stat-change">Productos por reponer</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="dashboard-charts">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Ventas de la Semana</h3>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="weeklySalesChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Productos Más Vendidos</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="top-products" id="topProductsList">
+                            <p class="empty-state">No hay datos de ventas aún</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="recent-activity card">
+                <div class="card-header">
+                    <h3>Actividad Reciente</h3>
+                </div>
+                <div class="card-body">
+                    <div class="activity-list" id="recentActivity">
+                        <div class="activity-item">
+                            <i class="fas fa-plus-circle activity-icon" style="color: #1cc88a;"></i>
+                            <div class="activity-details">
+                                <p>Producto "Camiseta Básica" agregado al inventario</p>
+                                <span class="activity-time">Hace 2 horas</span>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <i class="fas fa-cash-register activity-icon" style="color: #4e73df;"></i>
+                            <div class="activity-details">
+                                <p>Venta registrada por S/ 150.00</p>
+                                <span class="activity-time">Hace 5 horas</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
     
-    <div class="content-header">
-        <h2><i class="fas fa-home"></i> Panel de Control</h2>
-        <div class="header-actions">
-            <span id="fecha-actual" style="color: #666;"></span>
-            <button class="btn btn-secondary" onclick="actualizarDashboard()">
-                <i class="fas fa-sync-alt"></i> Actualizar
-            </button>
-        </div>
-    </div>
-
-    <div class="grid grid-4">
-        <div class="stat-card">
-            <div class="stat-icon primary">
-                <i class="fas fa-boxes"></i>
+    <!-- Modal para confirmaciones -->
+    <div class="modal" id="confirmationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Confirmar Acción</h3>
+                <button class="modal-close" id="modalClose">&times;</button>
             </div>
-            <div class="stat-value" id="total-productos">0</div>
-            <div class="stat-label">Total Productos</div>
-        </div>
-        
-        <div class="stat-card">
-            <div class="stat-icon success">
-                <i class="fas fa-shopping-cart"></i>
+            <div class="modal-body">
+                <p id="modalMessage">¿Está seguro de realizar esta acción?</p>
             </div>
-            <div class="stat-value" id="ventas-hoy">0</div>
-            <div class="stat-label">Ventas Hoy</div>
-            <small id="monto-hoy" style="color: #666;">S/. 0.00</small>
-        </div>
-        
-        <div class="stat-card">
-            <div class="stat-icon warning">
-                <i class="fas fa-exclamation-triangle"></i>
-            </div>
-            <div class="stat-value" id="stock-bajo">0</div>
-            <div class="stat-label">Stock Bajo</div>
-            <small style="color: #666;">(<span id="alerta-stock">3</span> unidades)</small>
-        </div>
-        
-        <div class="stat-card">
-            <div class="stat-icon info">
-                <i class="fas fa-money-bill-wave"></i>
-            </div>
-            <div class="stat-value" id="ganancias-hoy">S/. 0</div>
-            <div class="stat-label">Ganancias Hoy</div>
-        </div>
-    </div>
-
-    <div class="grid grid-2">
-        <div class="card">
-            <div class="card-header">
-                <h3><i class="fas fa-chart-line"></i> Ventas de Hoy</h3>
-                <select id="filtro-horas" onchange="actualizarGraficoHoy()" class="form-control" style="width: auto;">
-                    <option value="horas">Por Horas</option>
-                    <option value="productos">Por Productos</option>
-                </select>
-            </div>
-            <div style="position: relative; height: 250px;">
-                <canvas id="grafico-hoy"></canvas>
-            </div>
-        </div>
-        
-        <div class="card">
-            <div class="card-header">
-                <h3><i class="fas fa-fire"></i> Productos Más Vendidos</h3>
-                <a href="reportes.html" class="btn btn-sm btn-secondary">
-                    Ver Todos <i class="fas fa-arrow-right"></i>
-                </a>
-            </div>
-            <div id="top-productos" style="max-height: 250px; overflow-y: auto;">
-                <!-- Productos populares se cargarán aquí -->
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="modalCancel">Cancelar</button>
+                <button class="btn btn-primary" id="modalConfirm">Confirmar</button>
             </div>
         </div>
     </div>
-
-    <div class="grid grid-2">
-        <div class="card">
-            <div class="card-header">
-                <h3><i class="fas fa-exclamation-circle"></i> Alertas del Sistema</h3>
-                <span class="badge badge-danger" id="contador-alertas">0</span>
-            </div>
-            <div id="alertas-container" style="max-height: 200px; overflow-y: auto;">
-                <!-- Alertas se cargarán aquí -->
-            </div>
-        </div>
-        
-        <div class="card">
-            <div class="card-header">
-                <h3><i class="fas fa-history"></i> Actividad Reciente</h3>
-                <a href="ventas.html" class="btn btn-sm btn-primary">
-                    <i class="fas fa-plus"></i> Nueva Venta
-                </a>
-            </div>
-            <div id="actividad-reciente" style="max-height: 200px; overflow-y: auto;">
-                <!-- Actividad reciente se cargará aquí -->
-            </div>
-        </div>
-    </div>
-
+    
+    <!-- Notificaciones -->
+    <div class="notification-container" id="notificationContainer"></div>
+    
     <script src="js/main.js"></script>
     <script src="js/header.js"></script>
     <script src="js/dashboard.js"></script>
