@@ -3,137 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jessica Boutique | Inventario</title>
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/inventario.css">
-    <link rel="stylesheet" href="css/correcciones.css">
+    <title>Jessica Boutique - Inventario</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/estilos.css">
+    <link rel="stylesheet" href="css/componentes.css">
+    <link rel="stylesheet" href="css/tablas-formularios.css">
+    <link rel="stylesheet" href="css/responsive.css">
 </head>
 <body>
-    <!-- Navbar (mismo que index) -->
-    <div class="navbar">
-        <div class="logo">
-            <i class="fas fa-store"></i>
-            <h1>Jessica Boutique</h1>
-            <span class="subtitle">Sistema de Gestión</span>
-        </div>
-        <div class="nav-buttons">
-            <a href="index.html" class="nav-btn">
-                <i class="fas fa-home"></i> Inicio
-            </a>
-            <a href="inventario.html" class="nav-btn active">
-                <i class="fas fa-boxes"></i> Inventario
-            </a>
-            <a href="agregar-producto.html" class="nav-btn">
-                <i class="fas fa-plus-circle"></i> Agregar
-            </a>
-            <a href="ventas.html" class="nav-btn">
-                <i class="fas fa-cash-register"></i> Ventas
-            </a>
-            <a href="reportes.html" class="nav-btn">
-                <i class="fas fa-chart-bar"></i> Reportes
-            </a>
-            <a href="gestion.html" class="nav-btn">
-                <i class="fas fa-cog"></i> Gestión
-            </a>
-        </div>
-    </div>
-
-    <div class="container">
-        <div class="seccion-header">
-            <h2><i class="fas fa-boxes"></i> Inventario de Productos</h2>
-            <button class="btn-principal" onclick="location.href='agregar-producto.html'">
-                <i class="fas fa-plus"></i> Nuevo Producto
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-store"></i>
+                <h1>Jessica Boutique</h1>
+            </div>
+            <button class="nav-toggle" id="navToggle">
+                <i class="fas fa-bars"></i>
             </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="nav-link"><i class="fas fa-tachometer-alt"></i> Panel</a></li>
+                <li><a href="inventario.html" class="nav-link active"><i class="fas fa-boxes"></i> Inventario</a></li>
+                <li><a href="agregar-producto.html" class="nav-link"><i class="fas fa-plus-circle"></i> Agregar</a></li>
+                <li><a href="ventas.html" class="nav-link"><i class="fas fa-shopping-cart"></i> Ventas</a></li>
+                <li><a href="reportes.html" class="nav-link"><i class="fas fa-chart-bar"></i> Reportes</a></li>
+                <li><a href="gestion.html" class="nav-link"><i class="fas fa-cog"></i> Gestión</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="page-header">
+            <h2><i class="fas fa-boxes"></i> Inventario de Productos</h2>
+            <p>Gestiona tu inventario de productos</p>
         </div>
 
-        <div class="filtros">
-            <div class="busqueda">
+        <!-- Filtros y Búsqueda -->
+        <div class="filters-container">
+            <div class="search-box">
                 <i class="fas fa-search"></i>
-                <input type="text" id="buscar-producto" placeholder="Buscar por nombre..." 
-                       onkeyup="filtrarProductos()">
+                <input type="text" id="buscarProducto" placeholder="Buscar producto..." class="form-control">
             </div>
-            <select id="filtro-categoria" onchange="filtrarProductos()">
-                <option value="">Todas las categorías</option>
-            </select>
-            <select id="filtro-marca" onchange="filtrarProductos()">
-                <option value="">Todas las marcas</option>
-            </select>
-            <select id="filtro-talla" onchange="filtrarProductos()">
-                <option value="">Todas las tallas</option>
-                <option value="XS">XS</option>
-                <option value="S">S</option>
-                <option value="M">M</option>
-                <option value="L">L</option>
-                <option value="XL">XL</option>
-                <option value="Única">Única</option>
-            </select>
-            <select id="ordenar-por" onchange="ordenarProductos()">
-                <option value="nombre">Ordenar por</option>
-                <option value="cantidad">Menor cantidad</option>
-                <option value="precio">Menor precio</option>
-                <option value="ganancia">Mayor ganancia</option>
-            </select>
+            <div class="filter-group">
+                <label for="filtroCategoria" class="form-label">Categoría</label>
+                <select id="filtroCategoria" class="form-control">
+                    <option value="todas">Todas las categorías</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="filtroEstado" class="form-label">Estado</label>
+                <select id="filtroEstado" class="form-control">
+                    <option value="todos">Todos</option>
+                    <option value="instock">En Stock</option>
+                    <option value="lowstock">Stock Bajo</option>
+                    <option value="outofstock">Agotados</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="ordenarPor" class="form-label">Ordenar por</label>
+                <select id="ordenarPor" class="form-control">
+                    <option value="nombre">Nombre</option>
+                    <option value="precio">Precio</option>
+                    <option value="stock">Stock</option>
+                    <option value="reciente">Más recientes</option>
+                </select>
+            </div>
+            <button id="btnAplicarFiltros" class="btn btn-primary">Aplicar Filtros</button>
         </div>
 
-        <div class="tabla-contenedor">
-            <table id="tabla-productos">
-                <thead>
-                    <tr>
-                        <th>Producto</th>
-                        <th>Categoría</th>
-                        <th>Marca</th>
-                        <th>Talla</th>
-                        <th>Color</th>
-                        <th>Cantidad</th>
-                        <th>Precio</th>
-                        <th>Ganancia</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody id="lista-productos">
-                    <!-- Productos se cargarán aquí -->
-                </tbody>
-            </table>
+        <!-- Tabla de Productos -->
+        <div class="card">
+            <div class="card-header">
+                <h3>Lista de Productos</h3>
+                <div>
+                    <button id="btnExportarInventario" class="btn btn-secondary">
+                        <i class="fas fa-download"></i> Exportar
+                    </button>
+                    <a href="agregar-producto.html" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Nuevo Producto
+                    </a>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table" id="tablaInventario">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Categoría</th>
+                            <th>Talla</th>
+                            <th>Color</th>
+                            <th>Stock</th>
+                            <th>Precio Venta</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cuerpoTablaInventario">
+                        <!-- Los productos se cargarán aquí dinámicamente -->
+                    </tbody>
+                </table>
+            </div>
+            <div id="paginacionInventario" class="pagination">
+                <!-- La paginación se generará aquí -->
+            </div>
         </div>
 
-        <div class="estadisticas">
-            <div class="estadistica">
-                <h3>Total Productos</h3>
-                <p id="total-productos">0</p>
+        <!-- Resumen del Inventario -->
+        <div class="dashboard-cards">
+            <div class="card summary-card">
+                <h3>Productos Totales</h3>
+                <div class="card-value" id="resumenTotalProductos">0</div>
+                <p>en inventario</p>
             </div>
-            <div class="estadistica">
-                <h3>Stock Bajo (< 5)</h3>
-                <p id="stock-bajo">0</p>
-            </div>
-            <div class="estadistica">
+            <div class="card summary-card">
                 <h3>Valor Total</h3>
-                <p id="valor-total">S/. 0.00</p>
+                <div class="card-value" id="resumenValorTotal">S/. 0.00</div>
+                <p>valor del inventario</p>
             </div>
-            <div class="estadistica">
-                <h3>Ganancia Total</h3>
-                <p id="ganancia-total">S/. 0.00</p>
+            <div class="card summary-card">
+                <h3>Por Agotarse</h3>
+                <div class="card-value" id="resumenStockBajo">0</div>
+                <p>productos con stock bajo</p>
+            </div>
+            <div class="card summary-card">
+                <h3>Agotados</h3>
+                <div class="card-value" id="resumenAgotados">0</div>
+                <p>productos sin stock</p>
             </div>
         </div>
-    </div>
+    </main>
 
-    <!-- Modal para editar producto -->
-    <div id="modal-editar" class="modal">
-        <div class="modal-contenido">
+    <!-- Modal para Editar Producto -->
+    <div id="modalEditarProducto" class="modal">
+        <div class="modal-content">
             <div class="modal-header">
-                <h3><i class="fas fa-edit"></i> Editar Producto</h3>
-                <button class="btn-cerrar" onclick="cerrarModal('modal-editar')">&times;</button>
+                <h3>Editar Producto</h3>
+                <button id="cerrarModalEditar" class="btn btn-secondary">&times;</button>
             </div>
-            <div class="modal-body" id="modal-editar-body">
-                <!-- Formulario de edición se cargará aquí -->
+            <div class="modal-body">
+                <!-- El formulario de edición se cargará aquí -->
             </div>
         </div>
     </div>
 
-    <!-- Notificaciones -->
-    <div id="notificaciones" class="notificaciones"></div>
-
-    <script src="js/main.js"></script>
-    <script src="js/inventario.js"></script>
+    <script src="js/datos.js"></script>
+    <script src="js/sistema.js"></script>
+    <script src="js/productos.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar la página de inventario
+            if (typeof Productos !== 'undefined') {
+                Productos.inicializarPaginaInventario();
+            }
+        });
+    </script>
 </body>
 </html>
