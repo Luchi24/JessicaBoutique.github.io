@@ -3,145 +3,550 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jessica Boutique | Gestión</title>
+    <title>InventarioPro | Configuración</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/gestion.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="navbar">
-        <div class="logo">
-            <i class="fas fa-store"></i>
-            <h1>Jessica Boutique</h1>
-        </div>
-        <div class="nav-buttons">
-            <a href="index.html" class="nav-btn"><i class="fas fa-home"></i> Inicio</a>
-            <a href="inventario.html" class="nav-btn"><i class="fas fa-boxes"></i> Inventario</a>
-            <a href="agregar-producto.html" class="nav-btn"><i class="fas fa-plus"></i> Agregar</a>
-            <a href="ventas.html" class="nav-btn"><i class="fas fa-shopping-cart"></i> Ventas</a>
-            <a href="gestion.html" class="nav-btn active"><i class="fas fa-cog"></i> Configuración</a>
-        </div>
-    </div>
-
     <div class="container">
-        <div class="seccion-header">
-            <h2><i class="fas fa-cog"></i> Configuración</h2>
-        </div>
-
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
-            <div style="background: white; padding: 1.5rem; border-radius: 10px;">
-                <h3 style="color: #e91e63; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                    <i class="fas fa-folder"></i> Categorías
-                </h3>
-                <p style="color: #666; margin-bottom: 1rem; font-size: 0.9rem;">Agrega o elimina categorías de productos</p>
-                
-                <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
-                    <input type="text" id="nueva-categoria" placeholder="Nueva categoría" 
-                           style="flex: 1; padding: 0.8rem; border: 1px solid #ddd; border-radius: 6px;">
-                    <button onclick="agregarCategoria()" class="btn-principal">
-                        <i class="fas fa-plus"></i>
+        <!-- Sidebar/Navegación -->
+        <nav class="sidebar" id="sidebar">
+            <div class="logo">
+                <h1><i class="fas fa-boxes"></i> <span>InventarioPro</span></h1>
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            
+            <ul class="nav-menu">
+                <li>
+                    <a href="index.html" class="nav-link">
+                        <i class="fas fa-tachometer-alt"></i> <span>Panel de Control</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="inventario.html" class="nav-link">
+                        <i class="fas fa-box"></i> <span>Inventario</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="agregar-producto.html" class="nav-link">
+                        <i class="fas fa-plus-circle"></i> <span>Agregar Producto</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="ventas.html" class="nav-link">
+                        <i class="fas fa-cash-register"></i> <span>Ventas</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="reportes.html" class="nav-link">
+                        <i class="fas fa-chart-bar"></i> <span>Reportes</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="gestion.html" class="nav-link active">
+                        <i class="fas fa-cog"></i> <span>Configuración</span>
+                    </a>
+                </li>
+            </ul>
+            
+            <div class="theme-toggle">
+                <button id="themeToggle">
+                    <i class="fas fa-moon"></i> <span>Tema Oscuro</span>
+                </button>
+            </div>
+            
+            <div class="user-info">
+                <div class="avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="user-details">
+                    <span class="username">Administrador</span>
+                    <span class="user-role">Dueño</span>
+                </div>
+            </div>
+        </nav>
+        
+        <!-- Contenido Principal -->
+        <main class="main-content">
+            <div class="section-header">
+                <h2><i class="fas fa-cog"></i> Configuración</h2>
+                <p>Personaliza el sistema según tus necesidades</p>
+            </div>
+            
+            <div class="settings-tabs">
+                <div class="tab-buttons">
+                    <button class="tab-btn active" data-tab="categories">
+                        <i class="fas fa-tags"></i> Categorías
+                    </button>
+                    <button class="tab-btn" data-tab="sizes">
+                        <i class="fas fa-ruler"></i> Tallas
+                    </button>
+                    <button class="tab-btn" data-tab="colors">
+                        <i class="fas fa-palette"></i> Colores
+                    </button>
+                    <button class="tab-btn" data-tab="users">
+                        <i class="fas fa-users"></i> Usuarios
+                    </button>
+                    <button class="tab-btn" data-tab="data">
+                        <i class="fas fa-database"></i> Datos
+                    </button>
+                    <button class="tab-btn" data-tab="appearance">
+                        <i class="fas fa-paint-brush"></i> Apariencia
+                    </button>
+                    <button class="tab-btn" data-tab="system">
+                        <i class="fas fa-sliders-h"></i> Sistema
                     </button>
                 </div>
                 
-                <div id="lista-categorias" style="max-height: 200px; overflow-y: auto; border: 1px solid #eee; border-radius: 6px;">
-                    <!-- Categorías se cargarán aquí -->
-                </div>
-            </div>
-
-            <div style="background: white; padding: 1.5rem; border-radius: 10px;">
-                <h3 style="color: #e91e63; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                    <i class="fas fa-palette"></i> Colores
-                </h3>
-                <p style="color: #666; margin-bottom: 1rem; font-size: 0.9rem;">Gestiona los colores disponibles</p>
-                
-                <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
-                    <input type="text" id="nuevo-color" placeholder="Nuevo color" 
-                           style="flex: 1; padding: 0.8rem; border: 1px solid #ddd; border-radius: 6px;">
-                    <button onclick="agregarColor()" class="btn-principal">
-                        <i class="fas fa-plus"></i>
-                    </button>
-                </div>
-                
-                <div id="lista-colores" style="max-height: 200px; overflow-y: auto; border: 1px solid #eee; border-radius: 6px;">
-                    <!-- Colores se cargarán aquí -->
-                </div>
-            </div>
-
-            <div style="background: white; padding: 1.5rem; border-radius: 10px;">
-                <h3 style="color: #e91e63; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                    <i class="fas fa-sliders-h"></i> Ajustes
-                </h3>
-                
-                <div style="display: grid; gap: 1rem;">
-                    <div>
-                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">IGV (%)</label>
-                        <input type="number" id="tasa-igv" min="0" max="100" step="0.1" 
-                               style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 6px;">
-                    </div>
-                    
-                    <div>
-                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Alerta stock bajo</label>
-                        <input type="number" id="alerta-stock" min="1" max="50" 
-                               style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 6px;">
-                    </div>
-                    
-                    <button onclick="guardarAjustes()" class="btn-principal">
-                        <i class="fas fa-save"></i> Guardar Ajustes
-                    </button>
-                </div>
-            </div>
-
-            <div style="background: white; padding: 1.5rem; border-radius: 10px;">
-                <h3 style="color: #e91e63; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                    <i class="fas fa-database"></i> Datos
-                </h3>
-                <p style="color: #666; margin-bottom: 1rem; font-size: 0.9rem;">Exporta o importa tus datos</p>
-                
-                <div style="display: grid; gap: 1rem;">
-                    <button onclick="exportarDatos()" class="btn-principal">
-                        <i class="fas fa-download"></i> Exportar Datos
-                    </button>
-                    
-                    <div>
-                        <label style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Importar Datos</label>
-                        <input type="file" id="importar-archivo" accept=".json" 
-                               style="width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 6px;">
-                    </div>
-                    
-                    <div style="background: #fff3e0; padding: 1rem; border-radius: 6px; border-left: 4px solid #ff9800;">
-                        <p style="color: #e65100; margin: 0; font-size: 0.9rem;">
-                            <i class="fas fa-exclamation-triangle"></i> 
-                            La importación reemplazará todos los datos actuales.
-                        </p>
+                <div class="tab-content active" id="categories-tab">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-tags"></i> Gestión de Categorías</h3>
+                            <p>Organiza tus productos por categorías</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <input type="text" id="newCategory" placeholder="Nueva categoría (ej. Camisetas, Pantalones)">
+                                    <small class="form-help">Ingresa el nombre de la nueva categoría</small>
+                                </div>
+                                <button class="btn btn-primary" id="addCategory">
+                                    <i class="fas fa-plus"></i> Agregar
+                                </button>
+                            </div>
+                            
+                            <div class="categories-list" id="categoriesList">
+                                <p class="empty-state">No hay categorías registradas</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                
+                <div class="tab-content" id="sizes-tab">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-ruler"></i> Gestión de Tallas</h3>
+                            <p>Administra las tallas disponibles para tus productos</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <input type="text" id="newSize" placeholder="Nueva talla (ej. S, M, L, 32, 34)">
+                                    <small class="form-help">Ingresa la nueva talla</small>
+                                </div>
+                                <button class="btn btn-primary" id="addSize">
+                                    <i class="fas fa-plus"></i> Agregar
+                                </button>
+                            </div>
+                            
+                            <div class="sizes-list" id="sizesList">
+                                <p class="empty-state">No hay tallas registradas</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="colors-tab">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-palette"></i> Gestión de Colores</h3>
+                            <p>Administra los colores disponibles para tus productos</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <input type="text" id="newColorName" placeholder="Nombre del color (ej. Rojo, Azul)">
+                                    <small class="form-help">Nombre descriptivo del color</small>
+                                </div>
+                                <div class="form-group">
+                                    <input type="color" id="newColorValue" value="#ff0000">
+                                    <small class="form-help">Selecciona el color</small>
+                                </div>
+                                <button class="btn btn-primary" id="addColor">
+                                    <i class="fas fa-plus"></i> Agregar
+                                </button>
+                            </div>
+                            
+                            <div class="colors-list" id="colorsList">
+                                <p class="empty-state">No hay colores registrados</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="users-tab">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-users"></i> Gestión de Usuarios</h3>
+                            <p>Administra los usuarios del sistema</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="users-header">
+                                <button class="btn btn-primary" id="addUserBtn">
+                                    <i class="fas fa-user-plus"></i> Nuevo Usuario
+                                </button>
+                            </div>
+                            
+                            <div class="users-list" id="usersList">
+                                <div class="user-item">
+                                    <div class="user-avatar">
+                                        <i class="fas fa-user-circle"></i>
+                                    </div>
+                                    <div class="user-info">
+                                        <h4>Administrador</h4>
+                                        <p class="user-email">admin@inventariopro.com</p>
+                                        <span class="user-role admin">Administrador</span>
+                                    </div>
+                                    <div class="user-actions">
+                                        <button class="btn-icon edit-user" title="Editar usuario">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn-icon delete-user" title="Eliminar usuario">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="data-tab">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-database"></i> Gestión de Datos</h3>
+                            <p>Exporta, importa o respalda tus datos</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="data-actions">
+                                <div class="action-card">
+                                    <div class="action-icon">
+                                        <i class="fas fa-file-export"></i>
+                                    </div>
+                                    <div class="action-content">
+                                        <h4>Exportar Datos</h4>
+                                        <p>Guarda una copia de todos los datos del sistema en formato JSON</p>
+                                        <button class="btn btn-primary" id="exportData">
+                                            <i class="fas fa-download"></i> Exportar JSON
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="action-card">
+                                    <div class="action-icon">
+                                        <i class="fas fa-file-import"></i>
+                                    </div>
+                                    <div class="action-content">
+                                        <h4>Importar Datos</h4>
+                                        <p>Restaura los datos desde un archivo JSON previamente exportado</p>
+                                        <div class="import-section">
+                                            <input type="file" id="importFile" accept=".json" style="display: none;">
+                                            <button class="btn btn-outline" id="selectImportFile">
+                                                <i class="fas fa-folder-open"></i> Seleccionar Archivo
+                                            </button>
+                                            <span class="file-name" id="fileName">No se ha seleccionado archivo</span>
+                                        </div>
+                                        <button class="btn btn-secondary" id="importData" disabled>
+                                            <i class="fas fa-upload"></i> Importar Datos
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="action-card warning">
+                                    <div class="action-icon">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </div>
+                                    <div class="action-content">
+                                        <h4>Eliminar Datos</h4>
+                                        <p>Elimina todos los datos del sistema. Esta acción no se puede deshacer</p>
+                                        <button class="btn btn-danger" id="resetData">
+                                            <i class="fas fa-exclamation-triangle"></i> Restablecer Sistema
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="appearance-tab">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-paint-brush"></i> Apariencia del Sistema</h3>
+                            <p>Personaliza la apariencia del sistema</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="appearance-options">
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="darkModeToggle" checked>
+                                        <span>Tema oscuro predeterminado</span>
+                                    </label>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="accentColor">Color de acento:</label>
+                                    <div class="color-picker">
+                                        <input type="color" id="accentColor" value="#4e73df">
+                                        <span class="color-preview" id="accentColorPreview"></span>
+                                        <span class="color-value">#4e73df</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="fontSize">Tamaño de fuente:</label>
+                                    <div class="font-size-options">
+                                        <label class="font-option">
+                                            <input type="radio" name="fontSize" value="small">
+                                            <span class="font-sample small">Aa</span>
+                                            <span>Pequeño</span>
+                                        </label>
+                                        <label class="font-option active">
+                                            <input type="radio" name="fontSize" value="medium" checked>
+                                            <span class="font-sample medium">Aa</span>
+                                            <span>Mediano</span>
+                                        </label>
+                                        <label class="font-option">
+                                            <input type="radio" name="fontSize" value="large">
+                                            <span class="font-sample large">Aa</span>
+                                            <span>Grande</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="sidebarStyle">Estilo de barra lateral:</label>
+                                    <select id="sidebarStyle">
+                                        <option value="default">Predeterminado</option>
+                                        <option value="compact">Compacto</option>
+                                        <option value="floating">Flotante</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="animationsToggle" checked>
+                                        <span>Animaciones y transiciones</span>
+                                    </label>
+                                </div>
+                                
+                                <button class="btn btn-primary" id="saveAppearance">
+                                    <i class="fas fa-save"></i> Guardar Configuración
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="system-tab">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-sliders-h"></i> Configuración del Sistema</h3>
+                            <p>Ajustes avanzados del sistema</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="system-settings">
+                                <div class="setting-group">
+                                    <h4><i class="fas fa-calculator"></i> Configuración de Ventas</h4>
+                                    
+                                    <div class="form-group">
+                                        <label for="igvPercentage">Porcentaje de IGV:</label>
+                                        <div class="input-with-unit">
+                                            <input type="number" id="igvPercentage" value="18" min="0" max="100">
+                                            <span class="unit">%</span>
+                                        </div>
+                                        <small class="form-help">Porcentaje de impuesto general a las ventas</small>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="cardFeePercentage">Recargo por tarjeta:</label>
+                                        <div class="input-with-unit">
+                                            <input type="number" id="cardFeePercentage" value="5" min="0" max="100">
+                                            <span class="unit">%</span>
+                                        </div>
+                                        <small class="form-help">Porcentaje adicional por pago con tarjeta</small>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="autoUpdateStock" checked>
+                                            <span>Actualizar stock automáticamente después de ventas</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div class="setting-group">
+                                    <h4><i class="fas fa-bell"></i> Notificaciones y Alertas</h4>
+                                    
+                                    <div class="form-group">
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="lowStockAlert" checked>
+                                            <span>Alertas de stock bajo</span>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="alertThreshold">Umbral para alertas de stock:</label>
+                                        <input type="number" id="alertThreshold" value="5" min="0">
+                                        <small class="form-help">Número mínimo de unidades para generar alerta</small>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="dailyReportAlert" checked>
+                                            <span>Resumen diario de ventas</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div class="setting-group">
+                                    <h4><i class="fas fa-shield-alt"></i> Seguridad</h4>
+                                    
+                                    <div class="form-group">
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="sessionTimeout" checked>
+                                            <span>Cierre de sesión automático</span>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="timeoutMinutes">Minutos de inactividad:</label>
+                                        <div class="input-with-unit">
+                                            <input type="number" id="timeoutMinutes" value="30" min="5" max="240">
+                                            <span class="unit">minutos</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="checkbox-label">
+                                            <input type="checkbox" id="backupAuto" checked>
+                                            <span>Respaldos automáticos</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <button class="btn btn-primary" id="saveSystemSettings">
+                                    <i class="fas fa-save"></i> Guardar Configuración
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-
-        <div style="margin-top: 2rem; background: white; padding: 1.5rem; border-radius: 10px;">
-            <h3 style="color: #e91e63; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                <i class="fas fa-info-circle"></i> Información del Sistema
-            </h3>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-                <div style="padding: 1rem; background: #fafafa; border-radius: 8px;">
-                    <p style="color: #666; margin-bottom: 0.5rem; font-size: 0.9rem;">Total Productos</p>
-                    <p style="font-size: 1.5rem; font-weight: bold; color: #e91e63;" id="info-productos">0</p>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3><i class="fas fa-info-circle"></i> Información del Sistema</h3>
                 </div>
-                <div style="padding: 1rem; background: #fafafa; border-radius: 8px;">
-                    <p style="color: #666; margin-bottom: 0.5rem; font-size: 0.9rem;">Total Ventas</p>
-                    <p style="font-size: 1.5rem; font-weight: bold; color: #4caf50;" id="info-ventas">0</p>
+                <div class="card-body">
+                    <div class="system-info">
+                        <div class="info-item">
+                            <span class="info-label">Versión del Sistema:</span>
+                            <span class="info-value">InventarioPro 2.0</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Última Actualización:</span>
+                            <span class="info-value" id="lastUpdate">Cargando...</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Total de Productos:</span>
+                            <span class="info-value" id="systemProductCount">0</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Total de Ventas:</span>
+                            <span class="info-value" id="systemSaleCount">0</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Uso de Almacenamiento:</span>
+                            <span class="info-value" id="storageUsage">Calculando...</span>
+                        </div>
+                    </div>
                 </div>
-                <div style="padding: 1rem; background: #fafafa; border-radius: 8px;">
-                    <p style="color: #666; margin-bottom: 0.5rem; font-size: 0.9rem;">Versión</p>
-                    <p style="font-size: 1.5rem; font-weight: bold; color: #2196f3;">2.0</p>
-                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Modal para confirmaciones -->
+    <div class="modal" id="confirmationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Confirmar Acción</h3>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="modalMessage">¿Está seguro de realizar esta acción?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="modalCancel">Cancelar</button>
+                <button class="btn btn-primary" id="modalConfirm">Confirmar</button>
             </div>
         </div>
     </div>
-
-    <div id="notificaciones"></div>
-
+    
+    <!-- Modal Nuevo Usuario -->
+    <div class="modal" id="userModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="userModalTitle">Nuevo Usuario</h3>
+                <button class="modal-close" id="closeUserModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="userForm">
+                    <input type="hidden" id="userId">
+                    
+                    <div class="form-group">
+                        <label for="userName">Nombre completo *</label>
+                        <input type="text" id="userName" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="userEmail">Correo electrónico *</label>
+                        <input type="email" id="userEmail" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="userRole">Rol *</label>
+                        <select id="userRole" required>
+                            <option value="">Seleccionar rol</option>
+                            <option value="admin">Administrador</option>
+                            <option value="manager">Gerente</option>
+                            <option value="seller">Vendedor</option>
+                            <option value="viewer">Solo lectura</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="userPassword">Contraseña *</label>
+                        <input type="password" id="userPassword" required>
+                        <small class="form-help">Mínimo 8 caracteres</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="userConfirmPassword">Confirmar contraseña *</label>
+                        <input type="password" id="userConfirmPassword" required>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Guardar Usuario
+                        </button>
+                        <button type="button" class="btn btn-outline" id="cancelUserForm">
+                            Cancelar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Notificaciones -->
+    <div class="notification-container" id="notificationContainer"></div>
+    
     <script src="js/main.js"></script>
-    <script src="js/header.js"></script>
-    <script src="js/agregar.js"></script>
+    <script src="js/gestion.js"></script>
+        <script src="js/dashboard.js"></script>
 </body>
 </html>
