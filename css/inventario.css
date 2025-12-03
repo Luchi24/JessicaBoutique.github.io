@@ -1,74 +1,90 @@
-/* Estilos específicos para la página de Inventario */
+/* Estilos específicos para Inventario */
 
 /* Filtros */
 .card-filtros {
-    margin-bottom: 2rem;
+    background-color: var(--color-blanco);
+    border: 1px solid var(--color-gris);
 }
 
 .filtros-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--espacio-sm);
     align-items: end;
 }
 
+.filtro-item {
+    display: flex;
+    flex-direction: column;
+}
+
 .filtro-label {
-    display: block;
-    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
     font-weight: 600;
+    margin-bottom: 5px;
     color: var(--color-gris-oscuro);
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
 
 .btn-filtro {
+    margin-top: 5px;
     width: 100%;
-    margin-top: 1.5rem;
 }
 
-/* Tabla de inventario */
+/* Tabla de Inventario */
+.table-inventario {
+    font-size: 0.9rem;
+}
+
 .table-inventario th {
+    position: sticky;
+    top: 0;
     background-color: var(--color-lila);
-    color: white;
-    font-weight: 600;
+    z-index: 10;
 }
 
 .table-inventario td {
     vertical-align: middle;
 }
 
-/* Estados de productos */
-.estado-producto {
-    display: inline-block;
-    padding: 0.3rem 0.8rem;
-    border-radius: 20px;
-    font-size: 0.8rem;
+/* Estados en tabla */
+.stock-cell {
     font-weight: 600;
-    text-transform: uppercase;
 }
 
-.estado-instock {
-    background-color: rgba(76, 175, 80, 0.1);
+.stock-cell.high {
     color: var(--color-exito);
 }
 
-.estado-lowstock {
-    background-color: rgba(255, 152, 0, 0.1);
+.stock-cell.medium {
     color: var(--color-advertencia);
 }
 
-.estado-outofstock {
-    background-color: rgba(244, 67, 54, 0.1);
+.stock-cell.low {
     color: var(--color-peligro);
 }
 
-/* Acciones en tabla */
-.acciones-producto {
+/* Acciones rápidas */
+.quick-actions {
     display: flex;
-    gap: 0.5rem;
+    gap: 5px;
 }
 
-.acciones-producto .btn {
-    padding: 0.3rem 0.6rem;
-    font-size: 0.8rem;
+.quick-action-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.quick-action-btn:hover {
+    transform: scale(1.1);
 }
 
 /* Paginación */
@@ -76,74 +92,58 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 0.5rem;
-    margin-top: 1.5rem;
-    padding-top: 1rem;
+    gap: 5px;
+    margin-top: var(--espacio-md);
+    padding-top: var(--espacio-sm);
     border-top: 1px solid var(--color-gris);
 }
 
-.pagina-item {
-    list-style: none;
-}
-
-.pagina-link {
+.pagina-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 4px;
+    border: 1px solid var(--color-gris);
+    background: var(--color-blanco);
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 5px;
-    background-color: white;
-    color: var(--color-morado);
-    border: 1px solid var(--color-lila);
-    text-decoration: none;
-    transition: var(--transicion-rapida);
+    transition: all 0.2s ease;
 }
 
-.pagina-link:hover,
-.pagina-link.activa {
+.pagina-btn:hover {
+    background-color: var(--color-lila);
+    color: var(--color-blanco);
+    border-color: var(--color-lila);
+}
+
+.pagina-btn.activa {
     background-color: var(--color-morado);
-    color: white;
+    color: var(--color-blanco);
     border-color: var(--color-morado);
 }
 
-/* Resumen del inventario */
+.pagina-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Resumen de Inventario */
 .resumen-inventario {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 1.5rem;
-    margin-top: 2rem;
-}
-
-.resumen-inventario .card-resumen {
-    text-align: center;
-    padding: 1.5rem;
-}
-
-.resumen-inventario h3 {
-    font-size: 1.1rem;
-    margin-bottom: 1rem;
-    color: var(--color-gris-oscuro);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--espacio-sm);
+    margin-top: var(--espacio-lg);
 }
 
 .resumen-valor {
-    font-size: 2rem;
+    font-size: 2.2rem;
     font-weight: 700;
-    margin: 0.5rem 0;
-    color: var(--color-negro);
+    margin: var(--espacio-xs) 0;
+    color: var(--color-morado);
 }
 
-.resumen-inventario p {
-    font-size: 0.9rem;
-    color: var(--color-gris-oscuro);
-    margin: 0;
-}
-
-/* Modal de eliminación */
+/* Modal de Eliminación */
 .modal {
     display: none;
     position: fixed;
@@ -158,16 +158,26 @@
 }
 
 .modal-contenido {
-    background-color: white;
+    background-color: var(--color-blanco);
     border-radius: var(--radio-borde);
     width: 90%;
     max-width: 500px;
-    max-height: 90vh;
-    overflow-y: auto;
+    animation: modalAparecer 0.3s ease;
+}
+
+@keyframes modalAparecer {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .modal-header {
-    padding: 1.5rem;
+    padding: var(--espacio-md);
     border-bottom: 1px solid var(--color-gris);
     display: flex;
     justify-content: space-between;
@@ -178,7 +188,7 @@
     margin: 0;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 8px;
 }
 
 .btn-cerrar-modal {
@@ -190,29 +200,18 @@
 }
 
 .modal-body {
-    padding: 1.5rem;
+    padding: var(--espacio-md);
 }
 
 .modal-footer {
-    padding: 1.5rem;
+    padding: var(--espacio-md);
     border-top: 1px solid var(--color-gris);
     display: flex;
     justify-content: flex-end;
-    gap: 1rem;
+    gap: var(--espacio-sm);
 }
 
-.info-producto-eliminar {
-    background-color: rgba(0, 0, 0, 0.03);
-    border-radius: 5px;
-    padding: 1rem;
-    margin: 1rem 0;
-}
-
-.info-producto-eliminar p {
-    margin: 0.5rem 0;
-}
-
-/* Responsive para inventario */
+/* Responsive para Inventario */
 @media (max-width: 1024px) {
     .filtros-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -224,22 +223,30 @@
         grid-template-columns: 1fr;
     }
     
+    .table-inventario {
+        font-size: 0.85rem;
+    }
+    
+    .quick-actions {
+        flex-direction: column;
+    }
+    
     .resumen-inventario {
         grid-template-columns: repeat(2, 1fr);
     }
-    
-    .acciones-producto {
-        flex-direction: column;
-    }
 }
 
-@media (max-width: 576px) {
+@media (max-width: 480px) {
+    .table-inventario th,
+    .table-inventario td {
+        padding: 0.5rem;
+    }
+    
     .resumen-inventario {
         grid-template-columns: 1fr;
     }
     
     .modal-contenido {
         width: 95%;
-        margin: 1rem;
     }
 }
