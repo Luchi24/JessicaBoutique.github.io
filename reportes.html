@@ -583,6 +583,13 @@
                 link.click();
             }
         }
+        function aplicarFiltrosReportes() {
+            const periodo = document.getElementById('stats-period')?.value || 'day';
+            
+            if (typeof actualizarReportes === 'function') {
+                actualizarReportes(periodo);
+            }
+        }
         
         // Inicializar fechas personalizadas con valores por defecto
         const hoy = new Date().toISOString().split('T')[0];
@@ -593,5 +600,6 @@
         document.getElementById('fechaDesde').value = inicioMesStr;
         document.getElementById('fechaHasta').value = hoy;
     </script>
+    <script src="js/main.js"></script>
 </body>
 </html>
