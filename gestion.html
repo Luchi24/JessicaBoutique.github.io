@@ -3,202 +3,249 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jessica Boutique | Gestión</title>
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/gestion.css">
-    <link rel="stylesheet" href="css/correcciones.css">
+    <title>Jessica Boutique - Gestión</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/estilos.css">
+    <link rel="stylesheet" href="css/componentes.css">
+    <link rel="stylesheet" href="css/tablas-formularios.css">
+    <link rel="stylesheet" href="css/responsive.css">
 </head>
 <body>
-    <div class="navbar">
-        <div class="logo">
-            <i class="fas fa-store"></i>
-            <h1>Jessica Boutique</h1>
-            <span class="subtitle">Sistema de Gestión</span>
+    <!-- Barra de Navegación -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-store"></i>
+                <h1>Jessica Boutique</h1>
+            </div>
+            <button class="nav-toggle" id="navToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="nav-link"><i class="fas fa-tachometer-alt"></i> Panel</a></li>
+                <li><a href="inventario.html" class="nav-link"><i class="fas fa-boxes"></i> Inventario</a></li>
+                <li><a href="agregar-producto.html" class="nav-link"><i class="fas fa-plus-circle"></i> Agregar</a></li>
+                <li><a href="ventas.html" class="nav-link"><i class="fas fa-shopping-cart"></i> Ventas</a></li>
+                <li><a href="reportes.html" class="nav-link"><i class="fas fa-chart-bar"></i> Reportes</a></li>
+                <li><a href="gestion.html" class="nav-link active"><i class="fas fa-cog"></i> Gestión</a></li>
+            </ul>
         </div>
-        <div class="nav-buttons">
-            <a href="index.html" class="nav-btn">
-                <i class="fas fa-home"></i> Inicio
-            </a>
-            <a href="inventario.html" class="nav-btn">
-                <i class="fas fa-boxes"></i> Inventario
-            </a>
-            <a href="agregar-producto.html" class="nav-btn">
-                <i class="fas fa-plus-circle"></i> Agregar
-            </a>
-            <a href="ventas.html" class="nav-btn">
-                <i class="fas fa-cash-register"></i> Ventas
-            </a>
-            <a href="reportes.html" class="nav-btn">
-                <i class="fas fa-chart-bar"></i> Reportes
-            </a>
-            <a href="gestion.html" class="nav-btn active">
-                <i class="fas fa-cog"></i> Gestión
-            </a>
-        </div>
-    </div>
+    </nav>
 
-    <div class="container">
-        <div class="seccion-header">
+    <!-- Contenido Principal -->
+    <main class="container">
+        <div class="page-header">
             <h2><i class="fas fa-cog"></i> Configuración del Sistema</h2>
+            <p>Personaliza y gestiona la configuración de Jessica Boutique</p>
         </div>
 
-        <div class="gestion-grid">
-            <div class="gestion-card">
-                <div class="card-header">
-                    <h3><i class="fas fa-palette"></i> Colores Disponibles</h3>
-                    <p>Agrega y gestiona los colores para los productos</p>
-                </div>
-                
-                <div class="agregar-item">
-                    <input type="text" id="nuevo-color" placeholder="Ej: Rojo, Azul, Negro...">
-                    <button class="btn-principal" onclick="agregarColor()">
-                        <i class="fas fa-plus"></i> Agregar
-                    </button>
-                </div>
-
-                <div class="lista-items" id="lista-colores"></div>
+        <!-- Configuración General -->
+        <div class="card">
+            <div class="card-header">
+                <h3>Configuración General</h3>
             </div>
-
-            <div class="gestion-card">
-                <div class="card-header">
-                    <h3><i class="fas fa-folder"></i> Categorías de Productos</h3>
-                    <p>Crea y organiza las categorías disponibles</p>
-                </div>
-                
-                <div class="agregar-item">
-                    <input type="text" id="nueva-categoria" placeholder="Ej: Blusas, Vestidos...">
-                    <button class="btn-principal" onclick="agregarCategoria()">
-                        <i class="fas fa-plus"></i> Agregar
-                    </button>
-                </div>
-
-                <div class="lista-items" id="lista-categorias"></div>
-            </div>
-
-            <div class="gestion-card">
-                <div class="card-header">
-                    <h3><i class="fas fa-sliders-h"></i> Configuración General</h3>
-                    <p>Configura los parámetros del sistema</p>
-                </div>
-                
-                <div class="configuraciones">
-                    <div class="config-item">
-                        <label for="tasa-igv">
-                            <i class="fas fa-percentage"></i> Tasa IGV (%)
-                        </label>
-                        <input type="number" id="tasa-igv" min="0" max="100" step="0.1" 
-                               value="18" onchange="actualizarConfiguracion()">
+            <div class="card-body">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="select-tema">Tema de la Aplicación</label>
+                        <select id="select-tema" class="form-control">
+                            <option value="claro">Modo Claro</option>
+                            <option value="oscuro">Modo Oscuro</option>
+                        </select>
                     </div>
                     
-                    <div class="config-item">
-                        <label for="alertas-stock">
-                            <i class="fas fa-bell"></i> Alerta stock bajo
-                        </label>
-                        <input type="number" id="alertas-stock" min="1" max="100" 
-                               value="5" onchange="actualizarConfiguracion()">
+                    <div class="form-group">
+                        <label for="select-moneda">Moneda</label>
+                        <select id="select-moneda" class="form-control">
+                            <option value="S/.">Soles (S/.)</option>
+                            <option value="$">Dólares ($)</option>
+                            <option value="€">Euros (€)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="input-alerta-stock">Alerta de Stock Mínimo</label>
+                        <input type="number" id="input-alerta-stock" class="form-control" 
+                               min="1" value="5">
+                        <small class="form-text">Cantidad mínima para alertar sobre stock bajo</small>
                     </div>
                     
-                    <div class="config-item">
-                        <label>
-                            <i class="fas fa-sun"></i> Tema
-                        </label>
-                        <div class="tema-opciones">
-                            <label class="radio-option">
-                                <input type="radio" name="tema" value="claro" checked>
-                                <span>Claro</span>
-                            </label>
-                            <label class="radio-option">
-                                <input type="radio" name="tema" value="oscuro">
-                                <span>Oscuro</span>
-                            </label>
+                    <div class="form-group">
+                        <label for="input-comision-tarjeta">Comisión por Tarjeta (%)</label>
+                        <input type="number" id="input-comision-tarjeta" class="form-control" 
+                               min="0" max="20" step="0.1" value="5">
+                        <small class="form-text">Porcentaje adicional por pagos con tarjeta</small>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button id="btn-guardar-config" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Guardar Configuración
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gestión de Categorías -->
+        <div class="card mt-3">
+            <div class="card-header">
+                <h3>Gestión de Categorías</h3>
+            </div>
+            <div class="card-body">
+                <div class="form-row">
+                    <div class="form-group" style="flex: 1;">
+                        <label for="input-nueva-categoria">Nueva Categoría</label>
+                        <input type="text" id="input-nueva-categoria" class="form-control" 
+                               placeholder="Ej: Chaquetas">
+                    </div>
+                    <div class="form-group">
+                        <button id="btn-agregar-categoria" class="btn btn-primary" style="margin-top: 1.5rem;">
+                            <i class="fas fa-plus"></i> Agregar
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="mt-3">
+                    <h4>Categorías Existentes</h4>
+                    <ul class="list-group" id="lista-categorias">
+                        <!-- Las categorías se cargarán dinámicamente -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gestión de Colores -->
+        <div class="card mt-3">
+            <div class="card-header">
+                <h3>Gestión de Colores</h3>
+            </div>
+            <div class="card-body">
+                <div class="form-row">
+                    <div class="form-group" style="flex: 1;">
+                        <label for="input-nuevo-color">Nuevo Color</label>
+                        <input type="text" id="input-nuevo-color" class="form-control" 
+                               placeholder="Ej: Turquesa">
+                    </div>
+                    <div class="form-group">
+                        <button id="btn-agregar-color" class="btn btn-primary" style="margin-top: 1.5rem;">
+                            <i class="fas fa-plus"></i> Agregar
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="mt-3">
+                    <h4>Colores Existentes</h4>
+                    <ul class="list-group" id="lista-colores">
+                        <!-- Los colores se cargarán dinámicamente -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gestión de Tallas -->
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Tallas Generales</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="form-group" style="flex: 1;">
+                                <label for="input-nueva-talla">Nueva Talla</label>
+                                <input type="text" id="input-nueva-talla" class="form-control" 
+                                       placeholder="Ej: XXL">
+                            </div>
+                            <div class="form-group">
+                                <button id="btn-agregar-talla" class="btn btn-primary" style="margin-top: 1.5rem;">
+                                    <i class="fas fa-plus"></i> Agregar
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-3">
+                            <h4>Tallas Existentes</h4>
+                            <ul class="list-group" id="lista-tallas">
+                                <!-- Las tallas se cargarán dinámicamente -->
+                            </ul>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div class="gestion-card">
-                <div class="card-header">
-                    <h3><i class="fas fa-ruler"></i> Tallas Disponibles</h3>
-                    <p>Configura las tallas disponibles para productos</p>
-                </div>
-                
-                <div class="agregar-item">
-                    <input type="text" id="nueva-talla" placeholder="Ej: XS, S, M, L, XL...">
-                    <button class="btn-principal" onclick="agregarTalla()">
-                        <i class="fas fa-plus"></i> Agregar
-                    </button>
-                </div>
-
-                <div class="lista-items" id="lista-tallas"></div>
-            </div>
-
-            <div class="gestion-card full-width">
-                <div class="card-header">
-                    <h3><i class="fas fa-database"></i> Respaldo de Datos</h3>
-                    <p>Exporta o importa todos los datos del sistema</p>
-                </div>
-                
-                <div class="acciones-backup-simple">
-                    <button class="btn-principal" onclick="exportarDatosCompleto()">
-                        <i class="fas fa-download"></i> Exportar Todo
-                    </button>
-                    <div class="importar-container">
-                        <input type="file" id="importar-backup-file-real" 
-                               accept=".json" style="display: none;">
-                        <button class="btn-secundario" onclick="document.getElementById('importar-backup-file-real').click()">
-                            <i class="fas fa-upload"></i> Importar Backup
-                        </button>
+            
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Tallas de Pantalón</h3>
                     </div>
-                    <button class="btn-secundario peligro" onclick="mostrarOpcionesLimpiar()">
-                        <i class="fas fa-trash-alt"></i> Limpiar Datos
-                    </button>
-                </div>
-                
-                <div class="info-backup-simple">
-                    <p><i class="fas fa-info-circle"></i> Exporta todos los datos (productos, ventas, categorías, colores) en un archivo JSON</p>
-                </div>
-            </div>
-
-            <div class="gestion-card">
-                <div class="card-header">
-                    <h3><i class="fas fa-info-circle"></i> Información del Sistema</h3>
-                    <p>Estadísticas y detalles del sistema</p>
-                </div>
-                
-                <div class="info-sistema">
-                    <div class="info-item">
-                        <span>Versión:</span>
-                        <span>2.0</span>
-                    </div>
-                    <div class="info-item">
-                        <span>Total Productos:</span>
-                        <span id="info-total-productos">0</span>
-                    </div>
-                    <div class="info-item">
-                        <span>Total Ventas:</span>
-                        <span id="info-total-ventas">0</span>
-                    </div>
-                    <div class="info-item">
-                        <span>Total Clientes:</span>
-                        <span id="info-total-clientes">0</span>
-                    </div>
-                    <div class="info-item">
-                        <span>Última Actividad:</span>
-                        <span id="info-ultima-actividad">-</span>
-                    </div>
-                    <div class="info-item">
-                        <span>Tamaño Datos:</span>
-                        <span id="info-tamano-datos">0 KB</span>
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="form-group" style="flex: 1;">
+                                <label for="input-nueva-talla-pantalon">Nueva Talla de Pantalón</label>
+                                <input type="text" id="input-nueva-talla-pantalon" class="form-control" 
+                                       placeholder="Ej: 40">
+                            </div>
+                            <div class="form-group">
+                                <button id="btn-agregar-talla-pantalon" class="btn btn-primary" style="margin-top: 1.5rem;">
+                                    <i class="fas fa-plus"></i> Agregar
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-3">
+                            <h4>Tallas de Pantalón Existentes</h4>
+                            <ul class="list-group" id="lista-tallas-pantalon">
+                                <!-- Las tallas de pantalón se cargarán dinámicamente -->
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div id="notificaciones" class="notificaciones"></div>
+        <!-- Gestión de Datos -->
+        <div class="card mt-3">
+            <div class="card-header">
+                <h3>Gestión de Datos</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4>Exportar Datos</h4>
+                        <p>Exporta todos los datos del sistema en formato JSON para respaldo.</p>
+                        <button id="btn-exportar-datos" class="btn btn-primary">
+                            <i class="fas fa-download"></i> Exportar Datos
+                        </button>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <h4>Importar Datos</h4>
+                        <p>Importa datos desde un archivo JSON. ¡Cuidado! Esto sobrescribirá todos los datos actuales.</p>
+                        <input type="file" id="input-importar-datos" accept=".json" style="display: none;">
+                        <button id="btn-importar-datos" class="btn btn-warning">
+                            <i class="fas fa-upload"></i> Importar Datos
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <h4>Restablecer Datos</h4>
+                        <p>Restablece todos los datos a los valores de ejemplo. ¡Esta acción no se puede deshacer!</p>
+                        <button id="btn-restablecer-datos" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Restablecer a Datos de Ejemplo
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
 
-    <script src="js/main.js"></script>
-    <script src="js/gestion.js"></script>
+    <!-- Scripts -->
+    <script src="js/datos.js"></script>
+    <script src="js/sistema.js"></script>
+    <script src="js/configuracion.js"></script>
 </body>
 </html>
