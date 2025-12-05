@@ -9,6 +9,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Botón Menu Toggle para móviles -->
+    <button class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
     <!-- Sidebar Navigation -->
     <nav class="sidebar">
         <div class="logo">
@@ -19,7 +24,7 @@
         <div class="menu-items">
             <a href="#" class="menu-item active" data-section="dashboard">
                 <i class="fas fa-home"></i>
-                <span>Panel</span> <!-- Cambiado de Dashboard a Panel -->
+                <span>Panel</span>
             </a>
             
             <a href="#" class="menu-item" data-section="inventario">
@@ -67,28 +72,15 @@
         <!-- Top Bar -->
         <header class="top-bar">
             <div class="page-title">
-                <h1 id="pageTitle">Panel</h1> <!-- Cambiado de Dashboard a Panel -->
+                <h1 id="pageTitle">Panel</h1>
                 <p id="pageSubtitle">Bienvenida al sistema de gestión</p>
             </div>
             
             <div class="top-bar-actions">
-                <div class="notification-container">
-                    <button class="btn-notification" id="notificationBtn">
-                        <i class="fas fa-bell"></i>
-                        <span class="notification-badge">3</span>
-                    </button>
-                    <div class="notification-dropdown" id="notificationDropdown">
-                        <div class="notification-header">
-                            <h4>Notificaciones</h4>
-                            <button class="btn-mark-all-read" id="markAllRead">
-                                <i class="fas fa-check-double"></i> Marcar todas como leídas
-                            </button>
-                        </div>
-                        <div class="notification-list" id="notificationList">
-                            <!-- Notificaciones se cargarán aquí -->
-                        </div>
-                    </div>
-                </div>
+                <button class="btn-notification">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </button>
                 <div class="current-date">
                     <i class="fas fa-calendar"></i>
                     <span id="currentDate"></span>
@@ -148,7 +140,7 @@
                             <i class="fas fa-money-bill-wave"></i>
                         </div>
                         <div class="stat-info">
-                            <h3 id="dailyRevenue">S/. 0</h3> <!-- Cambiado a S/. -->
+                            <h3 id="dailyRevenue">S/. 0</h3>
                             <p>Ingresos Hoy</p>
                         </div>
                         <div class="stat-trend up">
@@ -242,53 +234,48 @@
                     <div class="search-box">
                         <i class="fas fa-search"></i>
                         <input type="text" id="searchInventory" placeholder="Buscar producto por nombre, marca, categoría...">
-                        <button class="btn-search" id="searchBtn">
-                            <i class="fas fa-search"></i>
-                        </button>
                     </div>
                     
                     <div class="filter-options">
-                        <div class="filter-group">
-                            <label>Ordenar por:</label>
+                        <select id="filterCategory">
+                            <option value="">Todas las categorías</option>
+                        </select>
+                        
+                        <select id="filterColor">
+                            <option value="">Todos los colores</option>
+                        </select>
+                        
+                        <select id="filterBrand">
+                            <option value="">Todas las marcas</option>
+                        </select>
+                        
+                        <select id="filterStatus">
+                            <option value="">Todos los estados</option>
+                            <option value="available">Disponible</option>
+                            <option value="low">Stock Bajo</option>
+                            <option value="out">Agotado</option>
+                        </select>
+                        
+                        <div class="sort-container">
                             <select id="sortBy">
-                                <option value="name">Nombre</option>
-                                <option value="stock">Cantidad</option>
-                                <option value="price">Precio</option>
-                                <option value="category">Categoría</option>
-                            </select>
-                            <select id="sortOrder">
-                                <option value="asc">Ascendente</option>
-                                <option value="desc">Descendente</option>
-                            </select>
-                        </div>
-                        
-                        <div class="filter-group">
-                            <label>Filtrar por:</label>
-                            <select id="filterColor">
-                                <option value="">Todos los colores</option>
-                            </select>
-                            <select id="filterBrand">
-                                <option value="">Todas las marcas</option>
-                            </select>
-                            <select id="filterCategory">
-                                <option value="">Todas las categorías</option>
-                            </select>
-                            <select id="filterStatus">
-                                <option value="">Todos los estados</option>
-                                <option value="available">Disponible</option>
-                                <option value="low">Stock Bajo</option>
-                                <option value="out">Agotado</option>
+                                <option value="">Ordenar por</option>
+                                <option value="name">Nombre (A-Z)</option>
+                                <option value="name-desc">Nombre (Z-A)</option>
+                                <option value="price">Precio (Menor a Mayor)</option>
+                                <option value="price-desc">Precio (Mayor a Menor)</option>
+                                <option value="stock">Stock (Menor a Mayor)</option>
+                                <option value="stock-desc">Stock (Mayor a Menor)</option>
+                                <option value="color">Color</option>
+                                <option value="brand">Marca</option>
                             </select>
                         </div>
                         
-                        <div class="filter-buttons">
-                            <button class="btn-filter" id="applyFilters">
-                                <i class="fas fa-filter"></i> Aplicar Filtros
-                            </button>
-                            <button class="btn-secondary" id="clearFilters">
-                                <i class="fas fa-times"></i> Limpiar
-                            </button>
-                        </div>
+                        <button class="btn-filter" id="applyFilters">
+                            <i class="fas fa-filter"></i> Filtrar
+                        </button>
+                        <button class="btn-secondary" id="clearFilters">
+                            <i class="fas fa-redo"></i> Limpiar
+                        </button>
                     </div>
                 </div>
 
@@ -335,7 +322,7 @@
                     </div>
                     <div class="summary-card">
                         <h4>Valor Inventario</h4>
-                        <p class="summary-number" id="summaryValue">S/. 0</p> <!-- Cambiado a S/. -->
+                        <p class="summary-number" id="summaryValue">S/. 0</p>
                     </div>
                     <div class="summary-card">
                         <h4>Stock Bajo</h4>
@@ -434,53 +421,6 @@
                             </div>
                         </div>
 
-                        <!-- Combinaciones Opcionales -->
-                        <div class="form-section">
-                            <h3><i class="fas fa-layer-group"></i> Combinaciones (Opcional)</h3>
-                            <div class="combinations-container">
-                                <div class="combination-form">
-                                    <div class="form-grid">
-                                        <div class="form-group">
-                                            <label for="comboSize">Talla</label>
-                                            <select id="comboSize">
-                                                <option value="">Seleccionar talla</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="comboColor">Color</label>
-                                            <select id="comboColor">
-                                                <option value="">Seleccionar color</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="comboQuantity">Cantidad</label>
-                                            <input type="number" id="comboQuantity" min="1" value="1">
-                                        </div>
-                                        <div class="form-group">
-                                            <button type="button" class="btn-secondary" id="addCombo">
-                                                <i class="fas fa-plus"></i> Agregar Combinación
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="combinations-list">
-                                    <table class="combinations-table">
-                                        <thead>
-                                            <tr>
-                                                <th>Talla</th>
-                                                <th>Color</th>
-                                                <th>Cantidad</th>
-                                                <th>Acciones</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="combinationsTableBody">
-                                            <!-- Las combinaciones se agregarán aquí -->
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-
                         <!-- Prices -->
                         <div class="form-section">
                             <h3><i class="fas fa-money-bill-wave"></i> Precios</h3>
@@ -490,7 +430,7 @@
                                         <i class="fas fa-shopping-bag"></i> Precio de Compra *
                                     </label>
                                     <div class="input-with-icon">
-                                        <span class="input-icon">S/.</span> <!-- Cambiado a S/. -->
+                                        <span class="input-icon">S/.</span>
                                         <input type="number" id="purchasePrice" 
                                                step="0.01" min="0" required 
                                                placeholder="0.00">
@@ -502,7 +442,7 @@
                                         <i class="fas fa-tag"></i> Precio de Venta *
                                     </label>
                                     <div class="input-with-icon">
-                                        <span class="input-icon">S/.</span> <!-- Cambiado a S/. -->
+                                        <span class="input-icon">S/.</span>
                                         <input type="number" id="salePrice" 
                                                step="0.01" min="0" required 
                                                placeholder="0.00">
@@ -516,6 +456,49 @@
                                         <input type="text" id="profitMargin" 
                                                readonly placeholder="0%">
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Product Variants -->
+                        <div class="form-section">
+                            <h3><i class="fas fa-layer-group"></i> Variantes del Producto (Opcional)</h3>
+                            <div class="variants-container">
+                                <div class="variant-form">
+                                    <div class="form-grid">
+                                        <div class="form-group">
+                                            <label for="variantColor">
+                                                <i class="fas fa-palette"></i> Color
+                                            </label>
+                                            <select id="variantColor">
+                                                <option value="">Selecciona un color</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="variantSize">Talla</label>
+                                            <div class="size-options" id="variantSizeOptions">
+                                                <!-- Las tallas se cargarán dinámicamente -->
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="variantStock">
+                                                <i class="fas fa-box"></i> Cantidad
+                                            </label>
+                                            <input type="number" id="variantStock" min="1" value="1">
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <button type="button" class="btn-primary" id="addVariantBtn">
+                                                <i class="fas fa-plus"></i> Agregar Variante
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="variants-list" id="variantsList">
+                                    <p class="empty-message">No hay variantes agregadas</p>
                                 </div>
                             </div>
                         </div>
@@ -630,15 +613,15 @@
                             <div class="payment-summary">
                                 <div class="summary-row">
                                     <span>Subtotal:</span>
-                                    <span id="subtotal">S/. 0.00</span> <!-- Cambiado a S/. -->
+                                    <span id="subtotal">S/. 0.00</span>
                                 </div>
                                 <div class="summary-row">
                                     <span>Comisión:</span>
-                                    <span id="commission">S/. 0.00</span> <!-- Cambiado a S/. -->
+                                    <span id="commission">S/. 0.00</span>
                                 </div>
                                 <div class="summary-row total">
                                     <span>Total:</span>
-                                    <span id="totalAmount">S/. 0.00</span> <!-- Cambiado a S/. -->
+                                    <span id="totalAmount">S/. 0.00</span>
                                 </div>
                             </div>
                         </div>
@@ -702,7 +685,7 @@
                             <i class="fas fa-chart-bar"></i>
                             <h3>Ventas Totales</h3>
                         </div>
-                        <p class="stat-number" id="totalSalesAmount">S/. 0</p> <!-- Cambiado a S/. -->
+                        <p class="stat-number" id="totalSalesAmount">S/. 0</p>
                         <div class="stat-change up">
                             <i class="fas fa-arrow-up"></i>
                             <span>0% vs período anterior</span>
@@ -714,7 +697,7 @@
                             <i class="fas fa-money-bill-wave"></i>
                             <h3>Ganancias</h3>
                         </div>
-                        <p class="stat-number" id="totalProfitAmount">S/. 0</p> <!-- Cambiado a S/. -->
+                        <p class="stat-number" id="totalProfitAmount">S/. 0</p>
                         <div class="stat-change up">
                             <i class="fas fa-arrow-up"></i>
                             <span>0% vs período anterior</span>
@@ -810,8 +793,11 @@
                                 </button>
                             </div>
                             
-                            <div class="config-grid" id="categoriesList">
-                                <!-- Las categorías se cargarán aquí en grid 2x2 -->
+                            <div class="config-list">
+                                <h4>Categorías Existentes</h4>
+                                <div id="categoriesList">
+                                    <!-- Las categorías se cargarán aquí -->
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -828,8 +814,11 @@
                                 </button>
                             </div>
                             
-                            <div class="config-grid" id="colorsList">
-                                <!-- Los colores se cargarán aquí en grid 2x2 -->
+                            <div class="config-list">
+                                <h4>Colores Existentes</h4>
+                                <div id="colorsList">
+                                    <!-- Los colores se cargarán aquí -->
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -885,11 +874,10 @@
                             <div class="setting-option">
                                 <h4><i class="fas fa-database"></i> Backup de Datos</h4>
                                 <div class="backup-buttons">
-                                    <input type="file" id="importDataInput" accept=".json" style="display: none;">
                                     <button class="btn-primary" id="exportData">
                                         <i class="fas fa-download"></i> Exportar Datos
                                     </button>
-                                    <button class="btn-secondary" id="importDataBtn">
+                                    <button class="btn-secondary" id="importData">
                                         <i class="fas fa-upload"></i> Importar Datos
                                     </button>
                                 </div>
