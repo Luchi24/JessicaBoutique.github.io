@@ -9,6 +9,7 @@ class JessicaBoutique {
         this.pantsSizes = JSON.parse(localStorage.getItem('jb_pantsSizes')) || this.getSamplePantsSizes();
         this.sales = JSON.parse(localStorage.getItem('jb_sales')) || [];
         this.clients = JSON.parse(localStorage.getItem('jb_clients')) || [];
+        this.notifications = JSON.parse(localStorage.getItem('jb_notifications')) || this.getSampleNotifications();
         
         // Estado actual
         this.currentPage = 1;
@@ -16,6 +17,8 @@ class JessicaBoutique {
         this.filteredProducts = [...this.products];
         this.currentCart = [];
         this.currentSale = null;
+        this.combinations = [];
+        this.pendingAction = null;
         
         // Inicializar
         this.init();
@@ -27,6 +30,8 @@ class JessicaBoutique {
         this.loadInitialData();
         this.updateDashboard();
         this.updateCurrentDate();
+        this.loadDarkModePreference();
+        this.loadNotifications();
         this.showToast('¡Bienvenida a Jessica Boutique!', 'success');
     }
 
@@ -48,8 +53,15 @@ class JessicaBoutique {
             });
         });
 
-        // Inventario
+        // Inventario - Búsqueda y filtros mejorados
         document.getElementById('searchInventory')?.addEventListener('input', () => this.searchProducts());
+        document.getElementById('searchBtn')?.addEventListener('click', () => this.searchProducts());
+        document.getElementById('sortBy')?.addEventListener('change', () => this.applyFilters());
+        document.getElementById('sortOrder')?.addEventListener('change', () => this.applyFilters());
+        document.getElementById('filterColor')?.addEventListener('change', () => this.applyFilters());
+        document.getElementById('filterBrand')?.addEventListener('change', () => this.applyFilters());
+        document.getElementById('filterCategory')?.addEventListener('change', () => this.applyFilters());
+        document.getElementById('filterStatus')?.addEventListener('change', () => this.applyFilters());
         document.getElementById('applyFilters')?.addEventListener('click', () => this.applyFilters());
         document.getElementById('clearFilters')?.addEventListener('click', () => this.clearFilters());
         document.getElementById('exportInventory')?.addEventListener('click', () => this.exportInventory());
@@ -61,6 +73,7 @@ class JessicaBoutique {
         document.getElementById('productCategory')?.addEventListener('change', (e) => this.updateSizeOptions(e));
         document.getElementById('purchasePrice')?.addEventListener('input', () => this.calculateProfitMargin());
         document.getElementById('salePrice')?.addEventListener('input', () => this.calculateProfitMargin());
+        document.getElementById('addCombo')?.addEventListener('click', () => this.addCombination());
 
         // Ventas
         document.getElementById('addProductBtn')?.addEventListener('click', () => this.addToCart());
@@ -78,6 +91,8 @@ class JessicaBoutique {
         document.getElementById('addPantsSize')?.addEventListener('click', () => this.addNewPantsSize());
         document.getElementById('darkModeToggle')?.addEventListener('change', () => this.toggleDarkMode());
         document.getElementById('exportData')?.addEventListener('click', () => this.exportAllData());
+        document.getElementById('importDataBtn')?.addEventListener('click', () => this.openImportDialog());
+        document.getElementById('importDataInput')?.addEventListener('change', (e) => this.importData(e));
         document.getElementById('clearData')?.addEventListener('click', () => this.confirmClearData());
 
         // Modales
@@ -91,6 +106,20 @@ class JessicaBoutique {
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', (e) => this.switchConfigTab(e));
         });
+
+        // Notificaciones
+        document.getElementById('notificationBtn')?.addEventListener('click', (e) => this.toggleNotifications(e));
+        document.getElementById('markAllRead')?.addEventListener('click', () => this.markAllNotificationsAsRead());
+
+        // Cerrar notificaciones al hacer click fuera
+        document.addEventListener('click', (e) => {
+            const dropdown = document.getElementById('notificationDropdown');
+            const btn = document.getElementById('notificationBtn');
+            
+            if (dropdown && btn && !dropdown.contains(e.target) && !btn.contains(e.target)) {
+                dropdown.classList.remove('active');
+            }
+        });
     }
 
     loadInitialData() {
@@ -102,6 +131,8 @@ class JessicaBoutique {
         this.loadRecentProducts();
         this.loadSalesHistory();
         this.loadConfigLists();
+        this.loadFilterOptions();
+        this.loadComboOptions();
     }
 
     // ============ DATOS DE EJEMPLO ============
@@ -168,6 +199,35 @@ class JessicaBoutique {
         return ["28", "30", "32", "34", "36", "38"];
     }
 
+    getSampleNotifications() {
+        return [
+            {
+                id: 1,
+                title: 'Stock bajo',
+                message: 'El producto "Blusa de Seda Blanca" tiene stock bajo (3 unidades)',
+                type: 'warning',
+                read: false,
+                timestamp: new Date().toISOString()
+            },
+            {
+                id: 2,
+                title: 'Nueva venta registrada',
+                message: 'Se registró una venta de S/. 159.98',
+                type: 'success',
+                read: false,
+                timestamp: new Date(Date.now() - 3600000).toISOString()
+            },
+            {
+                id: 3,
+                title: 'Producto agotado',
+                message: 'El producto "Vestido Rojo Elegante" está agotado',
+                type: 'danger',
+                read: false,
+                timestamp: new Date(Date.now() - 7200000).toISOString()
+            }
+        ];
+    }
+
     // ============ NAVEGACIÓN ============
     showSection(sectionId) {
         // Ocultar todas las secciones
@@ -201,6 +261,7 @@ class JessicaBoutique {
                     break;
                 case 'agregar':
                     this.resetProductForm();
+                    this.loadComboOptions();
                     break;
                 case 'ventas':
                     this.loadSalesHistory();
@@ -217,7 +278,7 @@ class JessicaBoutique {
 
     updatePageTitle(section) {
         const titles = {
-            'dashboard': 'Dashboard',
+            'dashboard': 'Panel',
             'inventario': 'Inventario',
             'agregar': 'Agregar Producto',
             'ventas': 'Ventas',
@@ -234,7 +295,7 @@ class JessicaBoutique {
             'configuracion': 'Personaliza tu sistema'
         };
         
-        document.getElementById('pageTitle').textContent = titles[section] || 'Dashboard';
+        document.getElementById('pageTitle').textContent = titles[section] || 'Panel';
         document.getElementById('pageSubtitle').textContent = subtitles[section] || 'Bienvenida al sistema';
     }
 
@@ -248,7 +309,7 @@ class JessicaBoutique {
         
         document.getElementById('totalProducts').textContent = totalProducts;
         document.getElementById('totalSales').textContent = totalSalesToday;
-        document.getElementById('dailyRevenue').textContent = `$${dailyRevenue.toFixed(2)}`;
+        document.getElementById('dailyRevenue').textContent = this.formatCurrency(dailyRevenue);
         document.getElementById('lowStock').textContent = lowStockProducts;
         
         // Actualizar productos recientes
@@ -273,7 +334,7 @@ class JessicaBoutique {
                 <td>${product.name}</td>
                 <td>${product.category}</td>
                 <td>${product.stock}</td>
-                <td>$${product.salePrice.toFixed(2)}</td>
+                <td>${this.formatCurrency(product.salePrice)}</td>
                 <td><span class="status-badge ${product.status}">${this.getStatusText(product.status)}</span></td>
             </tr>
         `).join('');
@@ -319,7 +380,7 @@ class JessicaBoutique {
                 <td>${product.brand}</td>
                 <td>${product.color}</td>
                 <td>${product.stock}</td>
-                <td>$${product.salePrice.toFixed(2)}</td>
+                <td>${this.formatCurrency(product.salePrice)}</td>
                 <td><span class="status-badge ${product.status}">${this.getStatusText(product.status)}</span></td>
                 <td class="table-actions">
                     <button class="btn-edit" onclick="system.editProduct(${product.id})">
@@ -342,6 +403,32 @@ class JessicaBoutique {
         return texts[status] || status;
     }
 
+    // ============ FILTROS MEJORADOS ============
+    loadFilterOptions() {
+        // Cargar colores únicos
+        const uniqueColors = [...new Set(this.products.map(p => p.color))];
+        const colorSelect = document.getElementById('filterColor');
+        if (colorSelect) {
+            colorSelect.innerHTML = '<option value="">Todos los colores</option>' +
+                uniqueColors.map(color => `<option value="${color}">${color}</option>`).join('');
+        }
+        
+        // Cargar marcas únicas
+        const uniqueBrands = [...new Set(this.products.map(p => p.brand))];
+        const brandSelect = document.getElementById('filterBrand');
+        if (brandSelect) {
+            brandSelect.innerHTML = '<option value="">Todas las marcas</option>' +
+                uniqueBrands.map(brand => `<option value="${brand}">${brand}</option>`).join('');
+        }
+        
+        // Cargar categorías
+        const categorySelect = document.getElementById('filterCategory');
+        if (categorySelect) {
+            categorySelect.innerHTML = '<option value="">Todas las categorías</option>' +
+                this.categories.map(cat => `<option value="${cat}">${cat}</option>`).join('');
+        }
+    }
+
     searchProducts() {
         const searchTerm = document.getElementById('searchInventory').value.toLowerCase();
         this.filteredProducts = this.products.filter(product => 
@@ -355,14 +442,34 @@ class JessicaBoutique {
     }
 
     applyFilters() {
+        const searchTerm = document.getElementById('searchInventory').value.toLowerCase();
         const category = document.getElementById('filterCategory').value;
         const status = document.getElementById('filterStatus').value;
+        const color = document.getElementById('filterColor').value;
+        const brand = document.getElementById('filterBrand').value;
+        const sortBy = document.getElementById('sortBy').value;
+        const sortOrder = document.getElementById('sortOrder').value;
         
         this.filteredProducts = this.products.filter(product => {
+            // Filtro de búsqueda
+            if (searchTerm && 
+                !product.name.toLowerCase().includes(searchTerm) &&
+                !product.brand.toLowerCase().includes(searchTerm) &&
+                !product.category.toLowerCase().includes(searchTerm)) {
+                return false;
+            }
+            
+            // Filtros individuales
             if (category && product.category !== category) return false;
             if (status && product.status !== status) return false;
+            if (color && product.color !== color) return false;
+            if (brand && product.brand !== brand) return false;
+            
             return true;
         });
+        
+        // Ordenar productos
+        this.sortProducts(sortBy, sortOrder);
         
         this.currentPage = 1;
         this.renderInventoryTable();
@@ -370,10 +477,45 @@ class JessicaBoutique {
         this.updateInventorySummary();
     }
 
+    sortProducts(sortBy, sortOrder) {
+        this.filteredProducts.sort((a, b) => {
+            let valueA, valueB;
+            
+            switch(sortBy) {
+                case 'name':
+                    valueA = a.name.toLowerCase();
+                    valueB = b.name.toLowerCase();
+                    break;
+                case 'stock':
+                    valueA = a.stock;
+                    valueB = b.stock;
+                    break;
+                case 'price':
+                    valueA = a.salePrice;
+                    valueB = b.salePrice;
+                    break;
+                case 'category':
+                    valueA = a.category.toLowerCase();
+                    valueB = b.category.toLowerCase();
+                    break;
+                default:
+                    return 0;
+            }
+            
+            if (valueA < valueB) return sortOrder === 'asc' ? -1 : 1;
+            if (valueA > valueB) return sortOrder === 'asc' ? 1 : -1;
+            return 0;
+        });
+    }
+
     clearFilters() {
         document.getElementById('searchInventory').value = '';
         document.getElementById('filterCategory').value = '';
         document.getElementById('filterStatus').value = '';
+        document.getElementById('filterColor').value = '';
+        document.getElementById('filterBrand').value = '';
+        document.getElementById('sortBy').value = 'name';
+        document.getElementById('sortOrder').value = 'asc';
         this.loadInventory();
     }
 
@@ -384,7 +526,7 @@ class JessicaBoutique {
         const out = this.products.filter(p => p.status === 'out').length;
         
         document.getElementById('summaryTotal').textContent = total;
-        document.getElementById('summaryValue').textContent = `$${value.toFixed(2)}`;
+        document.getElementById('summaryValue').textContent = this.formatCurrency(value);
         document.getElementById('summaryLow').textContent = low;
         document.getElementById('summaryOut').textContent = out;
     }
@@ -478,6 +620,22 @@ class JessicaBoutique {
         });
     }
 
+    loadComboOptions() {
+        // Cargar tallas para combo
+        const sizeSelect = document.getElementById('comboSize');
+        if (sizeSelect) {
+            sizeSelect.innerHTML = '<option value="">Seleccionar talla</option>' +
+                this.sizes.map(size => `<option value="${size}">${size}</option>`).join('');
+        }
+        
+        // Cargar colores para combo
+        const colorSelect = document.getElementById('comboColor');
+        if (colorSelect) {
+            colorSelect.innerHTML = '<option value="">Seleccionar color</option>' +
+                this.colors.map(color => `<option value="${color}">${color}</option>`).join('');
+        }
+    }
+
     updateSizeOptions(e) {
         const category = e.target.value;
         const container = document.getElementById('sizeOptions');
@@ -516,6 +674,67 @@ class JessicaBoutique {
         }
     }
 
+    // ============ COMBINACIONES ============
+    addCombination() {
+        const size = document.getElementById('comboSize').value;
+        const color = document.getElementById('comboColor').value;
+        const quantity = parseInt(document.getElementById('comboQuantity').value) || 1;
+        
+        if (!size || !color || quantity < 1) {
+            this.showToast('Selecciona talla, color y cantidad válida', 'error');
+            return;
+        }
+        
+        const combination = {
+            id: Date.now(),
+            size: size,
+            color: color,
+            quantity: quantity
+        };
+        
+        this.combinations.push(combination);
+        this.updateCombinationsTable();
+        
+        // Limpiar formulario
+        document.getElementById('comboSize').value = '';
+        document.getElementById('comboColor').value = '';
+        document.getElementById('comboQuantity').value = 1;
+    }
+
+    updateCombinationsTable() {
+        const container = document.getElementById('combinationsTableBody');
+        if (!container) return;
+        
+        if (this.combinations.length === 0) {
+            container.innerHTML = `
+                <tr>
+                    <td colspan="4" style="text-align: center; color: #999;">
+                        No hay combinaciones agregadas
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+        
+        container.innerHTML = this.combinations.map(combo => `
+            <tr>
+                <td>${combo.size}</td>
+                <td>${combo.color}</td>
+                <td>${combo.quantity}</td>
+                <td>
+                    <button class="btn-delete" onclick="system.removeCombination(${combo.id})">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    removeCombination(id) {
+        this.combinations = this.combinations.filter(combo => combo.id !== id);
+        this.updateCombinationsTable();
+    }
+
     saveProduct(e) {
         e.preventDefault();
         
@@ -539,6 +758,12 @@ class JessicaBoutique {
             return;
         }
         
+        // Calcular stock total (incluyendo combinaciones si existen)
+        let totalStock = stock;
+        if (this.combinations.length > 0) {
+            totalStock = this.combinations.reduce((sum, combo) => sum + combo.quantity, 0);
+        }
+        
         // Crear nuevo producto
         const newProduct = {
             id: this.generateId(),
@@ -549,10 +774,11 @@ class JessicaBoutique {
             size: selectedSize.dataset.size,
             purchasePrice: purchasePrice,
             salePrice: salePrice,
-            stock: stock,
+            stock: totalStock,
             minStock: minStock,
-            status: stock === 0 ? 'out' : stock < minStock ? 'low' : 'available',
-            createdAt: new Date().toISOString().split('T')[0]
+            status: totalStock === 0 ? 'out' : totalStock < minStock ? 'low' : 'available',
+            createdAt: new Date().toISOString().split('T')[0],
+            combinations: this.combinations.length > 0 ? [...this.combinations] : []
         };
         
         // Agregar a la lista
@@ -598,6 +824,10 @@ class JessicaBoutique {
                 opt.classList.remove('selected')
             );
         }
+        
+        // Limpiar combinaciones
+        this.combinations = [];
+        this.updateCombinationsTable();
     }
 
     cancelForm() {
@@ -703,7 +933,7 @@ class JessicaBoutique {
         select.innerHTML = '<option value="">Buscar producto...</option>' +
             availableProducts.map(p => 
                 `<option value="${p.id}" data-price="${p.salePrice}" data-stock="${p.stock}">
-                    ${p.name} - $${p.salePrice.toFixed(2)} (Stock: ${p.stock})
+                    ${p.name} - ${this.formatCurrency(p.salePrice)} (Stock: ${p.stock})
                 </option>`
             ).join('');
     }
@@ -773,10 +1003,10 @@ class JessicaBoutique {
             <div class="cart-item">
                 <div class="cart-item-info">
                     <div class="cart-item-name">${item.name}</div>
-                    <div class="cart-item-details">${item.quantity} x $${item.price.toFixed(2)}</div>
+                    <div class="cart-item-details">${item.quantity} x ${this.formatCurrency(item.price)}</div>
                 </div>
                 <div class="cart-item-actions">
-                    <span class="cart-item-price">$${item.subtotal.toFixed(2)}</span>
+                    <span class="cart-item-price">${this.formatCurrency(item.subtotal)}</span>
                     <button class="btn-delete" onclick="system.removeFromCart(${item.id})">
                         <i class="fas fa-times"></i>
                     </button>
@@ -812,9 +1042,9 @@ class JessicaBoutique {
         
         const total = subtotal + commission;
         
-        document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
-        document.getElementById('commission').textContent = `$${commission.toFixed(2)}`;
-        document.getElementById('totalAmount').textContent = `$${total.toFixed(2)}`;
+        document.getElementById('subtotal').textContent = this.formatCurrency(subtotal);
+        document.getElementById('commission').textContent = this.formatCurrency(commission);
+        document.getElementById('totalAmount').textContent = this.formatCurrency(total);
     }
 
     processSale() {
@@ -886,8 +1116,15 @@ class JessicaBoutique {
             this.saveData('clients');
         }
         
+        // Crear notificación de venta
+        this.addNotification(
+            'Nueva venta registrada',
+            `Se registró una venta de ${this.formatCurrency(total)}`,
+            'success'
+        );
+        
         // Mostrar éxito
-        this.showToast(`Venta procesada por $${total.toFixed(2)}`, 'success');
+        this.showToast(`Venta procesada por ${this.formatCurrency(total)}`, 'success');
         
         // Limpiar formulario
         document.getElementById('clientName').value = '';
@@ -901,6 +1138,7 @@ class JessicaBoutique {
         this.updateDashboard();
         this.loadInventory();
         this.loadSalesHistory();
+        this.loadNotifications();
     }
 
     generateSaleId() {
@@ -942,7 +1180,7 @@ class JessicaBoutique {
                 <td>${sale.id}</td>
                 <td>${sale.client.name}</td>
                 <td>${sale.products.length} productos</td>
-                <td>$${sale.total.toFixed(2)}</td>
+                <td>${this.formatCurrency(sale.total)}</td>
                 <td>${sale.date}</td>
                 <td class="table-actions">
                     <button class="btn-edit" onclick="system.viewSaleDetails(${sale.id})">
@@ -988,14 +1226,14 @@ class JessicaBoutique {
                     ${sale.products.map(p => `
                         <div class="product-item">
                             <span>${p.name}</span>
-                            <span>${p.quantity} x $${p.price.toFixed(2)} = $${p.subtotal.toFixed(2)}</span>
+                            <span>${p.quantity} x ${this.formatCurrency(p.price)} = ${this.formatCurrency(p.subtotal)}</span>
                         </div>
                     `).join('')}
                 </div>
                 
                 <div class="total-row">
                     <strong>Total:</strong>
-                    <span>$${sale.total.toFixed(2)}</span>
+                    <span>${this.formatCurrency(sale.total)}</span>
                 </div>
             </div>
         `;
@@ -1040,8 +1278,8 @@ class JessicaBoutique {
         const productsSold = salesInPeriod.reduce((sum, sale) => 
             sum + sale.products.reduce((qtySum, item) => qtySum + item.quantity, 0), 0);
         
-        document.getElementById('totalSalesAmount').textContent = `$${totalSales.toFixed(2)}`;
-        document.getElementById('totalProfitAmount').textContent = `$${totalProfit.toFixed(2)}`;
+        document.getElementById('totalSalesAmount').textContent = this.formatCurrency(totalSales);
+        document.getElementById('totalProfitAmount').textContent = this.formatCurrency(totalProfit);
         document.getElementById('newClients').textContent = newClients;
         document.getElementById('productsSold').textContent = productsSold;
     }
@@ -1109,7 +1347,7 @@ class JessicaBoutique {
                 data: {
                     labels: last7Days.map(d => this.formatDateShort(d)),
                     datasets: [{
-                        label: 'Ventas ($)',
+                        label: 'Ventas (S/.)',
                         data: salesData,
                         borderColor: '#7e57c2',
                         backgroundColor: 'rgba(126, 87, 194, 0.1)',
@@ -1223,7 +1461,7 @@ class JessicaBoutique {
                 </div>
                 <div class="product-stats">
                     <span class="sales-count">${item.quantity} vendidos</span>
-                    <span class="revenue">$${(item.quantity * item.product.salePrice).toFixed(2)}</span>
+                    <span class="revenue">${this.formatCurrency(item.quantity * item.product.salePrice)}</span>
                 </div>
             </div>
         `).join('');
@@ -1257,13 +1495,30 @@ class JessicaBoutique {
         if (!container) return;
         
         container.innerHTML = this.categories.map(category => `
-            <div class="config-list-item">
-                <span>${category}</span>
-                <button class="btn-delete" onclick="system.deleteCategory('${category}')">
-                    <i class="fas fa-trash"></i>
-                </button>
+            <div class="config-grid-item">
+                <input type="text" value="${category}" class="category-input" 
+                       data-original="${category}">
+                <div class="category-actions">
+                    <button class="btn-edit" onclick="system.updateCategory('${category}')">
+                        <i class="fas fa-save"></i>
+                    </button>
+                    <button class="btn-delete" onclick="system.deleteCategory('${category}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
             </div>
         `).join('');
+        
+        // Agregar event listeners para edición en tiempo real
+        container.querySelectorAll('.category-input').forEach(input => {
+            input.addEventListener('change', (e) => {
+                const original = e.target.dataset.original;
+                const newValue = e.target.value.trim();
+                if (newValue && newValue !== original) {
+                    this.updateCategory(original, newValue);
+                }
+            });
+        });
     }
 
     loadColorsList() {
@@ -1271,13 +1526,30 @@ class JessicaBoutique {
         if (!container) return;
         
         container.innerHTML = this.colors.map(color => `
-            <div class="config-list-item">
-                <span>${color}</span>
-                <button class="btn-delete" onclick="system.deleteColor('${color}')">
-                    <i class="fas fa-trash"></i>
-                </button>
+            <div class="config-grid-item">
+                <input type="text" value="${color}" class="color-input" 
+                       data-original="${color}">
+                <div class="color-actions">
+                    <button class="btn-edit" onclick="system.updateColor('${color}')">
+                        <i class="fas fa-save"></i>
+                    </button>
+                    <button class="btn-delete" onclick="system.deleteColor('${color}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
             </div>
         `).join('');
+        
+        // Agregar event listeners para edición en tiempo real
+        container.querySelectorAll('.color-input').forEach(input => {
+            input.addEventListener('change', (e) => {
+                const original = e.target.dataset.original;
+                const newValue = e.target.value.trim();
+                if (newValue && newValue !== original) {
+                    this.updateColor(original, newValue);
+                }
+            });
+        });
     }
 
     loadSizesLists() {
@@ -1399,6 +1671,84 @@ class JessicaBoutique {
         this.showToast('Talla de pantalón agregada', 'success');
     }
 
+    updateCategory(oldCategory, newCategory) {
+        if (!newCategory.trim()) {
+            this.showToast('El nombre de la categoría no puede estar vacío', 'error');
+            return;
+        }
+        
+        if (oldCategory === newCategory) return;
+        
+        if (this.categories.includes(newCategory)) {
+            this.showToast('La categoría ya existe', 'error');
+            return;
+        }
+        
+        // Actualizar en la lista
+        const index = this.categories.indexOf(oldCategory);
+        if (index > -1) {
+            this.categories[index] = newCategory;
+        }
+        
+        // Actualizar en productos
+        this.updateCategoryInProducts(oldCategory, newCategory);
+        
+        this.saveData('categories');
+        this.loadCategoriesList();
+        this.loadCategories();
+        this.loadFilterOptions();
+        this.showToast('Categoría actualizada', 'success');
+    }
+
+    updateCategoryInProducts(oldCategory, newCategory) {
+        this.products.forEach(product => {
+            if (product.category === oldCategory) {
+                product.category = newCategory;
+            }
+        });
+        this.saveData('products');
+        this.loadInventory();
+    }
+
+    updateColor(oldColor, newColor) {
+        if (!newColor.trim()) {
+            this.showToast('El nombre del color no puede estar vacío', 'error');
+            return;
+        }
+        
+        if (oldColor === newColor) return;
+        
+        if (this.colors.includes(newColor)) {
+            this.showToast('El color ya existe', 'error');
+            return;
+        }
+        
+        // Actualizar en la lista
+        const index = this.colors.indexOf(oldColor);
+        if (index > -1) {
+            this.colors[index] = newColor;
+        }
+        
+        // Actualizar en productos
+        this.updateColorInProducts(oldColor, newColor);
+        
+        this.saveData('colors');
+        this.loadColorsList();
+        this.loadColors();
+        this.loadFilterOptions();
+        this.showToast('Color actualizado', 'success');
+    }
+
+    updateColorInProducts(oldColor, newColor) {
+        this.products.forEach(product => {
+            if (product.color === oldColor) {
+                product.color = newColor;
+            }
+        });
+        this.saveData('products');
+        this.loadInventory();
+    }
+
     deleteCategory(category) {
         // Verificar si hay productos usando esta categoría
         const productsWithCategory = this.products.filter(p => p.category === category);
@@ -1411,6 +1761,7 @@ class JessicaBoutique {
         this.saveData('categories');
         this.loadCategories();
         this.loadCategoriesList();
+        this.loadFilterOptions();
         this.showToast('Categoría eliminada', 'success');
     }
 
@@ -1426,6 +1777,7 @@ class JessicaBoutique {
         this.saveData('colors');
         this.loadColors();
         this.loadColorsList();
+        this.loadFilterOptions();
         this.showToast('Color eliminado', 'success');
     }
 
@@ -1451,6 +1803,7 @@ class JessicaBoutique {
         this.showToast('Talla de pantalón eliminada', 'success');
     }
 
+    // ============ MODO OSCURO ============
     toggleDarkMode() {
         const isDarkMode = document.getElementById('darkModeToggle').checked;
         localStorage.setItem('jb_darkMode', isDarkMode);
@@ -1464,6 +1817,17 @@ class JessicaBoutique {
         this.showToast(`Modo ${isDarkMode ? 'oscuro' : 'claro'} activado`, 'success');
     }
 
+    loadDarkModePreference() {
+        const isDarkMode = localStorage.getItem('jb_darkMode') === 'true';
+        if (document.getElementById('darkModeToggle')) {
+            document.getElementById('darkModeToggle').checked = isDarkMode;
+        }
+        if (isDarkMode) {
+            document.body.classList.add('dark-mode');
+        }
+    }
+
+    // ============ IMPORTAR/EXPORTAR DATOS ============
     exportAllData() {
         const data = {
             products: this.products,
@@ -1473,6 +1837,7 @@ class JessicaBoutique {
             pantsSizes: this.pantsSizes,
             sales: this.sales,
             clients: this.clients,
+            notifications: this.notifications,
             exportDate: new Date().toISOString()
         };
         
@@ -1485,6 +1850,55 @@ class JessicaBoutique {
         link.click();
         
         this.showToast('Datos exportados correctamente', 'success');
+    }
+
+    openImportDialog() {
+        document.getElementById('importDataInput').click();
+    }
+
+    importData(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const data = JSON.parse(e.target.result);
+                
+                // Validar estructura de datos
+                if (this.validateImportData(data)) {
+                    this.importAllData(data);
+                    this.showToast('Datos importados correctamente', 'success');
+                    location.reload(); // Recargar para aplicar cambios
+                } else {
+                    this.showToast('El archivo no tiene el formato correcto', 'error');
+                }
+            } catch (error) {
+                this.showToast('Error al leer el archivo', 'error');
+            }
+        };
+        reader.readAsText(file);
+        
+        // Limpiar input
+        event.target.value = '';
+    }
+
+    validateImportData(data) {
+        return data.products && Array.isArray(data.products) &&
+               data.categories && Array.isArray(data.categories);
+    }
+
+    importAllData(data) {
+        if (data.products) this.products = data.products;
+        if (data.categories) this.categories = data.categories;
+        if (data.colors) this.colors = data.colors;
+        if (data.sizes) this.sizes = data.sizes;
+        if (data.pantsSizes) this.pantsSizes = data.pantsSizes;
+        if (data.sales) this.sales = data.sales;
+        if (data.clients) this.clients = data.clients;
+        if (data.notifications) this.notifications = data.notifications;
+        
+        this.saveAllData();
     }
 
     confirmClearData() {
@@ -1500,6 +1914,7 @@ class JessicaBoutique {
                 this.pantsSizes = this.getSamplePantsSizes();
                 this.sales = [];
                 this.clients = [];
+                this.notifications = this.getSampleNotifications();
                 
                 this.saveAllData();
                 this.loadInitialData();
@@ -1509,7 +1924,96 @@ class JessicaBoutique {
         );
     }
 
+    // ============ NOTIFICACIONES ============
+    toggleNotifications(e) {
+        e.stopPropagation();
+        const dropdown = document.getElementById('notificationDropdown');
+        dropdown.classList.toggle('active');
+        
+        if (dropdown.classList.contains('active')) {
+            this.loadNotifications();
+        }
+    }
+
+    loadNotifications() {
+        const container = document.getElementById('notificationList');
+        if (!container) return;
+        
+        const unreadCount = this.notifications.filter(n => !n.read).length;
+        document.querySelector('.notification-badge').textContent = unreadCount;
+        
+        container.innerHTML = this.notifications.map(notification => `
+            <div class="notification-item ${notification.read ? '' : 'unread'}" 
+                 onclick="system.markNotificationAsRead(${notification.id})">
+                <i class="fas fa-${this.getNotificationIcon(notification.type)}"></i>
+                <div class="notification-content">
+                    <div class="notification-title">${notification.title}</div>
+                    <div class="notification-message">${notification.message}</div>
+                    <div class="notification-time">${this.formatNotificationTime(notification.timestamp)}</div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    getNotificationIcon(type) {
+        const icons = {
+            'success': 'check-circle',
+            'warning': 'exclamation-triangle',
+            'danger': 'exclamation-circle',
+            'info': 'info-circle'
+        };
+        return icons[type] || 'bell';
+    }
+
+    formatNotificationTime(timestamp) {
+        const date = new Date(timestamp);
+        const now = new Date();
+        const diff = now - date;
+        
+        if (diff < 60000) return 'Hace unos segundos';
+        if (diff < 3600000) return `Hace ${Math.floor(diff / 60000)} minutos`;
+        if (diff < 86400000) return `Hace ${Math.floor(diff / 3600000)} horas`;
+        return date.toLocaleDateString('es-ES');
+    }
+
+    markNotificationAsRead(id) {
+        const notification = this.notifications.find(n => n.id === id);
+        if (notification) {
+            notification.read = true;
+            this.saveData('notifications');
+            this.loadNotifications();
+        }
+    }
+
+    markAllNotificationsAsRead() {
+        this.notifications.forEach(notification => {
+            notification.read = true;
+        });
+        this.saveData('notifications');
+        this.loadNotifications();
+        this.showToast('Todas las notificaciones marcadas como leídas', 'success');
+    }
+
+    addNotification(title, message, type = 'info') {
+        const notification = {
+            id: Date.now(),
+            title: title,
+            message: message,
+            type: type,
+            read: false,
+            timestamp: new Date().toISOString()
+        };
+        
+        this.notifications.unshift(notification);
+        this.saveData('notifications');
+        this.loadNotifications();
+    }
+
     // ============ UTILIDADES ============
+    formatCurrency(amount) {
+        return `S/. ${amount.toFixed(2)}`;
+    }
+
     saveData(type) {
         const keys = {
             'products': 'jb_products',
@@ -1518,7 +2022,8 @@ class JessicaBoutique {
             'sizes': 'jb_sizes',
             'pantsSizes': 'jb_pantsSizes',
             'sales': 'jb_sales',
-            'clients': 'jb_clients'
+            'clients': 'jb_clients',
+            'notifications': 'jb_notifications'
         };
         
         localStorage.setItem(keys[type], JSON.stringify(this[type]));
@@ -1532,6 +2037,7 @@ class JessicaBoutique {
         this.saveData('pantsSizes');
         this.saveData('sales');
         this.saveData('clients');
+        this.saveData('notifications');
     }
 
     updateCurrentDate() {
