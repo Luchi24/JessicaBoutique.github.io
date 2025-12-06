@@ -1,4 +1,4 @@
-// Sistema Jessica Boutique - Versión Mejorada y Simplificada
+// Sistema Jessica Boutique - Versión Mejorada y Completa
 class JessicaBoutique {
     constructor() {
         // Inicializar datos
@@ -9,7 +9,6 @@ class JessicaBoutique {
         this.pantsSizes = JSON.parse(localStorage.getItem('jb_pantsSizes')) || this.getSamplePantsSizes();
         this.sales = JSON.parse(localStorage.getItem('jb_sales')) || [];
         this.clients = JSON.parse(localStorage.getItem('jb_clients')) || [];
-        this.notifications = JSON.parse(localStorage.getItem('jb_notifications')) || this.getSampleNotifications();
         
         // Estado actual
         this.currentPage = 1;
@@ -17,7 +16,7 @@ class JessicaBoutique {
         this.filteredProducts = [...this.products];
         this.currentCart = [];
         this.currentSale = null;
-        this.combinations = [];
+        this.currentVariants = [];
         this.pendingAction = null;
         
         // Inicializar
@@ -26,16 +25,44 @@ class JessicaBoutique {
 
     // ============ INICIALIZACIÓN ============
     init() {
+        this.applyDarkMode();
         this.setupEventListeners();
         this.loadInitialData();
         this.updateDashboard();
         this.updateCurrentDate();
-        this.loadDarkModePreference();
-        this.loadNotifications();
         this.showToast('¡Bienvenida a Jessica Boutique!', 'success');
     }
 
+    applyDarkMode() {
+        const darkMode = localStorage.getItem('jb_darkMode') === 'true';
+        const toggle = document.getElementById('darkModeToggle');
+        
+        if (toggle) {
+            toggle.checked = darkMode;
+        }
+        
+        if (darkMode) {
+            document.body.classList.add('dark-mode');
+        } else {
+            document.body.classList.remove('dark-mode');
+        }
+    }
+
     setupEventListeners() {
+        // Menu toggle para móviles
+        document.getElementById('menuToggle')?.addEventListener('click', () => {
+            document.querySelector('.sidebar').classList.toggle('active');
+        });
+
+        // Cerrar sidebar al hacer clic en un item en móviles
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('click', () => {
+                if (window.innerWidth <= 1024) {
+                    document.querySelector('.sidebar').classList.remove('active');
+                }
+            });
+        });
+
         // Navegación
         document.querySelectorAll('.menu-item').forEach(item => {
             item.addEventListener('click', (e) => {
@@ -53,27 +80,24 @@ class JessicaBoutique {
             });
         });
 
-        // Inventario - Búsqueda y filtros mejorados
+        // Notificaciones
+        document.querySelector('.btn-notification')?.addEventListener('click', () => this.showNotifications());
+
+        // Inventario
         document.getElementById('searchInventory')?.addEventListener('input', () => this.searchProducts());
-        document.getElementById('searchBtn')?.addEventListener('click', () => this.searchProducts());
-        document.getElementById('sortBy')?.addEventListener('change', () => this.applyFilters());
-        document.getElementById('sortOrder')?.addEventListener('change', () => this.applyFilters());
-        document.getElementById('filterColor')?.addEventListener('change', () => this.applyFilters());
-        document.getElementById('filterBrand')?.addEventListener('change', () => this.applyFilters());
-        document.getElementById('filterCategory')?.addEventListener('change', () => this.applyFilters());
-        document.getElementById('filterStatus')?.addEventListener('change', () => this.applyFilters());
         document.getElementById('applyFilters')?.addEventListener('click', () => this.applyFilters());
         document.getElementById('clearFilters')?.addEventListener('click', () => this.clearFilters());
         document.getElementById('exportInventory')?.addEventListener('click', () => this.exportInventory());
         document.getElementById('prevPage')?.addEventListener('click', () => this.prevPage());
         document.getElementById('nextPage')?.addEventListener('click', () => this.nextPage());
+        document.getElementById('sortBy')?.addEventListener('change', () => this.applyFilters());
 
         // Agregar Producto
         document.getElementById('productForm')?.addEventListener('submit', (e) => this.saveProduct(e));
         document.getElementById('productCategory')?.addEventListener('change', (e) => this.updateSizeOptions(e));
         document.getElementById('purchasePrice')?.addEventListener('input', () => this.calculateProfitMargin());
         document.getElementById('salePrice')?.addEventListener('input', () => this.calculateProfitMargin());
-        document.getElementById('addCombo')?.addEventListener('click', () => this.addCombination());
+        document.getElementById('addVariantBtn')?.addEventListener('click', () => this.addVariant());
 
         // Ventas
         document.getElementById('addProductBtn')?.addEventListener('click', () => this.addToCart());
@@ -91,8 +115,7 @@ class JessicaBoutique {
         document.getElementById('addPantsSize')?.addEventListener('click', () => this.addNewPantsSize());
         document.getElementById('darkModeToggle')?.addEventListener('change', () => this.toggleDarkMode());
         document.getElementById('exportData')?.addEventListener('click', () => this.exportAllData());
-        document.getElementById('importDataBtn')?.addEventListener('click', () => this.openImportDialog());
-        document.getElementById('importDataInput')?.addEventListener('change', (e) => this.importData(e));
+        document.getElementById('importData')?.addEventListener('click', () => this.importData());
         document.getElementById('clearData')?.addEventListener('click', () => this.confirmClearData());
 
         // Modales
@@ -107,19 +130,8 @@ class JessicaBoutique {
             btn.addEventListener('click', (e) => this.switchConfigTab(e));
         });
 
-        // Notificaciones
-        document.getElementById('notificationBtn')?.addEventListener('click', (e) => this.toggleNotifications(e));
-        document.getElementById('markAllRead')?.addEventListener('click', () => this.markAllNotificationsAsRead());
-
-        // Cerrar notificaciones al hacer click fuera
-        document.addEventListener('click', (e) => {
-            const dropdown = document.getElementById('notificationDropdown');
-            const btn = document.getElementById('notificationBtn');
-            
-            if (dropdown && btn && !dropdown.contains(e.target) && !btn.contains(e.target)) {
-                dropdown.classList.remove('active');
-            }
-        });
+        // Estadísticas
+        document.getElementById('statsPeriod')?.addEventListener('change', () => this.loadStatistics());
     }
 
     loadInitialData() {
@@ -131,8 +143,8 @@ class JessicaBoutique {
         this.loadRecentProducts();
         this.loadSalesHistory();
         this.loadConfigLists();
-        this.loadFilterOptions();
-        this.loadComboOptions();
+        this.loadBrands();
+        this.loadFilterColors();
     }
 
     // ============ DATOS DE EJEMPLO ============
@@ -199,33 +211,23 @@ class JessicaBoutique {
         return ["28", "30", "32", "34", "36", "38"];
     }
 
-    getSampleNotifications() {
-        return [
-            {
-                id: 1,
-                title: 'Stock bajo',
-                message: 'El producto "Blusa de Seda Blanca" tiene stock bajo (3 unidades)',
-                type: 'warning',
-                read: false,
-                timestamp: new Date().toISOString()
-            },
-            {
-                id: 2,
-                title: 'Nueva venta registrada',
-                message: 'Se registró una venta de S/. 159.98',
-                type: 'success',
-                read: false,
-                timestamp: new Date(Date.now() - 3600000).toISOString()
-            },
-            {
-                id: 3,
-                title: 'Producto agotado',
-                message: 'El producto "Vestido Rojo Elegante" está agotado',
-                type: 'danger',
-                read: false,
-                timestamp: new Date(Date.now() - 7200000).toISOString()
-            }
-        ];
+    // ============ UTILIDADES ============
+    formatCurrency(amount) {
+        return `S/. ${amount.toFixed(2)}`;
+    }
+
+    generateId() {
+        const maxId = this.products.reduce((max, p) => Math.max(max, p.id || 0), 0);
+        return maxId + 1;
+    }
+
+    getStatusText(status) {
+        const texts = {
+            'available': 'Disponible',
+            'low': 'Stock Bajo',
+            'out': 'Agotado'
+        };
+        return texts[status] || status;
     }
 
     // ============ NAVEGACIÓN ============
@@ -261,7 +263,6 @@ class JessicaBoutique {
                     break;
                 case 'agregar':
                     this.resetProductForm();
-                    this.loadComboOptions();
                     break;
                 case 'ventas':
                     this.loadSalesHistory();
@@ -394,47 +395,13 @@ class JessicaBoutique {
         `).join('');
     }
 
-    getStatusText(status) {
-        const texts = {
-            'available': 'Disponible',
-            'low': 'Stock Bajo',
-            'out': 'Agotado'
-        };
-        return texts[status] || status;
-    }
-
-    // ============ FILTROS MEJORADOS ============
-    loadFilterOptions() {
-        // Cargar colores únicos
-        const uniqueColors = [...new Set(this.products.map(p => p.color))];
-        const colorSelect = document.getElementById('filterColor');
-        if (colorSelect) {
-            colorSelect.innerHTML = '<option value="">Todos los colores</option>' +
-                uniqueColors.map(color => `<option value="${color}">${color}</option>`).join('');
-        }
-        
-        // Cargar marcas únicas
-        const uniqueBrands = [...new Set(this.products.map(p => p.brand))];
-        const brandSelect = document.getElementById('filterBrand');
-        if (brandSelect) {
-            brandSelect.innerHTML = '<option value="">Todas las marcas</option>' +
-                uniqueBrands.map(brand => `<option value="${brand}">${brand}</option>`).join('');
-        }
-        
-        // Cargar categorías
-        const categorySelect = document.getElementById('filterCategory');
-        if (categorySelect) {
-            categorySelect.innerHTML = '<option value="">Todas las categorías</option>' +
-                this.categories.map(cat => `<option value="${cat}">${cat}</option>`).join('');
-        }
-    }
-
     searchProducts() {
         const searchTerm = document.getElementById('searchInventory').value.toLowerCase();
         this.filteredProducts = this.products.filter(product => 
             product.name.toLowerCase().includes(searchTerm) ||
             product.brand.toLowerCase().includes(searchTerm) ||
-            product.category.toLowerCase().includes(searchTerm)
+            product.category.toLowerCase().includes(searchTerm) ||
+            product.color.toLowerCase().includes(searchTerm)
         );
         this.currentPage = 1;
         this.renderInventoryTable();
@@ -442,34 +409,31 @@ class JessicaBoutique {
     }
 
     applyFilters() {
-        const searchTerm = document.getElementById('searchInventory').value.toLowerCase();
         const category = document.getElementById('filterCategory').value;
+        const color = document.getElementById('filterColor')?.value || '';
+        const brand = document.getElementById('filterBrand')?.value || '';
         const status = document.getElementById('filterStatus').value;
-        const color = document.getElementById('filterColor').value;
-        const brand = document.getElementById('filterBrand').value;
-        const sortBy = document.getElementById('sortBy').value;
-        const sortOrder = document.getElementById('sortOrder').value;
+        const sortBy = document.getElementById('sortBy')?.value || '';
+        const searchTerm = document.getElementById('searchInventory').value.toLowerCase();
         
         this.filteredProducts = this.products.filter(product => {
-            // Filtro de búsqueda
-            if (searchTerm && 
-                !product.name.toLowerCase().includes(searchTerm) &&
-                !product.brand.toLowerCase().includes(searchTerm) &&
-                !product.category.toLowerCase().includes(searchTerm)) {
-                return false;
-            }
-            
-            // Filtros individuales
             if (category && product.category !== category) return false;
-            if (status && product.status !== status) return false;
             if (color && product.color !== color) return false;
             if (brand && product.brand !== brand) return false;
-            
+            if (status && product.status !== status) return false;
+            if (searchTerm && !(
+                product.name.toLowerCase().includes(searchTerm) ||
+                product.brand.toLowerCase().includes(searchTerm) ||
+                product.category.toLowerCase().includes(searchTerm) ||
+                product.color.toLowerCase().includes(searchTerm)
+            )) return false;
             return true;
         });
         
-        // Ordenar productos
-        this.sortProducts(sortBy, sortOrder);
+        // Ordenar
+        if (sortBy) {
+            this.sortProducts(sortBy);
+        }
         
         this.currentPage = 1;
         this.renderInventoryTable();
@@ -477,45 +441,38 @@ class JessicaBoutique {
         this.updateInventorySummary();
     }
 
-    sortProducts(sortBy, sortOrder) {
+    sortProducts(sortBy) {
         this.filteredProducts.sort((a, b) => {
-            let valueA, valueB;
-            
             switch(sortBy) {
                 case 'name':
-                    valueA = a.name.toLowerCase();
-                    valueB = b.name.toLowerCase();
-                    break;
-                case 'stock':
-                    valueA = a.stock;
-                    valueB = b.stock;
-                    break;
+                    return a.name.localeCompare(b.name);
+                case 'name-desc':
+                    return b.name.localeCompare(a.name);
                 case 'price':
-                    valueA = a.salePrice;
-                    valueB = b.salePrice;
-                    break;
-                case 'category':
-                    valueA = a.category.toLowerCase();
-                    valueB = b.category.toLowerCase();
-                    break;
+                    return a.salePrice - b.salePrice;
+                case 'price-desc':
+                    return b.salePrice - a.salePrice;
+                case 'stock':
+                    return a.stock - b.stock;
+                case 'stock-desc':
+                    return b.stock - a.stock;
+                case 'color':
+                    return a.color.localeCompare(b.color);
+                case 'brand':
+                    return a.brand.localeCompare(b.brand);
                 default:
                     return 0;
             }
-            
-            if (valueA < valueB) return sortOrder === 'asc' ? -1 : 1;
-            if (valueA > valueB) return sortOrder === 'asc' ? 1 : -1;
-            return 0;
         });
     }
 
     clearFilters() {
         document.getElementById('searchInventory').value = '';
         document.getElementById('filterCategory').value = '';
-        document.getElementById('filterStatus').value = '';
         document.getElementById('filterColor').value = '';
         document.getElementById('filterBrand').value = '';
-        document.getElementById('sortBy').value = 'name';
-        document.getElementById('sortOrder').value = 'asc';
+        document.getElementById('filterStatus').value = '';
+        document.getElementById('sortBy').value = '';
         this.loadInventory();
     }
 
@@ -581,6 +538,7 @@ class JessicaBoutique {
     loadCategories() {
         const select = document.getElementById('productCategory');
         const filterSelect = document.getElementById('filterCategory');
+        const variantSelect = document.getElementById('variantColor');
         
         if (select) {
             select.innerHTML = '<option value="">Selecciona una categoría</option>' +
@@ -590,6 +548,11 @@ class JessicaBoutique {
         if (filterSelect) {
             filterSelect.innerHTML = '<option value="">Todas las categorías</option>' +
                 this.categories.map(cat => `<option value="${cat}">${cat}</option>`).join('');
+        }
+        
+        if (variantSelect) {
+            variantSelect.innerHTML = '<option value="">Selecciona un color</option>' +
+                this.colors.map(color => `<option value="${color}">${color}</option>`).join('');
         }
     }
 
@@ -601,65 +564,98 @@ class JessicaBoutique {
         }
     }
 
-    loadSizes() {
-        const container = document.getElementById('sizeOptions');
-        if (!container) return;
-        
-        container.innerHTML = this.sizes.map(size => `
-            <div class="size-option" data-size="${size}">${size}</div>
-        `).join('');
-        
-        // Agregar event listeners
-        container.querySelectorAll('.size-option').forEach(option => {
-            option.addEventListener('click', () => {
-                container.querySelectorAll('.size-option').forEach(opt => 
-                    opt.classList.remove('selected')
-                );
-                option.classList.add('selected');
-            });
-        });
+    loadFilterColors() {
+        const filterSelect = document.getElementById('filterColor');
+        if (filterSelect) {
+            const uniqueColors = [...new Set(this.products.map(p => p.color))];
+            filterSelect.innerHTML = '<option value="">Todos los colores</option>' +
+                uniqueColors.map(color => `<option value="${color}">${color}</option>`).join('');
+        }
     }
 
-    loadComboOptions() {
-        // Cargar tallas para combo
-        const sizeSelect = document.getElementById('comboSize');
-        if (sizeSelect) {
-            sizeSelect.innerHTML = '<option value="">Seleccionar talla</option>' +
-                this.sizes.map(size => `<option value="${size}">${size}</option>`).join('');
+    loadBrands() {
+        const brands = [...new Set(this.products.map(p => p.brand).filter(Boolean))];
+        const filterBrand = document.getElementById('filterBrand');
+        if (filterBrand) {
+            filterBrand.innerHTML = '<option value="">Todas las marcas</option>' +
+                brands.map(brand => `<option value="${brand}">${brand}</option>`).join('');
+        }
+    }
+
+    loadSizes() {
+        const container = document.getElementById('sizeOptions');
+        const variantContainer = document.getElementById('variantSizeOptions');
+        
+        if (container) {
+            container.innerHTML = this.sizes.map(size => `
+                <div class="size-option" data-size="${size}">${size}</div>
+            `).join('');
+            
+            container.querySelectorAll('.size-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    container.querySelectorAll('.size-option').forEach(opt => 
+                        opt.classList.remove('selected')
+                    );
+                    option.classList.add('selected');
+                });
+            });
         }
         
-        // Cargar colores para combo
-        const colorSelect = document.getElementById('comboColor');
-        if (colorSelect) {
-            colorSelect.innerHTML = '<option value="">Seleccionar color</option>' +
-                this.colors.map(color => `<option value="${color}">${color}</option>`).join('');
+        if (variantContainer) {
+            variantContainer.innerHTML = this.sizes.map(size => `
+                <div class="size-option" data-size="${size}">${size}</div>
+            `).join('');
+            
+            variantContainer.querySelectorAll('.size-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    variantContainer.querySelectorAll('.size-option').forEach(opt => 
+                        opt.classList.remove('selected')
+                    );
+                    option.classList.add('selected');
+                });
+            });
         }
     }
 
     updateSizeOptions(e) {
         const category = e.target.value;
         const container = document.getElementById('sizeOptions');
-        
-        if (!container) return;
+        const variantContainer = document.getElementById('variantSizeOptions');
         
         let sizes = this.sizes;
         if (category === 'Pantalones') {
             sizes = this.pantsSizes;
         }
         
-        container.innerHTML = sizes.map(size => `
-            <div class="size-option" data-size="${size}">${size}</div>
-        `).join('');
-        
-        // Agregar event listeners
-        container.querySelectorAll('.size-option').forEach(option => {
-            option.addEventListener('click', () => {
-                container.querySelectorAll('.size-option').forEach(opt => 
-                    opt.classList.remove('selected')
-                );
-                option.classList.add('selected');
+        if (container) {
+            container.innerHTML = sizes.map(size => `
+                <div class="size-option" data-size="${size}">${size}</div>
+            `).join('');
+            
+            container.querySelectorAll('.size-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    container.querySelectorAll('.size-option').forEach(opt => 
+                        opt.classList.remove('selected')
+                    );
+                    option.classList.add('selected');
+                });
             });
-        });
+        }
+        
+        if (variantContainer) {
+            variantContainer.innerHTML = sizes.map(size => `
+                <div class="size-option" data-size="${size}">${size}</div>
+            `).join('');
+            
+            variantContainer.querySelectorAll('.size-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    variantContainer.querySelectorAll('.size-option').forEach(opt => 
+                        opt.classList.remove('selected')
+                    );
+                    option.classList.add('selected');
+                });
+            });
+        }
     }
 
     calculateProfitMargin() {
@@ -674,65 +670,64 @@ class JessicaBoutique {
         }
     }
 
-    // ============ COMBINACIONES ============
-    addCombination() {
-        const size = document.getElementById('comboSize').value;
-        const color = document.getElementById('comboColor').value;
-        const quantity = parseInt(document.getElementById('comboQuantity').value) || 1;
+    addVariant() {
+        const color = document.getElementById('variantColor').value;
+        const size = document.querySelector('#variantSizeOptions .size-option.selected')?.dataset.size;
+        const stock = parseInt(document.getElementById('variantStock').value) || 1;
         
-        if (!size || !color || quantity < 1) {
-            this.showToast('Selecciona talla, color y cantidad válida', 'error');
+        if (!color || !size) {
+            this.showToast('Selecciona color y talla para la variante', 'error');
             return;
         }
         
-        const combination = {
+        const variant = {
             id: Date.now(),
-            size: size,
             color: color,
-            quantity: quantity
+            size: size,
+            stock: stock
         };
         
-        this.combinations.push(combination);
-        this.updateCombinationsTable();
+        this.currentVariants.push(variant);
+        this.renderVariantsList();
         
-        // Limpiar formulario
-        document.getElementById('comboSize').value = '';
-        document.getElementById('comboColor').value = '';
-        document.getElementById('comboQuantity').value = 1;
+        // Limpiar campos
+        document.getElementById('variantColor').value = '';
+        document.getElementById('variantSizeOptions').querySelectorAll('.size-option').forEach(opt => 
+            opt.classList.remove('selected')
+        );
+        document.getElementById('variantStock').value = 1;
     }
 
-    updateCombinationsTable() {
-        const container = document.getElementById('combinationsTableBody');
+    renderVariantsList() {
+        const container = document.getElementById('variantsList');
         if (!container) return;
         
-        if (this.combinations.length === 0) {
-            container.innerHTML = `
-                <tr>
-                    <td colspan="4" style="text-align: center; color: #999;">
-                        No hay combinaciones agregadas
-                    </td>
-                </tr>
-            `;
+        if (this.currentVariants.length === 0) {
+            container.innerHTML = '<p class="empty-message">No hay variantes agregadas</p>';
             return;
         }
         
-        container.innerHTML = this.combinations.map(combo => `
-            <tr>
-                <td>${combo.size}</td>
-                <td>${combo.color}</td>
-                <td>${combo.quantity}</td>
-                <td>
-                    <button class="btn-delete" onclick="system.removeCombination(${combo.id})">
+        container.innerHTML = this.currentVariants.map(variant => `
+            <div class="variant-item" data-id="${variant.id}">
+                <div class="variant-details">
+                    <div class="variant-info">
+                        <span><i class="fas fa-palette"></i> Color: ${variant.color}</span>
+                        <span><i class="fas fa-ruler"></i> Talla: ${variant.size}</span>
+                        <span><i class="fas fa-box"></i> Cantidad: ${variant.stock}</span>
+                    </div>
+                </div>
+                <div class="variant-actions">
+                    <button class="btn-delete" onclick="system.removeVariant(${variant.id})">
                         <i class="fas fa-trash"></i>
                     </button>
-                </td>
-            </tr>
+                </div>
+            </div>
         `).join('');
     }
 
-    removeCombination(id) {
-        this.combinations = this.combinations.filter(combo => combo.id !== id);
-        this.updateCombinationsTable();
+    removeVariant(id) {
+        this.currentVariants = this.currentVariants.filter(v => v.id !== id);
+        this.renderVariantsList();
     }
 
     saveProduct(e) {
@@ -746,7 +741,7 @@ class JessicaBoutique {
         const salePrice = parseFloat(document.getElementById('salePrice').value);
         const stock = parseInt(document.getElementById('initialStock').value);
         const minStock = parseInt(document.getElementById('lowStockAlert').value) || 5;
-        const selectedSize = document.querySelector('.size-option.selected');
+        const selectedSize = document.querySelector('#sizeOptions .size-option.selected');
         
         if (!name || !category || !color || !purchasePrice || !salePrice || !selectedSize) {
             this.showToast('Por favor, completa todos los campos obligatorios', 'error');
@@ -758,14 +753,8 @@ class JessicaBoutique {
             return;
         }
         
-        // Calcular stock total (incluyendo combinaciones si existen)
-        let totalStock = stock;
-        if (this.combinations.length > 0) {
-            totalStock = this.combinations.reduce((sum, combo) => sum + combo.quantity, 0);
-        }
-        
-        // Crear nuevo producto
-        const newProduct = {
+        // Crear producto base
+        const baseProduct = {
             id: this.generateId(),
             name: name,
             category: category,
@@ -774,15 +763,31 @@ class JessicaBoutique {
             size: selectedSize.dataset.size,
             purchasePrice: purchasePrice,
             salePrice: salePrice,
-            stock: totalStock,
+            stock: stock,
             minStock: minStock,
-            status: totalStock === 0 ? 'out' : totalStock < minStock ? 'low' : 'available',
-            createdAt: new Date().toISOString().split('T')[0],
-            combinations: this.combinations.length > 0 ? [...this.combinations] : []
+            status: stock === 0 ? 'out' : stock < minStock ? 'low' : 'available',
+            createdAt: new Date().toISOString().split('T')[0]
         };
         
-        // Agregar a la lista
-        this.products.push(newProduct);
+        // Agregar producto base
+        this.products.push(baseProduct);
+        
+        // Agregar variantes si existen
+        if (this.currentVariants.length > 0) {
+            this.currentVariants.forEach(variant => {
+                const variantProduct = {
+                    ...baseProduct,
+                    id: this.generateId(),
+                    color: variant.color,
+                    size: variant.size,
+                    stock: variant.stock,
+                    name: `${name} - ${variant.color} (${variant.size})`,
+                    status: variant.stock === 0 ? 'out' : variant.stock < minStock ? 'low' : 'available'
+                };
+                this.products.push(variantProduct);
+            });
+        }
+        
         this.saveData('products');
         
         // Actualizar categorías y colores si son nuevos
@@ -809,14 +814,11 @@ class JessicaBoutique {
         }, 1500);
     }
 
-    generateId() {
-        const maxId = this.products.reduce((max, p) => Math.max(max, p.id || 0), 0);
-        return maxId + 1;
-    }
-
     resetProductForm() {
         document.getElementById('productForm').reset();
         document.getElementById('profitMargin').value = '0%';
+        this.currentVariants = [];
+        this.renderVariantsList();
         
         const sizeOptions = document.getElementById('sizeOptions');
         if (sizeOptions) {
@@ -824,10 +826,6 @@ class JessicaBoutique {
                 opt.classList.remove('selected')
             );
         }
-        
-        // Limpiar combinaciones
-        this.combinations = [];
-        this.updateCombinationsTable();
     }
 
     cancelForm() {
@@ -1116,13 +1114,6 @@ class JessicaBoutique {
             this.saveData('clients');
         }
         
-        // Crear notificación de venta
-        this.addNotification(
-            'Nueva venta registrada',
-            `Se registró una venta de ${this.formatCurrency(total)}`,
-            'success'
-        );
-        
         // Mostrar éxito
         this.showToast(`Venta procesada por ${this.formatCurrency(total)}`, 'success');
         
@@ -1138,7 +1129,6 @@ class JessicaBoutique {
         this.updateDashboard();
         this.loadInventory();
         this.loadSalesHistory();
-        this.loadNotifications();
     }
 
     generateSaleId() {
@@ -1495,11 +1485,13 @@ class JessicaBoutique {
         if (!container) return;
         
         container.innerHTML = this.categories.map(category => `
-            <div class="config-grid-item">
-                <input type="text" value="${category}" class="category-input" 
-                       data-original="${category}">
-                <div class="category-actions">
-                    <button class="btn-edit" onclick="system.updateCategory('${category}')">
+            <div class="config-list-item editable" data-name="${category}">
+                <input type="text" value="${category}" class="edit-input" readonly>
+                <div class="item-actions">
+                    <button class="btn-edit" onclick="system.editConfigItem(this, 'category', '${category}')">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn-save" onclick="system.saveConfigItem(this, 'category', '${category}')" style="display: none;">
                         <i class="fas fa-save"></i>
                     </button>
                     <button class="btn-delete" onclick="system.deleteCategory('${category}')">
@@ -1508,17 +1500,6 @@ class JessicaBoutique {
                 </div>
             </div>
         `).join('');
-        
-        // Agregar event listeners para edición en tiempo real
-        container.querySelectorAll('.category-input').forEach(input => {
-            input.addEventListener('change', (e) => {
-                const original = e.target.dataset.original;
-                const newValue = e.target.value.trim();
-                if (newValue && newValue !== original) {
-                    this.updateCategory(original, newValue);
-                }
-            });
-        });
     }
 
     loadColorsList() {
@@ -1526,11 +1507,13 @@ class JessicaBoutique {
         if (!container) return;
         
         container.innerHTML = this.colors.map(color => `
-            <div class="config-grid-item">
-                <input type="text" value="${color}" class="color-input" 
-                       data-original="${color}">
-                <div class="color-actions">
-                    <button class="btn-edit" onclick="system.updateColor('${color}')">
+            <div class="config-list-item editable" data-name="${color}">
+                <input type="text" value="${color}" class="edit-input" readonly>
+                <div class="item-actions">
+                    <button class="btn-edit" onclick="system.editConfigItem(this, 'color', '${color}')">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn-save" onclick="system.saveConfigItem(this, 'color', '${color}')" style="display: none;">
                         <i class="fas fa-save"></i>
                     </button>
                     <button class="btn-delete" onclick="system.deleteColor('${color}')">
@@ -1539,17 +1522,6 @@ class JessicaBoutique {
                 </div>
             </div>
         `).join('');
-        
-        // Agregar event listeners para edición en tiempo real
-        container.querySelectorAll('.color-input').forEach(input => {
-            input.addEventListener('change', (e) => {
-                const original = e.target.dataset.original;
-                const newValue = e.target.value.trim();
-                if (newValue && newValue !== original) {
-                    this.updateColor(original, newValue);
-                }
-            });
-        });
     }
 
     loadSizesLists() {
@@ -1578,6 +1550,67 @@ class JessicaBoutique {
                 </div>
             `).join('');
         }
+    }
+
+    editConfigItem(button, type, oldValue) {
+        const item = button.closest('.config-list-item');
+        const input = item.querySelector('.edit-input');
+        const editBtn = item.querySelector('.btn-edit');
+        const saveBtn = item.querySelector('.btn-save');
+        
+        input.readOnly = false;
+        input.focus();
+        editBtn.style.display = 'none';
+        saveBtn.style.display = 'block';
+    }
+
+    saveConfigItem(button, type, oldValue) {
+        const item = button.closest('.config-list-item');
+        const input = item.querySelector('.edit-input');
+        const newValue = input.value.trim();
+        const editBtn = item.querySelector('.btn-edit');
+        const saveBtn = item.querySelector('.btn-save');
+        
+        if (!newValue) {
+            this.showToast('El valor no puede estar vacío', 'error');
+            return;
+        }
+        
+        if (type === 'category') {
+            // Actualizar en productos
+            this.products.forEach(product => {
+                if (product.category === oldValue) {
+                    product.category = newValue;
+                }
+            });
+            // Actualizar en lista
+            const index = this.categories.indexOf(oldValue);
+            if (index > -1) {
+                this.categories[index] = newValue;
+            }
+            this.saveData('products');
+            this.saveData('categories');
+        } else if (type === 'color') {
+            // Actualizar en productos
+            this.products.forEach(product => {
+                if (product.color === oldValue) {
+                    product.color = newValue;
+                }
+            });
+            // Actualizar en lista
+            const index = this.colors.indexOf(oldValue);
+            if (index > -1) {
+                this.colors[index] = newValue;
+            }
+            this.saveData('products');
+            this.saveData('colors');
+        }
+        
+        input.readOnly = true;
+        editBtn.style.display = 'block';
+        saveBtn.style.display = 'none';
+        this.loadConfigLists();
+        this.showToast(`${type === 'category' ? 'Categoría' : 'Color'} actualizado`, 'success');
     }
 
     addNewCategory() {
@@ -1671,84 +1704,6 @@ class JessicaBoutique {
         this.showToast('Talla de pantalón agregada', 'success');
     }
 
-    updateCategory(oldCategory, newCategory) {
-        if (!newCategory.trim()) {
-            this.showToast('El nombre de la categoría no puede estar vacío', 'error');
-            return;
-        }
-        
-        if (oldCategory === newCategory) return;
-        
-        if (this.categories.includes(newCategory)) {
-            this.showToast('La categoría ya existe', 'error');
-            return;
-        }
-        
-        // Actualizar en la lista
-        const index = this.categories.indexOf(oldCategory);
-        if (index > -1) {
-            this.categories[index] = newCategory;
-        }
-        
-        // Actualizar en productos
-        this.updateCategoryInProducts(oldCategory, newCategory);
-        
-        this.saveData('categories');
-        this.loadCategoriesList();
-        this.loadCategories();
-        this.loadFilterOptions();
-        this.showToast('Categoría actualizada', 'success');
-    }
-
-    updateCategoryInProducts(oldCategory, newCategory) {
-        this.products.forEach(product => {
-            if (product.category === oldCategory) {
-                product.category = newCategory;
-            }
-        });
-        this.saveData('products');
-        this.loadInventory();
-    }
-
-    updateColor(oldColor, newColor) {
-        if (!newColor.trim()) {
-            this.showToast('El nombre del color no puede estar vacío', 'error');
-            return;
-        }
-        
-        if (oldColor === newColor) return;
-        
-        if (this.colors.includes(newColor)) {
-            this.showToast('El color ya existe', 'error');
-            return;
-        }
-        
-        // Actualizar en la lista
-        const index = this.colors.indexOf(oldColor);
-        if (index > -1) {
-            this.colors[index] = newColor;
-        }
-        
-        // Actualizar en productos
-        this.updateColorInProducts(oldColor, newColor);
-        
-        this.saveData('colors');
-        this.loadColorsList();
-        this.loadColors();
-        this.loadFilterOptions();
-        this.showToast('Color actualizado', 'success');
-    }
-
-    updateColorInProducts(oldColor, newColor) {
-        this.products.forEach(product => {
-            if (product.color === oldColor) {
-                product.color = newColor;
-            }
-        });
-        this.saveData('products');
-        this.loadInventory();
-    }
-
     deleteCategory(category) {
         // Verificar si hay productos usando esta categoría
         const productsWithCategory = this.products.filter(p => p.category === category);
@@ -1761,7 +1716,6 @@ class JessicaBoutique {
         this.saveData('categories');
         this.loadCategories();
         this.loadCategoriesList();
-        this.loadFilterOptions();
         this.showToast('Categoría eliminada', 'success');
     }
 
@@ -1777,7 +1731,6 @@ class JessicaBoutique {
         this.saveData('colors');
         this.loadColors();
         this.loadColorsList();
-        this.loadFilterOptions();
         this.showToast('Color eliminado', 'success');
     }
 
@@ -1803,7 +1756,6 @@ class JessicaBoutique {
         this.showToast('Talla de pantalón eliminada', 'success');
     }
 
-    // ============ MODO OSCURO ============
     toggleDarkMode() {
         const isDarkMode = document.getElementById('darkModeToggle').checked;
         localStorage.setItem('jb_darkMode', isDarkMode);
@@ -1817,17 +1769,6 @@ class JessicaBoutique {
         this.showToast(`Modo ${isDarkMode ? 'oscuro' : 'claro'} activado`, 'success');
     }
 
-    loadDarkModePreference() {
-        const isDarkMode = localStorage.getItem('jb_darkMode') === 'true';
-        if (document.getElementById('darkModeToggle')) {
-            document.getElementById('darkModeToggle').checked = isDarkMode;
-        }
-        if (isDarkMode) {
-            document.body.classList.add('dark-mode');
-        }
-    }
-
-    // ============ IMPORTAR/EXPORTAR DATOS ============
     exportAllData() {
         const data = {
             products: this.products,
@@ -1837,7 +1778,6 @@ class JessicaBoutique {
             pantsSizes: this.pantsSizes,
             sales: this.sales,
             clients: this.clients,
-            notifications: this.notifications,
             exportDate: new Date().toISOString()
         };
         
@@ -1852,53 +1792,44 @@ class JessicaBoutique {
         this.showToast('Datos exportados correctamente', 'success');
     }
 
-    openImportDialog() {
-        document.getElementById('importDataInput').click();
-    }
-
-    importData(event) {
-        const file = event.target.files[0];
-        if (!file) return;
-        
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            try {
-                const data = JSON.parse(e.target.result);
-                
-                // Validar estructura de datos
-                if (this.validateImportData(data)) {
-                    this.importAllData(data);
-                    this.showToast('Datos importados correctamente', 'success');
-                    location.reload(); // Recargar para aplicar cambios
-                } else {
-                    this.showToast('El archivo no tiene el formato correcto', 'error');
+    importData() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.json';
+        input.onchange = (e) => {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            
+            reader.onload = (event) => {
+                try {
+                    const data = JSON.parse(event.target.result);
+                    
+                    // Validar estructura de datos
+                    if (data.products && data.categories && data.colors && data.sizes) {
+                        this.products = data.products;
+                        this.categories = data.categories;
+                        this.colors = data.colors;
+                        this.sizes = data.sizes;
+                        this.pantsSizes = data.pantsSizes || [];
+                        this.sales = data.sales || [];
+                        this.clients = data.clients || [];
+                        
+                        this.saveAllData();
+                        this.loadInitialData();
+                        this.updateDashboard();
+                        this.showToast('Datos importados correctamente', 'success');
+                    } else {
+                        this.showToast('Formato de archivo inválido', 'error');
+                    }
+                } catch (error) {
+                    this.showToast('Error al leer el archivo', 'error');
                 }
-            } catch (error) {
-                this.showToast('Error al leer el archivo', 'error');
-            }
+            };
+            
+            reader.readAsText(file);
         };
-        reader.readAsText(file);
         
-        // Limpiar input
-        event.target.value = '';
-    }
-
-    validateImportData(data) {
-        return data.products && Array.isArray(data.products) &&
-               data.categories && Array.isArray(data.categories);
-    }
-
-    importAllData(data) {
-        if (data.products) this.products = data.products;
-        if (data.categories) this.categories = data.categories;
-        if (data.colors) this.colors = data.colors;
-        if (data.sizes) this.sizes = data.sizes;
-        if (data.pantsSizes) this.pantsSizes = data.pantsSizes;
-        if (data.sales) this.sales = data.sales;
-        if (data.clients) this.clients = data.clients;
-        if (data.notifications) this.notifications = data.notifications;
-        
-        this.saveAllData();
+        input.click();
     }
 
     confirmClearData() {
@@ -1914,7 +1845,6 @@ class JessicaBoutique {
                 this.pantsSizes = this.getSamplePantsSizes();
                 this.sales = [];
                 this.clients = [];
-                this.notifications = this.getSampleNotifications();
                 
                 this.saveAllData();
                 this.loadInitialData();
@@ -1925,95 +1855,88 @@ class JessicaBoutique {
     }
 
     // ============ NOTIFICACIONES ============
-    toggleNotifications(e) {
-        e.stopPropagation();
-        const dropdown = document.getElementById('notificationDropdown');
-        dropdown.classList.toggle('active');
+    showNotifications() {
+        const notifications = [
+            { id: 1, title: 'Stock Bajo', message: '5 productos tienen stock bajo', date: new Date().toISOString().split('T')[0], type: 'warning' },
+            { id: 2, title: 'Venta Exitosa', message: 'Se registró una venta de S/. 250.00', date: new Date(Date.now() - 86400000).toISOString().split('T')[0], type: 'success' },
+            { id: 3, title: 'Producto Agotado', message: 'Vestido Elegante Negro está agotado', date: new Date(Date.now() - 172800000).toISOString().split('T')[0], type: 'danger' }
+        ];
         
-        if (dropdown.classList.contains('active')) {
-            this.loadNotifications();
-        }
-    }
-
-    loadNotifications() {
-        const container = document.getElementById('notificationList');
-        if (!container) return;
-        
-        const unreadCount = this.notifications.filter(n => !n.read).length;
-        document.querySelector('.notification-badge').textContent = unreadCount;
-        
-        container.innerHTML = this.notifications.map(notification => `
-            <div class="notification-item ${notification.read ? '' : 'unread'}" 
-                 onclick="system.markNotificationAsRead(${notification.id})">
-                <i class="fas fa-${this.getNotificationIcon(notification.type)}"></i>
-                <div class="notification-content">
-                    <div class="notification-title">${notification.title}</div>
-                    <div class="notification-message">${notification.message}</div>
-                    <div class="notification-time">${this.formatNotificationTime(notification.timestamp)}</div>
-                </div>
+        const notificationDropdown = document.createElement('div');
+        notificationDropdown.className = 'notification-dropdown';
+        notificationDropdown.innerHTML = `
+            <div class="notification-header">
+                <h4>Notificaciones (${notifications.length})</h4>
+                <button class="btn-clear" onclick="this.closest('.notification-dropdown').remove()">Marcar todas como leídas</button>
             </div>
-        `).join('');
-    }
-
-    getNotificationIcon(type) {
-        const icons = {
-            'success': 'check-circle',
-            'warning': 'exclamation-triangle',
-            'danger': 'exclamation-circle',
-            'info': 'info-circle'
-        };
-        return icons[type] || 'bell';
-    }
-
-    formatNotificationTime(timestamp) {
-        const date = new Date(timestamp);
-        const now = new Date();
-        const diff = now - date;
+            <div class="notification-list">
+                ${notifications.map(notif => `
+                    <div class="notification-item ${notif.type}">
+                        <div class="notification-icon">
+                            <i class="fas fa-${notif.type === 'warning' ? 'exclamation-triangle' : notif.type === 'success' ? 'check-circle' : 'times-circle'}"></i>
+                        </div>
+                        <div class="notification-content">
+                            <div class="notification-title">${notif.title}</div>
+                            <div class="notification-message">${notif.message}</div>
+                            <div class="notification-date">${notif.date}</div>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
         
-        if (diff < 60000) return 'Hace unos segundos';
-        if (diff < 3600000) return `Hace ${Math.floor(diff / 60000)} minutos`;
-        if (diff < 86400000) return `Hace ${Math.floor(diff / 3600000)} horas`;
-        return date.toLocaleDateString('es-ES');
-    }
-
-    markNotificationAsRead(id) {
-        const notification = this.notifications.find(n => n.id === id);
-        if (notification) {
-            notification.read = true;
-            this.saveData('notifications');
-            this.loadNotifications();
+        // Remover dropdown existente
+        const existingDropdown = document.querySelector('.notification-dropdown');
+        if (existingDropdown) {
+            existingDropdown.remove();
         }
-    }
-
-    markAllNotificationsAsRead() {
-        this.notifications.forEach(notification => {
-            notification.read = true;
-        });
-        this.saveData('notifications');
-        this.loadNotifications();
-        this.showToast('Todas las notificaciones marcadas como leídas', 'success');
-    }
-
-    addNotification(title, message, type = 'info') {
-        const notification = {
-            id: Date.now(),
-            title: title,
-            message: message,
-            type: type,
-            read: false,
-            timestamp: new Date().toISOString()
-        };
         
-        this.notifications.unshift(notification);
-        this.saveData('notifications');
-        this.loadNotifications();
+        // Agregar nuevo dropdown
+        const btn = document.querySelector('.btn-notification');
+        btn.appendChild(notificationDropdown);
+        
+        // Cerrar al hacer clic fuera
+        setTimeout(() => {
+            const closeDropdown = (e) => {
+                if (!notificationDropdown.contains(e.target) && !btn.contains(e.target)) {
+                    notificationDropdown.remove();
+                    document.removeEventListener('click', closeDropdown);
+                }
+            };
+            document.addEventListener('click', closeDropdown);
+        }, 100);
+    }
+
+    // ============ EXPORTAR INVENTARIO ============
+    exportInventory() {
+        const data = this.products.map(p => ({
+            ID: p.id,
+            Producto: p.name,
+            Categoría: p.category,
+            Marca: p.brand,
+            Color: p.color,
+            Talla: p.size,
+            Stock: p.stock,
+            'Precio Compra': p.purchasePrice,
+            'Precio Venta': p.salePrice,
+            Estado: this.getStatusText(p.status)
+        }));
+        
+        let csv = 'ID,Producto,Categoría,Marca,Color,Talla,Stock,Precio Compra,Precio Venta,Estado\n';
+        data.forEach(row => {
+            csv += `${row.ID},"${row.Producto}",${row.Categoría},${row.Marca},${row.Color},${row.Talla},${row.Stock},${row['Precio Compra']},${row['Precio Venta']},${row.Estado}\n`;
+        });
+        
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `inventario_${new Date().toISOString().split('T')[0]}.csv`;
+        link.click();
+        
+        this.showToast('Inventario exportado en formato CSV', 'success');
     }
 
     // ============ UTILIDADES ============
-    formatCurrency(amount) {
-        return `S/. ${amount.toFixed(2)}`;
-    }
-
     saveData(type) {
         const keys = {
             'products': 'jb_products',
@@ -2022,8 +1945,7 @@ class JessicaBoutique {
             'sizes': 'jb_sizes',
             'pantsSizes': 'jb_pantsSizes',
             'sales': 'jb_sales',
-            'clients': 'jb_clients',
-            'notifications': 'jb_notifications'
+            'clients': 'jb_clients'
         };
         
         localStorage.setItem(keys[type], JSON.stringify(this[type]));
@@ -2037,7 +1959,6 @@ class JessicaBoutique {
         this.saveData('pantsSizes');
         this.saveData('sales');
         this.saveData('clients');
-        this.saveData('notifications');
     }
 
     updateCurrentDate() {
@@ -2115,34 +2036,6 @@ class JessicaBoutique {
             this.pendingAction = null;
         }
         this.closeModal();
-    }
-
-    exportInventory() {
-        const data = this.products.map(p => ({
-            ID: p.id,
-            Producto: p.name,
-            Categoría: p.category,
-            Marca: p.brand,
-            Color: p.color,
-            Talla: p.size,
-            Stock: p.stock,
-            'Precio Compra': p.purchasePrice,
-            'Precio Venta': p.salePrice,
-            Estado: this.getStatusText(p.status)
-        }));
-        
-        let csv = 'ID,Producto,Categoría,Marca,Color,Talla,Stock,Precio Compra,Precio Venta,Estado\n';
-        data.forEach(row => {
-            csv += `${row.ID},"${row.Producto}",${row.Categoría},${row.Marca},${row.Color},${row.Talla},${row.Stock},${row['Precio Compra']},${row['Precio Venta']},${row.Estado}\n`;
-        });
-        
-        const blob = new Blob([csv], { type: 'text/csv' });
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = `inventario_${new Date().toISOString().split('T')[0]}.csv`;
-        link.click();
-        
-        this.showToast('Inventario exportado en formato CSV', 'success');
     }
 }
 
