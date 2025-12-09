@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jessica Boutique - Inventario</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Botón Menu Toggle para móviles -->
+    <button class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <div class="logo">
+            <a href="index.html" class="logo-link">
+                <i class="fas fa-store"></i>
+                <h2>Jessica Boutique</h2>
+            </a>
+        </div>
+        
+        <div class="menu-items">
+            <a href="index.html" class="menu-item">
+                <i class="fas fa-home"></i>
+                <span>Panel</span>
+            </a>
+            
+            <a href="inventario.html" class="menu-item active">
+                <i class="fas fa-boxes"></i>
+                <span>Inventario</span>
+            </a>
+            
+            <a href="agregar.html" class="menu-item">
+                <i class="fas fa-plus-circle"></i>
+                <span>Agregar Producto</span>
+            </a>
+            
+            <a href="ventas.html" class="menu-item">
+                <i class="fas fa-shopping-cart"></i>
+                <span>Ventas</span>
+            </a>
+            
+            <a href="estadisticas.html" class="menu-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Estadísticas</span>
+            </a>
+            
+            <a href="configuracion.html" class="menu-item">
+                <i class="fas fa-cog"></i>
+                <span>Configuración</span>
+            </a>
+        </div>
+        
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <i class="fas fa-user-circle"></i>
+                <div>
+                    <strong>Administrador</strong>
+                    <small>Jessica Boutique</small>
+                </div>
+            </div>
+            <a href="#" class="btn-logout" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Bar -->
+        <header class="top-bar">
+            <div class="page-title">
+                <h1>Inventario</h1>
+                <p>Gestiona todos tus productos</p>
+            </div>
+            
+            <div class="top-bar-actions">
+                <a href="#" class="btn-notification" id="notificationLink">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </a>
+                <div class="current-date">
+                    <i class="fas fa-calendar"></i>
+                    <span id="currentDate"></span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Inventory Content -->
+        <div class="content-sections">
+            <section class="content-section active">
+                <div class="section-header">
+                    <div class="header-left">
+                        <h2><i class="fas fa-boxes"></i> Inventario</h2>
+                        <p>Gestiona todos tus productos</p>
+                    </div>
+                    <div class="header-actions">
+                        <a href="agregar.html" class="btn-primary">
+                            <i class="fas fa-plus"></i> Nuevo Producto
+                        </a>
+                        <button class="btn-secondary" id="exportInventory">
+                            <i class="fas fa-file-export"></i> Exportar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Search and Filters -->
+                <div class="search-container">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchInventory" placeholder="Buscar producto por nombre, marca, categoría...">
+                    </div>
+                    
+                    <div class="filter-options">
+                        <select id="filterCategory">
+                            <option value="">Todas las categorías</option>
+                        </select>
+                        
+                        <select id="filterColor">
+                            <option value="">Todos los colores</option>
+                        </select>
+                        
+                        <select id="filterBrand">
+                            <option value="">Todas las marcas</option>
+                        </select>
+                        
+                        <select id="filterStatus">
+                            <option value="">Todos los estados</option>
+                            <option value="available">Disponible</option>
+                            <option value="low">Stock Bajo</option>
+                            <option value="out">Agotado</option>
+                        </select>
+                        
+                        <div class="sort-container">
+                            <select id="sortBy">
+                                <option value="">Ordenar por</option>
+                                <option value="name">Nombre (A-Z)</option>
+                                <option value="name-desc">Nombre (Z-A)</option>
+                                <option value="price">Precio (Menor a Mayor)</option>
+                                <option value="price-desc">Precio (Mayor a Menor)</option>
+                                <option value="stock">Stock (Menor a Mayor)</option>
+                                <option value="stock-desc">Stock (Mayor a Menor)</option>
+                                <option value="color">Color</option>
+                                <option value="brand">Marca</option>
+                            </select>
+                        </div>
+                        
+                        <button class="btn-filter" id="applyFilters">
+                            <i class="fas fa-filter"></i> Filtrar
+                        </button>
+                        <a href="inventario.html" class="btn-secondary" id="clearFilters">
+                            <i class="fas fa-redo"></i> Limpiar
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Inventory Table -->
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Producto</th>
+                                <th>Categoría</th>
+                                <th>Marca</th>
+                                <th>Color</th>
+                                <th>Stock</th>
+                                <th>Precio</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventoryTable">
+                            <!-- Los productos se cargarán aquí -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination">
+                    <button class="pagination-btn" id="prevPage" disabled>
+                        <i class="fas fa-chevron-left"></i> Anterior
+                    </button>
+                    <div class="page-numbers" id="pageNumbers">
+                        <span class="page-number active">1</span>
+                    </div>
+                    <button class="pagination-btn" id="nextPage" disabled>
+                        Siguiente <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+
+                <!-- Inventory Summary -->
+                <div class="summary-cards">
+                    <div class="summary-card">
+                        <h4>Total Productos</h4>
+                        <p class="summary-number" id="summaryTotal">0</p>
+                    </div>
+                    <div class="summary-card">
+                        <h4>Valor Inventario</h4>
+                        <p class="summary-number" id="summaryValue">S/. 0</p>
+                    </div>
+                    <div class="summary-card">
+                        <h4>Stock Bajo</h4>
+                        <p class="summary-number" id="summaryLow">0</p>
+                    </div>
+                    <div class="summary-card">
+                        <h4>Agotados</h4>
+                        <p class="summary-number" id="summaryOut">0</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Modals -->
+    <div class="modal-overlay" id="modalOverlay"></div>
+
+    <!-- Edit Product Modal -->
+    <div class="modal" id="editProductModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-edit"></i> Editar Producto</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- El formulario de edición se cargará aquí -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal" id="confirmationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="confirmTitle"></h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="confirmMessage"></p>
+                <div class="modal-actions">
+                    <button class="btn-secondary" id="cancelConfirm">Cancelar</button>
+                    <button class="btn-primary" id="confirmAction">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+</body>
+</html>
