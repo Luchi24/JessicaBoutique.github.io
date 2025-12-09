@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jessica Boutique - Agregar Producto</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Botón Menu Toggle para móviles -->
+    <button class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <div class="logo">
+            <a href="index.html" class="logo-link">
+                <i class="fas fa-store"></i>
+                <h2>Jessica Boutique</h2>
+            </a>
+        </div>
+        
+        <div class="menu-items">
+            <a href="index.html" class="menu-item">
+                <i class="fas fa-home"></i>
+                <span>Panel</span>
+            </a>
+            
+            <a href="inventario.html" class="menu-item">
+                <i class="fas fa-boxes"></i>
+                <span>Inventario</span>
+            </a>
+            
+            <a href="agregar.html" class="menu-item active">
+                <i class="fas fa-plus-circle"></i>
+                <span>Agregar Producto</span>
+            </a>
+            
+            <a href="ventas.html" class="menu-item">
+                <i class="fas fa-shopping-cart"></i>
+                <span>Ventas</span>
+            </a>
+            
+            <a href="estadisticas.html" class="menu-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Estadísticas</span>
+            </a>
+            
+            <a href="configuracion.html" class="menu-item">
+                <i class="fas fa-cog"></i>
+                <span>Configuración</span>
+            </a>
+        </div>
+        
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <i class="fas fa-user-circle"></i>
+                <div>
+                    <strong>Administrador</strong>
+                    <small>Jessica Boutique</small>
+                </div>
+            </div>
+            <a href="#" class="btn-logout" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Bar -->
+        <header class="top-bar">
+            <div class="page-title">
+                <h1>Agregar Producto</h1>
+                <p>Completa el formulario para agregar un nuevo producto</p>
+            </div>
+            
+            <div class="top-bar-actions">
+                <a href="#" class="btn-notification" id="notificationLink">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </a>
+                <div class="current-date">
+                    <i class="fas fa-calendar"></i>
+                    <span id="currentDate"></span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Add Product Content -->
+        <div class="content-sections">
+            <section class="content-section active">
+                <div class="section-header">
+                    <div class="header-left">
+                        <h2><i class="fas fa-plus-circle"></i> Agregar Producto</h2>
+                        <p>Completa el formulario para agregar un nuevo producto</p>
+                    </div>
+                    <div class="header-actions">
+                        <a href="inventario.html" class="btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Volver al Inventario
+                        </a>
+                    </div>
+                </div>
+
+                <div class="form-container">
+                    <form id="productForm">
+                        <!-- Basic Information -->
+                        <div class="form-section">
+                            <h3><i class="fas fa-info-circle"></i> Información Básica</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="productName">
+                                        <i class="fas fa-tag"></i> Nombre del Producto *
+                                    </label>
+                                    <input type="text" id="productName" required 
+                                           placeholder="Ej: Vestido de noche elegante">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="productCategory">
+                                        <i class="fas fa-tags"></i> Categoría *
+                                    </label>
+                                    <select id="productCategory" required>
+                                        <option value="">Selecciona una categoría</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="productBrand">
+                                        <i class="fas fa-copyright"></i> Marca
+                                    </label>
+                                    <input type="text" id="productBrand" 
+                                           placeholder="Marca del producto">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="productColor">
+                                        <i class="fas fa-palette"></i> Color *
+                                    </label>
+                                    <select id="productColor" required>
+                                        <option value="">Selecciona un color</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sizes and Stock -->
+                        <div class="form-section">
+                            <h3><i class="fas fa-ruler"></i> Tallas y Stock</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="productSize">Talla *</label>
+                                    <div class="size-options" id="sizeOptions">
+                                        <!-- Las tallas se cargarán dinámicamente -->
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="initialStock">
+                                        <i class="fas fa-box"></i> Stock Inicial *
+                                    </label>
+                                    <input type="number" id="initialStock" 
+                                           min="0" value="0" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="lowStockAlert">
+                                        <i class="fas fa-exclamation-triangle"></i> Alerta de Stock Bajo
+                                    </label>
+                                    <input type="number" id="lowStockAlert" 
+                                           min="1" placeholder="Ej: 5">
+                                    <small>Recibirás alerta cuando el stock sea menor a este número</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Prices -->
+                        <div class="form-section">
+                            <h3><i class="fas fa-money-bill-wave"></i> Precios</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="purchasePrice">
+                                        <i class="fas fa-shopping-bag"></i> Precio de Compra *
+                                    </label>
+                                    <div class="input-with-icon">
+                                        <span class="input-icon">S/.</span>
+                                        <input type="number" id="purchasePrice" 
+                                               step="0.01" min="0" required 
+                                               placeholder="0.00">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="salePrice">
+                                        <i class="fas fa-tag"></i> Precio de Venta *
+                                    </label>
+                                    <div class="input-with-icon">
+                                        <span class="input-icon">S/.</span>
+                                        <input type="number" id="salePrice" 
+                                               step="0.01" min="0" required 
+                                               placeholder="0.00">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="profitMargin">Margen de Ganancia</label>
+                                    <div class="input-with-icon">
+                                        <span class="input-icon">%</span>
+                                        <input type="text" id="profitMargin" 
+                                               readonly placeholder="0%">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Product Variants -->
+                        <div class="form-section">
+                            <h3><i class="fas fa-layer-group"></i> Variantes del Producto (Opcional)</h3>
+                            <div class="variants-container">
+                                <div class="variant-form">
+                                    <div class="form-grid">
+                                        <div class="form-group">
+                                            <label for="variantColor">
+                                                <i class="fas fa-palette"></i> Color
+                                            </label>
+                                            <select id="variantColor">
+                                                <option value="">Selecciona un color</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="variantSize">Talla</label>
+                                            <div class="size-options" id="variantSizeOptions">
+                                                <!-- Las tallas se cargarán dinámicamente -->
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="variantStock">
+                                                <i class="fas fa-box"></i> Cantidad
+                                            </label>
+                                            <input type="number" id="variantStock" min="1" value="1">
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <button type="button" class="btn-primary" id="addVariantBtn">
+                                                <i class="fas fa-plus"></i> Agregar Variante
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="variants-list" id="variantsList">
+                                    <p class="empty-message">No hay variantes agregadas</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="form-actions">
+                            <a href="inventario.html" class="btn-secondary">
+                                Cancelar
+                            </a>
+                            <button type="submit" class="btn-primary">
+                                <i class="fas fa-save"></i> Guardar Producto
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+</body>
+</html>
