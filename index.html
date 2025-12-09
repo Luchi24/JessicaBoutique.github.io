@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jessica Boutique</title>
+    <title>Jessica Boutique - Panel</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -17,39 +17,39 @@
     <!-- Sidebar Navigation -->
     <nav class="sidebar">
         <div class="logo">
-            <a href="#dashboard" class="logo-link" data-section="dashboard">
+            <a href="index.html" class="logo-link">
                 <i class="fas fa-store"></i>
                 <h2>Jessica Boutique</h2>
             </a>
         </div>
         
         <div class="menu-items">
-            <a href="#dashboard" class="menu-item active" data-section="dashboard">
+            <a href="index.html" class="menu-item active">
                 <i class="fas fa-home"></i>
                 <span>Panel</span>
             </a>
             
-            <a href="#inventario" class="menu-item" data-section="inventario">
+            <a href="inventario.html" class="menu-item">
                 <i class="fas fa-boxes"></i>
                 <span>Inventario</span>
             </a>
             
-            <a href="#agregar" class="menu-item" data-section="agregar">
+            <a href="agregar.html" class="menu-item">
                 <i class="fas fa-plus-circle"></i>
                 <span>Agregar Producto</span>
             </a>
             
-            <a href="#ventas" class="menu-item" data-section="ventas">
+            <a href="ventas.html" class="menu-item">
                 <i class="fas fa-shopping-cart"></i>
                 <span>Ventas</span>
             </a>
             
-            <a href="#estadisticas" class="menu-item" data-section="estadisticas">
+            <a href="estadisticas.html" class="menu-item">
                 <i class="fas fa-chart-line"></i>
                 <span>Estadísticas</span>
             </a>
             
-            <a href="#configuracion" class="menu-item" data-section="configuracion">
+            <a href="configuracion.html" class="menu-item">
                 <i class="fas fa-cog"></i>
                 <span>Configuración</span>
             </a>
@@ -63,7 +63,7 @@
                     <small>Jessica Boutique</small>
                 </div>
             </div>
-            <a href="#logout" class="btn-logout" id="logoutBtn">
+            <a href="#" class="btn-logout" id="logoutBtn">
                 <i class="fas fa-sign-out-alt"></i>
             </a>
         </div>
@@ -74,12 +74,12 @@
         <!-- Top Bar -->
         <header class="top-bar">
             <div class="page-title">
-                <h1 id="pageTitle">Panel</h1>
-                <p id="pageSubtitle">Bienvenida al sistema de gestión</p>
+                <h1>Panel</h1>
+                <p>Bienvenida al sistema de gestión</p>
             </div>
             
             <div class="top-bar-actions">
-                <a href="#notificaciones" class="btn-notification" id="notificationLink">
+                <a href="#" class="btn-notification" id="notificationLink">
                     <i class="fas fa-bell"></i>
                     <span class="notification-badge">3</span>
                 </a>
@@ -90,15 +90,14 @@
             </div>
         </header>
 
-        <!-- Content Sections -->
+        <!-- Dashboard Content -->
         <div class="content-sections">
-            <!-- Dashboard Section -->
-            <section id="dashboard-section" class="content-section active">
+            <section class="content-section active">
                 <div class="welcome-card">
                     <div class="welcome-content">
                         <h2>¡Hola, Jessica!</h2>
                         <p>Bienvenida a tu sistema de gestión de boutique. Aquí tienes un resumen rápido de tu negocio.</p>
-                        <a href="#agregar" class="btn-quick-action" data-section="agregar">
+                        <a href="agregar.html" class="btn-quick-action">
                             <i class="fas fa-plus"></i> Agregar Producto Rápido
                         </a>
                     </div>
@@ -109,7 +108,7 @@
 
                 <!-- Stats Cards -->
                 <div class="stats-grid">
-                    <a href="#inventario" class="stat-card" data-section="inventario">
+                    <a href="inventario.html" class="stat-card">
                         <div class="stat-icon">
                             <i class="fas fa-boxes"></i>
                         </div>
@@ -123,7 +122,7 @@
                         </div>
                     </a>
                     
-                    <a href="#ventas" class="stat-card" data-section="ventas">
+                    <a href="ventas.html" class="stat-card">
                         <div class="stat-icon">
                             <i class="fas fa-shopping-cart"></i>
                         </div>
@@ -137,7 +136,7 @@
                         </div>
                     </a>
                     
-                    <a href="#estadisticas" class="stat-card" data-section="estadisticas">
+                    <a href="estadisticas.html" class="stat-card">
                         <div class="stat-icon">
                             <i class="fas fa-money-bill-wave"></i>
                         </div>
@@ -151,7 +150,7 @@
                         </div>
                     </a>
                     
-                    <a href="#inventario?filter=low" class="stat-card" data-section="inventario" data-filter="low">
+                    <a href="inventario.html?filter=low" class="stat-card">
                         <div class="stat-icon">
                             <i class="fas fa-exclamation-triangle"></i>
                         </div>
@@ -170,19 +169,19 @@
                 <div class="quick-actions">
                     <h3>Acciones Rápidas</h3>
                     <div class="actions-grid">
-                        <a href="#agregar" class="action-card" data-section="agregar">
+                        <a href="agregar.html" class="action-card">
                             <i class="fas fa-plus-circle"></i>
                             <span>Agregar Producto</span>
                         </a>
-                        <a href="#ventas" class="action-card" data-section="ventas">
+                        <a href="ventas.html" class="action-card">
                             <i class="fas fa-cash-register"></i>
                             <span>Nueva Venta</span>
                         </a>
-                        <a href="#inventario" class="action-card" data-section="inventario">
+                        <a href="inventario.html" class="action-card">
                             <i class="fas fa-search"></i>
                             <span>Buscar Producto</span>
                         </a>
-                        <a href="#estadisticas" class="action-card" data-section="estadisticas">
+                        <a href="estadisticas.html" class="action-card">
                             <i class="fas fa-chart-bar"></i>
                             <span>Ver Reportes</span>
                         </a>
@@ -193,7 +192,7 @@
                 <div class="recent-section">
                     <div class="section-header">
                         <h3>Productos Recientes</h3>
-                        <a href="#inventario">Ver Todos</a>
+                        <a href="inventario.html">Ver Todos</a>
                     </div>
                     <div class="table-responsive">
                         <table class="recent-table">
@@ -213,747 +212,11 @@
                     </div>
                 </div>
             </section>
-
-            <!-- Inventario Section -->
-            <section id="inventario-section" class="content-section">
-                <div class="section-header">
-                    <div class="header-left">
-                        <h2><i class="fas fa-boxes"></i> Inventario</h2>
-                        <p>Gestiona todos tus productos</p>
-                    </div>
-                    <div class="header-actions">
-                        <a href="#agregar" class="btn-primary" data-section="agregar">
-                            <i class="fas fa-plus"></i> Nuevo Producto
-                        </a>
-                        <button class="btn-secondary" id="exportInventory">
-                            <i class="fas fa-file-export"></i> Exportar
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Search and Filters -->
-                <div class="search-container">
-                    <div class="search-box">
-                        <i class="fas fa-search"></i>
-                        <input type="text" id="searchInventory" placeholder="Buscar producto por nombre, marca, categoría...">
-                    </div>
-                    
-                    <div class="filter-options">
-                        <select id="filterCategory">
-                            <option value="">Todas las categorías</option>
-                        </select>
-                        
-                        <select id="filterColor">
-                            <option value="">Todos los colores</option>
-                        </select>
-                        
-                        <select id="filterBrand">
-                            <option value="">Todas las marcas</option>
-                        </select>
-                        
-                        <select id="filterStatus">
-                            <option value="">Todos los estados</option>
-                            <option value="available">Disponible</option>
-                            <option value="low">Stock Bajo</option>
-                            <option value="out">Agotado</option>
-                        </select>
-                        
-                        <div class="sort-container">
-                            <select id="sortBy">
-                                <option value="">Ordenar por</option>
-                                <option value="name">Nombre (A-Z)</option>
-                                <option value="name-desc">Nombre (Z-A)</option>
-                                <option value="price">Precio (Menor a Mayor)</option>
-                                <option value="price-desc">Precio (Mayor a Menor)</option>
-                                <option value="stock">Stock (Menor a Mayor)</option>
-                                <option value="stock-desc">Stock (Mayor a Menor)</option>
-                                <option value="color">Color</option>
-                                <option value="brand">Marca</option>
-                            </select>
-                        </div>
-                        
-                        <button class="btn-filter" id="applyFilters">
-                            <i class="fas fa-filter"></i> Filtrar
-                        </button>
-                        <a href="#inventario" class="btn-secondary" id="clearFilters">
-                            <i class="fas fa-redo"></i> Limpiar
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Inventory Table -->
-                <div class="table-container">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Producto</th>
-                                <th>Categoría</th>
-                                <th>Marca</th>
-                                <th>Color</th>
-                                <th>Stock</th>
-                                <th>Precio</th>
-                                <th>Estado</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="inventoryTable">
-                            <!-- Los productos se cargarán aquí -->
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Pagination -->
-                <div class="pagination">
-                    <button class="pagination-btn" id="prevPage" disabled>
-                        <i class="fas fa-chevron-left"></i> Anterior
-                    </button>
-                    <div class="page-numbers" id="pageNumbers">
-                        <a href="#inventario?page=1" class="page-number active">1</a>
-                    </div>
-                    <button class="pagination-btn" id="nextPage" disabled>
-                        Siguiente <i class="fas fa-chevron-right"></i>
-                    </button>
-                </div>
-
-                <!-- Inventory Summary -->
-                <div class="summary-cards">
-                    <a href="#inventario" class="summary-card">
-                        <h4>Total Productos</h4>
-                        <p class="summary-number" id="summaryTotal">0</p>
-                    </a>
-                    <a href="#inventario?sort=value" class="summary-card">
-                        <h4>Valor Inventario</h4>
-                        <p class="summary-number" id="summaryValue">S/. 0</p>
-                    </a>
-                    <a href="#inventario?filter=low" class="summary-card">
-                        <h4>Stock Bajo</h4>
-                        <p class="summary-number" id="summaryLow">0</p>
-                    </a>
-                    <a href="#inventario?filter=out" class="summary-card">
-                        <h4>Agotados</h4>
-                        <p class="summary-number" id="summaryOut">0</p>
-                    </a>
-                </div>
-            </section>
-
-            <!-- Agregar Producto Section -->
-            <section id="agregar-section" class="content-section">
-                <div class="section-header">
-                    <div class="header-left">
-                        <h2><i class="fas fa-plus-circle"></i> Agregar Producto</h2>
-                        <p>Completa el formulario para agregar un nuevo producto</p>
-                    </div>
-                    <div class="header-actions">
-                        <a href="#inventario" class="btn-secondary" data-section="inventario">
-                            <i class="fas fa-arrow-left"></i> Volver al Inventario
-                        </a>
-                    </div>
-                </div>
-
-                <div class="form-container">
-                    <form id="productForm">
-                        <!-- Basic Information -->
-                        <div class="form-section">
-                            <h3><i class="fas fa-info-circle"></i> Información Básica</h3>
-                            <div class="form-grid">
-                                <div class="form-group">
-                                    <label for="productName">
-                                        <i class="fas fa-tag"></i> Nombre del Producto *
-                                    </label>
-                                    <input type="text" id="productName" required 
-                                           placeholder="Ej: Vestido de noche elegante">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="productCategory">
-                                        <i class="fas fa-tags"></i> Categoría *
-                                    </label>
-                                    <select id="productCategory" required>
-                                        <option value="">Selecciona una categoría</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="productBrand">
-                                        <i class="fas fa-copyright"></i> Marca
-                                    </label>
-                                    <input type="text" id="productBrand" 
-                                           placeholder="Marca del producto">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="productColor">
-                                        <i class="fas fa-palette"></i> Color *
-                                    </label>
-                                    <select id="productColor" required>
-                                        <option value="">Selecciona un color</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Sizes and Stock -->
-                        <div class="form-section">
-                            <h3><i class="fas fa-ruler"></i> Tallas y Stock</h3>
-                            <div class="form-grid">
-                                <div class="form-group">
-                                    <label for="productSize">Talla *</label>
-                                    <div class="size-options" id="sizeOptions">
-                                        <!-- Las tallas se cargarán dinámicamente -->
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="initialStock">
-                                        <i class="fas fa-box"></i> Stock Inicial *
-                                    </label>
-                                    <input type="number" id="initialStock" 
-                                           min="0" value="0" required>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="lowStockAlert">
-                                        <i class="fas fa-exclamation-triangle"></i> Alerta de Stock Bajo
-                                    </label>
-                                    <input type="number" id="lowStockAlert" 
-                                           min="1" placeholder="Ej: 5">
-                                    <small>Recibirás alerta cuando el stock sea menor a este número</small>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Prices -->
-                        <div class="form-section">
-                            <h3><i class="fas fa-money-bill-wave"></i> Precios</h3>
-                            <div class="form-grid">
-                                <div class="form-group">
-                                    <label for="purchasePrice">
-                                        <i class="fas fa-shopping-bag"></i> Precio de Compra *
-                                    </label>
-                                    <div class="input-with-icon">
-                                        <span class="input-icon">S/.</span>
-                                        <input type="number" id="purchasePrice" 
-                                               step="0.01" min="0" required 
-                                               placeholder="0.00">
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="salePrice">
-                                        <i class="fas fa-tag"></i> Precio de Venta *
-                                    </label>
-                                    <div class="input-with-icon">
-                                        <span class="input-icon">S/.</span>
-                                        <input type="number" id="salePrice" 
-                                               step="0.01" min="0" required 
-                                               placeholder="0.00">
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="profitMargin">Margen de Ganancia</label>
-                                    <div class="input-with-icon">
-                                        <span class="input-icon">%</span>
-                                        <input type="text" id="profitMargin" 
-                                               readonly placeholder="0%">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Product Variants -->
-                        <div class="form-section">
-                            <h3><i class="fas fa-layer-group"></i> Variantes del Producto (Opcional)</h3>
-                            <div class="variants-container">
-                                <div class="variant-form">
-                                    <div class="form-grid">
-                                        <div class="form-group">
-                                            <label for="variantColor">
-                                                <i class="fas fa-palette"></i> Color
-                                            </label>
-                                            <select id="variantColor">
-                                                <option value="">Selecciona un color</option>
-                                            </select>
-                                        </div>
-                                        
-                                        <div class="form-group">
-                                            <label for="variantSize">Talla</label>
-                                            <div class="size-options" id="variantSizeOptions">
-                                                <!-- Las tallas se cargarán dinámicamente -->
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="form-group">
-                                            <label for="variantStock">
-                                                <i class="fas fa-box"></i> Cantidad
-                                            </label>
-                                            <input type="number" id="variantStock" min="1" value="1">
-                                        </div>
-                                        
-                                        <div class="form-group">
-                                            <button type="button" class="btn-primary" id="addVariantBtn">
-                                                <i class="fas fa-plus"></i> Agregar Variante
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="variants-list" id="variantsList">
-                                    <p class="empty-message">No hay variantes agregadas</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Form Actions -->
-                        <div class="form-actions">
-                            <a href="#inventario" class="btn-secondary">
-                                Cancelar
-                            </a>
-                            <button type="submit" class="btn-primary">
-                                <i class="fas fa-save"></i> Guardar Producto
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </section>
-
-            <!-- Ventas Section -->
-            <section id="ventas-section" class="content-section">
-                <div class="section-header">
-                    <div class="header-left">
-                        <h2><i class="fas fa-shopping-cart"></i> Ventas</h2>
-                        <p>Registra nuevas ventas y consulta el historial</p>
-                    </div>
-                    <div class="header-actions">
-                        <a href="#ventas?new=true" class="btn-primary" id="newSaleBtn">
-                            <i class="fas fa-plus"></i> Nueva Venta
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Sale Form -->
-                <div class="sale-form-container" id="saleFormContainer">
-                    <div class="sale-form">
-                        <div class="form-section">
-                            <h3><i class="fas fa-user"></i> Datos del Cliente</h3>
-                            <div class="form-grid">
-                                <div class="form-group">
-                                    <label for="clientName">Nombre *</label>
-                                    <input type="text" id="clientName" 
-                                           placeholder="Nombre del cliente" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="clientDNI">DNI</label>
-                                    <input type="text" id="clientDNI" 
-                                           placeholder="Número de DNI">
-                                </div>
-                                <div class="form-group">
-                                    <label for="clientPhone">Teléfono</label>
-                                    <input type="tel" id="clientPhone" 
-                                           placeholder="Número de teléfono">
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Product Selection -->
-                        <div class="form-section">
-                            <h3><i class="fas fa-box"></i> Productos</h3>
-                            <div class="product-selection">
-                                <div class="selection-header">
-                                    <div class="form-group">
-                                        <select id="selectProduct">
-                                            <option value="">Buscar producto...</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="number" id="productQty" 
-                                               min="1" value="1" placeholder="Cantidad">
-                                    </div>
-                                    <button class="btn-secondary" id="addProductBtn">
-                                        <i class="fas fa-plus"></i> Agregar
-                                    </button>
-                                </div>
-                                
-                                <div class="cart-items" id="cartItems">
-                                    <p class="empty-cart">No hay productos en el carrito</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Payment -->
-                        <div class="form-section">
-                            <h3><i class="fas fa-credit-card"></i> Pago</h3>
-                            <div class="payment-methods">
-                                <div class="payment-option">
-                                    <input type="radio" id="cash" name="payment" 
-                                           value="efectivo" checked>
-                                    <label for="cash">
-                                        <i class="fas fa-money-bill-wave"></i>
-                                        Efectivo
-                                    </label>
-                                </div>
-                                <div class="payment-option">
-                                    <input type="radio" id="transfer" name="payment" 
-                                           value="transferencia">
-                                    <label for="transfer">
-                                        <i class="fas fa-university"></i>
-                                        Transferencia
-                                    </label>
-                                </div>
-                                <div class="payment-option">
-                                    <input type="radio" id="card" name="payment" 
-                                           value="tarjeta">
-                                    <label for="card">
-                                        <i class="fas fa-credit-card"></i>
-                                        Tarjeta (+5%)
-                                    </label>
-                                </div>
-                            </div>
-                            
-                            <div class="payment-summary">
-                                <div class="summary-row">
-                                    <span>Subtotal:</span>
-                                    <span id="subtotal">S/. 0.00</span>
-                                </div>
-                                <div class="summary-row">
-                                    <span>Comisión:</span>
-                                    <span id="commission">S/. 0.00</span>
-                                </div>
-                                <div class="summary-row total">
-                                    <span>Total:</span>
-                                    <span id="totalAmount">S/. 0.00</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Sale Actions -->
-                        <div class="sale-actions">
-                            <button class="btn-secondary" id="clearSale">
-                                <i class="fas fa-trash"></i> Limpiar
-                            </button>
-                            <button class="btn-primary" id="processSale">
-                                <i class="fas fa-check"></i> Procesar Venta
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Sales History -->
-                <div class="sales-history">
-                    <h3><i class="fas fa-history"></i> Historial de Ventas</h3>
-                    <div class="table-container">
-                        <table class="data-table">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Cliente</th>
-                                    <th>Productos</th>
-                                    <th>Total</th>
-                                    <th>Fecha</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody id="salesHistoryTable">
-                                <!-- Historial se cargará aquí -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Estadísticas Section -->
-            <section id="estadisticas-section" class="content-section">
-                <div class="section-header">
-                    <div class="header-left">
-                        <h2><i class="fas fa-chart-line"></i> Estadísticas</h2>
-                        <p>Visualiza el rendimiento de tu negocio</p>
-                    </div>
-                    <div class="header-actions">
-                        <select id="statsPeriod">
-                            <option value="today">Hoy</option>
-                            <option value="week">Esta Semana</option>
-                            <option value="month">Este Mes</option>
-                            <option value="year">Este Año</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Stats Cards -->
-                <div class="stats-grid-large">
-                    <a href="#ventas" class="stat-card-large" data-section="ventas">
-                        <div class="stat-header">
-                            <i class="fas fa-chart-bar"></i>
-                            <h3>Ventas Totales</h3>
-                        </div>
-                        <p class="stat-number" id="totalSalesAmount">S/. 0</p>
-                        <div class="stat-change up">
-                            <i class="fas fa-arrow-up"></i>
-                            <span>0% vs período anterior</span>
-                        </div>
-                    </a>
-                    
-                    <a href="#estadisticas?metric=profit" class="stat-card-large">
-                        <div class="stat-header">
-                            <i class="fas fa-money-bill-wave"></i>
-                            <h3>Ganancias</h3>
-                        </div>
-                        <p class="stat-number" id="totalProfitAmount">S/. 0</p>
-                        <div class="stat-change up">
-                            <i class="fas fa-arrow-up"></i>
-                            <span>0% vs período anterior</span>
-                        </div>
-                    </a>
-                    
-                    <a href="#clientes" class="stat-card-large">
-                        <div class="stat-header">
-                            <i class="fas fa-user-friends"></i>
-                            <h3>Clientes Nuevos</h3>
-                        </div>
-                        <p class="stat-number" id="newClients">0</p>
-                        <div class="stat-change up">
-                            <i class="fas fa-arrow-up"></i>
-                            <span>0% vs período anterior</span>
-                        </div>
-                    </a>
-                    
-                    <a href="#inventario?sort=sold" class="stat-card-large">
-                        <div class="stat-header">
-                            <i class="fas fa-box"></i>
-                            <h3>Productos Vendidos</h3>
-                        </div>
-                        <p class="stat-number" id="productsSold">0</p>
-                        <div class="stat-change up">
-                            <i class="fas fa-arrow-up"></i>
-                            <span>0% vs período anterior</span>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Charts -->
-                <div class="charts-container">
-                    <div class="chart-card">
-                        <h3><i class="fas fa-chart-line"></i> Ventas por Día</h3>
-                        <div class="chart-wrapper">
-                            <canvas id="salesChart"></canvas>
-                        </div>
-                    </div>
-                    
-                    <div class="chart-card">
-                        <h3><i class="fas fa-chart-pie"></i> Categorías Más Vendidas</h3>
-                        <div class="chart-wrapper">
-                            <canvas id="categoryChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Top Products -->
-                <div class="top-products">
-                    <h3><i class="fas fa-trophy"></i> Productos Más Vendidos</h3>
-                    <div class="products-list" id="topProductsList">
-                        <!-- Los productos más vendidos se cargarán aquí -->
-                    </div>
-                </div>
-            </section>
-
-            <!-- Configuración Section -->
-            <section id="configuracion-section" class="content-section">
-                <div class="section-header">
-                    <div class="header-left">
-                        <h2><i class="fas fa-cog"></i> Configuración</h2>
-                        <p>Personaliza tu sistema</p>
-                    </div>
-                </div>
-
-                <!-- Tabs -->
-                <div class="config-tabs">
-                    <div class="tab-buttons">
-                        <a href="#categories" class="tab-btn active" data-tab="categories">
-                            <i class="fas fa-tags"></i> Categorías
-                        </a>
-                        <a href="#colors" class="tab-btn" data-tab="colors">
-                            <i class="fas fa-palette"></i> Colores
-                        </a>
-                        <a href="#sizes" class="tab-btn" data-tab="sizes">
-                            <i class="fas fa-ruler"></i> Tallas
-                        </a>
-                        <a href="#settings" class="tab-btn" data-tab="settings">
-                            <i class="fas fa-sliders-h"></i> Ajustes
-                        </a>
-                    </div>
-
-                    <!-- Categories Tab -->
-                    <div class="tab-content active" id="categories-tab">
-                        <div class="config-form">
-                            <h3>Gestionar Categorías</h3>
-                            <div class="form-group">
-                                <input type="text" id="newCategory" 
-                                       placeholder="Nombre de la nueva categoría">
-                                <button class="btn-primary" id="addCategory">
-                                    <i class="fas fa-plus"></i> Agregar
-                                </button>
-                            </div>
-                            
-                            <div class="config-list">
-                                <h4>Categorías Existentes</h4>
-                                <div id="categoriesList">
-                                    <!-- Las categorías se cargarán aquí -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Colors Tab -->
-                    <div class="tab-content" id="colors-tab">
-                        <div class="config-form">
-                            <h3>Gestionar Colores</h3>
-                            <div class="form-group">
-                                <input type="text" id="newColor" 
-                                       placeholder="Nombre del nuevo color">
-                                <button class="btn-primary" id="addColor">
-                                    <i class="fas fa-plus"></i> Agregar
-                                </button>
-                            </div>
-                            
-                            <div class="config-list">
-                                <h4>Colores Existentes</h4>
-                                <div id="colorsList">
-                                    <!-- Los colores se cargarán aquí -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Sizes Tab -->
-                    <div class="tab-content" id="sizes-tab">
-                        <div class="config-form">
-                            <h3>Gestionar Tallas</h3>
-                            <div class="form-grid">
-                                <div class="form-group">
-                                    <label>Tallas Generales</label>
-                                    <input type="text" id="newSize" 
-                                           placeholder="Ej: XS, S, M, L, XL">
-                                    <button class="btn-primary" id="addSize">
-                                        <i class="fas fa-plus"></i> Agregar
-                                    </button>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label>Tallas de Pantalón</label>
-                                    <input type="text" id="newPantsSize" 
-                                           placeholder="Ej: 28, 30, 32, 34">
-                                    <button class="btn-primary" id="addPantsSize">
-                                        <i class="fas fa-plus"></i> Agregar
-                                    </button>
-                                </div>
-                            </div>
-                            
-                            <div class="sizes-lists">
-                                <div class="size-list">
-                                    <h4>Tallas Generales</h4>
-                                    <div id="sizesList"></div>
-                                </div>
-                                <div class="size-list">
-                                    <h4>Tallas de Pantalón</h4>
-                                    <div id="pantsSizesList"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Settings Tab -->
-                    <div class="tab-content" id="settings-tab">
-                        <div class="settings-options">
-                            <div class="setting-option">
-                                <h4><i class="fas fa-moon"></i> Modo Oscuro</h4>
-                                <label class="switch">
-                                    <input type="checkbox" id="darkModeToggle">
-                                    <span class="slider"></span>
-                                </label>
-                            </div>
-                            
-                            <div class="setting-option">
-                                <h4><i class="fas fa-database"></i> Backup de Datos</h4>
-                                <div class="backup-buttons">
-                                    <button class="btn-primary" id="exportData">
-                                        <i class="fas fa-download"></i> Exportar Datos
-                                    </button>
-                                    <button class="btn-secondary" id="importData">
-                                        <i class="fas fa-upload"></i> Importar Datos
-                                    </button>
-                                </div>
-                            </div>
-                            
-                            <div class="setting-option">
-                                <h4><i class="fas fa-trash"></i> Limpiar Sistema</h4>
-                                <button class="btn-danger" id="clearData">
-                                    <i class="fas fa-exclamation-triangle"></i> 
-                                    Limpiar Todos los Datos
-                                </button>
-                                <small>Esta acción eliminará todos los datos del sistema</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
         </div>
     </main>
 
-    <!-- Modals -->
-    <div class="modal-overlay" id="modalOverlay"></div>
-
-    <!-- Edit Product Modal -->
-    <div class="modal" id="editProductModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3><i class="fas fa-edit"></i> Editar Producto</h3>
-                <a href="#close" class="modal-close">&times;</a>
-            </div>
-            <div class="modal-body">
-                <!-- El formulario de edición se cargará aquí -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Confirmation Modal -->
-    <div class="modal" id="confirmationModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="confirmTitle"></h3>
-                <a href="#close" class="modal-close">&times;</a>
-            </div>
-            <div class="modal-body">
-                <p id="confirmMessage"></p>
-                <div class="modal-actions">
-                    <a href="#close" class="btn-secondary" id="cancelConfirm">Cancelar</a>
-                    <button class="btn-primary" id="confirmAction">Confirmar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Sale Details Modal -->
-    <div class="modal" id="saleDetailsModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3><i class="fas fa-receipt"></i> Detalles de Venta</h3>
-                <a href="#close" class="modal-close">&times;</a>
-            </div>
-            <div class="modal-body">
-                <!-- Los detalles de la venta se cargarán aquí -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Notification Toast -->
-    <div class="toast-container" id="toastContainer"></div>
-
-    <!-- Scripts con src -->
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
