@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jessica Boutique - Ventas</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Botón Menu Toggle para móviles -->
+    <button class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <div class="logo">
+            <a href="index.html" class="logo-link">
+                <i class="fas fa-store"></i>
+                <h2>Jessica Boutique</h2>
+            </a>
+        </div>
+        
+        <div class="menu-items">
+            <a href="index.html" class="menu-item">
+                <i class="fas fa-home"></i>
+                <span>Panel</span>
+            </a>
+            
+            <a href="inventario.html" class="menu-item">
+                <i class="fas fa-boxes"></i>
+                <span>Inventario</span>
+            </a>
+            
+            <a href="agregar.html" class="menu-item">
+                <i class="fas fa-plus-circle"></i>
+                <span>Agregar Producto</span>
+            </a>
+            
+            <a href="ventas.html" class="menu-item active">
+                <i class="fas fa-shopping-cart"></i>
+                <span>Ventas</span>
+            </a>
+            
+            <a href="estadisticas.html" class="menu-item">
+                <i class="fas fa-chart-line"></i>
+                                <span>Estadísticas</span>
+            </a>
+            
+            <a href="configuracion.html" class="menu-item">
+                <i class="fas fa-cog"></i>
+                <span>Configuración</span>
+            </a>
+        </div>
+        
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <i class="fas fa-user-circle"></i>
+                <div>
+                    <strong>Administrador</strong>
+                    <small>Jessica Boutique</small>
+                </div>
+            </div>
+            <a href="#" class="btn-logout" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Bar -->
+        <header class="top-bar">
+            <div class="page-title">
+                <h1>Ventas</h1>
+                <p>Registra nuevas ventas y consulta el historial</p>
+            </div>
+            
+            <div class="top-bar-actions">
+                <a href="#" class="btn-notification" id="notificationLink">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </a>
+                <div class="current-date">
+                    <i class="fas fa-calendar"></i>
+                    <span id="currentDate"></span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Sales Content -->
+        <div class="content-sections">
+            <section class="content-section active">
+                <div class="section-header">
+                    <div class="header-left">
+                        <h2><i class="fas fa-shopping-cart"></i> Ventas</h2>
+                        <p>Registra nuevas ventas y consulta el historial</p>
+                    </div>
+                    <div class="header-actions">
+                        <button class="btn-primary" id="newSaleBtn">
+                            <i class="fas fa-plus"></i> Nueva Venta
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Sale Form -->
+                <div class="sale-form-container" id="saleFormContainer">
+                    <div class="sale-form">
+                        <div class="form-section">
+                            <h3><i class="fas fa-user"></i> Datos del Cliente</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="clientName">Nombre *</label>
+                                    <input type="text" id="clientName" 
+                                           placeholder="Nombre del cliente" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="clientDNI">DNI</label>
+                                    <input type="text" id="clientDNI" 
+                                           placeholder="Número de DNI">
+                                </div>
+                                <div class="form-group">
+                                    <label for="clientPhone">Teléfono</label>
+                                    <input type="tel" id="clientPhone" 
+                                           placeholder="Número de teléfono">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Product Selection -->
+                        <div class="form-section">
+                            <h3><i class="fas fa-box"></i> Productos</h3>
+                            <div class="product-selection">
+                                <div class="selection-header">
+                                    <div class="form-group">
+                                        <select id="selectProduct">
+                                            <option value="">Buscar producto...</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="number" id="productQty" 
+                                               min="1" value="1" placeholder="Cantidad">
+                                    </div>
+                                    <button class="btn-secondary" id="addProductBtn">
+                                        <i class="fas fa-plus"></i> Agregar
+                                    </button>
+                                </div>
+                                
+                                <div class="cart-items" id="cartItems">
+                                    <p class="empty-cart">No hay productos en el carrito</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Payment -->
+                        <div class="form-section">
+                            <h3><i class="fas fa-credit-card"></i> Pago</h3>
+                            <div class="payment-methods">
+                                <div class="payment-option">
+                                    <input type="radio" id="cash" name="payment" 
+                                           value="efectivo" checked>
+                                    <label for="cash">
+                                        <i class="fas fa-money-bill-wave"></i>
+                                        Efectivo
+                                    </label>
+                                </div>
+                                <div class="payment-option">
+                                    <input type="radio" id="transfer" name="payment" 
+                                           value="transferencia">
+                                    <label for="transfer">
+                                        <i class="fas fa-university"></i>
+                                        Transferencia
+                                    </label>
+                                </div>
+                                <div class="payment-option">
+                                    <input type="radio" id="card" name="payment" 
+                                           value="tarjeta">
+                                    <label for="card">
+                                        <i class="fas fa-credit-card"></i>
+                                        Tarjeta (+5%)
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="payment-summary">
+                                <div class="summary-row">
+                                    <span>Subtotal:</span>
+                                    <span id="subtotal">S/. 0.00</span>
+                                </div>
+                                <div class="summary-row">
+                                    <span>Comisión:</span>
+                                    <span id="commission">S/. 0.00</span>
+                                </div>
+                                <div class="summary-row total">
+                                    <span>Total:</span>
+                                    <span id="totalAmount">S/. 0.00</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sale Actions -->
+                        <div class="sale-actions">
+                            <button class="btn-secondary" id="clearSale">
+                                <i class="fas fa-trash"></i> Limpiar
+                            </button>
+                            <button class="btn-primary" id="processSale">
+                                <i class="fas fa-check"></i> Procesar Venta
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sales History -->
+                <div class="sales-history">
+                    <h3><i class="fas fa-history"></i> Historial de Ventas</h3>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Cliente</th>
+                                    <th>Productos</th>
+                                    <th>Total</th>
+                                    <th>Fecha</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="salesHistoryTable">
+                                <!-- Historial se cargará aquí -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Modals -->
+    <div class="modal-overlay" id="modalOverlay"></div>
+
+    <!-- Sale Details Modal -->
+    <div class="modal" id="saleDetailsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-receipt"></i> Detalles de Venta</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- Los detalles de la venta se cargarán aquí -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+</body>
+</html>
