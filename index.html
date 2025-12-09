@@ -3,109 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Sistema de gestión Jessica Boutique - Inventario, ventas y análisis">
-    <meta name="theme-color" content="#7e57c2">
-    <title>Jessica Boutique | Sistema de Gestión</title>
+    <title>Jessica Boutique</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="manifest" href="manifest.json">
 </head>
 <body>
     <!-- Botón Menu Toggle para móviles -->
-    <button class="menu-toggle" id="menuToggle" aria-label="Menú principal">
+    <button class="menu-toggle" id="menuToggle">
         <i class="fas fa-bars"></i>
     </button>
 
     <!-- Sidebar Navigation -->
-    <nav class="sidebar" role="navigation" aria-label="Navegación principal">
+    <nav class="sidebar">
         <div class="logo">
-            <i class="fas fa-store" aria-hidden="true"></i>
-            <h2>Jessica Boutique</h2>
+            <a href="#dashboard" class="logo-link" data-section="dashboard">
+                <i class="fas fa-store"></i>
+                <h2>Jessica Boutique</h2>
+            </a>
         </div>
         
-        <div class="menu-items" role="menu">
-            <a href="#" class="menu-item active" data-section="dashboard" role="menuitem">
-                <i class="fas fa-home" aria-hidden="true"></i>
+        <div class="menu-items">
+            <a href="#dashboard" class="menu-item active" data-section="dashboard">
+                <i class="fas fa-home"></i>
                 <span>Panel</span>
             </a>
             
-            <a href="#" class="menu-item" data-section="inventario" role="menuitem">
-                <i class="fas fa-boxes" aria-hidden="true"></i>
+            <a href="#inventario" class="menu-item" data-section="inventario">
+                <i class="fas fa-boxes"></i>
                 <span>Inventario</span>
             </a>
             
-            <a href="#" class="menu-item" data-section="agregar" role="menuitem">
-                <i class="fas fa-plus-circle" aria-hidden="true"></i>
+            <a href="#agregar" class="menu-item" data-section="agregar">
+                <i class="fas fa-plus-circle"></i>
                 <span>Agregar Producto</span>
             </a>
             
-            <a href="#" class="menu-item" data-section="ventas" role="menuitem">
-                <i class="fas fa-shopping-cart" aria-hidden="true"></i>
+            <a href="#ventas" class="menu-item" data-section="ventas">
+                <i class="fas fa-shopping-cart"></i>
                 <span>Ventas</span>
             </a>
             
-            <a href="#" class="menu-item" data-section="estadisticas" role="menuitem">
-                <i class="fas fa-chart-line" aria-hidden="true"></i>
+            <a href="#estadisticas" class="menu-item" data-section="estadisticas">
+                <i class="fas fa-chart-line"></i>
                 <span>Estadísticas</span>
             </a>
             
-            <a href="#" class="menu-item" data-section="configuracion" role="menuitem">
-                <i class="fas fa-cog" aria-hidden="true"></i>
+            <a href="#configuracion" class="menu-item" data-section="configuracion">
+                <i class="fas fa-cog"></i>
                 <span>Configuración</span>
-            </a>
-            
-            <!-- Nuevas opciones añadidas -->
-            <a href="#" class="menu-item" data-section="proveedores" role="menuitem">
-                <i class="fas fa-truck" aria-hidden="true"></i>
-                <span>Proveedores</span>
-            </a>
-            
-            <a href="#" class="menu-item" data-section="promociones" role="menuitem">
-                <i class="fas fa-percentage" aria-hidden="true"></i>
-                <span>Promociones</span>
             </a>
         </div>
         
         <div class="sidebar-footer">
             <div class="user-info">
-                <i class="fas fa-user-circle" aria-hidden="true"></i>
+                <i class="fas fa-user-circle"></i>
                 <div>
-                    <strong id="userName">Administrador</strong>
-                    <small id="userRole">Jessica Boutique</small>
+                    <strong>Administrador</strong>
+                    <small>Jessica Boutique</small>
                 </div>
             </div>
-            <button class="btn-logout" id="logoutBtn" aria-label="Cerrar sesión">
-                <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
-            </button>
+            <a href="#logout" class="btn-logout" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+            </a>
         </div>
     </nav>
 
     <!-- Main Content -->
-    <main class="main-content" role="main">
+    <main class="main-content">
         <!-- Top Bar -->
-        <header class="top-bar" role="banner">
+        <header class="top-bar">
             <div class="page-title">
                 <h1 id="pageTitle">Panel</h1>
                 <p id="pageSubtitle">Bienvenida al sistema de gestión</p>
             </div>
             
             <div class="top-bar-actions">
-                <button class="btn-notification" id="notificationBtn" aria-label="Notificaciones">
-                    <i class="fas fa-bell" aria-hidden="true"></i>
+                <a href="#notificaciones" class="btn-notification" id="notificationLink">
+                    <i class="fas fa-bell"></i>
                     <span class="notification-badge">3</span>
-                </button>
-                
-                <button class="btn-secondary" id="voiceSearchBtn" aria-label="Búsqueda por voz">
-                    <i class="fas fa-microphone" aria-hidden="true"></i>
-                </button>
-                
-                <button class="btn-secondary" id="shortcutsBtn" aria-label="Atajos de teclado">
-                    <i class="fas fa-keyboard" aria-hidden="true"></i>
-                </button>
-                
+                </a>
                 <div class="current-date">
-                    <i class="fas fa-calendar" aria-hidden="true"></i>
+                    <i class="fas fa-calendar"></i>
                     <span id="currentDate"></span>
                 </div>
             </div>
@@ -114,112 +93,99 @@
         <!-- Content Sections -->
         <div class="content-sections">
             <!-- Dashboard Section -->
-            <section id="dashboard-section" class="content-section active" role="region" aria-labelledby="pageTitle">
+            <section id="dashboard-section" class="content-section active">
                 <div class="welcome-card">
                     <div class="welcome-content">
-                        <h2>¡Hola, <span id="welcomeName">Jessica</span>!</h2>
-                        <p id="welcomeMessage">Bienvenida a tu sistema de gestión de boutique. Aquí tienes un resumen rápido de tu negocio.</p>
-                        <div class="welcome-actions">
-                            <button class="btn-quick-action" data-section="agregar" id="quickAddBtn">
-                                <i class="fas fa-plus" aria-hidden="true"></i> Agregar Producto Rápido
-                            </button>
-                            <button class="btn-secondary" id="startTutorialBtn">
-                                <i class="fas fa-graduation-cap" aria-hidden="true"></i> Tutorial
-                            </button>
-                        </div>
+                        <h2>¡Hola, Jessica!</h2>
+                        <p>Bienvenida a tu sistema de gestión de boutique. Aquí tienes un resumen rápido de tu negocio.</p>
+                        <a href="#agregar" class="btn-quick-action" data-section="agregar">
+                            <i class="fas fa-plus"></i> Agregar Producto Rápido
+                        </a>
                     </div>
                     <div class="welcome-image">
-                        <i class="fas fa-store-alt" aria-hidden="true"></i>
+                        <i class="fas fa-store-alt"></i>
                     </div>
                 </div>
 
                 <!-- Stats Cards -->
-                <div class="stats-grid" role="list" aria-label="Estadísticas del negocio">
-                    <div class="stat-card" role="listitem">
+                <div class="stats-grid">
+                    <a href="#inventario" class="stat-card" data-section="inventario">
                         <div class="stat-icon">
-                            <i class="fas fa-boxes" aria-hidden="true"></i>
+                            <i class="fas fa-boxes"></i>
                         </div>
                         <div class="stat-info">
                             <h3 id="totalProducts">0</h3>
                             <p>Productos en Stock</p>
                         </div>
                         <div class="stat-trend up">
-                            <i class="fas fa-arrow-up" aria-hidden="true"></i>
+                            <i class="fas fa-arrow-up"></i>
                             <span>12%</span>
                         </div>
-                    </div>
+                    </a>
                     
-                    <div class="stat-card" role="listitem">
+                    <a href="#ventas" class="stat-card" data-section="ventas">
                         <div class="stat-icon">
-                            <i class="fas fa-shopping-cart" aria-hidden="true"></i>
+                            <i class="fas fa-shopping-cart"></i>
                         </div>
                         <div class="stat-info">
                             <h3 id="totalSales">0</h3>
                             <p>Ventas Hoy</p>
                         </div>
                         <div class="stat-trend up">
-                            <i class="fas fa-arrow-up" aria-hidden="true"></i>
+                            <i class="fas fa-arrow-up"></i>
                             <span>8%</span>
                         </div>
-                    </div>
+                    </a>
                     
-                    <div class="stat-card" role="listitem">
+                    <a href="#estadisticas" class="stat-card" data-section="estadisticas">
                         <div class="stat-icon">
-                            <i class="fas fa-money-bill-wave" aria-hidden="true"></i>
+                            <i class="fas fa-money-bill-wave"></i>
                         </div>
                         <div class="stat-info">
                             <h3 id="dailyRevenue">S/. 0</h3>
                             <p>Ingresos Hoy</p>
                         </div>
                         <div class="stat-trend up">
-                            <i class="fas fa-arrow-up" aria-hidden="true"></i>
+                            <i class="fas fa-arrow-up"></i>
                             <span>15%</span>
                         </div>
-                    </div>
+                    </a>
                     
-                    <div class="stat-card" role="listitem">
+                    <a href="#inventario?filter=low" class="stat-card" data-section="inventario" data-filter="low">
                         <div class="stat-icon">
-                            <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
+                            <i class="fas fa-exclamation-triangle"></i>
                         </div>
                         <div class="stat-info">
                             <h3 id="lowStock">0</h3>
                             <p>Productos con Stock Bajo</p>
                         </div>
                         <div class="stat-trend down">
-                            <i class="fas fa-arrow-down" aria-hidden="true"></i>
+                            <i class="fas fa-arrow-down"></i>
                             <span>5%</span>
                         </div>
-                    </div>
+                    </a>
                 </div>
 
                 <!-- Quick Actions -->
                 <div class="quick-actions">
                     <h3>Acciones Rápidas</h3>
-                    <div class="actions-grid" role="list" aria-label="Acciones rápidas">
-                        <button class="action-card" data-section="agregar" role="listitem">
-                            <i class="fas fa-plus-circle" aria-hidden="true"></i>
+                    <div class="actions-grid">
+                        <a href="#agregar" class="action-card" data-section="agregar">
+                            <i class="fas fa-plus-circle"></i>
                             <span>Agregar Producto</span>
-                        </button>
-                        <button class="action-card" data-section="ventas" role="listitem">
-                            <i class="fas fa-cash-register" aria-hidden="true"></i>
+                        </a>
+                        <a href="#ventas" class="action-card" data-section="ventas">
+                            <i class="fas fa-cash-register"></i>
                             <span>Nueva Venta</span>
-                        </button>
-                        <button class="action-card" data-section="inventario" role="listitem">
-                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </a>
+                        <a href="#inventario" class="action-card" data-section="inventario">
+                            <i class="fas fa-search"></i>
                             <span>Buscar Producto</span>
-                        </button>
-                        <button class="action-card" data-section="estadisticas" role="listitem">
-                            <i class="fas fa-chart-bar" aria-hidden="true"></i>
+                        </a>
+                        <a href="#estadisticas" class="action-card" data-section="estadisticas">
+                            <i class="fas fa-chart-bar"></i>
                             <span>Ver Reportes</span>
-                        </button>
-                        <button class="action-card" id="scanBarcodeBtn" role="listitem">
-                            <i class="fas fa-barcode" aria-hidden="true"></i>
-                            <span>Escanear Código</span>
-                        </button>
-                        <button class="action-card" data-section="promociones" role="listitem">
-                            <i class="fas fa-percentage" aria-hidden="true"></i>
-                            <span>Crear Promoción</span>
-                        </button>
+                        </a>
                     </div>
                 </div>
 
@@ -227,17 +193,17 @@
                 <div class="recent-section">
                     <div class="section-header">
                         <h3>Productos Recientes</h3>
-                        <a href="#" data-section="inventario">Ver Todos</a>
+                        <a href="#inventario">Ver Todos</a>
                     </div>
                     <div class="table-responsive">
-                        <table class="recent-table" aria-label="Productos recientes">
+                        <table class="recent-table">
                             <thead>
                                 <tr>
-                                    <th scope="col">Producto</th>
-                                    <th scope="col">Categoría</th>
-                                    <th scope="col">Stock</th>
-                                    <th scope="col">Precio</th>
-                                    <th scope="col">Estado</th>
+                                    <th>Producto</th>
+                                    <th>Categoría</th>
+                                    <th>Stock</th>
+                                    <th>Precio</th>
+                                    <th>Estado</th>
                                 </tr>
                             </thead>
                             <tbody id="recentProducts">
@@ -246,33 +212,21 @@
                         </table>
                     </div>
                 </div>
-
-                <!-- Predictive Alerts -->
-                <div class="predictive-alert" id="predictiveAlert" style="display: none;">
-                    <i class="fas fa-lightbulb" aria-hidden="true"></i>
-                    <div class="alert-content">
-                        <strong>Análisis Predictivo:</strong>
-                        <span id="predictionMessage"></span>
-                    </div>
-                </div>
             </section>
 
             <!-- Inventario Section -->
-            <section id="inventario-section" class="content-section" role="region" aria-labelledby="inventarioTitle">
+            <section id="inventario-section" class="content-section">
                 <div class="section-header">
                     <div class="header-left">
-                        <h2><i class="fas fa-boxes" aria-hidden="true"></i> Inventario</h2>
+                        <h2><i class="fas fa-boxes"></i> Inventario</h2>
                         <p>Gestiona todos tus productos</p>
                     </div>
                     <div class="header-actions">
-                        <button class="btn-primary" data-section="agregar">
-                            <i class="fas fa-plus" aria-hidden="true"></i> Nuevo Producto
-                        </button>
+                        <a href="#agregar" class="btn-primary" data-section="agregar">
+                            <i class="fas fa-plus"></i> Nuevo Producto
+                        </a>
                         <button class="btn-secondary" id="exportInventory">
-                            <i class="fas fa-file-export" aria-hidden="true"></i> Exportar
-                        </button>
-                        <button class="btn-secondary" id="printInventory">
-                            <i class="fas fa-print" aria-hidden="true"></i> Imprimir
+                            <i class="fas fa-file-export"></i> Exportar
                         </button>
                     </div>
                 </div>
@@ -280,29 +234,24 @@
                 <!-- Search and Filters -->
                 <div class="search-container">
                     <div class="search-box">
-                        <i class="fas fa-search" aria-hidden="true"></i>
-                        <input type="text" id="searchInventory" 
-                               placeholder="Buscar producto por nombre, marca, categoría, código..."
-                               aria-label="Buscar producto">
-                        <button class="voice-search-btn" id="inventoryVoiceSearch" aria-label="Búsqueda por voz">
-                            <i class="fas fa-microphone" aria-hidden="true"></i>
-                        </button>
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchInventory" placeholder="Buscar producto por nombre, marca, categoría...">
                     </div>
                     
                     <div class="filter-options">
-                        <select id="filterCategory" aria-label="Filtrar por categoría">
+                        <select id="filterCategory">
                             <option value="">Todas las categorías</option>
                         </select>
                         
-                        <select id="filterColor" aria-label="Filtrar por color">
+                        <select id="filterColor">
                             <option value="">Todos los colores</option>
                         </select>
                         
-                        <select id="filterBrand" aria-label="Filtrar por marca">
+                        <select id="filterBrand">
                             <option value="">Todas las marcas</option>
                         </select>
                         
-                        <select id="filterStatus" aria-label="Filtrar por estado">
+                        <select id="filterStatus">
                             <option value="">Todos los estados</option>
                             <option value="available">Disponible</option>
                             <option value="low">Stock Bajo</option>
@@ -310,7 +259,7 @@
                         </select>
                         
                         <div class="sort-container">
-                            <select id="sortBy" aria-label="Ordenar por">
+                            <select id="sortBy">
                                 <option value="">Ordenar por</option>
                                 <option value="name">Nombre (A-Z)</option>
                                 <option value="name-desc">Nombre (Z-A)</option>
@@ -320,34 +269,32 @@
                                 <option value="stock-desc">Stock (Mayor a Menor)</option>
                                 <option value="color">Color</option>
                                 <option value="brand">Marca</option>
-                                <option value="profit">Rentabilidad</option>
                             </select>
                         </div>
                         
                         <button class="btn-filter" id="applyFilters">
-                            <i class="fas fa-filter" aria-hidden="true"></i> Filtrar
+                            <i class="fas fa-filter"></i> Filtrar
                         </button>
-                        <button class="btn-secondary" id="clearFilters">
-                            <i class="fas fa-redo" aria-hidden="true"></i> Limpiar
-                        </button>
+                        <a href="#inventario" class="btn-secondary" id="clearFilters">
+                            <i class="fas fa-redo"></i> Limpiar
+                        </a>
                     </div>
                 </div>
 
                 <!-- Inventory Table -->
                 <div class="table-container">
-                    <table class="data-table" aria-label="Inventario de productos">
+                    <table class="data-table">
                         <thead>
                             <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">Producto</th>
-                                <th scope="col">Categoría</th>
-                                <th scope="col">Marca</th>
-                                <th scope="col">Color</th>
-                                <th scope="col">Stock</th>
-                                <th scope="col">Precio</th>
-                                <th scope="col">Rentabilidad</th>
-                                <th scope="col">Estado</th>
-                                <th scope="col">Acciones</th>
+                                <th>ID</th>
+                                <th>Producto</th>
+                                <th>Categoría</th>
+                                <th>Marca</th>
+                                <th>Color</th>
+                                <th>Stock</th>
+                                <th>Precio</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody id="inventoryTable">
@@ -357,99 +304,79 @@
                 </div>
 
                 <!-- Pagination -->
-                <div class="pagination" aria-label="Paginación">
-                    <button class="pagination-btn" id="prevPage" disabled aria-label="Página anterior">
-                        <i class="fas fa-chevron-left" aria-hidden="true"></i> Anterior
+                <div class="pagination">
+                    <button class="pagination-btn" id="prevPage" disabled>
+                        <i class="fas fa-chevron-left"></i> Anterior
                     </button>
-                    <div class="page-numbers" id="pageNumbers" role="list" aria-label="Números de página">
-                        <span class="page-number active" role="listitem" aria-current="page">1</span>
+                    <div class="page-numbers" id="pageNumbers">
+                        <a href="#inventario?page=1" class="page-number active">1</a>
                     </div>
-                    <button class="pagination-btn" id="nextPage" disabled aria-label="Página siguiente">
-                        Siguiente <i class="fas fa-chevron-right" aria-hidden="true"></i>
+                    <button class="pagination-btn" id="nextPage" disabled>
+                        Siguiente <i class="fas fa-chevron-right"></i>
                     </button>
                 </div>
 
                 <!-- Inventory Summary -->
-                <div class="summary-cards" role="list" aria-label="Resumen del inventario">
-                    <div class="summary-card" role="listitem">
+                <div class="summary-cards">
+                    <a href="#inventario" class="summary-card">
                         <h4>Total Productos</h4>
                         <p class="summary-number" id="summaryTotal">0</p>
-                    </div>
-                    <div class="summary-card" role="listitem">
+                    </a>
+                    <a href="#inventario?sort=value" class="summary-card">
                         <h4>Valor Inventario</h4>
                         <p class="summary-number" id="summaryValue">S/. 0</p>
-                    </div>
-                    <div class="summary-card" role="listitem">
+                    </a>
+                    <a href="#inventario?filter=low" class="summary-card">
                         <h4>Stock Bajo</h4>
                         <p class="summary-number" id="summaryLow">0</p>
-                    </div>
-                    <div class="summary-card" role="listitem">
+                    </a>
+                    <a href="#inventario?filter=out" class="summary-card">
                         <h4>Agotados</h4>
                         <p class="summary-number" id="summaryOut">0</p>
-                    </div>
-                    <div class="summary-card" role="listitem">
-                        <h4>Rentabilidad Total</h4>
-                        <p class="summary-number" id="summaryProfit">S/. 0</p>
-                    </div>
-                </div>
-
-                <!-- Barcode Section -->
-                <div class="barcode-container" id="barcodeContainer" style="display: none;">
-                    <h3><i class="fas fa-barcode" aria-hidden="true"></i> Código de Barras</h3>
-                    <div id="barcodeDisplay" class="barcode"></div>
-                    <button class="btn-primary" id="printBarcodeBtn">
-                        <i class="fas fa-print" aria-hidden="true"></i> Imprimir Código
-                    </button>
-                    <button class="btn-secondary" id="scanBarcodeInventoryBtn">
-                        <i class="fas fa-camera" aria-hidden="true"></i> Escanear
-                    </button>
+                    </a>
                 </div>
             </section>
 
             <!-- Agregar Producto Section -->
-            <section id="agregar-section" class="content-section" role="region" aria-labelledby="agregarTitle">
+            <section id="agregar-section" class="content-section">
                 <div class="section-header">
                     <div class="header-left">
-                        <h2><i class="fas fa-plus-circle" aria-hidden="true"></i> Agregar Producto</h2>
+                        <h2><i class="fas fa-plus-circle"></i> Agregar Producto</h2>
                         <p>Completa el formulario para agregar un nuevo producto</p>
                     </div>
                     <div class="header-actions">
-                        <button class="btn-secondary" data-section="inventario">
-                            <i class="fas fa-arrow-left" aria-hidden="true"></i> Volver al Inventario
-                        </button>
-                        <button class="btn-secondary" id="generateBarcodeBtn">
-                            <i class="fas fa-barcode" aria-hidden="true"></i> Generar Código
-                        </button>
+                        <a href="#inventario" class="btn-secondary" data-section="inventario">
+                            <i class="fas fa-arrow-left"></i> Volver al Inventario
+                        </a>
                     </div>
                 </div>
 
                 <div class="form-container">
-                    <form id="productForm" aria-label="Formulario de producto">
+                    <form id="productForm">
                         <!-- Basic Information -->
                         <div class="form-section">
-                            <h3><i class="fas fa-info-circle" aria-hidden="true"></i> Información Básica</h3>
+                            <h3><i class="fas fa-info-circle"></i> Información Básica</h3>
                             <div class="form-grid">
                                 <div class="form-group">
                                     <label for="productName">
-                                        <i class="fas fa-tag" aria-hidden="true"></i> Nombre del Producto *
+                                        <i class="fas fa-tag"></i> Nombre del Producto *
                                     </label>
                                     <input type="text" id="productName" required 
-                                           placeholder="Ej: Vestido de noche elegante"
-                                           aria-required="true">
+                                           placeholder="Ej: Vestido de noche elegante">
                                 </div>
                                 
                                 <div class="form-group">
                                     <label for="productCategory">
-                                        <i class="fas fa-tags" aria-hidden="true"></i> Categoría *
+                                        <i class="fas fa-tags"></i> Categoría *
                                     </label>
-                                    <select id="productCategory" required aria-required="true">
+                                    <select id="productCategory" required>
                                         <option value="">Selecciona una categoría</option>
                                     </select>
                                 </div>
                                 
                                 <div class="form-group">
                                     <label for="productBrand">
-                                        <i class="fas fa-copyright" aria-hidden="true"></i> Marca
+                                        <i class="fas fa-copyright"></i> Marca
                                     </label>
                                     <input type="text" id="productBrand" 
                                            placeholder="Marca del producto">
@@ -457,9 +384,9 @@
                                 
                                 <div class="form-group">
                                     <label for="productColor">
-                                        <i class="fas fa-palette" aria-hidden="true"></i> Color *
+                                        <i class="fas fa-palette"></i> Color *
                                     </label>
-                                    <select id="productColor" required aria-required="true">
+                                    <select id="productColor" required>
                                         <option value="">Selecciona un color</option>
                                     </select>
                                 </div>
@@ -468,69 +395,59 @@
 
                         <!-- Sizes and Stock -->
                         <div class="form-section">
-                            <h3><i class="fas fa-ruler" aria-hidden="true"></i> Tallas y Stock</h3>
+                            <h3><i class="fas fa-ruler"></i> Tallas y Stock</h3>
                             <div class="form-grid">
                                 <div class="form-group">
                                     <label for="productSize">Talla *</label>
-                                    <div class="size-options" id="sizeOptions" role="list" aria-label="Opciones de talla">
+                                    <div class="size-options" id="sizeOptions">
                                         <!-- Las tallas se cargarán dinámicamente -->
                                     </div>
                                 </div>
                                 
                                 <div class="form-group">
                                     <label for="initialStock">
-                                        <i class="fas fa-box" aria-hidden="true"></i> Stock Inicial *
+                                        <i class="fas fa-box"></i> Stock Inicial *
                                     </label>
                                     <input type="number" id="initialStock" 
-                                           min="0" value="0" required aria-required="true">
+                                           min="0" value="0" required>
                                 </div>
                                 
                                 <div class="form-group">
                                     <label for="lowStockAlert">
-                                        <i class="fas fa-exclamation-triangle" aria-hidden="true"></i> Alerta de Stock Bajo
+                                        <i class="fas fa-exclamation-triangle"></i> Alerta de Stock Bajo
                                     </label>
                                     <input type="number" id="lowStockAlert" 
                                            min="1" placeholder="Ej: 5">
                                     <small>Recibirás alerta cuando el stock sea menor a este número</small>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="productTags">
-                                        <i class="fas fa-tags" aria-hidden="true"></i> Etiquetas
-                                    </label>
-                                    <input type="text" id="productTags" 
-                                           placeholder="Ej: nuevo, temporada, oferta"
-                                           data-role="tagsinput">
-                                    <small>Separa con comas</small>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Prices -->
                         <div class="form-section">
-                            <h3><i class="fas fa-money-bill-wave" aria-hidden="true"></i> Precios</h3>
+                            <h3><i class="fas fa-money-bill-wave"></i> Precios</h3>
                             <div class="form-grid">
                                 <div class="form-group">
                                     <label for="purchasePrice">
-                                        <i class="fas fa-shopping-bag" aria-hidden="true"></i> Precio de Compra *
+                                        <i class="fas fa-shopping-bag"></i> Precio de Compra *
                                     </label>
                                     <div class="input-with-icon">
                                         <span class="input-icon">S/.</span>
                                         <input type="number" id="purchasePrice" 
                                                step="0.01" min="0" required 
-                                               placeholder="0.00" aria-required="true">
+                                               placeholder="0.00">
                                     </div>
                                 </div>
                                 
                                 <div class="form-group">
                                     <label for="salePrice">
-                                        <i class="fas fa-tag" aria-hidden="true"></i> Precio de Venta *
+                                        <i class="fas fa-tag"></i> Precio de Venta *
                                     </label>
                                     <div class="input-with-icon">
                                         <span class="input-icon">S/.</span>
                                         <input type="number" id="salePrice" 
                                                step="0.01" min="0" required 
-                                               placeholder="0.00" aria-required="true">
+                                               placeholder="0.00">
                                     </div>
                                 </div>
                                 
@@ -542,29 +459,18 @@
                                                readonly placeholder="0%">
                                     </div>
                                 </div>
-                                
-                                <div class="form-group">
-                                    <label for="suggestedPrice">
-                                        <i class="fas fa-lightbulb" aria-hidden="true"></i> Precio Sugerido
-                                    </label>
-                                    <div class="input-with-icon">
-                                        <span class="input-icon">S/.</span>
-                                        <input type="text" id="suggestedPrice" 
-                                               readonly placeholder="0.00">
-                                    </div>
-                                </div>
                             </div>
                         </div>
 
                         <!-- Product Variants -->
                         <div class="form-section">
-                            <h3><i class="fas fa-layer-group" aria-hidden="true"></i> Variantes del Producto (Opcional)</h3>
+                            <h3><i class="fas fa-layer-group"></i> Variantes del Producto (Opcional)</h3>
                             <div class="variants-container">
                                 <div class="variant-form">
                                     <div class="form-grid">
                                         <div class="form-group">
                                             <label for="variantColor">
-                                                <i class="fas fa-palette" aria-hidden="true"></i> Color
+                                                <i class="fas fa-palette"></i> Color
                                             </label>
                                             <select id="variantColor">
                                                 <option value="">Selecciona un color</option>
@@ -573,21 +479,21 @@
                                         
                                         <div class="form-group">
                                             <label for="variantSize">Talla</label>
-                                            <div class="size-options" id="variantSizeOptions" role="list" aria-label="Opciones de talla para variantes">
+                                            <div class="size-options" id="variantSizeOptions">
                                                 <!-- Las tallas se cargarán dinámicamente -->
                                             </div>
                                         </div>
                                         
                                         <div class="form-group">
                                             <label for="variantStock">
-                                                <i class="fas fa-box" aria-hidden="true"></i> Cantidad
+                                                <i class="fas fa-box"></i> Cantidad
                                             </label>
                                             <input type="number" id="variantStock" min="1" value="1">
                                         </div>
                                         
                                         <div class="form-group">
                                             <button type="button" class="btn-primary" id="addVariantBtn">
-                                                <i class="fas fa-plus" aria-hidden="true"></i> Agregar Variante
+                                                <i class="fas fa-plus"></i> Agregar Variante
                                             </button>
                                         </div>
                                     </div>
@@ -599,42 +505,13 @@
                             </div>
                         </div>
 
-                        <!-- Supplier Information -->
-                        <div class="form-section">
-                            <h3><i class="fas fa-truck" aria-hidden="true"></i> Información del Proveedor</h3>
-                            <div class="form-grid">
-                                <div class="form-group">
-                                    <label for="supplierName">Nombre del Proveedor</label>
-                                    <input type="text" id="supplierName" 
-                                           placeholder="Nombre del proveedor">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="supplierContact">Contacto</label>
-                                    <input type="text" id="supplierContact" 
-                                           placeholder="Teléfono o email">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="supplierPrice">Precio Proveedor</label>
-                                    <div class="input-with-icon">
-                                        <span class="input-icon">S/.</span>
-                                        <input type="number" id="supplierPrice" 
-                                               step="0.01" min="0" 
-                                               placeholder="0.00">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                         <!-- Form Actions -->
                         <div class="form-actions">
-                            <button type="button" class="btn-secondary" 
-                                    onclick="system.cancelForm()" aria-label="Cancelar">
+                            <a href="#inventario" class="btn-secondary">
                                 Cancelar
-                            </button>
-                            <button type="submit" class="btn-primary" aria-label="Guardar producto">
-                                <i class="fas fa-save" aria-hidden="true"></i> Guardar Producto
+                            </a>
+                            <button type="submit" class="btn-primary">
+                                <i class="fas fa-save"></i> Guardar Producto
                             </button>
                         </div>
                     </form>
@@ -642,19 +519,16 @@
             </section>
 
             <!-- Ventas Section -->
-            <section id="ventas-section" class="content-section" role="region" aria-labelledby="ventasTitle">
+            <section id="ventas-section" class="content-section">
                 <div class="section-header">
                     <div class="header-left">
-                        <h2><i class="fas fa-shopping-cart" aria-hidden="true"></i> Ventas</h2>
+                        <h2><i class="fas fa-shopping-cart"></i> Ventas</h2>
                         <p>Registra nuevas ventas y consulta el historial</p>
                     </div>
                     <div class="header-actions">
-                        <button class="btn-primary" id="newSaleBtn">
-                            <i class="fas fa-plus" aria-hidden="true"></i> Nueva Venta
-                        </button>
-                        <button class="btn-secondary" id="applyCouponBtn">
-                            <i class="fas fa-ticket-alt" aria-hidden="true"></i> Aplicar Cupón
-                        </button>
+                        <a href="#ventas?new=true" class="btn-primary" id="newSaleBtn">
+                            <i class="fas fa-plus"></i> Nueva Venta
+                        </a>
                     </div>
                 </div>
 
@@ -662,12 +536,12 @@
                 <div class="sale-form-container" id="saleFormContainer">
                     <div class="sale-form">
                         <div class="form-section">
-                            <h3><i class="fas fa-user" aria-hidden="true"></i> Datos del Cliente</h3>
+                            <h3><i class="fas fa-user"></i> Datos del Cliente</h3>
                             <div class="form-grid">
                                 <div class="form-group">
                                     <label for="clientName">Nombre *</label>
                                     <input type="text" id="clientName" 
-                                           placeholder="Nombre del cliente" required aria-required="true">
+                                           placeholder="Nombre del cliente" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="clientDNI">DNI</label>
@@ -679,39 +553,25 @@
                                     <input type="tel" id="clientPhone" 
                                            placeholder="Número de teléfono">
                                 </div>
-                                <div class="form-group">
-                                    <label for="clientEmail">Email</label>
-                                    <input type="email" id="clientEmail" 
-                                           placeholder="correo@ejemplo.com">
-                                </div>
                             </div>
                         </div>
 
                         <!-- Product Selection -->
                         <div class="form-section">
-                            <h3><i class="fas fa-box" aria-hidden="true"></i> Productos</h3>
+                            <h3><i class="fas fa-box"></i> Productos</h3>
                             <div class="product-selection">
                                 <div class="selection-header">
                                     <div class="form-group">
-                                        <select id="selectProduct" aria-label="Seleccionar producto">
+                                        <select id="selectProduct">
                                             <option value="">Buscar producto...</option>
                                         </select>
                                     </div>
                                     <div class="form-group">
                                         <input type="number" id="productQty" 
-                                               min="1" value="1" placeholder="Cantidad"
-                                               aria-label="Cantidad">
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="text" id="productSearch" 
-                                               placeholder="Código de barras"
-                                               aria-label="Código de barras">
+                                               min="1" value="1" placeholder="Cantidad">
                                     </div>
                                     <button class="btn-secondary" id="addProductBtn">
-                                        <i class="fas fa-plus" aria-hidden="true"></i> Agregar
-                                    </button>
-                                    <button class="btn-secondary" id="scanProductBtn">
-                                        <i class="fas fa-barcode" aria-hidden="true"></i> Escanear
+                                        <i class="fas fa-plus"></i> Agregar
                                     </button>
                                 </div>
                                 
@@ -723,63 +583,38 @@
 
                         <!-- Payment -->
                         <div class="form-section">
-                            <h3><i class="fas fa-credit-card" aria-hidden="true"></i> Pago</h3>
-                            <div class="payment-methods" role="list" aria-label="Métodos de pago">
-                                <div class="payment-option" role="listitem">
+                            <h3><i class="fas fa-credit-card"></i> Pago</h3>
+                            <div class="payment-methods">
+                                <div class="payment-option">
                                     <input type="radio" id="cash" name="payment" 
                                            value="efectivo" checked>
                                     <label for="cash">
-                                        <i class="fas fa-money-bill-wave" aria-hidden="true"></i>
+                                        <i class="fas fa-money-bill-wave"></i>
                                         Efectivo
                                     </label>
                                 </div>
-                                <div class="payment-option" role="listitem">
+                                <div class="payment-option">
                                     <input type="radio" id="transfer" name="payment" 
                                            value="transferencia">
                                     <label for="transfer">
-                                        <i class="fas fa-university" aria-hidden="true"></i>
+                                        <i class="fas fa-university"></i>
                                         Transferencia
                                     </label>
                                 </div>
-                                <div class="payment-option" role="listitem">
+                                <div class="payment-option">
                                     <input type="radio" id="card" name="payment" 
                                            value="tarjeta">
                                     <label for="card">
-                                        <i class="fas fa-credit-card" aria-hidden="true"></i>
+                                        <i class="fas fa-credit-card"></i>
                                         Tarjeta (+5%)
                                     </label>
                                 </div>
-                                <div class="payment-option" role="listitem">
-                                    <input type="radio" id="yape" name="payment" 
-                                           value="yape">
-                                    <label for="yape">
-                                        <i class="fas fa-mobile-alt" aria-hidden="true"></i>
-                                        Yape/Plin
-                                    </label>
-                                </div>
-                            </div>
-                            
-                            <!-- Coupon Section -->
-                            <div class="coupon-section" id="couponSection" style="display: none;">
-                                <div class="form-group">
-                                    <label for="couponCode">Código de Cupón</label>
-                                    <input type="text" id="couponCode" 
-                                           placeholder="Ingresa el código">
-                                    <button class="btn-secondary" id="applyCouponSaleBtn">
-                                        Aplicar
-                                    </button>
-                                </div>
-                                <div id="couponMessage"></div>
                             </div>
                             
                             <div class="payment-summary">
                                 <div class="summary-row">
                                     <span>Subtotal:</span>
                                     <span id="subtotal">S/. 0.00</span>
-                                </div>
-                                <div class="summary-row" id="discountRow" style="display: none;">
-                                    <span>Descuento:</span>
-                                    <span id="discountAmount">S/. 0.00</span>
                                 </div>
                                 <div class="summary-row">
                                     <span>Comisión:</span>
@@ -795,16 +630,10 @@
                         <!-- Sale Actions -->
                         <div class="sale-actions">
                             <button class="btn-secondary" id="clearSale">
-                                <i class="fas fa-trash" aria-hidden="true"></i> Limpiar
-                            </button>
-                            <button class="btn-secondary" id="saveDraftBtn">
-                                <i class="fas fa-save" aria-hidden="true"></i> Guardar Borrador
+                                <i class="fas fa-trash"></i> Limpiar
                             </button>
                             <button class="btn-primary" id="processSale">
-                                <i class="fas fa-check" aria-hidden="true"></i> Procesar Venta
-                            </button>
-                            <button class="btn-primary" id="printReceiptBtn">
-                                <i class="fas fa-print" aria-hidden="true"></i> Imprimir
+                                <i class="fas fa-check"></i> Procesar Venta
                             </button>
                         </div>
                     </div>
@@ -812,18 +641,17 @@
 
                 <!-- Sales History -->
                 <div class="sales-history">
-                    <h3><i class="fas fa-history" aria-hidden="true"></i> Historial de Ventas</h3>
+                    <h3><i class="fas fa-history"></i> Historial de Ventas</h3>
                     <div class="table-container">
-                        <table class="data-table" aria-label="Historial de ventas">
+                        <table class="data-table">
                             <thead>
                                 <tr>
-                                    <th scope="col">ID</th>
-                                    <th scope="col">Cliente</th>
-                                    <th scope="col">Productos</th>
-                                    <th scope="col">Total</th>
-                                    <th scope="col">Fecha</th>
-                                    <th scope="col">Estado</th>
-                                    <th scope="col">Acciones</th>
+                                    <th>ID</th>
+                                    <th>Cliente</th>
+                                    <th>Productos</th>
+                                    <th>Total</th>
+                                    <th>Fecha</th>
+                                    <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody id="salesHistoryTable">
@@ -835,194 +663,140 @@
             </section>
 
             <!-- Estadísticas Section -->
-            <section id="estadisticas-section" class="content-section" role="region" aria-labelledby="estadisticasTitle">
+            <section id="estadisticas-section" class="content-section">
                 <div class="section-header">
                     <div class="header-left">
-                        <h2><i class="fas fa-chart-line" aria-hidden="true"></i> Estadísticas</h2>
+                        <h2><i class="fas fa-chart-line"></i> Estadísticas</h2>
                         <p>Visualiza el rendimiento de tu negocio</p>
                     </div>
                     <div class="header-actions">
-                        <select id="statsPeriod" aria-label="Período de estadísticas">
+                        <select id="statsPeriod">
                             <option value="today">Hoy</option>
                             <option value="week">Esta Semana</option>
                             <option value="month">Este Mes</option>
                             <option value="year">Este Año</option>
-                            <option value="custom">Personalizado</option>
                         </select>
-                        <button class="btn-secondary" id="exportReportBtn">
-                            <i class="fas fa-file-export" aria-hidden="true"></i> Exportar
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Custom Date Range -->
-                <div class="custom-date-range" id="customDateRange" style="display: none;">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="startDate">Fecha Inicio</label>
-                            <input type="date" id="startDate">
-                        </div>
-                        <div class="form-group">
-                            <label for="endDate">Fecha Fin</label>
-                            <input type="date" id="endDate">
-                        </div>
-                        <div class="form-group">
-                            <button class="btn-primary" id="applyDateRange">Aplicar</button>
-                        </div>
                     </div>
                 </div>
 
                 <!-- Stats Cards -->
-                <div class="stats-grid-large" role="list" aria-label="Estadísticas principales">
-                    <div class="stat-card-large" role="listitem">
+                <div class="stats-grid-large">
+                    <a href="#ventas" class="stat-card-large" data-section="ventas">
                         <div class="stat-header">
-                            <i class="fas fa-chart-bar" aria-hidden="true"></i>
+                            <i class="fas fa-chart-bar"></i>
                             <h3>Ventas Totales</h3>
                         </div>
                         <p class="stat-number" id="totalSalesAmount">S/. 0</p>
                         <div class="stat-change up">
-                            <i class="fas fa-arrow-up" aria-hidden="true"></i>
-                            <span id="salesChange">0% vs período anterior</span>
+                            <i class="fas fa-arrow-up"></i>
+                            <span>0% vs período anterior</span>
                         </div>
-                    </div>
+                    </a>
                     
-                    <div class="stat-card-large" role="listitem">
+                    <a href="#estadisticas?metric=profit" class="stat-card-large">
                         <div class="stat-header">
-                            <i class="fas fa-money-bill-wave" aria-hidden="true"></i>
+                            <i class="fas fa-money-bill-wave"></i>
                             <h3>Ganancias</h3>
                         </div>
                         <p class="stat-number" id="totalProfitAmount">S/. 0</p>
                         <div class="stat-change up">
-                            <i class="fas fa-arrow-up" aria-hidden="true"></i>
-                            <span id="profitChange">0% vs período anterior</span>
+                            <i class="fas fa-arrow-up"></i>
+                            <span>0% vs período anterior</span>
                         </div>
-                    </div>
+                    </a>
                     
-                    <div class="stat-card-large" role="listitem">
+                    <a href="#clientes" class="stat-card-large">
                         <div class="stat-header">
-                            <i class="fas fa-user-friends" aria-hidden="true"></i>
+                            <i class="fas fa-user-friends"></i>
                             <h3>Clientes Nuevos</h3>
                         </div>
                         <p class="stat-number" id="newClients">0</p>
                         <div class="stat-change up">
-                            <i class="fas fa-arrow-up" aria-hidden="true"></i>
-                            <span id="clientsChange">0% vs período anterior</span>
+                            <i class="fas fa-arrow-up"></i>
+                            <span>0% vs período anterior</span>
                         </div>
-                    </div>
+                    </a>
                     
-                    <div class="stat-card-large" role="listitem">
+                    <a href="#inventario?sort=sold" class="stat-card-large">
                         <div class="stat-header">
-                            <i class="fas fa-box" aria-hidden="true"></i>
+                            <i class="fas fa-box"></i>
                             <h3>Productos Vendidos</h3>
                         </div>
                         <p class="stat-number" id="productsSold">0</p>
                         <div class="stat-change up">
-                            <i class="fas fa-arrow-up" aria-hidden="true"></i>
-                            <span id="productsChange">0% vs período anterior</span>
+                            <i class="fas fa-arrow-up"></i>
+                            <span>0% vs período anterior</span>
                         </div>
-                    </div>
+                    </a>
                 </div>
 
                 <!-- Charts -->
                 <div class="charts-container">
                     <div class="chart-card">
-                        <h3><i class="fas fa-chart-line" aria-hidden="true"></i> Ventas por Día</h3>
+                        <h3><i class="fas fa-chart-line"></i> Ventas por Día</h3>
                         <div class="chart-wrapper">
-                            <canvas id="salesChart" aria-label="Gráfico de ventas por día"></canvas>
+                            <canvas id="salesChart"></canvas>
                         </div>
                     </div>
                     
                     <div class="chart-card">
-                        <h3><i class="fas fa-chart-pie" aria-hidden="true"></i> Categorías Más Vendidas</h3>
+                        <h3><i class="fas fa-chart-pie"></i> Categorías Más Vendidas</h3>
                         <div class="chart-wrapper">
-                            <canvas id="categoryChart" aria-label="Gráfico de categorías más vendidas"></canvas>
-                        </div>
-                    </div>
-                    
-                    <div class="chart-card">
-                        <h3><i class="fas fa-chart-bar" aria-hidden="true"></i> Rentabilidad por Producto</h3>
-                        <div class="chart-wrapper">
-                            <canvas id="profitChart" aria-label="Gráfico de rentabilidad por producto"></canvas>
-                        </div>
-                    </div>
-                    
-                    <div class="chart-card">
-                        <h3><i class="fas fa-users" aria-hidden="true"></i> Comportamiento de Clientes</h3>
-                        <div class="chart-wrapper">
-                            <canvas id="clientsChart" aria-label="Gráfico de comportamiento de clientes"></canvas>
+                            <canvas id="categoryChart"></canvas>
                         </div>
                     </div>
                 </div>
 
                 <!-- Top Products -->
                 <div class="top-products">
-                    <h3><i class="fas fa-trophy" aria-hidden="true"></i> Productos Más Vendidos</h3>
-                    <div class="products-list" id="topProductsList" role="list" aria-label="Productos más vendidos">
+                    <h3><i class="fas fa-trophy"></i> Productos Más Vendidos</h3>
+                    <div class="products-list" id="topProductsList">
                         <!-- Los productos más vendidos se cargarán aquí -->
-                    </div>
-                </div>
-
-                <!-- Season Analysis -->
-                <div class="season-analysis">
-                    <h3><i class="fas fa-calendar-alt" aria-hidden="true"></i> Análisis de Temporada</h3>
-                    <div class="season-indicators" id="seasonIndicators">
-                        <!-- Indicadores de temporada se cargarán aquí -->
                     </div>
                 </div>
             </section>
 
             <!-- Configuración Section -->
-            <section id="configuracion-section" class="content-section" role="region" aria-labelledby="configuracionTitle">
+            <section id="configuracion-section" class="content-section">
                 <div class="section-header">
                     <div class="header-left">
-                        <h2><i class="fas fa-cog" aria-hidden="true"></i> Configuración</h2>
+                        <h2><i class="fas fa-cog"></i> Configuración</h2>
                         <p>Personaliza tu sistema</p>
-                    </div>
-                    <div class="header-actions">
-                        <button class="btn-primary" id="saveSettingsBtn">
-                            <i class="fas fa-save" aria-hidden="true"></i> Guardar Cambios
-                        </button>
                     </div>
                 </div>
 
                 <!-- Tabs -->
                 <div class="config-tabs">
-                    <div class="tab-buttons" role="tablist" aria-label="Pestañas de configuración">
-                        <button class="tab-btn active" data-tab="categories" role="tab" aria-selected="true">
-                            <i class="fas fa-tags" aria-hidden="true"></i> Categorías
-                        </button>
-                        <button class="tab-btn" data-tab="colors" role="tab" aria-selected="false">
-                            <i class="fas fa-palette" aria-hidden="true"></i> Colores
-                        </button>
-                        <button class="tab-btn" data-tab="sizes" role="tab" aria-selected="false">
-                            <i class="fas fa-ruler" aria-hidden="true"></i> Tallas
-                        </button>
-                        <button class="tab-btn" data-tab="settings" role="tab" aria-selected="false">
-                            <i class="fas fa-sliders-h" aria-hidden="true"></i> Ajustes
-                        </button>
-                        <button class="tab-btn" data-tab="security" role="tab" aria-selected="false">
-                            <i class="fas fa-shield-alt" aria-hidden="true"></i> Seguridad
-                        </button>
-                        <button class="tab-btn" data-tab="backup" role="tab" aria-selected="false">
-                            <i class="fas fa-database" aria-hidden="true"></i> Backup
-                        </button>
+                    <div class="tab-buttons">
+                        <a href="#categories" class="tab-btn active" data-tab="categories">
+                            <i class="fas fa-tags"></i> Categorías
+                        </a>
+                        <a href="#colors" class="tab-btn" data-tab="colors">
+                            <i class="fas fa-palette"></i> Colores
+                        </a>
+                        <a href="#sizes" class="tab-btn" data-tab="sizes">
+                            <i class="fas fa-ruler"></i> Tallas
+                        </a>
+                        <a href="#settings" class="tab-btn" data-tab="settings">
+                            <i class="fas fa-sliders-h"></i> Ajustes
+                        </a>
                     </div>
 
                     <!-- Categories Tab -->
-                    <div class="tab-content active" id="categories-tab" role="tabpanel">
+                    <div class="tab-content active" id="categories-tab">
                         <div class="config-form">
                             <h3>Gestionar Categorías</h3>
                             <div class="form-group">
                                 <input type="text" id="newCategory" 
                                        placeholder="Nombre de la nueva categoría">
                                 <button class="btn-primary" id="addCategory">
-                                    <i class="fas fa-plus" aria-hidden="true"></i> Agregar
+                                    <i class="fas fa-plus"></i> Agregar
                                 </button>
                             </div>
                             
                             <div class="config-list">
                                 <h4>Categorías Existentes</h4>
-                                <div id="categoriesList" role="list">
+                                <div id="categoriesList">
                                     <!-- Las categorías se cargarán aquí -->
                                 </div>
                             </div>
@@ -1030,20 +804,20 @@
                     </div>
 
                     <!-- Colors Tab -->
-                    <div class="tab-content" id="colors-tab" role="tabpanel">
+                    <div class="tab-content" id="colors-tab">
                         <div class="config-form">
                             <h3>Gestionar Colores</h3>
                             <div class="form-group">
                                 <input type="text" id="newColor" 
                                        placeholder="Nombre del nuevo color">
                                 <button class="btn-primary" id="addColor">
-                                    <i class="fas fa-plus" aria-hidden="true"></i> Agregar
+                                    <i class="fas fa-plus"></i> Agregar
                                 </button>
                             </div>
                             
                             <div class="config-list">
                                 <h4>Colores Existentes</h4>
-                                <div id="colorsList" role="list">
+                                <div id="colorsList">
                                     <!-- Los colores se cargarán aquí -->
                                 </div>
                             </div>
@@ -1051,7 +825,7 @@
                     </div>
 
                     <!-- Sizes Tab -->
-                    <div class="tab-content" id="sizes-tab" role="tabpanel">
+                    <div class="tab-content" id="sizes-tab">
                         <div class="config-form">
                             <h3>Gestionar Tallas</h3>
                             <div class="form-grid">
@@ -1060,7 +834,7 @@
                                     <input type="text" id="newSize" 
                                            placeholder="Ej: XS, S, M, L, XL">
                                     <button class="btn-primary" id="addSize">
-                                        <i class="fas fa-plus" aria-hidden="true"></i> Agregar
+                                        <i class="fas fa-plus"></i> Agregar
                                     </button>
                                 </div>
                                 
@@ -1069,7 +843,7 @@
                                     <input type="text" id="newPantsSize" 
                                            placeholder="Ej: 28, 30, 32, 34">
                                     <button class="btn-primary" id="addPantsSize">
-                                        <i class="fas fa-plus" aria-hidden="true"></i> Agregar
+                                        <i class="fas fa-plus"></i> Agregar
                                     </button>
                                 </div>
                             </div>
@@ -1077,21 +851,21 @@
                             <div class="sizes-lists">
                                 <div class="size-list">
                                     <h4>Tallas Generales</h4>
-                                    <div id="sizesList" role="list"></div>
+                                    <div id="sizesList"></div>
                                 </div>
                                 <div class="size-list">
                                     <h4>Tallas de Pantalón</h4>
-                                    <div id="pantsSizesList" role="list"></div>
+                                    <div id="pantsSizesList"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Settings Tab -->
-                    <div class="tab-content" id="settings-tab" role="tabpanel">
+                    <div class="tab-content" id="settings-tab">
                         <div class="settings-options">
                             <div class="setting-option">
-                                <h4><i class="fas fa-moon" aria-hidden="true"></i> Modo Oscuro</h4>
+                                <h4><i class="fas fa-moon"></i> Modo Oscuro</h4>
                                 <label class="switch">
                                     <input type="checkbox" id="darkModeToggle">
                                     <span class="slider"></span>
@@ -1099,150 +873,27 @@
                             </div>
                             
                             <div class="setting-option">
-                                <h4><i class="fas fa-bell" aria-hidden="true"></i> Notificaciones</h4>
-                                <div class="notification-settings">
-                                    <label class="checkbox-label">
-                                        <input type="checkbox" id="notifyStock" checked>
-                                        <span>Stock bajo</span>
-                                    </label>
-                                    <label class="checkbox-label">
-                                        <input type="checkbox" id="notifySales" checked>
-                                        <span>Ventas</span>
-                                    </label>
-                                    <label class="checkbox-label">
-                                        <input type="checkbox" id="notifyBackup" checked>
-                                        <span>Backups</span>
-                                    </label>
-                                </div>
-                            </div>
-                            
-                            <div class="setting-option">
-                                <h4><i class="fas fa-percentage" aria-hidden="true"></i> Comisiones</h4>
-                                <div class="form-group">
-                                    <label for="cardCommission">Comisión Tarjeta (%)</label>
-                                    <input type="number" id="cardCommission" min="0" max="20" step="0.1" value="5">
-                                </div>
-                                <div class="form-group">
-                                    <label for="defaultMargin">Margen Predeterminado (%)</label>
-                                    <input type="number" id="defaultMargin" min="10" max="200" step="1" value="50">
-                                </div>
-                            </div>
-                            
-                            <div class="setting-option">
-                                <h4><i class="fas fa-language" aria-hidden="true"></i> Idioma</h4>
-                                <select id="languageSelect">
-                                    <option value="es">Español</option>
-                                    <option value="en">English</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Security Tab -->
-                    <div class="tab-content" id="security-tab" role="tabpanel">
-                        <div class="security-settings">
-                            <div class="setting-option">
-                                <h4><i class="fas fa-lock" aria-hidden="true"></i> Seguridad</h4>
-                                <div class="form-group">
-                                    <label for="autoLock">Bloqueo Automático (minutos)</label>
-                                    <input type="number" id="autoLock" min="1" max="60" value="15">
-                                </div>
-                                <div class="form-group">
-                                    <label for="passwordChange">Cambiar Contraseña</label>
-                                    <input type="password" id="newPassword" placeholder="Nueva contraseña">
-                                    <input type="password" id="confirmPassword" placeholder="Confirmar contraseña">
-                                    <button class="btn-primary" id="changePasswordBtn">Cambiar</button>
-                                </div>
-                                <div class="encryption-status secure">
-                                    <i class="fas fa-shield-alt" aria-hidden="true"></i>
-                                    <span>Datos Encriptados</span>
-                                </div>
-                            </div>
-                            
-                            <div class="setting-option">
-                                <h4><i class="fas fa-history" aria-hidden="true"></i> Historial de Actividad</h4>
-                                <div class="activity-log" id="activityLog">
-                                    <!-- Actividad se cargará aquí -->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Backup Tab -->
-                    <div class="tab-content" id="backup-tab" role="tabpanel">
-                        <div class="backup-settings">
-                            <div class="setting-option">
-                                <h4><i class="fas fa-database" aria-hidden="true"></i> Backup de Datos</h4>
+                                <h4><i class="fas fa-database"></i> Backup de Datos</h4>
                                 <div class="backup-buttons">
                                     <button class="btn-primary" id="exportData">
-                                        <i class="fas fa-download" aria-hidden="true"></i> Exportar Datos
+                                        <i class="fas fa-download"></i> Exportar Datos
                                     </button>
                                     <button class="btn-secondary" id="importData">
-                                        <i class="fas fa-upload" aria-hidden="true"></i> Importar Datos
-                                    </button>
-                                    <button class="btn-secondary" id="cloudBackupBtn">
-                                        <i class="fas fa-cloud" aria-hidden="true"></i> Backup en la Nube
+                                        <i class="fas fa-upload"></i> Importar Datos
                                     </button>
                                 </div>
                             </div>
                             
                             <div class="setting-option">
-                                <h4><i class="fas fa-history" aria-hidden="true"></i> Historial de Backups</h4>
-                                <div class="backup-history" id="backupHistory">
-                                    <!-- Historial de backups se cargará aquí -->
-                                </div>
-                            </div>
-                            
-                            <div class="setting-option">
-                                <h4><i class="fas fa-trash" aria-hidden="true"></i> Limpiar Sistema</h4>
+                                <h4><i class="fas fa-trash"></i> Limpiar Sistema</h4>
                                 <button class="btn-danger" id="clearData">
-                                    <i class="fas fa-exclamation-triangle" aria-hidden="true"></i> 
+                                    <i class="fas fa-exclamation-triangle"></i> 
                                     Limpiar Todos los Datos
                                 </button>
                                 <small>Esta acción eliminará todos los datos del sistema</small>
                             </div>
                         </div>
                     </div>
-                </div>
-            </section>
-
-            <!-- Nuevas Secciones Añadidas -->
-
-            <!-- Proveedores Section -->
-            <section id="proveedores-section" class="content-section" role="region" aria-labelledby="proveedoresTitle">
-                <div class="section-header">
-                    <div class="header-left">
-                        <h2><i class="fas fa-truck" aria-hidden="true"></i> Proveedores</h2>
-                        <p>Gestiona tus proveedores y compras</p>
-                    </div>
-                    <div class="header-actions">
-                        <button class="btn-primary" id="addSupplierBtn">
-                            <i class="fas fa-plus" aria-hidden="true"></i> Nuevo Proveedor
-                        </button>
-                    </div>
-                </div>
-
-                <div class="suppliers-container" id="suppliersContainer">
-                    <!-- Lista de proveedores se cargará aquí -->
-                </div>
-            </section>
-
-            <!-- Promociones Section -->
-            <section id="promociones-section" class="content-section" role="region" aria-labelledby="promocionesTitle">
-                <div class="section-header">
-                    <div class="header-left">
-                        <h2><i class="fas fa-percentage" aria-hidden="true"></i> Promociones</h2>
-                        <p>Crea y gestiona promociones especiales</p>
-                    </div>
-                    <div class="header-actions">
-                        <button class="btn-primary" id="addPromotionBtn">
-                            <i class="fas fa-plus" aria-hidden="true"></i> Nueva Promoción
-                        </button>
-                    </div>
-                </div>
-
-                <div class="promotions-container" id="promotionsContainer">
-                    <!-- Lista de promociones se cargará aquí -->
                 </div>
             </section>
         </div>
@@ -1255,8 +906,8 @@
     <div class="modal" id="editProductModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3><i class="fas fa-edit" aria-hidden="true"></i> Editar Producto</h3>
-                <button class="modal-close" aria-label="Cerrar">&times;</button>
+                <h3><i class="fas fa-edit"></i> Editar Producto</h3>
+                <a href="#close" class="modal-close">&times;</a>
             </div>
             <div class="modal-body">
                 <!-- El formulario de edición se cargará aquí -->
@@ -1269,12 +920,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3 id="confirmTitle"></h3>
-                <button class="modal-close" aria-label="Cerrar">&times;</button>
+                <a href="#close" class="modal-close">&times;</a>
             </div>
             <div class="modal-body">
                 <p id="confirmMessage"></p>
                 <div class="modal-actions">
-                    <button class="btn-secondary" id="cancelConfirm">Cancelar</button>
+                    <a href="#close" class="btn-secondary" id="cancelConfirm">Cancelar</a>
                     <button class="btn-primary" id="confirmAction">Confirmar</button>
                 </div>
             </div>
@@ -1285,8 +936,8 @@
     <div class="modal" id="saleDetailsModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3><i class="fas fa-receipt" aria-hidden="true"></i> Detalles de Venta</h3>
-                <button class="modal-close" aria-label="Cerrar">&times;</button>
+                <h3><i class="fas fa-receipt"></i> Detalles de Venta</h3>
+                <a href="#close" class="modal-close">&times;</a>
             </div>
             <div class="modal-body">
                 <!-- Los detalles de la venta se cargarán aquí -->
@@ -1294,123 +945,15 @@
         </div>
     </div>
 
-    <!-- Supplier Modal -->
-    <div class="modal" id="supplierModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3><i class="fas fa-truck" aria-hidden="true"></i> Gestión de Proveedor</h3>
-                <button class="modal-close" aria-label="Cerrar">&times;</button>
-            </div>
-            <div class="modal-body">
-                <!-- Formulario de proveedor se cargará aquí -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Promotion Modal -->
-    <div class="modal" id="promotionModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3><i class="fas fa-percentage" aria-hidden="true"></i> Gestión de Promoción</h3>
-                <button class="modal-close" aria-label="Cerrar">&times;</button>
-            </div>
-            <div class="modal-body">
-                <!-- Formulario de promoción se cargará aquí -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Tutorial Modal -->
-    <div class="modal" id="tutorialModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3><i class="fas fa-graduation-cap" aria-hidden="true"></i> Tutorial Jessica Boutique</h3>
-                <button class="modal-close" aria-label="Cerrar">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="tutorial-content" id="tutorialContent">
-                    <!-- Contenido del tutorial se cargará aquí -->
-                </div>
-                <div class="modal-actions">
-                    <button class="btn-secondary" id="prevTutorial">Anterior</button>
-                    <button class="btn-primary" id="nextTutorial">Siguiente</button>
-                    <button class="btn-secondary" id="skipTutorial">Saltar Tutorial</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Shortcuts Modal -->
-    <div class="modal shortcuts-modal" id="shortcutsModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3><i class="fas fa-keyboard" aria-hidden="true"></i> Atajos de Teclado</h3>
-                <button class="modal-close" aria-label="Cerrar">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="shortcuts-list" id="shortcutsList">
-                    <!-- Lista de atajos se cargará aquí -->
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Barcode Scanner Modal -->
-    <div class="modal" id="barcodeScannerModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3><i class="fas fa-barcode" aria-hidden="true"></i> Escáner de Código de Barras</h3>
-                <button class="modal-close" aria-label="Cerrar">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div id="scannerContainer">
-                    <!-- El escáner se cargará aquí -->
-                </div>
-                <div class="scanner-instructions">
-                    <p>Apunte la cámara hacia el código de barras</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- PWA Install Prompt -->
-    <div class="pwa-prompt" id="pwaPrompt">
-        <p>¿Quieres instalar Jessica Boutique como una app?</p>
-        <div class="pwa-buttons">
-            <button class="btn-secondary" id="pwaCancel">Ahora no</button>
-            <button class="btn-primary" id="pwaInstall">Instalar</button>
-        </div>
-    </div>
-
-    <!-- Pantalla de carga -->
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="spinner"></div>
-        <p id="loadingMessage">Procesando...</p>
-    </div>
-
     <!-- Notification Toast -->
     <div class="toast-container" id="toastContainer"></div>
 
-    <!-- Scripts -->
+    <!-- Scripts con src -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
-    <script src="https://unpkg.com/html5-qrcode@2.3.4/html5-qrcode.min.js"></script>
     <script src="script.js"></script>
-    
-    <!-- Service Worker Registration -->
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() {
-                navigator.serviceWorker.register('service-worker.js').then(function(registration) {
-                    console.log('ServiceWorker registration successful');
-                }, function(err) {
-                    console.log('ServiceWorker registration failed: ', err);
-                });
-            });
-        }
-    </script>
 </body>
 </html>
