@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jessica Boutique - Configuración</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Botón Menu Toggle para móviles -->
+    <button class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
+        <div class="logo">
+            <a href="index.html" class="logo-link">
+                <i class="fas fa-store"></i>
+                <h2>Jessica Boutique</h2>
+            </a>
+        </div>
+        
+        <div class="menu-items">
+            <a href="index.html" class="menu-item">
+                <i class="fas fa-home"></i>
+                <span>Panel</span>
+            </a>
+            
+            <a href="inventario.html" class="menu-item">
+                <i class="fas fa-boxes"></i>
+                <span>Inventario</span>
+            </a>
+            
+            <a href="agregar.html" class="menu-item">
+                <i class="fas fa-plus-circle"></i>
+                <span>Agregar Producto</span>
+            </a>
+            
+            <a href="ventas.html" class="menu-item">
+                <i class="fas fa-shopping-cart"></i>
+                <span>Ventas</span>
+            </a>
+            
+            <a href="estadisticas.html" class="menu-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Estadísticas</span>
+            </a>
+            
+            <a href="configuracion.html" class="menu-item active">
+                <i class="fas fa-cog"></i>
+                <span>Configuración</span>
+            </a>
+        </div>
+        
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <i class="fas fa-user-circle"></i>
+                <div>
+                    <strong>Administrador</strong>
+                    <small>Jessica Boutique</small>
+                </div>
+            </div>
+            <a href="#" class="btn-logout" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Bar -->
+        <header class="top-bar">
+            <div class="page-title">
+                <h1>Configuración</h1>
+                <p>Personaliza tu sistema</p>
+            </div>
+            
+            <div class="top-bar-actions">
+                <a href="#" class="btn-notification" id="notificationLink">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </a>
+                <div class="current-date">
+                    <i class="fas fa-calendar"></i>
+                    <span id="currentDate"></span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Configuration Content -->
+        <div class="content-sections">
+            <section class="content-section active">
+                <div class="section-header">
+                    <div class="header-left">
+                        <h2><i class="fas fa-cog"></i> Configuración</h2>
+                        <p>Personaliza tu sistema</p>
+                    </div>
+                </div>
+
+                <!-- Tabs -->
+                <div class="config-tabs">
+                    <div class="tab-buttons">
+                        <button class="tab-btn active" data-tab="categories">
+                            <i class="fas fa-tags"></i> Categorías
+                        </button>
+                        <button class="tab-btn" data-tab="colors">
+                            <i class="fas fa-palette"></i> Colores
+                        </button>
+                        <button class="tab-btn" data-tab="sizes">
+                            <i class="fas fa-ruler"></i> Tallas
+                        </button>
+                        <button class="tab-btn" data-tab="settings">
+                            <i class="fas fa-sliders-h"></i> Ajustes
+                        </button>
+                    </div>
+
+                    <!-- Categories Tab -->
+                    <div class="tab-content active" id="categories-tab">
+                        <div class="config-form">
+                            <h3>Gestionar Categorías</h3>
+                            <div class="form-group">
+                                <input type="text" id="newCategory" 
+                                       placeholder="Nombre de la nueva categoría">
+                                <button class="btn-primary" id="addCategory">
+                                    <i class="fas fa-plus"></i> Agregar
+                                </button>
+                            </div>
+                            
+                            <div class="config-list">
+                                <h4>Categorías Existentes</h4>
+                                <div id="categoriesList">
+                                    <!-- Las categorías se cargarán aquí -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Colors Tab -->
+                    <div class="tab-content" id="colors-tab">
+                        <div class="config-form">
+                            <h3>Gestionar Colores</h3>
+                            <div class="form-group">
+                                <input type="text" id="newColor" 
+                                       placeholder="Nombre del nuevo color">
+                                <button class="btn-primary" id="addColor">
+                                    <i class="fas fa-plus"></i> Agregar
+                                </button>
+                            </div>
+                            
+                            <div class="config-list">
+                                <h4>Colores Existentes</h4>
+                                <div id="colorsList">
+                                    <!-- Los colores se cargarán aquí -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sizes Tab -->
+                    <div class="tab-content" id="sizes-tab">
+                        <div class="config-form">
+                            <h3>Gestionar Tallas</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>Tallas Generales</label>
+                                    <input type="text" id="newSize" 
+                                           placeholder="Ej: XS, S, M, L, XL">
+                                    <button class="btn-primary" id="addSize">
+                                        <i class="fas fa-plus"></i> Agregar
+                                    </button>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label>Tallas de Pantalón</label>
+                                    <input type="text" id="newPantsSize" 
+                                           placeholder="Ej: 28, 30, 32, 34">
+                                    <button class="btn-primary" id="addPantsSize">
+                                        <i class="fas fa-plus"></i> Agregar
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="sizes-lists">
+                                <div class="size-list">
+                                    <h4>Tallas Generales</h4>
+                                    <div id="sizesList"></div>
+                                </div>
+                                <div class="size-list">
+                                    <h4>Tallas de Pantalón</h4>
+                                    <div id="pantsSizesList"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Settings Tab -->
+                    <div class="tab-content" id="settings-tab">
+                        <div class="settings-options">
+                            <div class="setting-option">
+                                <h4><i class="fas fa-moon"></i> Modo Oscuro</h4>
+                                <label class="switch">
+                                    <input type="checkbox" id="darkModeToggle">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                            
+                            <div class="setting-option">
+                                <h4><i class="fas fa-database"></i> Backup de Datos</h4>
+                                <div class="backup-buttons">
+                                    <button class="btn-primary" id="exportData">
+                                        <i class="fas fa-download"></i> Exportar Datos
+                                    </button>
+                                    <button class="btn-secondary" id="importData">
+                                        <i class="fas fa-upload"></i> Importar Datos
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="setting-option">
+                                <h4><i class="fas fa-trash"></i> Limpiar Sistema</h4>
+                                <button class="btn-danger" id="clearData">
+                                    <i class="fas fa-exclamation-triangle"></i> 
+                                    Limpiar Todos los Datos
+                                </button>
+                                <small>Esta acción eliminará todos los datos del sistema</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Modals -->
+    <div class="modal-overlay" id="modalOverlay"></div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal" id="confirmationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="confirmTitle"></h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="confirmMessage"></p>
+                <div class="modal-actions">
+                    <button class="btn-secondary" id="cancelConfirm">Cancelar</button>
+                    <button class="btn-primary" id="confirmAction">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+</body>
+</html>
