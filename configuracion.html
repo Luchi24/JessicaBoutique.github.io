@@ -15,46 +15,7 @@
     </button>
 
     <!-- Sidebar Navigation -->
-    <nav class="sidebar">
-        <div class="logo">
-            <a href="index.html" class="logo-link">
-                <i class="fas fa-store"></i>
-                <h2>Jessica Boutique</h2>
-            </a>
-        </div>
-        
-        <div class="menu-items">
-            <a href="index.html" class="menu-item">
-                <i class="fas fa-home"></i>
-                <span>Panel</span>
-            </a>
-            
-            <a href="inventario.html" class="menu-item">
-                <i class="fas fa-boxes"></i>
-                <span>Inventario</span>
-            </a>
-            
-            <a href="agregar.html" class="menu-item">
-                <i class="fas fa-plus-circle"></i>
-                <span>Agregar Producto</span>
-            </a>
-            
-            <a href="ventas.html" class="menu-item">
-                <i class="fas fa-shopping-cart"></i>
-                                <span>Ventas</span>
-            </a>
-            
-            <a href="estadisticas.html" class="menu-item">
-                <i class="fas fa-chart-line"></i>
-                <span>Estadísticas</span>
-            </a>
-            
-            <a href="configuracion.html" class="menu-item active">
-                <i class="fas fa-cog"></i>
-                <span>Configuración</span>
-            </a>
-        </div>
-    </nav>
+    <div id="sidebar-container"></div>
 
     <!-- Main Content -->
     <main class="main-content">
@@ -66,6 +27,10 @@
             </div>
             
             <div class="top-bar-actions">
+                <a href="#" class="btn-notification" id="notificationLink">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </a>
                 <div class="current-date">
                     <i class="fas fa-calendar"></i>
                     <span id="currentDate"></span>
@@ -240,4 +205,5 @@
     <!-- Scripts -->
     <script src="script.js"></script>
 </body>
+<script src="loadSidebar.js"></script>
 </html>
