@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jessica Boutique - Proveedores</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- La barra lateral se carga dinámicamente con sidebar.js -->
+    
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Bar -->
+        <header class="top-bar">
+            <div class="page-title">
+                <h1>Proveedores</h1>
+                <p>Gestiona tus proveedores</p>
+            </div>
+            
+            <div class="top-bar-actions">
+                <a href="#" class="btn-notification" id="notificationLink">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </a>
+                <div class="current-date">
+                    <i class="fas fa-calendar"></i>
+                    <span id="currentDate"></span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Proveedores Content -->
+        <div class="content-sections">
+            <section class="content-section active">
+                <div class="section-header">
+                    <div class="header-left">
+                        <h2><i class="fas fa-truck"></i> Proveedores</h2>
+                        <p>Gestiona tus proveedores</p>
+                    </div>
+                    <div class="header-actions">
+                        <button class="btn-primary" id="newSupplierBtn">
+                            <i class="fas fa-plus"></i> Nuevo Proveedor
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Supplier Form -->
+                <div class="form-container" id="supplierFormContainer" style="display: none;">
+                    <form id="supplierForm">
+                        <div class="form-section">
+                            <h3><i class="fas fa-info-circle"></i> Información del Proveedor</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="supplierName">Nombre *</label>
+                                    <input type="text" id="supplierName" required 
+                                           placeholder="Nombre del proveedor">
+                                </div>
+                                <div class="form-group">
+                                    <label for="supplierContact">Contacto</label>
+                                    <input type="text" id="supplierContact" 
+                                           placeholder="Nombre del contacto">
+                                </div>
+                                <div class="form-group">
+                                    <label for="supplierPhone">Teléfono</label>
+                                    <input type="tel" id="supplierPhone" 
+                                           placeholder="Número de teléfono">
+                                </div>
+                                <div class="form-group">
+                                    <label for="supplierEmail">Email</label>
+                                    <input type="email" id="supplierEmail" 
+                                           placeholder="Correo electrónico">
+                                </div>
+                                <div class="form-group">
+                                    <label for="supplierAddress">Dirección</label>
+                                    <textarea id="supplierAddress" rows="2"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="supplierProducts">Productos que provee</label>
+                                    <textarea id="supplierProducts" rows="2"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn-secondary" id="cancelSupplier">
+                                Cancelar
+                            </button>
+                            <button type="submit" class="btn-primary">
+                                <i class="fas fa-save"></i> Guardar Proveedor
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Suppliers List -->
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Contacto</th>
+                                <th>Teléfono</th>
+                                <th>Email</th>
+                                <th>Productos</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="suppliersTable">
+                            <!-- Los proveedores se cargarán aquí -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Modales -->
+    <div class="modal-overlay" id="modalOverlay"></div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal" id="confirmationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="confirmTitle"></h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="confirmMessage"></p>
+                <div class="modal-actions">
+                    <button class="btn-secondary" id="cancelConfirm">Cancelar</button>
+                    <button class="btn-primary" id="confirmAction">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="sidebar.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
