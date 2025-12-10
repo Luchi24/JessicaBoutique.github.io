@@ -15,46 +15,7 @@
     </button>
 
     <!-- Sidebar Navigation -->
-    <nav class="sidebar">
-        <div class="logo">
-            <a href="index.html" class="logo-link">
-                <i class="fas fa-store"></i>
-                <h2>Jessica Boutique</h2>
-            </a>
-        </div>
-        
-        <div class="menu-items">
-            <a href="index.html" class="menu-item">
-                <i class="fas fa-home"></i>
-                <span>Panel</span>
-            </a>
-            
-            <a href="inventario.html" class="menu-item">
-                <i class="fas fa-boxes"></i>
-                <span>Inventario</span>
-            </a>
-            
-            <a href="agregar.html" class="menu-item">
-                <i class="fas fa-plus-circle"></i>
-                <span>Agregar Producto</span>
-            </a>
-            
-            <a href="ventas.html" class="menu-item active">
-                <i class="fas fa-shopping-cart"></i>
-                <span>Ventas</span>
-            </a>
-            
-            <a href="estadisticas.html" class="menu-item">
-                <i class="fas fa-chart-line"></i>
-                <span>Estadísticas</span>
-            </a>
-            
-            <a href="configuracion.html" class="menu-item">
-                <i class="fas fa-cog"></i>
-                <span>Configuración</span>
-            </a>
-        </div>
-    </nav>
+    <div id="sidebar-container"></div>
 
     <!-- Main Content -->
     <main class="main-content">
@@ -66,6 +27,10 @@
             </div>
             
             <div class="top-bar-actions">
+                <a href="#" class="btn-notification" id="notificationLink">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </a>
                 <div class="current-date">
                     <i class="fas fa-calendar"></i>
                     <span id="currentDate"></span>
@@ -117,15 +82,18 @@
                             <h3><i class="fas fa-box"></i> Productos</h3>
                             <div class="product-selection">
                                 <div class="selection-header">
-                                    <div class="form-group" style="flex: 1;">
-                                        <button class="btn-primary" id="selectProductBtn">
-                                            <i class="fas fa-search"></i> Buscar Producto
-                                        </button>
+                                    <div class="form-group">
+                                        <select id="selectProduct">
+                                            <option value="">Buscar producto...</option>
+                                        </select>
                                     </div>
-                                    <div class="form-group" style="flex: 0.5;">
+                                    <div class="form-group">
                                         <input type="number" id="productQty" 
                                                min="1" value="1" placeholder="Cantidad">
                                     </div>
+                                    <button class="btn-secondary" id="addProductBtn">
+                                        <i class="fas fa-plus"></i> Agregar
+                                    </button>
                                 </div>
                                 
                                 <div class="cart-items" id="cartItems">
@@ -233,48 +201,8 @@
         </div>
     </div>
 
-    <!-- Product Selection Modal -->
-    <div class="modal" id="productSelectionModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3><i class="fas fa-search"></i> Seleccionar Producto</h3>
-                <button class="modal-close">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="search-box" style="margin-bottom: 20px;">
-                    <i class="fas fa-search"></i>
-                    <input type="text" id="productSearch" placeholder="Buscar producto...">
-                </div>
-                <div class="filter-options" style="margin-bottom: 20px;">
-                    <select id="modalFilterCategory">
-                        <option value="">Todas las categorías</option>
-                    </select>
-                    <select id="modalFilterColor">
-                        <option value="">Todos los colores</option>
-                    </select>
-                </div>
-                <div class="table-container" style="max-height: 400px; overflow-y: auto;">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Producto</th>
-                                <th>Categoría</th>
-                                <th>Color</th>
-                                <th>Stock</th>
-                                <th>Precio</th>
-                                <th>Acción</th>
-                            </tr>
-                        </thead>
-                        <tbody id="productSelectionTable">
-                            <!-- Productos para selección -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Scripts -->
     <script src="script.js"></script>
 </body>
+<script src="loadSidebar.js"></script>
 </html>
